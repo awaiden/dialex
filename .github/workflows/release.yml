@@ -44,6 +44,8 @@ jobs:
         run: |
           cd packages/core
           bun pm pack --destination "$RUNNER_TEMP"
+          # Publish from outside the repo: npm rejects the root devEngines (bun).
+          cd "$RUNNER_TEMP"
           npm publish "$RUNNER_TEMP"/dialexjs-*.tgz --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -52,6 +54,7 @@ jobs:
         run: |
           cd packages/cli
           bun pm pack --destination "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP"
           npm publish "$RUNNER_TEMP"/dialexjs-cli-*.tgz --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
