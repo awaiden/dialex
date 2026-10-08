@@ -1,4 +1,4 @@
-import { defineConfig } from "pregnancy-government";
+import { defineConfig } from "dialex";
 
 export default defineConfig({
   defaultLocale: "tr",

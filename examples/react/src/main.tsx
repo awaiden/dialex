@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { I18nProvider } from "pregnancy-government/react";
+import { I18nProvider } from "dialex/react";
 import "./index.css";
 import App from "./App.tsx";
 
