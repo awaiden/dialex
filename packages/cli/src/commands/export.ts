@@ -14,9 +14,12 @@ export interface ExportOptions {
   out?: string;
   /** Limit the export to these locales. */
   locale?: string[];
+  /** Print machine-readable JSON instead of human output. */
+  json?: boolean;
 }
 
 export interface ExportResult {
+  success: boolean;
   files: string[];
   keys: number;
   /** Function values cannot be exported as plain text. */
@@ -112,16 +115,30 @@ ${units.join("\n")}
     }
   }
 
-  logger.success(
-    `Exported ${orderedKeys.size} key${orderedKeys.size === 1 ? "" : "s"} to ${files.length} ${format} file${files.length === 1 ? "" : "s"} in ${path.relative(root, outDir) || "."}`,
-  );
-  if (skippedFunctions > 0) {
-    logger.warn(
-      `${skippedFunctions} function value${skippedFunctions === 1 ? "" : "s"} skipped (not translatable as text)`,
-    );
-  }
-  for (const file of project.unsupported)
-    logger.warn(`Skipped ${file}: unsupported dictionary shape`);
+  const quiet = options.json === true;
 
-  return { files, keys: orderedKeys.size, skippedFunctions, skippedFiles: project.unsupported };
+  const result: ExportResult = {
+    success: true,
+    files,
+    keys: orderedKeys.size,
+    skippedFunctions,
+    skippedFiles: project.unsupported,
+  };
+
+  if (quiet) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    logger.success(
+      `Exported ${orderedKeys.size} key${orderedKeys.size === 1 ? "" : "s"} to ${files.length} ${format} file${files.length === 1 ? "" : "s"} in ${path.relative(root, outDir) || "."}`,
+    );
+    if (skippedFunctions > 0) {
+      logger.warn(
+        `${skippedFunctions} function value${skippedFunctions === 1 ? "" : "s"} skipped (not translatable as text)`,
+      );
+    }
+    for (const file of project.unsupported)
+      logger.warn(`Skipped ${file}: unsupported dictionary shape`);
+  }
+
+  return result;
 }

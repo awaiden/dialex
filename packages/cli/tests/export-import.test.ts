@@ -171,4 +171,32 @@ describe("import", () => {
       /--locale/,
     );
   });
+
+  it("supports json option for export and import", async () => {
+    const dir = project();
+    const lines: string[] = [];
+    const origLog = console.log;
+    console.log = (...args: unknown[]) => void lines.push(args.join(" "));
+    try {
+      const exportRes = await runExport({ cwd: dir, format: "json", out: "out", json: true });
+      expect(exportRes.success).toBe(true);
+      const jsonExport = JSON.parse(lines.join("\n"));
+      expect(jsonExport.success).toBe(true);
+      expect(jsonExport.keys).toBe(3);
+
+      lines.length = 0;
+      const importRes = await runImport({
+        cwd: dir,
+        file: "out/en.json",
+        locale: "en",
+        json: true,
+      });
+      expect(importRes.success).toBe(true);
+      const jsonImport = JSON.parse(lines.join("\n"));
+      expect(jsonImport.success).toBe(true);
+      expect(jsonImport.updated).toBe(3);
+    } finally {
+      console.log = origLog;
+    }
+  });
 });

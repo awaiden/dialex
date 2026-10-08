@@ -23,6 +23,8 @@ export interface TranslateOptions {
   dryRun?: boolean;
   /** Overrides the provider from the config (used by tests). */
   provider?: TranslateProvider;
+  /** Print machine-readable JSON instead of human output. */
+  json?: boolean;
 }
 
 export interface PendingTranslation {
@@ -35,6 +37,7 @@ export interface PendingTranslation {
 }
 
 export interface TranslateResult {
+  success: boolean;
   dryRun: boolean;
   pending: PendingTranslation[];
   translated: number;
@@ -96,7 +99,10 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
     }
   }
 
+  const quiet = options.json === true;
+
   const result: TranslateResult = {
+    success: true,
     dryRun: options.dryRun === true,
     pending: tasks,
     translated: 0,
@@ -104,16 +110,24 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
   };
 
   if (tasks.length === 0) {
-    logger.success(`Nothing to translate from "${source}".`);
+    if (quiet) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      logger.success(`Nothing to translate from "${source}".`);
+    }
     return result;
   }
 
   if (options.dryRun) {
-    logger.info(
-      `Would translate ${tasks.length} string${tasks.length === 1 ? "" : "s"} from "${source}":`,
-    );
-    for (const t of tasks) {
-      logger.log(`  ${pc.dim(t.locale)} ${t.key}  ${pc.dim(JSON.stringify(t.source))}`);
+    if (quiet) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      logger.info(
+        `Would translate ${tasks.length} string${tasks.length === 1 ? "" : "s"} from "${source}":`,
+      );
+      for (const t of tasks) {
+        logger.log(`  ${pc.dim(t.locale)} ${t.key}  ${pc.dim(JSON.stringify(t.source))}`);
+      }
     }
     return result;
   }
@@ -137,9 +151,11 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
     if (sendable.length === 0) continue;
 
     const unique = [...new Set(sendable.map((t) => t.source))];
-    logger.info(
-      `Translating ${unique.length} string${unique.length === 1 ? "" : "s"} to "${locale}" with ${provider!.name ?? "provider"}...`,
-    );
+    if (!quiet) {
+      logger.info(
+        `Translating ${unique.length} string${unique.length === 1 ? "" : "s"} to "${locale}" with ${provider!.name ?? "provider"}...`,
+      );
+    }
     const translations = await provider!.translate(unique, source, locale);
     if (translations.length !== unique.length) {
       throw new Error(
@@ -170,13 +186,21 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
 
   for (const dict of touched) await saveDictionaryFile(dict.df);
 
-  logger.success(
-    `Translated ${result.translated} of ${tasks.length} string${tasks.length === 1 ? "" : "s"}.`,
-  );
   if (result.rejected.length > 0) {
-    logger.warn(
-      `${result.rejected.length} left unchanged: ${result.rejected.slice(0, 5).join("; ")}${result.rejected.length > 5 ? "; ..." : ""}`,
+    result.success = false;
+  }
+
+  if (quiet) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    logger.success(
+      `Translated ${result.translated} of ${tasks.length} string${tasks.length === 1 ? "" : "s"}.`,
     );
+    if (result.rejected.length > 0) {
+      logger.warn(
+        `${result.rejected.length} left unchanged: ${result.rejected.slice(0, 5).join("; ")}${result.rejected.length > 5 ? "; ..." : ""}`,
+      );
+    }
   }
   return result;
 }

@@ -58,3 +58,12 @@ jobs:
           npm publish "$RUNNER_TEMP"/dialexjs-cli-*.tgz --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish MCP Package (@dialexjs/mcp)
+        run: |
+          cd packages/mcp
+          bun pm pack --destination "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP"
+          npm publish "$RUNNER_TEMP"/dialexjs-mcp-*.tgz --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

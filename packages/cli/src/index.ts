@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name("dialex")
   .description("Dialex CLI - High-performance, type-safe internationalization compiler and tooling")
-  .version("0.1.0");
+  .version("0.2.0");
 
 program
   .command("generate")
@@ -23,6 +23,7 @@ program
   .option("-w, --watch", "Watch dictionary files for changes")
   .option("-o, --output <path>", "Custom output file path for generated dictionaries")
   .option("-c, --config <path>", "Custom config path")
+  .option("--json", "Print machine-readable JSON")
   .action(async (opts) => {
     await runGenerate(opts);
   });
@@ -37,6 +38,8 @@ program
   .option("-d, --default-locale <locale>", "Default locale (e.g. en)")
   .option("-l, --locales <locales>", "Comma-separated supported locales (e.g. en,tr)")
   .option("-y, --yes", "Skip prompts and use defaults")
+  .option("--ai", "Configure AI agent support (.claude/skills, .mcp.json, AGENTS.md)")
+  .option("--no-ai", "Skip AI agent configuration")
   .action(async (opts) => {
     await runInit(opts);
   });
@@ -61,6 +64,7 @@ program
   .option("-o, --out <dir>", "Output directory", "i18n-export")
   .option("-l, --locale <locales...>", "Limit to these locales")
   .option("-c, --config <path>", "Custom config path")
+  .option("--json", "Print machine-readable JSON")
   .action(async (opts) => {
     await runExport(opts);
   });
@@ -72,6 +76,7 @@ program
   .option("-l, --locale <locale>", "Locale for single-locale files")
   .option("--allow-new", "Add keys that do not exist in any locale yet")
   .option("-c, --config <path>", "Custom config path")
+  .option("--json", "Print machine-readable JSON")
   .action(async (file, opts) => {
     await runImport({ file, ...opts });
   });
@@ -86,11 +91,16 @@ program
   )
   .option("--dry-run", "List what would be translated without calling the provider")
   .option("-c, --config <path>", "Custom config path")
+  .option("--json", "Print machine-readable JSON")
   .action(async (opts) => {
     try {
       await runTranslate(opts);
     } catch (err: any) {
-      logger.error(err.message || String(err));
+      if (opts.json) {
+        console.log(JSON.stringify({ success: false, error: err.message || String(err) }, null, 2));
+      } else {
+        logger.error(err.message || String(err));
+      }
       process.exit(1);
     }
   });

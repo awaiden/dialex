@@ -22,6 +22,8 @@ export interface ImportOptions {
   locale?: string;
   /** Allow keys that do not exist in any locale yet. */
   allowNew?: boolean;
+  /** Print machine-readable JSON instead of human output. */
+  json?: boolean;
 }
 
 export interface ImportEntry {
@@ -31,6 +33,7 @@ export interface ImportEntry {
 }
 
 export interface ImportResult {
+  success: boolean;
   created: number;
   updated: number;
   /** Function/non-text values that cannot be overwritten. */
@@ -195,7 +198,9 @@ export async function runImport(options: ImportOptions): Promise<ImportResult> {
   const project = await loadProject(root, options.config);
   const byName = new Map(project.dictionaries.map((d) => [d.name, d]));
 
+  const quiet = options.json === true;
   const result: ImportResult = {
+    success: true,
     created: 0,
     updated: 0,
     skipped: [],
@@ -244,23 +249,31 @@ export async function runImport(options: ImportOptions): Promise<ImportResult> {
     if (touched.has(dict.rel)) await saveDictionaryFile(dict.df);
   }
 
-  logger.success(
-    `Imported ${result.created + result.updated} value${result.created + result.updated === 1 ? "" : "s"} (${result.created} added, ${result.updated} updated)`,
-  );
-  if (result.unknown.length > 0) {
-    logger.warn(
-      `${result.unknown.length} unknown key${result.unknown.length === 1 ? "" : "s"} ignored (use --allow-new to add): ${result.unknown.slice(0, 5).join(", ")}${result.unknown.length > 5 ? ", ..." : ""}`,
-    );
-  }
   if (result.rejected.length > 0) {
-    logger.warn(
-      `${result.rejected.length} value${result.rejected.length === 1 ? "" : "s"} rejected: ${result.rejected.slice(0, 5).join("; ")}`,
-    );
+    result.success = false;
   }
-  if (result.skipped.length > 0) {
-    logger.warn(
-      `${result.skipped.length} non-text value${result.skipped.length === 1 ? "" : "s"} left unchanged: ${result.skipped.slice(0, 5).join(", ")}`,
+
+  if (quiet) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    logger.success(
+      `Imported ${result.created + result.updated} value${result.created + result.updated === 1 ? "" : "s"} (${result.created} added, ${result.updated} updated)`,
     );
+    if (result.unknown.length > 0) {
+      logger.warn(
+        `${result.unknown.length} unknown key${result.unknown.length === 1 ? "" : "s"} ignored (use --allow-new to add): ${result.unknown.slice(0, 5).join(", ")}${result.unknown.length > 5 ? ", ..." : ""}`,
+      );
+    }
+    if (result.rejected.length > 0) {
+      logger.warn(
+        `${result.rejected.length} value${result.rejected.length === 1 ? "" : "s"} rejected: ${result.rejected.slice(0, 5).join("; ")}`,
+      );
+    }
+    if (result.skipped.length > 0) {
+      logger.warn(
+        `${result.skipped.length} non-text value${result.skipped.length === 1 ? "" : "s"} left unchanged: ${result.skipped.slice(0, 5).join(", ")}`,
+      );
+    }
   }
 
   return result;

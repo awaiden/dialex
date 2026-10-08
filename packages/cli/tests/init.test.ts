@@ -49,6 +49,13 @@ describe("CLI init command", () => {
 
     const pkg = JSON.parse(fs.readFileSync(path.join(tempDir, "package.json"), "utf-8"));
     expect(pkg.scripts["i18n:generate"]).toBe("dialex generate");
+
+    expect(fs.existsSync(path.join(tempDir, ".claude/skills/dialex/SKILL.md"))).toBe(true);
+    expect(fs.existsSync(path.join(tempDir, ".mcp.json"))).toBe(true);
+    const mcp = JSON.parse(fs.readFileSync(path.join(tempDir, ".mcp.json"), "utf-8"));
+    expect(mcp.mcpServers.dialex).toBeDefined();
+    expect(fs.existsSync(path.join(tempDir, "AGENTS.md"))).toBe(true);
+    expect(fs.readFileSync(path.join(tempDir, "AGENTS.md"), "utf-8")).toContain("Dialex");
   });
 
   it("injects i18nPlugin into vite.config.ts for React/Vite projects via Magicast", async () => {

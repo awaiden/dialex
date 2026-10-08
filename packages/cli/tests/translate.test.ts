@@ -132,6 +132,36 @@ describe("runTranslate", () => {
     expect(fs.readFileSync(path.join(dir, "src/home.content.ts"), "utf-8")).toBe(before);
   });
 
+  it("supports json option for translate (including dry-run)", async () => {
+    const dir = project();
+    const { provider } = stub();
+    const lines: string[] = [];
+    const origLog = console.log;
+    console.log = (...args: unknown[]) => void lines.push(args.join(" "));
+    try {
+      const dryResult = await runTranslate({
+        cwd: dir,
+        provider,
+        locale: ["tr"],
+        dryRun: true,
+        json: true,
+      });
+      expect(dryResult.success).toBe(true);
+      const jsonDry = JSON.parse(lines.join("\n"));
+      expect(jsonDry.dryRun).toBe(true);
+      expect(jsonDry.pending.length).toBe(3);
+
+      lines.length = 0;
+      const transResult = await runTranslate({ cwd: dir, provider, locale: ["tr"], json: true });
+      expect(transResult.success).toBe(true);
+      const jsonTrans = JSON.parse(lines.join("\n"));
+      expect(jsonTrans.success).toBe(true);
+      expect(jsonTrans.translated).toBe(3);
+    } finally {
+      console.log = origLog;
+    }
+  });
+
   it("explains how to configure a provider when none is set", async () => {
     await expect(runTranslate({ cwd: project() })).rejects.toThrow(/claudeProvider/);
   });

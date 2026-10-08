@@ -1,0 +1,49 @@
+# Dialex
+
+> Type-safe, high-performance internationalization toolchain for JavaScript and TypeScript. Zero runtime overhead, strict compile-time parity, and ICU MessageFormat support across the full stack.
+
+## Documentation
+
+- [Dialex Documentation](/README.html): Dialex Documentation documentation and reference.
+- [API Reference](/api/README.html): API Reference documentation and reference.
+- [CLI](/cli/README.html): CLI documentation and reference.
+- [dialex check](/cli/check.html): dialex check documentation and reference.
+- [dialex export](/cli/export.html): dialex export documentation and reference.
+- [dialex generate](/cli/generate.html): dialex generate documentation and reference.
+- [dialex import](/cli/import.html): dialex import documentation and reference.
+- [dialex init](/cli/init.html): dialex init documentation and reference.
+- [dialex translate](/cli/translate.html): dialex translate documentation and reference.
+- [Frameworks](/frameworks/README.html): Frameworks documentation and reference.
+- [Angular](/frameworks/angular.html): Angular documentation and reference.
+- [Astro](/frameworks/astro.html): Astro documentation and reference.
+- [Elysia](/frameworks/elysia.html): Elysia documentation and reference.
+- [Express](/frameworks/express.html): Express documentation and reference.
+- [Fastify](/frameworks/fastify.html): Fastify documentation and reference.
+- [h3 / Nitro](/frameworks/h3.html): h3 / Nitro documentation and reference.
+- [Hono](/frameworks/hono.html): Hono documentation and reference.
+- [Koa](/frameworks/koa.html): Koa documentation and reference.
+- [NestJS](/frameworks/nestjs.html): NestJS documentation and reference.
+- [Next.js](/frameworks/nextjs.html): Next.js documentation and reference.
+- [React / Vite](/frameworks/react.html): React / Vite documentation and reference.
+- [SvelteKit](/frameworks/sveltekit.html): SvelteKit documentation and reference.
+- [Vue / Nuxt](/frameworks/vue.html): Vue / Nuxt documentation and reference.
+- [Fetch API (Request)](/frameworks/web.html): Fetch API (Request) documentation and reference.
+- [AI Assistants & MCP](/guide/ai.html): AI Assistants & MCP documentation and reference.
+- [Configuration](/guide/configuration.html): Configuration documentation and reference.
+- [Dictionaries](/guide/dictionaries.html): Dictionaries documentation and reference.
+- [Locale Fallbacks](/guide/fallbacks.html): Locale Fallbacks documentation and reference.
+- [Formatting & Plurals](/guide/formatting.html): Formatting & Plurals documentation and reference.
+- [Getting Started](/guide/getting-started.html): Getting Started documentation and reference.
+- [ICU Messages](/guide/icu.html): ICU Messages documentation and reference.
+- [Key Paths (`t`)](/guide/key-paths.html): Key Paths (`t`) documentation and reference.
+- [Lazy Loading](/guide/lazy-loading.html): Lazy Loading documentation and reference.
+- [Locale Detection](/guide/locale-detection.html): Locale Detection documentation and reference.
+- [Routing Helpers](/guide/routing.html): Routing Helpers documentation and reference.
+- [Testing](/guide/testing.html): Testing documentation and reference.
+- [Type Safety](/guide/type-safety.html): Type Safety documentation and reference.
+- [VS Code Extension](/guide/vscode.html): VS Code Extension documentation and reference.
+
+## Tools & AI
+
+- [@dialexjs/mcp](/guide/ai.html): Model Context Protocol server for safe reading and AST editing.
+- [Skills](/guide/ai.html): Claude and Agent skills compatible with npx skills.

@@ -29,9 +29,11 @@ export {
   hasPath,
   listLeaves,
   listLocales,
+  loadDictionaryFile,
   locationOf,
   parseDictionaryText,
   renderDictionaryFile,
+  saveDictionaryFile,
   setString,
   type DictionaryFile,
   type Leaf,
@@ -54,3 +56,5 @@ export {
   type Project,
   type ProjectDictionary,
 } from "./utils/project.js";
+
+export { generateDictionaries, type GenerateOptions } from "./commands/generate.js";

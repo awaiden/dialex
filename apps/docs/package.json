@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vuepress dev docs",
-    "build": "vuepress build docs",
+    "build": "bun run scripts/generate-llms.ts && vuepress build docs",
+    "generate-llms": "bun run scripts/generate-llms.ts",
     "check-translations": "bun run scripts/check-translations.ts",
     "test": "bun run scripts/check-translations.ts"
   },

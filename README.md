@@ -35,6 +35,7 @@ Modern web development demands internationalization that doesn't compromise on r
 | --------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [`dialexjs`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)           | Core runtime library, framework adapters, and Vite plugin                        |
 | [`@dialexjs/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli) | Standalone CLI (`dialexjs`, `dx`) for scaffolding, codegen, and CI parity checks |
+| [`@dialexjs/mcp`](./packages/mcp) | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp) | Model Context Protocol (MCP) server for AI assistants and agent skills           |
 
 ---
 

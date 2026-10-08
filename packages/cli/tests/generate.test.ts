@@ -41,4 +41,32 @@ export default defineDictionary({
     expect(generatedContent).toContain("export const dictionaryMap");
     expect(generatedContent).toContain('import dict_0 from "./auth.content.js"');
   });
+
+  it("supports json option in runGenerate", async () => {
+    const contentCode = `
+import { defineDictionary } from "dialexjs";
+export default defineDictionary({
+  name: "auth",
+  dictionary: {
+    en: { login: "Log in" },
+  },
+});
+`;
+    fs.mkdirSync(path.join(tempDir, "src"), { recursive: true });
+    fs.writeFileSync(path.join(tempDir, "src/auth.content.ts"), contentCode, "utf-8");
+
+    const lines: string[] = [];
+    const origLog = console.log;
+    console.log = (...args: unknown[]) => void lines.push(args.join(" "));
+    try {
+      const { runGenerate } = await import("../src/commands/generate.js");
+      await runGenerate({ cwd: tempDir, json: true });
+      const json = JSON.parse(lines.join("\n"));
+      expect(json.success).toBe(true);
+      expect(json.files.length).toBe(1);
+      expect(json.outputPath).toContain("i18n.generated.ts");
+    } finally {
+      console.log = origLog;
+    }
+  });
 });

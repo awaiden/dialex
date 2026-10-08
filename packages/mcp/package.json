@@ -1,7 +1,7 @@
 {
-  "name": "@dialexjs/cli",
+  "name": "@dialexjs/mcp",
   "version": "0.2.0",
-  "description": "High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking)",
+  "description": "Model Context Protocol (MCP) server for Dialex internationalization",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
     "url": "https://github.com/awaiden/dialex/issues"
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "dialex": "./dist/index.mjs"
+    "dialex-mcp": "./dist/index.mjs"
   },
   "files": [
     "dist"
@@ -21,8 +21,6 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.mjs",
-    "./api": "./dist/api.mjs",
-    "./translate": "./dist/translate/index.mjs",
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -35,14 +33,9 @@
     "check": "vp check"
   },
   "dependencies": {
-    "@clack/prompts": "^1.8.1",
-    "chokidar": "^5.0.0",
-    "commander": "^15.0.0",
-    "dialexjs": "workspace:*",
-    "fast-glob": "^3.3.3",
-    "magicast": "^0.5.5",
-    "picocolors": "^1.1.1",
-    "unconfig": "^7.5.0"
+    "@dialexjs/cli": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

@@ -19,6 +19,7 @@ const PAGES = {
     "lazy-loading",
     "testing",
     "vscode",
+    "ai",
     "configuration",
   ],
   frameworks: [
