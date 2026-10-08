@@ -43,8 +43,8 @@ jobs:
 
       - name: Build docs
         run: bun run docs:build
-        env:
-          DOCS_BASE: /${{ github.event.repository.name }}/
+        # Served from the custom domain root. For awaiden.github.io/dialex/ instead,
+        # set DOCS_BASE: /dialex/ here.
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

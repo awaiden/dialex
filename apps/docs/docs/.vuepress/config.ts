@@ -72,7 +72,7 @@ function sidebarFor(locale: SiteLocale) {
 const locales = Object.values(LOCALES);
 
 export default defineUserConfig({
-  // GitHub Pages serves project sites under /<repo>/; the workflow sets DOCS_BASE.
+  // GitHub Pages serves project sites under /<repo>/; set DOCS_BASE for that case.
   base: (process.env.DOCS_BASE as `/${string}/` | undefined) ?? "/",
   title: "Dialex",
   bundler: viteBundler(),
