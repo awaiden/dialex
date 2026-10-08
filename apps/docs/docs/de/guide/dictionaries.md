@@ -3,7 +3,7 @@
 Ein Wörterbuch ist ein benanntes Objekt, das jedem Locale seinen Inhalt zuordnet. Dateien werden über das Glob `include` gefunden (Standard: `**/*.content.ts`).
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: { title: "Hello" },

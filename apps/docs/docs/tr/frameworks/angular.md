@@ -1,6 +1,6 @@
 # Angular
 
-`dialex/angular`, etkin yerel ayarı, sözlükleri ve `t` işlevini Angular signal'leri olarak sağlar.
+`dialexjs/angular`, etkin yerel ayarı, sözlükleri ve `t` işlevini Angular signal'leri olarak sağlar.
 
 ::: warning Sürümler
 Angular 22 ile geliştirildi ve test edildi. Yalnızca `signal`, `computed`, `inject`, `InjectionToken`, `makeEnvironmentProviders` ve `afterNextRender` kullanır; bu yüzden Angular 17 ve sonrası için yazılmıştır, ancak daha eski sürümler test edilmemiştir. Bir Angular CLI uygulaması içinde çalıştırılmamıştır; testler, bir DOM ortamında gerçek bir Angular uygulama injector'ını sürer.
@@ -17,7 +17,7 @@ dialex generate        # writes src/i18n.generated.ts
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
-import { provideDialex } from "dialex/angular";
+import { provideDialex } from "dialexjs/angular";
 import dictionaries from "../i18n.generated";
 
 export const appConfig: ApplicationConfig = {
@@ -37,7 +37,7 @@ Bir sözlüğü her değiştirdiğinizde `dialex generate` (veya `dialex generat
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialex/angular";
+import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",

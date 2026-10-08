@@ -2,7 +2,7 @@
 
 > Type-safe, zero-boilerplate internationalization (i18n) framework for React, Next.js, Hono, Express, Fastify, Koa, NestJS, Elysia, SvelteKit, Astro, Vue / Nuxt, and Vite.
 
-[![npm version](https://img.shields.io/npm/v/dialex.svg)](https://www.npmjs.com/package/dialex)
+[![npm version](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -14,7 +14,7 @@
 - 🌐 **Full-Stack Ecosystem**: First-class adapters for **Next.js** (App Router & Pages Router), **Fastify**, **Koa**, **Hono**, **Express**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, and **React / Vite**.
 - 🧩 **Zero-Config Virtual Modules**: Instant HMR and automatic scanning with the Vite plugin.
 - 🎯 **Interpolation Functions**: Dictionaries support typed functions `(name: string) => string` with full type inference.
-- 🛠️ **CLI Tooling**: Companion CLI [`@dialex/cli`](https://www.npmjs.com/package/@dialex/cli) with `dialex init`, `dialex generate`, and `dialex check`.
+- 🛠️ **CLI Tooling**: Companion CLI [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) with `dialex init`, `dialex generate`, and `dialex check`.
 
 ---
 
@@ -22,16 +22,16 @@
 
 ```bash
 # npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ---
@@ -41,7 +41,7 @@ pnpm add -D @dialex/cli
 ### 1. Define Dictionaries (`src/home.content.ts`)
 
 ```typescript
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {
@@ -67,7 +67,7 @@ bun x dialex generate
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialex/hono";
+import { i18n } from "dialexjs/hono";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Hono();
@@ -83,7 +83,7 @@ app.get("/", (c) => {
 
 ```typescript
 import Fastify from "fastify";
-import { i18nPlugin } from "dialex/fastify";
+import { i18nPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = Fastify();
@@ -99,7 +99,7 @@ app.get("/", (req) => {
 
 ```typescript
 import express from "express";
-import { i18n } from "dialex/express";
+import { i18n } from "dialexjs/express";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = express();
@@ -115,13 +115,13 @@ app.get("/", (req, res) => {
 
 ```typescript
 // next.config.ts
-import { withI18n } from "dialex/next";
+import { withI18n } from "dialexjs/next";
 export default withI18n({/* next config */});
 ```
 
 ```typescript
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialex/server";
+import { getDictionary } from "dialexjs/server";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -134,14 +134,14 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
 ## 🧩 Entry Points
 
-| Import                                                                                            | Purpose                                                                                       |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `dialex`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT` |
-| `dialex/react`, `dialex/vue`, `dialex/nuxt`, `dialex/angular`                                     | Providers, `useDictionary`, `useT`, Nuxt module                                               |
-| `dialex/vite`, `dialex/next`, `dialex/next/middleware`, `dialex/next/link`                        | Bundler plugins, Next.js middleware and link                                                  |
-| `dialex/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                   |
-| `dialex/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                   |
-| `dialex/testing`, `dialex/testing/react`, `dialex/testing/vue`                                    | Test helpers                                                                                  |
+| Import                                                                                              | Purpose                                                                                       |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `dialexjs`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT` |
+| `dialexjs/react`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/angular`                               | Providers, `useDictionary`, `useT`, Nuxt module                                               |
+| `dialexjs/vite`, `dialexjs/next`, `dialexjs/next/middleware`, `dialexjs/next/link`                  | Bundler plugins, Next.js middleware and link                                                  |
+| `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                   |
+| `dialexjs/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                   |
+| `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                                | Test helpers                                                                                  |
 
 See the documentation site (`apps/docs`) for guides and the API reference.
 

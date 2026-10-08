@@ -5,7 +5,7 @@ import {
   isIcuStructured,
   parseMessage,
   type IcuNode,
-} from "dialex/icu";
+} from "dialexjs/icu";
 
 export interface IcuFinding {
   level: "error" | "warning";

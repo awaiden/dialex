@@ -4,7 +4,7 @@ Dialex, proje kökünden `dialex.config.*` (veya `i18n.config.*`) dosyasını y�
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "en",

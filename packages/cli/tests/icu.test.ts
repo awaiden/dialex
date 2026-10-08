@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
-import type { TranslateProvider } from "dialex";
+import type { TranslateProvider } from "dialexjs";
 import { runCheck } from "../src/commands/check.js";
 import { runImport } from "../src/commands/import.js";
 import { runTranslate } from "../src/commands/translate.js";

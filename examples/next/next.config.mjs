@@ -1,4 +1,4 @@
-import { withI18n } from "dialex/next";
+import { withI18n } from "dialexjs/next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

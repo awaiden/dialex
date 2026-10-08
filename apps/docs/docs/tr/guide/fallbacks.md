@@ -12,7 +12,7 @@ Hiçbiri eşleşmezse sözlükte tanımlanan ilk yerel ayar kullanılır.
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "en",

@@ -4,7 +4,7 @@ Dialex 会从项目根目录加载 `dialex.config.*`（或 `i18n.config.*`）；
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "en",

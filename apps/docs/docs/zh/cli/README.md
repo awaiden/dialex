@@ -1,10 +1,10 @@
 # CLI
 
-`@dialex/cli` 会安装两个可执行命令：`dialex` 和别名 `dx`。
+`@dialexjs/cli` 会安装两个可执行命令：`dialexjs` 和别名 `dx`。
 
 ```bash
-npm install -D @dialex/cli dialex
-npm install -g @dialex/cli   # or globally
+npm install -D @dialexjs/cli dialexjs
+npm install -g @dialexjs/cli   # or globally
 ```
 
 | 命令                                 | 别名   | 用途                                              |

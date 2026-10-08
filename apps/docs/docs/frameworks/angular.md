@@ -1,6 +1,6 @@
 # Angular
 
-`dialex/angular` provides the active locale, dictionaries and `t` as Angular signals.
+`dialexjs/angular` provides the active locale, dictionaries and `t` as Angular signals.
 
 ::: warning Versions
 Developed and tested against Angular 22. It uses only `signal`, `computed`, `inject`, `InjectionToken`, `makeEnvironmentProviders` and `afterNextRender`, so it is written for Angular 17 and newer, but older versions have not been tested. It has not been run inside an Angular CLI application; the tests drive a real Angular application injector in a DOM environment.
@@ -17,7 +17,7 @@ dialex generate        # writes src/i18n.generated.ts
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
-import { provideDialex } from "dialex/angular";
+import { provideDialex } from "dialexjs/angular";
 import dictionaries from "../i18n.generated";
 
 export const appConfig: ApplicationConfig = {
@@ -37,7 +37,7 @@ Re-run `dialex generate` (or `dialex generate --watch`) whenever you change a di
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialex/angular";
+import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",

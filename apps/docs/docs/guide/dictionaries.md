@@ -3,7 +3,7 @@
 A dictionary is a named object mapping each locale to its content. Files are discovered by the `include` glob (default `**/*.content.ts`).
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: { title: "Hello" },

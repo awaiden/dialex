@@ -1,13 +1,13 @@
 # 测试
 
-`dialex/testing` 帮助你在没有运行中的服务器、配置文件或打包器插件的情况下，测试使用 Dialex 的代码。它适用于任何测试运行器。
+`dialexjs/testing` 帮助你在没有运行中的服务器、配置文件或打包器插件的情况下，测试使用 Dialex 的代码。它适用于任何测试运行器。
 
 ## `createTestI18n`
 
 一个自包含的上下文，提供与你的应用相同的 `getDictionary` 和 `t`：
 
 ```ts
-import { createTestI18n } from "dialex/testing";
+import { createTestI18n } from "dialexjs/testing";
 import home from "../src/home.content";
 
 const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
@@ -31,7 +31,7 @@ i18n.withLocale("en").getDictionary("home").title; // "Welcome"
 构建一个标准的 `Request`，适配器会把它解析为你指定的 locale。用它来测试服务器、loader 和中间件：
 
 ```ts
-import { mockRequest } from "dialex/testing";
+import { mockRequest } from "dialexjs/testing";
 
 const res = await app.request(mockRequest("/dashboard", { locale: "tr" }));
 expect(res.headers.get("content-language")).toBe("tr");
@@ -54,7 +54,7 @@ expect(res.headers.get("content-language")).toBe("tr");
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialex/testing/react";
+import { TestI18nProvider } from "dialexjs/testing/react";
 
 render(
   <TestI18nProvider locale="tr">
@@ -70,7 +70,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialex/testing/vue";
+import { createTestI18n } from "dialexjs/testing/vue";
 
 const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
 ```

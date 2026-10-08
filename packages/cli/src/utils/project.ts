@@ -1,7 +1,7 @@
 import path from "node:path";
 import fg from "fast-glob";
-import { resolveI18nConfig } from "dialex/scanner";
-import type { I18nConfig } from "dialex";
+import { resolveI18nConfig } from "dialexjs/scanner";
+import type { I18nConfig } from "dialexjs";
 import { loadDictionaryFile, type DictionaryFile } from "./dictionary-edit.js";
 import { readStaticConfig } from "./static-config.js";
 

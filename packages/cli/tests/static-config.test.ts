@@ -11,7 +11,7 @@ import {
 describe("parseStaticConfig", () => {
   it("reads defineConfig calls", () => {
     const { config, notes } = parseStaticConfig(`
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 export default defineConfig({
   defaultLocale: "tr",
   locales: ["tr", "en"],

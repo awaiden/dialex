@@ -1,9 +1,9 @@
 # Formato y plurales
 
-Dialex incluye pequeños helpers con tipos construidos sobre `Intl`. Viven en el paquete `dialex` y funcionan en cualquier lugar donde se ejecuten funciones de diccionario: servidor o cliente.
+Dialex incluye pequeños helpers con tipos construidos sobre `Intl`. Viven en el paquete `dialexjs` y funcionan en cualquier lugar donde se ejecuten funciones de diccionario: servidor o cliente.
 
 ```ts
-import { defineDictionary, plural, formatters } from "dialex";
+import { defineDictionary, plural, formatters } from "dialexjs";
 
 const en = formatters("en");
 

@@ -78,7 +78,7 @@ The trade-off is that only statically visible values are understood:
 - In `dialex.config`, `defaultLocale`, `locales`, `include`, `fallbacks`, `prefixDefault` and `lazy` must be literals. Anything computed is ignored and noted in the **Dialex** output channel.
 - A dictionary that uses spreads, computed keys, or imported values cannot be analyzed. It gets an informational note instead of diagnostics. [`dialex check`](../cli/check.md) does import such files and checks them.
 
-The same analysis is available programmatically as `@dialex/cli/api` (`analyzeProject`, `readStaticConfig`, and the dictionary editing helpers).
+The same analysis is available programmatically as `@dialexjs/cli/api` (`analyzeProject`, `readStaticConfig`, and the dictionary editing helpers).
 
 ## Try it out
 

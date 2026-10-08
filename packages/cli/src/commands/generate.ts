@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import chokidar from "chokidar";
-import { resolveI18nConfig, generateDts } from "dialex/scanner";
+import { resolveI18nConfig, generateDts } from "dialexjs/scanner";
 import { logger } from "../utils/logger.js";
 
 export interface GenerateOptions {

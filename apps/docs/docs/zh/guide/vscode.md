@@ -78,7 +78,7 @@ code --install-extension dialex-vscode-0.1.0.vsix
 - 在 `dialex.config` 中，`defaultLocale`、`locales`、`include`、`fallbacks`、`prefixDefault` 和 `lazy` 必须是字面量。任何计算得出的值都会被忽略，并记录在 **Dialex** 输出通道中。
 - 使用展开、计算键或导入值的词典无法分析。它只会得到一条提示信息，而不是诊断。[`dialex check`](../cli/check.md) 会导入这类文件并进行检查。
 
-同样的分析也可以通过编程方式使用，即 `@dialex/cli/api`（`analyzeProject`、`readStaticConfig` 以及词典编辑辅助函数）。
+同样的分析也可以通过编程方式使用，即 `@dialexjs/cli/api`（`analyzeProject`、`readStaticConfig` 以及词典编辑辅助函数）。
 
 <a id="try-it-out"></a>
 

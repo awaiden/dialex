@@ -1,8 +1,8 @@
-# @dialex/cli
+# @dialexjs/cli
 
 > High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking).
 
-[![npm version](https://img.shields.io/npm/v/@dialex/cli.svg)](https://www.npmjs.com/package/@dialex/cli)
+[![npm version](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -11,14 +11,14 @@
 
 ```bash
 # Locally in project (Recommended)
-npm install -D @dialex/cli dialex
-bun add -d @dialex/cli dialex
+npm install -D @dialexjs/cli dialexjs
+bun add -d @dialexjs/cli dialexjs
 
 # Or globally
-npm install -g @dialex/cli
+npm install -g @dialexjs/cli
 ```
 
-Binaries installed: `dialex` and alias `dx`.
+Binaries installed: `dialexjs` and alias `dx`.
 
 ---
 
@@ -64,7 +64,7 @@ dialex import translations/tr.xlf
 
 ### `dialex translate`
 
-Fills missing (or `[TODO]`) strings with a provider you configure in `dialex.config.ts`. Built-in providers for Claude, OpenAI (ChatGPT), Gemini and DeepL are exported from `@dialex/cli/translate`. `--dry-run` lists what would be sent without calling anything.
+Fills missing (or `[TODO]`) strings with a provider you configure in `dialex.config.ts`. Built-in providers for Claude, OpenAI (ChatGPT), Gemini and DeepL are exported from `@dialexjs/cli/translate`. `--dry-run` lists what would be sent without calling anything.
 
 ### `dialex check` (alias: `lint`)
 

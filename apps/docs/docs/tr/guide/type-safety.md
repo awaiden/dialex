@@ -3,17 +3,17 @@
 `dialex generate` (ayrıca Vite eklentisi ve Next.js için `withI18n`) `src/dialex-env.d.ts` dosyasını yazar. Bu dosya üç arayüzü genişletir:
 
 ```ts
-declare module "dialex" {
+declare module "dialexjs" {
   export interface Register {
     locales: "en" | "tr";
   }
 }
 
-declare module "dialex/react" {
+declare module "dialexjs/react" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 
-declare module "dialex/server" {
+declare module "dialexjs/server" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 ```

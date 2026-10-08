@@ -1,10 +1,10 @@
 # CLI
 
-`@dialex/cli` installiert zwei Binärdateien: `dialex` und den Alias `dx`.
+`@dialexjs/cli` installiert zwei Binärdateien: `dialexjs` und den Alias `dx`.
 
 ```bash
-npm install -D @dialex/cli dialex
-npm install -g @dialex/cli   # or globally
+npm install -D @dialexjs/cli dialexjs
+npm install -g @dialexjs/cli   # or globally
 ```
 
 | Befehl                               | Alias  | Zweck                                                               |

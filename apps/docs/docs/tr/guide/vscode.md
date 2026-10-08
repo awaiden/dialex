@@ -78,7 +78,7 @@ Bunun bedeli, yalnızca statik olarak görünen değerlerin anlaşılmasıdır:
 - `dialex.config` içinde `defaultLocale`, `locales`, `include`, `fallbacks`, `prefixDefault` ve `lazy` sabit değerler (literal) olmalıdır. Hesaplanan her şey yok sayılır ve **Dialex** çıktı kanalında not edilir.
 - Yayılım (spread), hesaplanan anahtar ya da içe aktarılan değer kullanan bir sözlük analiz edilemez. Tanılama yerine bilgilendirici bir not alır. [`dialex check`](../cli/check.md) bu tür dosyaları içe aktarır ve denetler.
 
-Aynı analiz programatik olarak `@dialex/cli/api` olarak da kullanılabilir (`analyzeProject`, `readStaticConfig` ve sözlük düzenleme yardımcıları).
+Aynı analiz programatik olarak `@dialexjs/cli/api` olarak da kullanılabilir (`analyzeProject`, `readStaticConfig` ve sözlük düzenleme yardımcıları).
 
 <a id="try-it-out"></a>
 

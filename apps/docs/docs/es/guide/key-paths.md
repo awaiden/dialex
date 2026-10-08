@@ -14,19 +14,19 @@ Las rutas desconocidas registran una advertencia y devuelven la propia ruta.
 
 ## Dónde está disponible
 
-| Entorno                 | Cómo obtener `t`                               |
-| ----------------------- | ---------------------------------------------- |
-| React                   | `const t = useT()` desde `dialex/react`        |
-| Vue / Nuxt              | `const t = useT()` desde `dialex/vue`          |
-| Servidor (Next)         | `const t = getT(locale)` desde `dialex/server` |
-| Elysia                  | `t` en el contexto de la petición              |
-| SvelteKit               | `event.locals.t`                               |
-| Astro                   | `Astro.locals.t`                               |
-| En cualquier otro lugar | `createT(getDictionary)` desde `dialex`        |
+| Entorno                 | Cómo obtener `t`                                 |
+| ----------------------- | ------------------------------------------------ |
+| React                   | `const t = useT()` desde `dialexjs/react`        |
+| Vue / Nuxt              | `const t = useT()` desde `dialexjs/vue`          |
+| Servidor (Next)         | `const t = getT(locale)` desde `dialexjs/server` |
+| Elysia                  | `t` en el contexto de la petición                |
+| SvelteKit               | `event.locals.t`                                 |
+| Astro                   | `Astro.locals.t`                                 |
+| En cualquier otro lugar | `createT(getDictionary)` desde `dialexjs`        |
 
 ## Tipos
 
-Después de `dialex generate`, el registro amplía el módulo `dialex`, de modo que `TranslationPath` pasa a ser una unión como `"home.title" | "home.greeting" | "home.nav.about"`. Pasar una ruta desconocida o un argumento de tipo incorrecto es un error de compilación:
+Después de `dialex generate`, el registro amplía el módulo `dialexjs`, de modo que `TranslationPath` pasa a ser una unión como `"home.title" | "home.greeting" | "home.nav.about"`. Pasar una ruta desconocida o un argumento de tipo incorrecto es un error de compilación:
 
 ```ts
 t("home.greeting", 42); // Error: number is not assignable to string

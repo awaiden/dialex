@@ -1,10 +1,10 @@
 # CLI
 
-`@dialex/cli` iki komut kurar: `dialex` ve takma adı `dx`.
+`@dialexjs/cli` iki komut kurar: `dialexjs` ve takma adı `dx`.
 
 ```bash
-npm install -D @dialex/cli dialex
-npm install -g @dialex/cli   # or globally
+npm install -D @dialexjs/cli dialexjs
+npm install -g @dialexjs/cli   # or globally
 ```
 
 | Komut                                | Takma ad | Amaç                                                                     |

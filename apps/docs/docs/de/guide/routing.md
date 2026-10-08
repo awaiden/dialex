@@ -1,6 +1,6 @@
 # Routing-Helfer
 
-Frameworkunabhängige Helfer für URLs mit Locale-Präfix, aus `dialex/routing`.
+Frameworkunabhängige Helfer für URLs mit Locale-Präfix, aus `dialexjs/routing`.
 
 ```ts
 import {
@@ -9,7 +9,7 @@ import {
   alternateLinks,
   alternateLanguages,
   sitemapEntries,
-} from "dialex/routing";
+} from "dialexjs/routing";
 
 const options = { locales: ["en", "tr"], defaultLocale: "en" };
 

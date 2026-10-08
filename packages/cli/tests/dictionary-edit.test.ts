@@ -27,7 +27,7 @@ describe("dictionary-edit", () => {
     return file;
   };
 
-  const sample = `import { defineDictionary } from "dialex";
+  const sample = `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {
@@ -137,7 +137,7 @@ export default defineDictionary("home", {
 });
 
 describe("dictionary-edit: text parsing, completeness, locations, rendering", () => {
-  const source = `import { defineDictionary } from "dialex";
+  const source = `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

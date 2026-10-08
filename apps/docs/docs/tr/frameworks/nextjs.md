@@ -4,7 +4,7 @@
 
 ```ts
 // next.config.mjs
-import { withI18n } from "dialex/next";
+import { withI18n } from "dialexjs/next";
 
 export default withI18n({
   // your Next.js config
@@ -19,7 +19,7 @@ export default withI18n({
 
 ```ts
 // middleware.ts
-import { createI18nMiddleware } from "dialex/next/middleware";
+import { createI18nMiddleware } from "dialexjs/next/middleware";
 
 export default createI18nMiddleware({
   locales: ["en", "tr"],
@@ -52,7 +52,7 @@ Middleware edge üzerinde çalışır ve `dialex.config.ts` dosyasını okuyamaz
 `I18nLink`, geçerli yerel ayarı URL'de tutan `next/link`'tir. Yerel ayarı `[locale]` rota parametresinden alır:
 
 ```tsx
-import { I18nLink } from "dialex/next/link";
+import { I18nLink } from "dialexjs/next/link";
 
 <I18nLink href="/about">About</I18nLink>; // /tr/about while viewing /tr/...
 <I18nLink href="/about" locale="en">
@@ -66,7 +66,7 @@ import { I18nLink } from "dialex/next/link";
 
 ```tsx
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialex/server";
+import { getDictionary } from "dialexjs/server";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 ## SEO: hreflang ve site haritası
 
 ```tsx
-import { alternateLanguages, sitemapEntries } from "dialex/routing";
+import { alternateLanguages, sitemapEntries } from "dialexjs/routing";
 
 const routing = { locales: ["en", "tr"], defaultLocale: "en", baseUrl: "https://example.com" };
 

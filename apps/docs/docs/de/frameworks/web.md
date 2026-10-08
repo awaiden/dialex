@@ -1,9 +1,9 @@
 # Fetch API (Request)
 
-`dialex/web` ermittelt das Locale aus einem Standard-`Request`. Verwende es in jedem Framework oder jeder Laufzeitumgebung, die dir einen liefert: Loader von React Router und Remix, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
+`dialexjs/web` ermittelt das Locale aus einem Standard-`Request`. Verwende es in jedem Framework oder jeder Laufzeitumgebung, die dir einen liefert: Loader von React Router und Remix, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialex/web";
+import { createI18nHandler } from "dialexjs/web";
 import dictionaries from "./i18n.generated.js";
 
 export const resolveI18n = createI18nHandler({
@@ -27,7 +27,7 @@ Erkennungsreihenfolge und Optionen sind dieselben wie bei den anderen Adaptern: 
 
 ## Rezepte
 
-Sie zeigen, wie die Teile zusammenspielen. Nur `dialex/web` selbst wird von den Tests von Dialex abgedeckt; die folgende Framework-Anbindung wurde nicht in echten Apps ausgeführt, prüfe sie also anhand der aktuellen Dokumentation deines Frameworks.
+Sie zeigen, wie die Teile zusammenspielen. Nur `dialexjs/web` selbst wird von den Tests von Dialex abgedeckt; die folgende Framework-Anbindung wurde nicht in echten Apps ausgeführt, prüfe sie also anhand der aktuellen Dokumentation deines Frameworks.
 
 ### React Router / Remix
 

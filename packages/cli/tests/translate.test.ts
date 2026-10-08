@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
-import type { TranslateProvider } from "dialex";
+import type { TranslateProvider } from "dialexjs";
 import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider, toDeepLLanguage } from "../src/translate/deepl.js";
@@ -24,7 +24,7 @@ const project = () => {
   );
   fs.writeFileSync(
     path.join(dir, "src/home.content.ts"),
-    `import { defineDictionary } from "dialex";
+    `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

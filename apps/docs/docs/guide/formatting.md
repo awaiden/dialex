@@ -1,9 +1,9 @@
 # Formatting & Plurals
 
-Dialex ships small, typed helpers built on `Intl`. They live in the `dialex` package and work anywhere dictionary functions run: server or client.
+Dialex ships small, typed helpers built on `Intl`. They live in the `dialexjs` package and work anywhere dictionary functions run: server or client.
 
 ```ts
-import { defineDictionary, plural, formatters } from "dialex";
+import { defineDictionary, plural, formatters } from "dialexjs";
 
 const en = formatters("en");
 

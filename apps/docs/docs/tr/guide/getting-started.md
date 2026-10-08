@@ -4,25 +4,25 @@ Dialex, TypeScript ile tanımlanan sözlükler etrafında kurulmuş bir i18n çe
 
 ## Paketler
 
-| Paket         | Amaç                                                                                   |
-| ------------- | -------------------------------------------------------------------------------------- |
-| `dialex`      | Çekirdek çalışma zamanı, çerçeve adaptörleri, Vite eklentisi                           |
-| `@dialex/cli` | İskele oluşturma, kod üretimi ve tutarlılık denetimleri için `dialex` / `dx` komutları |
+| Paket           | Amaç                                                                                     |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| `dialexjs`      | Çekirdek çalışma zamanı, çerçeve adaptörleri, Vite eklentisi                             |
+| `@dialexjs/cli` | İskele oluşturma, kod üretimi ve tutarlılık denetimleri için `dialexjs` / `dx` komutları |
 
 ## Kurulum
 
 ```bash
 # bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ## İskele oluşturma
@@ -43,7 +43,7 @@ Bu komut `dialex.config.ts` dosyasını, başlangıç sözlüğü olan `src/home
 
 ```ts
 // src/home.content.ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useDictionary } from "dialex/react";
+import { useDictionary } from "dialexjs/react";
 
 export function ClientCounter() {
   const [count, setCount] = useState(0);

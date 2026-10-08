@@ -1,6 +1,6 @@
 # Yönlendirme Yardımcıları
 
-`dialex/routing` içinden, yerel ayar öneki taşıyan URL'ler için çerçeveden bağımsız yardımcılar.
+`dialexjs/routing` içinden, yerel ayar öneki taşıyan URL'ler için çerçeveden bağımsız yardımcılar.
 
 ```ts
 import {
@@ -9,7 +9,7 @@ import {
   alternateLinks,
   alternateLanguages,
   sitemapEntries,
-} from "dialex/routing";
+} from "dialexjs/routing";
 
 const options = { locales: ["en", "tr"], defaultLocale: "en" };
 

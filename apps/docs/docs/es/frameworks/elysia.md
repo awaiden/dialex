@@ -2,7 +2,7 @@
 
 ```ts
 import { Elysia } from "elysia";
-import { i18n } from "dialex/elysia";
+import { i18n } from "dialexjs/elysia";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Elysia()

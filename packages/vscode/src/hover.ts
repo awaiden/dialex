@@ -1,5 +1,5 @@
 import path from "node:path";
-import { getLeafSource, type AnalyzedDictionary, type Reference } from "@dialex/cli/api";
+import { getLeafSource, type AnalyzedDictionary, type Reference } from "@dialexjs/cli/api";
 import { orderedLocales, type ProjectModel } from "./model.js";
 import { classifyPath, resolveReference } from "./references.js";
 

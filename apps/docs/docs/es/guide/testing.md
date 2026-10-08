@@ -1,13 +1,13 @@
 # Pruebas
 
-`dialex/testing` te ayuda a probar código que usa Dialex sin un servidor en ejecución, sin archivo de configuración y sin el plugin del bundler. Funciona con cualquier ejecutor de pruebas.
+`dialexjs/testing` te ayuda a probar código que usa Dialex sin un servidor en ejecución, sin archivo de configuración y sin el plugin del bundler. Funciona con cualquier ejecutor de pruebas.
 
 ## `createTestI18n`
 
 Un contexto autocontenido con los mismos `getDictionary` y `t` que usa tu aplicación:
 
 ```ts
-import { createTestI18n } from "dialex/testing";
+import { createTestI18n } from "dialexjs/testing";
 import home from "../src/home.content";
 
 const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
@@ -31,7 +31,7 @@ i18n.withLocale("en").getDictionary("home").title; // "Welcome"
 Crea una `Request` estándar que un adaptador resuelve al locale que pidas. Úsala para probar servidores, loaders y middleware:
 
 ```ts
-import { mockRequest } from "dialex/testing";
+import { mockRequest } from "dialexjs/testing";
 
 const res = await app.request(mockRequest("/dashboard", { locale: "tr" }));
 expect(res.headers.get("content-language")).toBe("tr");
@@ -54,7 +54,7 @@ Los componentes que llaman a `useDictionary`, `useT` o `useI18n` leen los módul
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialex/testing/react";
+import { TestI18nProvider } from "dialexjs/testing/react";
 
 render(
   <TestI18nProvider locale="tr">
@@ -70,7 +70,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialex/testing/vue";
+import { createTestI18n } from "dialexjs/testing/vue";
 
 const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
 ```

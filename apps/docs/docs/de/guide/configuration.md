@@ -4,7 +4,7 @@ Dialex lädt `dialex.config.*` (oder `i18n.config.*`) aus dem Projektstamm; unte
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "en",

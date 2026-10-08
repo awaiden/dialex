@@ -4,7 +4,7 @@
 
 ```ts
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialex/nestjs";
+import { I18nModule } from "dialexjs/nestjs";
 import dictionaries from "./i18n.generated.js";
 
 @Module({
@@ -31,7 +31,7 @@ I18nModule.forRootAsync({
 
 ```ts
 import { Controller, Get } from "@nestjs/common";
-import { I18nLocale, I18nDictionary } from "dialex/nestjs";
+import { I18nLocale, I18nDictionary } from "dialexjs/nestjs";
 
 @Controller()
 export class AppController {

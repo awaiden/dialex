@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { AnalysisResult, AnalyzedDictionary } from "@dialex/cli/api";
+import type { AnalysisResult, AnalyzedDictionary } from "@dialexjs/cli/api";
 
 /** What the editor features know about one Dialex project (a folder with its own config). */
 export interface ProjectModel {

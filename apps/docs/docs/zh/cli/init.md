@@ -3,7 +3,7 @@
 在当前项目中初始化 Dialex。
 
 - 检测框架（Next.js、Fastify、Koa、Hono、Express、NestJS、Elysia、SvelteKit、Astro、Vue、Nuxt、React/Vite）。
-- 使用 Magicast 的 AST 转换编辑 `dialex.config.ts`；在 React 和 Vue 项目中把 `i18nPlugin()` 注入 `vite.config.ts`；在 Nuxt 项目中把 `dialex/nuxt` 模块注册到 `nuxt.config.ts`。
+- 使用 Magicast 的 AST 转换编辑 `dialex.config.ts`；在 React 和 Vue 项目中把 `i18nPlugin()` 注入 `vite.config.ts`；在 Nuxt 项目中把 `dialexjs/nuxt` 模块注册到 `nuxt.config.ts`。
 - 写入初始词典和 TypeScript 声明文件。
 
 ```bash

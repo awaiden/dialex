@@ -6,7 +6,7 @@ import {
   parseDictionaryText,
   renderDictionaryFile,
   setString,
-} from "@dialex/cli/api";
+} from "@dialexjs/cli/api";
 
 export interface MissingKey {
   locale: string;

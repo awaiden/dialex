@@ -3,7 +3,7 @@
 Las cadenas de un diccionario pueden ser mensajes [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/). Pasa un objeto de valores a `t` y Dialex formatea el mensaje para el locale activo.
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("cart", {
   en: {
@@ -51,7 +51,7 @@ Las ramas pueden contener cualquiera de lo anterior, de modo que los plurales y 
 Si un mensaje no se puede formatear, por ejemplo porque falta un valor, `t` registra una advertencia y devuelve el mensaje sin cambios, de modo que una cadena defectuosa nunca rompe una página. `formatMessage` en sí lanza `IcuFormatError` (valores ausentes o no válidos) o `IcuSyntaxError` (con una posición).
 
 ```ts
-import { formatMessage } from "dialex";
+import { formatMessage } from "dialexjs";
 
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```

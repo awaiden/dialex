@@ -1,4 +1,4 @@
-import type { TranslateProvider } from "dialex";
+import type { TranslateProvider } from "dialexjs";
 
 export interface DeepLProviderOptions {
   /** Defaults to the `DEEPL_API_KEY` environment variable. Keys ending in `:fx` use the free API. */

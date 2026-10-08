@@ -3,7 +3,7 @@
 Un diccionario es un objeto con nombre que asocia cada locale con su contenido. Los archivos se descubren mediante el glob `include` (por defecto `**/*.content.ts`).
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: { title: "Hello" },

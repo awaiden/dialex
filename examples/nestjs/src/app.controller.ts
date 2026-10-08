@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from "@nestjs/common";
-import { I18nLocale, I18nDictionary, I18nService } from "dialex/nestjs";
+import { I18nLocale, I18nDictionary, I18nService } from "dialexjs/nestjs";
 
 @Controller()
 export class AppController {

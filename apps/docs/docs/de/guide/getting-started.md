@@ -4,25 +4,25 @@ Dialex ist ein i18n-Framework rund um Wörterbücher, die in TypeScript definier
 
 ## Pakete
 
-| Paket         | Zweck                                                                                        |
-| ------------- | -------------------------------------------------------------------------------------------- |
-| `dialex`      | Kern-Laufzeit, Framework-Adapter, Vite-Plugin                                                |
-| `@dialex/cli` | Die Befehle `dialex` / `dx` für Projektgerüst, Codegenerierung und Vollständigkeitsprüfungen |
+| Paket           | Zweck                                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| `dialexjs`      | Kern-Laufzeit, Framework-Adapter, Vite-Plugin                                                  |
+| `@dialexjs/cli` | Die Befehle `dialexjs` / `dx` für Projektgerüst, Codegenerierung und Vollständigkeitsprüfungen |
 
 ## Installation
 
 ```bash
 # bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ## Projektgerüst erstellen
@@ -43,7 +43,7 @@ Das erzeugt `dialex.config.ts` und ein Start-Wörterbuch `src/home.content.ts` u
 
 ```ts
 // src/home.content.ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

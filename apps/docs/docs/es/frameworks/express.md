@@ -2,7 +2,7 @@
 
 ```ts
 import express from "express";
-import { i18n } from "dialex/express";
+import { i18n } from "dialexjs/express";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = express();

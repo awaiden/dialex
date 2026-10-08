@@ -3,7 +3,7 @@
 Sözlük, her yerel ayarı içeriğine eşleyen adlandırılmış bir nesnedir. Dosyalar `include` glob'u ile bulunur (varsayılan `**/*.content.ts`).
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: { title: "Hello" },

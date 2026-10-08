@@ -3,7 +3,7 @@
 词典是一个具名对象，把每个 locale 映射到对应的内容。文件通过 `include` glob 查找（默认 `**/*.content.ts`）。
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: { title: "Hello" },

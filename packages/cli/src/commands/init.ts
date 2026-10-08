@@ -160,7 +160,7 @@ export async function runInit(options: InitOptions = {}) {
         logger.success(`Updated ${pc.bold(configFileName)} via Magicast`);
       }
     } else {
-      const mod = parseModule(`import { defineConfig } from "dialex";
+      const mod = parseModule(`import { defineConfig } from "dialexjs";
 
 export default defineConfig({});
 `);
@@ -172,7 +172,7 @@ export default defineConfig({});
   } catch (err: any) {
     logger.warn(`Magicast config update notice: ${err.message || String(err)}`);
     // Fallback safe string write if AST parser encounters non-standard syntax
-    const fallback = `import { defineConfig } from "dialex";
+    const fallback = `import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "${defaultLocale}",
@@ -194,7 +194,7 @@ export default defineConfig({
         try {
           const vMod = await loadFile(vConfig);
           addVitePlugin(vMod, {
-            from: "dialex/vite",
+            from: "dialexjs/vite",
             imported: "i18nPlugin",
             constructor: "i18nPlugin",
           });
@@ -217,16 +217,16 @@ export default defineConfig({
     if (nuxtConfig) {
       try {
         const nMod = await loadFile(nuxtConfig);
-        addNuxtModule(nMod, "dialex/nuxt", "dialex", {
+        addNuxtModule(nMod, "dialexjs/nuxt", "dialex", {
           defaultLocale,
           locales: localeList,
         });
         await writeFile(nMod, nuxtConfig);
         logger.success(
-          `Registered dialex/nuxt in ${pc.bold(path.basename(nuxtConfig))} via Magicast`,
+          `Registered dialexjs/nuxt in ${pc.bold(path.basename(nuxtConfig))} via Magicast`,
         );
       } catch {
-        logger.warn("Could not update the Nuxt config; add the dialex/nuxt module manually.");
+        logger.warn("Could not update the Nuxt config; add the dialexjs/nuxt module manually.");
       }
     }
   }
@@ -245,7 +245,7 @@ export default defineConfig({
       )
       .join("\n");
 
-    const dictContent = `import { defineDictionary } from "dialex";
+    const dictContent = `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
 ${dictRecords}
@@ -285,7 +285,7 @@ ${dictRecords}
     case "hono":
       logger.log(`
 import { Hono } from "hono";
-import { i18n } from "dialex/hono";
+import { i18n } from "dialexjs/hono";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Hono();
@@ -300,7 +300,7 @@ app.get("/", (c) => {
     case "fastify":
       logger.log(`
 import Fastify from "fastify";
-import { i18nPlugin } from "dialex/fastify";
+import { i18nPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = Fastify();
@@ -315,7 +315,7 @@ app.get("/", (req) => {
     case "express":
       logger.log(`
 import express from "express";
-import { i18n } from "dialex/express";
+import { i18n } from "dialexjs/express";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = express();
@@ -330,7 +330,7 @@ app.get("/", (req, res) => {
     case "koa":
       logger.log(`
 import Koa from "koa";
-import { i18n } from "dialex/koa";
+import { i18n } from "dialexjs/koa";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Koa();
@@ -345,7 +345,7 @@ app.use((ctx) => {
     case "nestjs":
       logger.log(`
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialex/nestjs";
+import { I18nModule } from "dialexjs/nestjs";
 import dictionaries from "./src/i18n.generated.js";
 
 @Module({
@@ -356,7 +356,7 @@ export class AppModule {}
       break;
     case "next":
       logger.log(`
-import { getDictionary } from "dialex/server";
+import { getDictionary } from "dialexjs/server";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale = "en" } = await params;
@@ -368,7 +368,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     case "elysia":
       logger.log(`
 import { Elysia } from "elysia";
-import { i18n } from "dialex/elysia";
+import { i18n } from "dialexjs/elysia";
 import dictionaries from "./src/i18n.generated.js";
 
 new Elysia()
@@ -380,7 +380,7 @@ new Elysia()
     case "sveltekit":
       logger.log(`
 // src/hooks.server.ts
-import { i18nHandle } from "dialex/sveltekit";
+import { i18nHandle } from "dialexjs/sveltekit";
 import dictionaries from "./i18n.generated.js";
 
 export const handle = i18nHandle({ dictionaries });
@@ -392,7 +392,7 @@ export const handle = i18nHandle({ dictionaries });
     case "astro":
       logger.log(`
 // src/middleware.ts
-import { i18n } from "dialex/astro";
+import { i18n } from "dialexjs/astro";
 import dictionaries from "./i18n.generated.js";
 
 export const onRequest = i18n({ dictionaries });
@@ -404,7 +404,7 @@ export const onRequest = i18n({ dictionaries });
       logger.log(`
 // src/main.ts
 import { createApp } from "vue";
-import { createI18n } from "dialex/vue";
+import { createI18n } from "dialexjs/vue";
 import App from "./App.vue";
 
 createApp(App).use(createI18n()).mount("#app");
@@ -416,7 +416,7 @@ createApp(App).use(createI18n()).mount("#app");
       logger.log(`
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ["dialex/nuxt"],
+  modules: ["dialexjs/nuxt"],
 });
 
 // In components: const dict = useDictionary("home")

@@ -14,19 +14,19 @@ Bilinmeyen yollar bir uyarı kaydeder ve yolun kendisini döndürür.
 
 ## Nerede kullanılabilir
 
-| Ortam           | `t` nasıl alınır                                 |
-| --------------- | ------------------------------------------------ |
-| React           | `dialex/react` içinden `const t = useT()`        |
-| Vue / Nuxt      | `dialex/vue` içinden `const t = useT()`          |
-| Sunucu (Next)   | `dialex/server` içinden `const t = getT(locale)` |
-| Elysia          | İstek bağlamındaki `t`                           |
-| SvelteKit       | `event.locals.t`                                 |
-| Astro           | `Astro.locals.t`                                 |
-| Başka her yerde | `dialex` içinden `createT(getDictionary)`        |
+| Ortam           | `t` nasıl alınır                                   |
+| --------------- | -------------------------------------------------- |
+| React           | `dialexjs/react` içinden `const t = useT()`        |
+| Vue / Nuxt      | `dialexjs/vue` içinden `const t = useT()`          |
+| Sunucu (Next)   | `dialexjs/server` içinden `const t = getT(locale)` |
+| Elysia          | İstek bağlamındaki `t`                             |
+| SvelteKit       | `event.locals.t`                                   |
+| Astro           | `Astro.locals.t`                                   |
+| Başka her yerde | `dialexjs` içinden `createT(getDictionary)`        |
 
 ## Tipler
 
-`dialex generate` sonrasında kayıt defteri `dialex` modülünü genişletir; böylece `TranslationPath`, `"home.title" | "home.greeting" | "home.nav.about"` gibi bir birleşim tipine dönüşür. Bilinmeyen bir yol ya da yanlış tipte bir argüman vermek derleme hatasıdır:
+`dialex generate` sonrasında kayıt defteri `dialexjs` modülünü genişletir; böylece `TranslationPath`, `"home.title" | "home.greeting" | "home.nav.about"` gibi bir birleşim tipine dönüşür. Bilinmeyen bir yol ya da yanlış tipte bir argüman vermek derleme hatasıdır:
 
 ```ts
 t("home.greeting", 42); // Error: number is not assignable to string

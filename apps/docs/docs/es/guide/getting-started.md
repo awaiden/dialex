@@ -4,25 +4,25 @@ Dialex es un framework de i18n construido en torno a diccionarios definidos en T
 
 ## Paquetes
 
-| Paquete       | Propósito                                                                                     |
-| ------------- | --------------------------------------------------------------------------------------------- |
-| `dialex`      | Runtime principal, adaptadores de frameworks, plugin de Vite                                  |
-| `@dialex/cli` | Binarios `dialex` / `dx` para generar el proyecto base, generar código y comprobar la paridad |
+| Paquete         | Propósito                                                                                       |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| `dialexjs`      | Runtime principal, adaptadores de frameworks, plugin de Vite                                    |
+| `@dialexjs/cli` | Binarios `dialexjs` / `dx` para generar el proyecto base, generar código y comprobar la paridad |
 
 ## Instalación
 
 ```bash
 # bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ## Generar el proyecto base
@@ -43,7 +43,7 @@ Esto crea `dialex.config.ts`, un diccionario inicial `src/home.content.ts` y añ
 
 ```ts
 // src/home.content.ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

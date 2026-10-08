@@ -1,4 +1,4 @@
-import { getDictionary } from "dialex/server";
+import { getDictionary } from "dialexjs/server";
 import { ClientCounter } from "../../components/client-counter";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

@@ -78,7 +78,7 @@ Der Preis dafür: Es werden nur statisch sichtbare Werte verstanden:
 - In `dialex.config` müssen `defaultLocale`, `locales`, `include`, `fallbacks`, `prefixDefault` und `lazy` Literale sein. Alles Berechnete wird ignoriert und im Ausgabekanal **Dialex** vermerkt.
 - Ein Wörterbuch, das Spreads, berechnete Schlüssel oder importierte Werte verwendet, lässt sich nicht analysieren. Es erhält statt Diagnosen einen Hinweis. [`dialex check`](../cli/check.md) importiert solche Dateien und prüft sie.
 
-Dieselbe Analyse steht programmatisch als `@dialex/cli/api` zur Verfügung (`analyzeProject`, `readStaticConfig` und die Helfer zum Bearbeiten von Wörterbüchern).
+Dieselbe Analyse steht programmatisch als `@dialexjs/cli/api` zur Verfügung (`analyzeProject`, `readStaticConfig` und die Helfer zum Bearbeiten von Wörterbüchern).
 
 <a id="try-it-out"></a>
 

@@ -1,13 +1,13 @@
 # Testing
 
-`dialex/testing` helps you test code that uses Dialex without a running server, a config file, or the bundler plugin. It works with any test runner.
+`dialexjs/testing` helps you test code that uses Dialex without a running server, a config file, or the bundler plugin. It works with any test runner.
 
 ## `createTestI18n`
 
 A self-contained context with the same `getDictionary` and `t` your app uses:
 
 ```ts
-import { createTestI18n } from "dialex/testing";
+import { createTestI18n } from "dialexjs/testing";
 import home from "../src/home.content";
 
 const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
@@ -31,7 +31,7 @@ i18n.withLocale("en").getDictionary("home").title; // "Welcome"
 Builds a standard `Request` that an adapter resolves to the locale you ask for. Use it to test servers, loaders and middleware:
 
 ```ts
-import { mockRequest } from "dialex/testing";
+import { mockRequest } from "dialexjs/testing";
 
 const res = await app.request(mockRequest("/dashboard", { locale: "tr" }));
 expect(res.headers.get("content-language")).toBe("tr");
@@ -54,7 +54,7 @@ Components that call `useDictionary`, `useT` or `useI18n` read the plugin's virt
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialex/testing/react";
+import { TestI18nProvider } from "dialexjs/testing/react";
 
 render(
   <TestI18nProvider locale="tr">
@@ -70,7 +70,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialex/testing/vue";
+import { createTestI18n } from "dialexjs/testing/vue";
 
 const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
 ```

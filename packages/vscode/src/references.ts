@@ -1,4 +1,4 @@
-import { scanReferences, type AnalyzedDictionary, type Reference } from "@dialex/cli/api";
+import { scanReferences, type AnalyzedDictionary, type Reference } from "@dialexjs/cli/api";
 import type { ProjectModel } from "./model.js";
 
 /** `getDictionary("home").nav.about` -> the `.nav.about` member chain after the call. */

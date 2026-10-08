@@ -20,8 +20,8 @@ dialex translate -s en
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
-import { claudeProvider } from "@dialex/cli/translate";
+import { defineConfig } from "dialexjs";
+import { claudeProvider } from "@dialexjs/cli/translate";
 
 export default defineConfig({
   defaultLocale: "en",

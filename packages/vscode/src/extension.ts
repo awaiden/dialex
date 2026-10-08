@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { analyzeProject, readStaticConfig, type AnalysisIssue } from "@dialex/cli/api";
+import { analyzeProject, readStaticConfig, type AnalysisIssue } from "@dialexjs/cli/api";
 import { completionContextAt, completionEntries, type CompletionEntry } from "./completion.js";
 import { definitionFor } from "./definition.js";
 import { buildHover } from "./hover.js";

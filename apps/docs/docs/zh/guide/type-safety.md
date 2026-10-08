@@ -3,17 +3,17 @@
 `dialex generate`（以及 Vite 插件和 Next.js 的 `withI18n`）会写入 `src/dialex-env.d.ts`，它扩展了三个接口：
 
 ```ts
-declare module "dialex" {
+declare module "dialexjs" {
   export interface Register {
     locales: "en" | "tr";
   }
 }
 
-declare module "dialex/react" {
+declare module "dialexjs/react" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 
-declare module "dialex/server" {
+declare module "dialexjs/server" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 ```

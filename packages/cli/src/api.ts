@@ -1,5 +1,5 @@
 /**
- * Programmatic API of `@dialex/cli`, used by the editor extension and other tooling.
+ * Programmatic API of `@dialexjs/cli`, used by the editor extension and other tooling.
  *
  * Everything here reads dictionaries and configs from the syntax tree and never executes project
  * code, except `analyzeProject({ runtime: true })` and `loadProject`, which are opt-in.

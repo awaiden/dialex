@@ -1,6 +1,6 @@
 # API 参考
 
-## `dialex`
+## `dialexjs`
 
 ### `defineConfig(config)`
 
@@ -16,7 +16,7 @@
 
 ### `formatMessage(locale, message, values?)`、`parseMessage(message)`
 
-格式化或解析 [ICU 消息](../guide/icu.md)。也可以不引入运行时的其余部分，从 `dialex/icu` 使用，同时提供 `getArguments` 和 `isIcuStructured`。
+格式化或解析 [ICU 消息](../guide/icu.md)。也可以不引入运行时的其余部分，从 `dialexjs/icu` 使用，同时提供 `getArguments` 和 `isIcuStructured`。
 
 ### `createT(getDictionary, locale?)`
 
@@ -36,54 +36,54 @@
 | `DictionaryDefinition<N, T>`                | `defineDictionary` 的返回类型                                                                          |
 | `globalDictionaries`                        | 由 `defineDictionary` 填充的进程内注册表                                                               |
 
-## `dialex/server`
+## `dialexjs/server`
 
 `getDictionary(name, locale?)` 返回某个 locale 的词典内容，`getT(locale?)` 返回一个 `t` 函数。参见 [Next.js](../frameworks/nextjs.md)。
 
-## `dialex/react`
+## `dialexjs/react`
 
 `I18nProvider`、`useI18n`、`useDictionary`、`useT`、`preloadDictionaries`。参见 [React / Vite](../frameworks/react.md)。
 
-## `dialex/vite`
+## `dialexjs/vite`
 
 `i18nPlugin(inlineConfig?)`。参见 [React / Vite](../frameworks/react.md)。
 
-## `dialex/next`
+## `dialexjs/next`
 
 `withI18n(nextConfig, inlineConfig?)`。参见 [Next.js](../frameworks/nextjs.md)。
 
-## `dialex/vue` 和 `dialex/nuxt`
+## `dialexjs/vue` 和 `dialexjs/nuxt`
 
 `createI18n`、`useI18n`、`useDictionary`、`useT`、`preloadDictionaries` 以及 Nuxt 模块。参见 [Vue / Nuxt](../frameworks/vue.md)。
 
 ## 服务端适配器
 
-`dialex/express`（`i18n`）、`dialex/fastify`（`i18nPlugin`）、`dialex/koa`（`i18n`）、`dialex/hono`（`i18n`）、`dialex/nestjs`（`I18nModule` 及相关项）、`dialex/elysia`（`i18n`）、`dialex/sveltekit`（`i18nHandle`）、`dialex/astro`（`i18n`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
+`dialexjs/express`（`i18n`）、`dialexjs/fastify`（`i18nPlugin`）、`dialexjs/koa`（`i18n`）、`dialexjs/hono`（`i18n`）、`dialexjs/nestjs`（`I18nModule` 及相关项）、`dialexjs/elysia`（`i18n`）、`dialexjs/sveltekit`（`i18nHandle`）、`dialexjs/astro`（`i18n`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
 
-## `dialex/routing`
+## `dialexjs/routing`
 
 `localizePath`、`stripLocale`、`alternateLinks`、`alternateLanguages`、`sitemapEntries`。参见[路由辅助函数](../guide/routing.md)。
 
-## `dialex/next/middleware` 和 `dialex/next/link`
+## `dialexjs/next/middleware` 和 `dialexjs/next/link`
 
 `createI18nMiddleware(options)` 和 `I18nLink`。参见 [Next.js](../frameworks/nextjs.md)。
 
-## `dialex/angular`
+## `dialexjs/angular`
 
 `provideDialex`、`injectI18n`、`injectDictionary`、`injectT`、`DIALEX`。参见 [Angular](../frameworks/angular.md)。
 
-## `dialex/web` 和 `dialex/h3`
+## `dialexjs/web` 和 `dialexjs/h3`
 
 适用于任意 `Request` 的 `createI18nHandler(options)`，以及 h3 1.x 的 `i18n(options)` 中间件。参见 [Fetch API](../frameworks/web.md) 和 [h3 / Nitro](../frameworks/h3.md)。
 
-## `dialex/testing`
+## `dialexjs/testing`
 
-`createTestI18n`、`mockRequest`，以及框架封装 `TestI18nProvider`（`dialex/testing/react`）和 `createTestI18n`（`dialex/testing/vue`）。参见[测试](../guide/testing.md)。
+`createTestI18n`、`mockRequest`，以及框架封装 `TestI18nProvider`（`dialexjs/testing/react`）和 `createTestI18n`（`dialexjs/testing/vue`）。参见[测试](../guide/testing.md)。
 
-## `@dialex/cli/api`
+## `@dialexjs/cli/api`
 
 `analyzeProject`、`readStaticConfig`、`scanReferences` 以及 [VS Code 扩展](../guide/vscode.md)所基于的词典编辑辅助函数。它们从语法树读取词典和配置，不会运行项目代码。
 
-## `dialex/scanner`
+## `dialexjs/scanner`
 
 适配器在未传入 `dictionaries` 选项时使用的运行时词典扫描。在生产环境中，请优先使用 `dialex generate` 编译出的注册表。

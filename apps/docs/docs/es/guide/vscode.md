@@ -78,7 +78,7 @@ La contrapartida es que solo se entienden los valores visibles de forma estátic
 - En `dialex.config`, `defaultLocale`, `locales`, `include`, `fallbacks`, `prefixDefault` y `lazy` deben ser literales. Todo lo calculado se ignora y se anota en el canal de salida **Dialex**.
 - Un diccionario que usa spreads, claves calculadas o valores importados no se puede analizar. Recibe una nota informativa en lugar de diagnósticos. [`dialex check`](../cli/check.md) sí importa esos archivos y los comprueba.
 
-El mismo análisis está disponible por código como `@dialex/cli/api` (`analyzeProject`, `readStaticConfig` y los helpers de edición de diccionarios).
+El mismo análisis está disponible por código como `@dialexjs/cli/api` (`analyzeProject`, `readStaticConfig` y los helpers de edición de diccionarios).
 
 <a id="try-it-out"></a>
 

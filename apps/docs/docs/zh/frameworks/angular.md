@@ -1,6 +1,6 @@
 # Angular
 
-`dialex/angular` 以 Angular signal 的形式提供当前 locale、词典和 `t`。
+`dialexjs/angular` 以 Angular signal 的形式提供当前 locale、词典和 `t`。
 
 ::: warning 版本
 基于 Angular 22 开发和测试。它只使用 `signal`、`computed`、`inject`、`InjectionToken`、`makeEnvironmentProviders` 和 `afterNextRender`，因此是为 Angular 17 及更高版本编写的，但较旧的版本尚未测试。它尚未在 Angular CLI 应用中运行过；测试是在 DOM 环境中驱动一个真实的 Angular 应用 injector。
@@ -17,7 +17,7 @@ dialex generate        # writes src/i18n.generated.ts
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
-import { provideDialex } from "dialex/angular";
+import { provideDialex } from "dialexjs/angular";
 import dictionaries from "../i18n.generated";
 
 export const appConfig: ApplicationConfig = {
@@ -37,7 +37,7 @@ export const appConfig: ApplicationConfig = {
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialex/angular";
+import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",

@@ -3,7 +3,7 @@
 > **Next-Generation, Type-Safe Internationalization (i18n) Framework**  
 > Zero runtime overhead, seamless full-stack DX, and compiler-driven type safety.
 
-[![npm version](https://img.shields.io/npm/v/dialex.svg)](https://www.npmjs.com/package/dialex)
+[![npm version](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)
 [![CI Status](https://github.com/awaiden/dialex/actions/workflows/ci.yml/badge.svg)](https://github.com/awaiden/dialex/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -25,16 +25,16 @@ Modern web development demands internationalization that doesn't compromise on r
 - 🚚 **Lazy Loading**: Per-dictionary code splitting for Vite apps with `lazy: true`.
 - 📝 **ICU Messages**: `{count, plural, one {# item} other {# items}}` strings, formatted by `t()` with CLDR plural rules for every language.
 - 🔑 **Key Paths**: A typed `t("home.nav.about")` alongside `getDictionary`.
-- 🧰 **Developer-First CLI**: [`@dialex/cli`](https://www.npmjs.com/package/@dialex/cli) scaffolds projects with AST precision (**Magicast**), watches dictionary files with instantaneous codegen, and audits translation parity in CI.
+- 🧰 **Developer-First CLI**: [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) scaffolds projects with AST precision (**Magicast**), watches dictionary files with instantaneous codegen, and audits translation parity in CI.
 
 ---
 
 ## 📦 Packages
 
-| Package                         | Version                                                                                           | Description                                                                    |
-| ------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [`dialex`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialex.svg)](https://www.npmjs.com/package/dialex)           | Core runtime library, framework adapters, and Vite plugin                      |
-| [`@dialex/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialex/cli.svg)](https://www.npmjs.com/package/@dialex/cli) | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks |
+| Package                           | Version                                                                                               | Description                                                                      |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`dialexjs`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)           | Core runtime library, framework adapters, and Vite plugin                        |
+| [`@dialexjs/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli) | Standalone CLI (`dialexjs`, `dx`) for scaffolding, codegen, and CI parity checks |
 
 ---
 
@@ -44,16 +44,16 @@ Modern web development demands internationalization that doesn't compromise on r
 
 ```bash
 # Using Bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # Using npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # Using pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ### 2. Scaffold with CLI
@@ -80,7 +80,7 @@ Dictionaries are defined using `defineDictionary`:
 
 ```typescript
 // src/home.content.ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {
@@ -118,7 +118,7 @@ const dict = req.getDictionary("home");
 Wrap your `next.config.mjs`:
 
 ```typescript
-import { withI18n } from "dialex/next";
+import { withI18n } from "dialexjs/next";
 
 export default withI18n({
   // Your Next.js config
@@ -129,7 +129,7 @@ Add the middleware that keeps every page under a locale prefix:
 
 ```typescript
 // middleware.ts
-import { createI18nMiddleware } from "dialex/next/middleware";
+import { createI18nMiddleware } from "dialexjs/next/middleware";
 
 export default createI18nMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
 
@@ -138,13 +138,13 @@ export const config = {
 };
 ```
 
-Use `I18nLink` from `dialex/next/link` for links that keep the current locale.
+Use `I18nLink` from `dialexjs/next/link` for links that keep the current locale.
 
 Server Components:
 
 ```typescript
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialex/server";
+import { getDictionary } from "dialexjs/server";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
 ```typescript
 import Fastify from "fastify";
-import { i18nPlugin } from "dialex/fastify";
+import { i18nPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = Fastify();
@@ -191,7 +191,7 @@ await app.listen({ port: 3000 });
 ```typescript
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialex/koa";
+import { i18n } from "dialexjs/koa";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Koa();
@@ -214,7 +214,7 @@ app.listen(3000);
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialex/hono";
+import { i18n } from "dialexjs/hono";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Hono();
@@ -234,7 +234,7 @@ export default app;
 
 ```typescript
 import express from "express";
-import { i18n } from "dialex/express";
+import { i18n } from "dialexjs/express";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = express();
@@ -254,7 +254,7 @@ app.listen(3000);
 
 ```typescript
 import { Module, Controller, Get } from "@nestjs/common";
-import { I18nModule, I18nLocale, I18nDictionary } from "dialex/nestjs";
+import { I18nModule, I18nLocale, I18nDictionary } from "dialexjs/nestjs";
 import dictionaries from "./src/i18n.generated.js";
 
 @Controller()
@@ -276,7 +276,7 @@ export class AppModule {}
 
 ### Elysia, SvelteKit, Astro, Vue / Nuxt, Angular
 
-Adapters for these ship as `dialex/elysia`, `dialex/sveltekit`, `dialex/astro`, `dialex/vue`, `dialex/nuxt` and `dialex/angular`. See the docs site (`apps/docs`) for setup.
+Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/astro`, `dialexjs/vue`, `dialexjs/nuxt` and `dialexjs/angular`. See the docs site (`apps/docs`) for setup.
 
 ---
 
@@ -286,7 +286,7 @@ Adapters for these ship as `dialex/elysia`, `dialex/sveltekit`, `dialex/astro`, 
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialex/vite";
+import { i18nPlugin } from "dialexjs/vite";
 
 export default defineConfig({
   plugins: [react(), i18nPlugin()],
@@ -295,7 +295,7 @@ export default defineConfig({
 
 ```tsx
 // src/App.tsx
-import { useI18n, useDictionary } from "dialex/react";
+import { useI18n, useDictionary } from "dialexjs/react";
 
 export function App() {
   const { locale, setLocale } = useI18n();
@@ -357,7 +357,7 @@ bun x dialex import translations/tr.xlf
 
 ### `dialex translate`
 
-Fills missing (or `[TODO]`) strings through a provider configured in `dialex.config.ts`. Claude, OpenAI (ChatGPT), Gemini and DeepL providers are built in (`@dialex/cli/translate`). `--dry-run` lists what would be translated without calling anything.
+Fills missing (or `[TODO]`) strings through a provider configured in `dialex.config.ts`. Claude, OpenAI (ChatGPT), Gemini and DeepL providers are built in (`@dialexjs/cli/translate`). `--dry-run` lists what would be translated without calling anything.
 
 ```bash
 bun x dialex translate --dry-run
@@ -390,7 +390,7 @@ Check out runnable projects in [`examples/`](./examples):
 
 ## 🧪 Testing & Validation
 
-Test your own code with `dialex/testing` (`createTestI18n`, `mockRequest`, `TestI18nProvider`); see the docs.
+Test your own code with `dialexjs/testing` (`createTestI18n`, `mockRequest`, `TestI18nProvider`); see the docs.
 
 For this repository:
 

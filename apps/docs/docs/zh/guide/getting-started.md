@@ -4,25 +4,25 @@ Dialex 是一个围绕用 TypeScript 定义的词典构建的 i18n 框架。编�
 
 ## 软件包
 
-| 软件包        | 用途                                                         |
-| ------------- | ------------------------------------------------------------ |
-| `dialex`      | 核心运行时、框架适配器、Vite 插件                            |
-| `@dialex/cli` | `dialex` / `dx` 命令，用于生成项目骨架、生成代码和检查一致性 |
+| 软件包          | 用途                                                           |
+| --------------- | -------------------------------------------------------------- |
+| `dialexjs`      | 核心运行时、框架适配器、Vite 插件                              |
+| `@dialexjs/cli` | `dialexjs` / `dx` 命令，用于生成项目骨架、生成代码和检查一致性 |
 
 ## 安装
 
 ```bash
 # bun
-bun add dialex
-bun add -d @dialex/cli
+bun add dialexjs
+bun add -d @dialexjs/cli
 
 # npm
-npm install dialex
-npm install -D @dialex/cli
+npm install dialexjs
+npm install -D @dialexjs/cli
 
 # pnpm
-pnpm add dialex
-pnpm add -D @dialex/cli
+pnpm add dialexjs
+pnpm add -D @dialexjs/cli
 ```
 
 ## 生成项目骨架
@@ -43,7 +43,7 @@ dialex init --framework fastify --default-locale en --locales en,tr -y
 
 ```ts
 // src/home.content.ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

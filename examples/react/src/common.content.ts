@@ -1,4 +1,4 @@
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("common", {
   en: {

@@ -2,7 +2,7 @@
 
 ```ts
 import Fastify from "fastify";
-import { i18nPlugin } from "dialex/fastify";
+import { i18nPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = Fastify();

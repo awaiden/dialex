@@ -1,6 +1,6 @@
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialex/koa";
+import { i18n } from "dialexjs/koa";
 import dictionaries from "./i18n.generated.js";
 
 const app = new Koa();

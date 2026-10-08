@@ -7,7 +7,7 @@ Füge das Vite-Plugin hinzu (siehe [React / Vite](./react.md#vite-plugin)) und i
 ```ts
 // src/main.ts
 import { createApp } from "vue";
-import { createI18n } from "dialex/vue";
+import { createI18n } from "dialexjs/vue";
 import App from "./App.vue";
 
 createApp(App)
@@ -17,7 +17,7 @@ createApp(App)
 
 ```vue
 <script setup lang="ts">
-import { useI18n, useDictionary } from "dialex/vue";
+import { useI18n, useDictionary } from "dialexjs/vue";
 
 const { locale, setLocale } = useI18n();
 const dict = useDictionary("home");
@@ -42,7 +42,7 @@ Ist [Lazy Loading](../guide/lazy-loading.md) aktiviert, ist `useDictionary` leer
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ["dialex/nuxt"],
+  modules: ["dialexjs/nuxt"],
   dialex: {
     defaultLocale: "en",
     locales: ["en", "tr"],

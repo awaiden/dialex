@@ -8,7 +8,7 @@
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialex/vite";
+import { i18nPlugin } from "dialexjs/vite";
 
 export default defineConfig({
   plugins: [react(), i18nPlugin()],
@@ -20,7 +20,7 @@ export default defineConfig({
 ## Provider ve hook'lar
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialex/react";
+import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
 
 function App() {
   const { locale, setLocale } = useI18n();

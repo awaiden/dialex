@@ -14,19 +14,19 @@ Unknown paths log a warning and return the path itself.
 
 ## Where it is available
 
-| Environment   | How to get `t`                                |
-| ------------- | --------------------------------------------- |
-| React         | `const t = useT()` from `dialex/react`        |
-| Vue / Nuxt    | `const t = useT()` from `dialex/vue`          |
-| Server (Next) | `const t = getT(locale)` from `dialex/server` |
-| Elysia        | `t` on the request context                    |
-| SvelteKit     | `event.locals.t`                              |
-| Astro         | `Astro.locals.t`                              |
-| Anywhere else | `createT(getDictionary)` from `dialex`        |
+| Environment   | How to get `t`                                  |
+| ------------- | ----------------------------------------------- |
+| React         | `const t = useT()` from `dialexjs/react`        |
+| Vue / Nuxt    | `const t = useT()` from `dialexjs/vue`          |
+| Server (Next) | `const t = getT(locale)` from `dialexjs/server` |
+| Elysia        | `t` on the request context                      |
+| SvelteKit     | `event.locals.t`                                |
+| Astro         | `Astro.locals.t`                                |
+| Anywhere else | `createT(getDictionary)` from `dialexjs`        |
 
 ## Typing
 
-After `dialex generate`, the registry augments the `dialex` module, so `TranslationPath` becomes a union such as `"home.title" | "home.greeting" | "home.nav.about"`. Passing an unknown path or the wrong argument type is a compile error:
+After `dialex generate`, the registry augments the `dialexjs` module, so `TranslationPath` becomes a union such as `"home.title" | "home.greeting" | "home.nav.about"`. Passing an unknown path or the wrong argument type is a compile error:
 
 ```ts
 t("home.greeting", 42); // Error: number is not assignable to string

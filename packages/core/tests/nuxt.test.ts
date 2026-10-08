@@ -23,7 +23,7 @@ describe("Nuxt module", () => {
     const contents = template.getContents();
     expect(contents).toContain('useCookie("lng"');
     expect(contents).toContain('"tr"');
-    expect(contents).toContain('from "dialex/vue"');
+    expect(contents).toContain('from "dialexjs/vue"');
 
     expect(calls.addImports[0][0].map((i: any) => i.name)).toEqual(["useI18n", "useDictionary"]);
   });

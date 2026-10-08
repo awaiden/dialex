@@ -1,6 +1,6 @@
 # Routing Helpers
 
-Framework-agnostic helpers for locale-prefixed URLs, from `dialex/routing`.
+Framework-agnostic helpers for locale-prefixed URLs, from `dialexjs/routing`.
 
 ```ts
 import {
@@ -9,7 +9,7 @@ import {
   alternateLinks,
   alternateLanguages,
   sitemapEntries,
-} from "dialex/routing";
+} from "dialexjs/routing";
 
 const options = { locales: ["en", "tr"], defaultLocale: "en" };
 

@@ -1,9 +1,9 @@
 # Biçimlendirme ve Çoğullar
 
-Dialex, `Intl` üzerine kurulu küçük ve tip güvenli yardımcılarla gelir. Bunlar `dialex` paketinde yer alır ve sözlük fonksiyonlarının çalıştığı her yerde, sunucuda ya da istemcide çalışır.
+Dialex, `Intl` üzerine kurulu küçük ve tip güvenli yardımcılarla gelir. Bunlar `dialexjs` paketinde yer alır ve sözlük fonksiyonlarının çalıştığı her yerde, sunucuda ya da istemcide çalışır.
 
 ```ts
-import { defineDictionary, plural, formatters } from "dialex";
+import { defineDictionary, plural, formatters } from "dialexjs";
 
 const en = formatters("en");
 

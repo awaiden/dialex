@@ -12,7 +12,7 @@ If nothing matches, the first locale defined in the dictionary is used.
 
 ```ts
 // dialex.config.ts
-import { defineConfig } from "dialex";
+import { defineConfig } from "dialexjs";
 
 export default defineConfig({
   defaultLocale: "en",

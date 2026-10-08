@@ -1,7 +1,7 @@
 import path from "node:path";
 import fg from "fast-glob";
 import pc from "picocolors";
-import { resolveI18nConfig } from "dialex/scanner";
+import { resolveI18nConfig } from "dialexjs/scanner";
 import { analyzeProject, type AnalysisIssue } from "../analysis.js";
 import { logger } from "../utils/logger.js";
 import {

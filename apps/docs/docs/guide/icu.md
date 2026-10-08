@@ -3,7 +3,7 @@
 Strings in a dictionary can be [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/) messages. Pass a values object to `t` and Dialex formats the message for the active locale.
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("cart", {
   en: {
@@ -51,7 +51,7 @@ Branches can contain any of the above, so plurals and selects nest.
 If a message cannot be formatted, for example because a value is missing, `t` logs a warning and returns the message unchanged, so a bad string never crashes a page. `formatMessage` itself throws `IcuFormatError` (missing or invalid values) or `IcuSyntaxError` (with a position).
 
 ```ts
-import { formatMessage } from "dialex";
+import { formatMessage } from "dialexjs";
 
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```

@@ -1,6 +1,6 @@
 # API Başvurusu
 
-## `dialex`
+## `dialexjs`
 
 ### `defineConfig(config)`
 
@@ -16,7 +16,7 @@ Bir sözlük tanımlar ve kaydeder. `DictionaryDefinition<N, T>` döndürür: `{
 
 ### `formatMessage(locale, message, values?)`, `parseMessage(message)`
 
-Bir [ICU mesajını](../guide/icu.md) biçimlendirir veya ayrıştırır. Çalışma zamanının geri kalanı olmadan, `getArguments` ve `isIcuStructured` ile birlikte `dialex/icu` üzerinden de kullanılabilir.
+Bir [ICU mesajını](../guide/icu.md) biçimlendirir veya ayrıştırır. Çalışma zamanının geri kalanı olmadan, `getArguments` ve `isIcuStructured` ile birlikte `dialexjs/icu` üzerinden de kullanılabilir.
 
 ### `createT(getDictionary, locale?)`
 
@@ -36,54 +36,54 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 | `DictionaryDefinition<N, T>`                | `defineDictionary` dönüş tipi                                                                          |
 | `globalDictionaries`                        | `defineDictionary` ile doldurulan işlem içi kayıt defteri                                              |
 
-## `dialex/server`
+## `dialexjs/server`
 
 `getDictionary(name, locale?)` bir yerel ayar için sözlük içeriğini, `getT(locale?)` ise bir `t` fonksiyonunu döndürür. Bkz. [Next.js](../frameworks/nextjs.md).
 
-## `dialex/react`
+## `dialexjs/react`
 
 `I18nProvider`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
 
-## `dialex/vite`
+## `dialexjs/vite`
 
 `i18nPlugin(inlineConfig?)`. Bkz. [React / Vite](../frameworks/react.md).
 
-## `dialex/next`
+## `dialexjs/next`
 
 `withI18n(nextConfig, inlineConfig?)`. Bkz. [Next.js](../frameworks/nextjs.md).
 
-## `dialex/vue` ve `dialex/nuxt`
+## `dialexjs/vue` ve `dialexjs/nuxt`
 
 `createI18n`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries` ve Nuxt modülü. Bkz. [Vue / Nuxt](../frameworks/vue.md).
 
 ## Sunucu adaptörleri
 
-`dialex/express` (`i18n`), `dialex/fastify` (`i18nPlugin`), `dialex/koa` (`i18n`), `dialex/hono` (`i18n`), `dialex/nestjs` (`I18nModule` ve ilgili parçalar), `dialex/elysia` (`i18n`), `dialex/sveltekit` (`i18nHandle`), `dialex/astro` (`i18n`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
+`dialexjs/express` (`i18n`), `dialexjs/fastify` (`i18nPlugin`), `dialexjs/koa` (`i18n`), `dialexjs/hono` (`i18n`), `dialexjs/nestjs` (`I18nModule` ve ilgili parçalar), `dialexjs/elysia` (`i18n`), `dialexjs/sveltekit` (`i18nHandle`), `dialexjs/astro` (`i18n`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
 
-## `dialex/routing`
+## `dialexjs/routing`
 
 `localizePath`, `stripLocale`, `alternateLinks`, `alternateLanguages`, `sitemapEntries`. Bkz. [Yönlendirme Yardımcıları](../guide/routing.md).
 
-## `dialex/next/middleware` ve `dialex/next/link`
+## `dialexjs/next/middleware` ve `dialexjs/next/link`
 
 `createI18nMiddleware(options)` ve `I18nLink`. Bkz. [Next.js](../frameworks/nextjs.md).
 
-## `dialex/angular`
+## `dialexjs/angular`
 
 `provideDialex`, `injectI18n`, `injectDictionary`, `injectT`, `DIALEX`. Bkz. [Angular](../frameworks/angular.md).
 
-## `dialex/web` ve `dialex/h3`
+## `dialexjs/web` ve `dialexjs/h3`
 
 Herhangi bir `Request` için `createI18nHandler(options)` ve h3 1.x `i18n(options)` middleware'i. Bkz. [Fetch API](../frameworks/web.md) ve [h3 / Nitro](../frameworks/h3.md).
 
-## `dialex/testing`
+## `dialexjs/testing`
 
-`createTestI18n`, `mockRequest` ve çerçeve sarmalayıcıları: `TestI18nProvider` (`dialex/testing/react`) ile `createTestI18n` (`dialex/testing/vue`). Bkz. [Test Etme](../guide/testing.md).
+`createTestI18n`, `mockRequest` ve çerçeve sarmalayıcıları: `TestI18nProvider` (`dialexjs/testing/react`) ile `createTestI18n` (`dialexjs/testing/vue`). Bkz. [Test Etme](../guide/testing.md).
 
-## `@dialex/cli/api`
+## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` ve [VS Code eklentisinin](../guide/vscode.md) üzerine kurulduğu sözlük düzenleme yardımcıları. Sözlükleri ve yapılandırmaları proje kodunu çalıştırmadan sözdizimi ağacından okurlar.
 
-## `dialex/scanner`
+## `dialexjs/scanner`
 
 Bir `dictionaries` seçeneği verilmediğinde adaptörlerin kullandığı çalışma zamanı sözlük taraması. Üretimde `dialex generate` ile derlenmiş kayıt defterini tercih edin.

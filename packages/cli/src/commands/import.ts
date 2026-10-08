@@ -7,7 +7,7 @@ import {
   saveDictionaryFile,
   setString,
 } from "../utils/dictionary-edit.js";
-import { argumentSignature, parseMessage } from "dialex/icu";
+import { argumentSignature, parseMessage } from "dialexjs/icu";
 import { loadProject } from "../utils/project.js";
 import { logger } from "../utils/logger.js";
 import type { TranslationFormat } from "./export.js";

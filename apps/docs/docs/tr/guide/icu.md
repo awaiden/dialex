@@ -3,7 +3,7 @@
 Bir sözlükteki metinler [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/) mesajları olabilir. `t` işlevine bir değerler nesnesi verin; Dialex mesajı etkin yerel ayar için biçimlendirir.
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("cart", {
   en: {
@@ -51,7 +51,7 @@ Dallar yukarıdakilerin herhangi birini içerebilir; bu yüzden çoğullar ve se
 Bir mesaj biçimlendirilemezse, örneğin bir değer eksikse, `t` bir uyarı kaydeder ve mesajı değiştirmeden döndürür; böylece hatalı bir metin bir sayfayı asla çökertmez. `formatMessage` ise `IcuFormatError` (eksik ya da geçersiz değerler) veya `IcuSyntaxError` (konumuyla birlikte) fırlatır.
 
 ```ts
-import { formatMessage } from "dialex";
+import { formatMessage } from "dialexjs";
 
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```

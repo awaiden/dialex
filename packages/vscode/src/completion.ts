@@ -1,4 +1,4 @@
-import type { AnalyzedDictionary } from "@dialex/cli/api";
+import type { AnalyzedDictionary } from "@dialexjs/cli/api";
 import type { ProjectModel } from "./model.js";
 
 export type CompletionContext =

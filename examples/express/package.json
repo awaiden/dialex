@@ -10,11 +10,11 @@
     "lint": "oxlint"
   },
   "dependencies": {
-    "dialex": "workspace:*",
+    "dialexjs": "workspace:*",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@dialex/cli": "workspace:*",
+    "@dialexjs/cli": "workspace:*",
     "@types/express": "^5.0.6",
     "@types/node": "^24.13.3",
     "oxlint": "^1.81.0",

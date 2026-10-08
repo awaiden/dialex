@@ -1,9 +1,9 @@
 # 格式化与复数
 
-Dialex 提供了一组基于 `Intl` 的小型带类型辅助函数。它们位于 `dialex` 包中，在任何运行词典函数的地方都可以使用：服务端或客户端。
+Dialex 提供了一组基于 `Intl` 的小型带类型辅助函数。它们位于 `dialexjs` 包中，在任何运行词典函数的地方都可以使用：服务端或客户端。
 
 ```ts
-import { defineDictionary, plural, formatters } from "dialex";
+import { defineDictionary, plural, formatters } from "dialexjs";
 
 const en = formatters("en");
 

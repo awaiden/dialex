@@ -4,7 +4,7 @@
 
 ```ts
 // src/hooks.server.ts
-import { i18nHandle } from "dialex/sveltekit";
+import { i18nHandle } from "dialexjs/sveltekit";
 import dictionaries from "./i18n.generated.js";
 
 export const handle = i18nHandle({

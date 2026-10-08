@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { analyzeProject, type AnalysisIssue } from "@dialex/cli/api";
+import { analyzeProject, type AnalysisIssue } from "@dialexjs/cli/api";
 import { buildModel, type ProjectModel } from "../src/model.js";
 
-export const HOME = `import { defineDictionary } from "dialex";
+export const HOME = `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

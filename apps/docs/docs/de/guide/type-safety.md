@@ -3,17 +3,17 @@
 `dialex generate` (sowie das Vite-Plugin und `withI18n` für Next.js) schreibt `src/dialex-env.d.ts`. Die Datei erweitert drei Interfaces:
 
 ```ts
-declare module "dialex" {
+declare module "dialexjs" {
   export interface Register {
     locales: "en" | "tr";
   }
 }
 
-declare module "dialex/react" {
+declare module "dialexjs/react" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 
-declare module "dialex/server" {
+declare module "dialexjs/server" {
   export interface DictionaryRegistry extends Record<"home" /* ... */> {}
 }
 ```

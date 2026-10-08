@@ -1,9 +1,9 @@
 # Fetch API (Request)
 
-`dialex/web`, yerel ayarı standart bir `Request` üzerinden çözer. Size bir `Request` veren her çerçevede ya da çalışma zamanında kullanın: React Router ve Remix loader'ları, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
+`dialexjs/web`, yerel ayarı standart bir `Request` üzerinden çözer. Size bir `Request` veren her çerçevede ya da çalışma zamanında kullanın: React Router ve Remix loader'ları, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialex/web";
+import { createI18nHandler } from "dialexjs/web";
 import dictionaries from "./i18n.generated.js";
 
 export const resolveI18n = createI18nHandler({
@@ -27,7 +27,7 @@ Algılama sırası ve seçenekler diğer adaptörlerle aynıdır: bkz. [Yerel Ay
 
 ## Tarifler
 
-Bunlar parçaların nasıl bir araya geldiğini gösterir. Dialex'in testleri yalnızca `dialex/web`'in kendisini kapsar; aşağıdaki çerçeve bağlantıları gerçek uygulamalarda çalıştırılmamıştır, bu yüzden çerçevenizin güncel belgeleriyle karşılaştırın.
+Bunlar parçaların nasıl bir araya geldiğini gösterir. Dialex'in testleri yalnızca `dialexjs/web`'in kendisini kapsar; aşağıdaki çerçeve bağlantıları gerçek uygulamalarda çalıştırılmamıştır, bu yüzden çerçevenizin güncel belgeleriyle karşılaştırın.
 
 ### React Router / Remix
 

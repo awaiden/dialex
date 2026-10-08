@@ -1,4 +1,4 @@
-import { getArguments, isIcuStructured, parseMessage } from "dialex/icu";
+import { getArguments, isIcuStructured, parseMessage } from "dialexjs/icu";
 
 /** `{name}`, `%s` / `%1$d`, and HTML/XML tags: text that must survive translation unchanged. */
 const PLACEHOLDER = /\{[^{}]+\}|%\d*\$?[sdif]|<\/?[A-Za-z][^<>]*>/g;

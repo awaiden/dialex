@@ -1,6 +1,6 @@
 # Helpers de enrutamiento
 
-Helpers independientes del framework para URLs con prefijo de locale, desde `dialex/routing`.
+Helpers independientes del framework para URLs con prefijo de locale, desde `dialexjs/routing`.
 
 ```ts
 import {
@@ -9,7 +9,7 @@ import {
   alternateLinks,
   alternateLanguages,
   sitemapEntries,
-} from "dialex/routing";
+} from "dialexjs/routing";
 
 const options = { locales: ["en", "tr"], defaultLocale: "en" };
 

@@ -9,7 +9,7 @@
     "lint": "oxlint"
   },
   "dependencies": {
-    "dialex": "workspace:*",
+    "dialexjs": "workspace:*",
     "next": "^15.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

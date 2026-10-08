@@ -1,13 +1,13 @@
 # Test Etme
 
-`dialex/testing`, Dialex kullanan kodu çalışan bir sunucu, yapılandırma dosyası ya da paketleyici eklentisi olmadan test etmenize yardımcı olur. Her test çalıştırıcısıyla çalışır.
+`dialexjs/testing`, Dialex kullanan kodu çalışan bir sunucu, yapılandırma dosyası ya da paketleyici eklentisi olmadan test etmenize yardımcı olur. Her test çalıştırıcısıyla çalışır.
 
 ## `createTestI18n`
 
 Uygulamanızın kullandığı `getDictionary` ve `t` ile aynı olan, kendi içinde bütünlüklü bir bağlam:
 
 ```ts
-import { createTestI18n } from "dialex/testing";
+import { createTestI18n } from "dialexjs/testing";
 import home from "../src/home.content";
 
 const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
@@ -31,7 +31,7 @@ i18n.withLocale("en").getDictionary("home").title; // "Welcome"
 Bir adaptörün istediğiniz yerel ayara çözdüğü standart bir `Request` oluşturur. Sunucuları, loader'ları ve middleware'leri test etmek için kullanın:
 
 ```ts
-import { mockRequest } from "dialex/testing";
+import { mockRequest } from "dialexjs/testing";
 
 const res = await app.request(mockRequest("/dashboard", { locale: "tr" }));
 expect(res.headers.get("content-language")).toBe("tr");
@@ -54,7 +54,7 @@ Göreli URL'ler `http://localhost` temel alınarak çözülür. Düz bir `Reques
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialex/testing/react";
+import { TestI18nProvider } from "dialexjs/testing/react";
 
 render(
   <TestI18nProvider locale="tr">
@@ -70,7 +70,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialex/testing/vue";
+import { createTestI18n } from "dialexjs/testing/vue";
 
 const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
 ```

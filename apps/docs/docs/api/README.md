@@ -1,6 +1,6 @@
 # API Reference
 
-## `dialex`
+## `dialexjs`
 
 ### `defineConfig(config)`
 
@@ -16,7 +16,7 @@ Defines and registers a dictionary. Returns `DictionaryDefinition<N, T>`: `{ nam
 
 ### `formatMessage(locale, message, values?)`, `parseMessage(message)`
 
-Format or parse an [ICU message](../guide/icu.md). Also available, without the rest of the runtime, from `dialex/icu` together with `getArguments` and `isIcuStructured`.
+Format or parse an [ICU message](../guide/icu.md). Also available, without the rest of the runtime, from `dialexjs/icu` together with `getArguments` and `isIcuStructured`.
 
 ### `createT(getDictionary, locale?)`
 
@@ -36,54 +36,54 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 | `DictionaryDefinition<N, T>`                | Return type of `defineDictionary`                                                                      |
 | `globalDictionaries`                        | In-process registry populated by `defineDictionary`                                                    |
 
-## `dialex/server`
+## `dialexjs/server`
 
 `getDictionary(name, locale?)` returns the dictionary content for a locale and `getT(locale?)` returns a `t` function. See [Next.js](../frameworks/nextjs.md).
 
-## `dialex/react`
+## `dialexjs/react`
 
 `I18nProvider`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`. See [React / Vite](../frameworks/react.md).
 
-## `dialex/vite`
+## `dialexjs/vite`
 
 `i18nPlugin(inlineConfig?)`. See [React / Vite](../frameworks/react.md).
 
-## `dialex/next`
+## `dialexjs/next`
 
 `withI18n(nextConfig, inlineConfig?)`. See [Next.js](../frameworks/nextjs.md).
 
-## `dialex/vue` and `dialex/nuxt`
+## `dialexjs/vue` and `dialexjs/nuxt`
 
 `createI18n`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`, and the Nuxt module. See [Vue / Nuxt](../frameworks/vue.md).
 
 ## Server adapters
 
-`dialex/express` (`i18n`), `dialex/fastify` (`i18nPlugin`), `dialex/koa` (`i18n`), `dialex/hono` (`i18n`), `dialex/nestjs` (`I18nModule` and friends), `dialex/elysia` (`i18n`), `dialex/sveltekit` (`i18nHandle`), `dialex/astro` (`i18n`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
+`dialexjs/express` (`i18n`), `dialexjs/fastify` (`i18nPlugin`), `dialexjs/koa` (`i18n`), `dialexjs/hono` (`i18n`), `dialexjs/nestjs` (`I18nModule` and friends), `dialexjs/elysia` (`i18n`), `dialexjs/sveltekit` (`i18nHandle`), `dialexjs/astro` (`i18n`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
 
-## `dialex/routing`
+## `dialexjs/routing`
 
 `localizePath`, `stripLocale`, `alternateLinks`, `alternateLanguages`, `sitemapEntries`. See [Routing Helpers](../guide/routing.md).
 
-## `dialex/next/middleware` and `dialex/next/link`
+## `dialexjs/next/middleware` and `dialexjs/next/link`
 
 `createI18nMiddleware(options)` and `I18nLink`. See [Next.js](../frameworks/nextjs.md).
 
-## `dialex/angular`
+## `dialexjs/angular`
 
 `provideDialex`, `injectI18n`, `injectDictionary`, `injectT`, `DIALEX`. See [Angular](../frameworks/angular.md).
 
-## `dialex/web` and `dialex/h3`
+## `dialexjs/web` and `dialexjs/h3`
 
 `createI18nHandler(options)` for any `Request`, and the h3 1.x `i18n(options)` middleware. See [Fetch API](../frameworks/web.md) and [h3 / Nitro](../frameworks/h3.md).
 
-## `dialex/testing`
+## `dialexjs/testing`
 
-`createTestI18n`, `mockRequest`, and the framework wrappers `TestI18nProvider` (`dialex/testing/react`) and `createTestI18n` (`dialex/testing/vue`). See [Testing](../guide/testing.md).
+`createTestI18n`, `mockRequest`, and the framework wrappers `TestI18nProvider` (`dialexjs/testing/react`) and `createTestI18n` (`dialexjs/testing/vue`). See [Testing](../guide/testing.md).
 
-## `@dialex/cli/api`
+## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` and the dictionary editing helpers the [VS Code extension](../guide/vscode.md) is built on. They read dictionaries and configs from the syntax tree without running project code.
 
-## `dialex/scanner`
+## `dialexjs/scanner`
 
 Runtime dictionary scanning used by adapters when no `dictionaries` option is passed. Prefer the compiled registry from `dialex generate` in production.

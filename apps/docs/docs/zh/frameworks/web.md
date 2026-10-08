@@ -1,9 +1,9 @@
 # Fetch API (Request)
 
-`dialex/web` 从标准的 `Request` 解析 locale。可用于任何向你提供 `Request` 的框架或运行时：React Router 和 Remix 的 loader、TanStack Start、SolidStart、Cloudflare Workers、Deno、Bun。
+`dialexjs/web` 从标准的 `Request` 解析 locale。可用于任何向你提供 `Request` 的框架或运行时：React Router 和 Remix 的 loader、TanStack Start、SolidStart、Cloudflare Workers、Deno、Bun。
 
 ```ts
-import { createI18nHandler } from "dialex/web";
+import { createI18nHandler } from "dialexjs/web";
 import dictionaries from "./i18n.generated.js";
 
 export const resolveI18n = createI18nHandler({
@@ -27,7 +27,7 @@ const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(re
 
 ## 示例写法
 
-这些示例展示各部分如何配合。Dialex 的测试只覆盖 `dialex/web` 本身；下面的框架接入尚未在真实应用中运行过，因此请对照你所用框架的最新文档进行核对。
+这些示例展示各部分如何配合。Dialex 的测试只覆盖 `dialexjs/web` 本身；下面的框架接入尚未在真实应用中运行过，因此请对照你所用框架的最新文档进行核对。
 
 ### React Router / Remix
 

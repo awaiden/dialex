@@ -14,19 +14,19 @@ Unbekannte Pfade protokollieren eine Warnung und geben den Pfad selbst zurück.
 
 ## Wo es verfügbar ist
 
-| Umgebung      | So erhältst du `t`                           |
-| ------------- | -------------------------------------------- |
-| React         | `const t = useT()` aus `dialex/react`        |
-| Vue / Nuxt    | `const t = useT()` aus `dialex/vue`          |
-| Server (Next) | `const t = getT(locale)` aus `dialex/server` |
-| Elysia        | `t` im Request-Kontext                       |
-| SvelteKit     | `event.locals.t`                             |
-| Astro         | `Astro.locals.t`                             |
-| Überall sonst | `createT(getDictionary)` aus `dialex`        |
+| Umgebung      | So erhältst du `t`                             |
+| ------------- | ---------------------------------------------- |
+| React         | `const t = useT()` aus `dialexjs/react`        |
+| Vue / Nuxt    | `const t = useT()` aus `dialexjs/vue`          |
+| Server (Next) | `const t = getT(locale)` aus `dialexjs/server` |
+| Elysia        | `t` im Request-Kontext                         |
+| SvelteKit     | `event.locals.t`                               |
+| Astro         | `Astro.locals.t`                               |
+| Überall sonst | `createT(getDictionary)` aus `dialexjs`        |
 
 ## Typisierung
 
-Nach `dialex generate` erweitert die Registry das Modul `dialex`, sodass `TranslationPath` zu einer Union wie `"home.title" | "home.greeting" | "home.nav.about"` wird. Ein unbekannter Pfad oder ein Argument mit falschem Typ ist ein Kompilierfehler:
+Nach `dialex generate` erweitert die Registry das Modul `dialexjs`, sodass `TranslationPath` zu einer Union wie `"home.title" | "home.greeting" | "home.nav.about"` wird. Ein unbekannter Pfad oder ein Argument mit falschem Typ ist ein Kompilierfehler:
 
 ```ts
 t("home.greeting", 42); // Error: number is not assignable to string

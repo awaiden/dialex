@@ -21,7 +21,7 @@ Aufgeteilt wird **pro Wörterbuchdatei**, nicht pro Locale. Jede Datei definiert
 
 ```tsx
 import { Suspense } from "react";
-import { useDictionary, useT, preloadDictionaries } from "dialex/react";
+import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
 
 function Pricing() {
   const dict = useDictionary("pricing"); // suspends on first use
@@ -49,7 +49,7 @@ preloadDictionaries("pricing");
 
 ```vue
 <script setup lang="ts">
-import { useDictionary, preloadDictionaries } from "dialex/vue";
+import { useDictionary, preloadDictionaries } from "dialexjs/vue";
 
 const dict = useDictionary("pricing");
 </script>

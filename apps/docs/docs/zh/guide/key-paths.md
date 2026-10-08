@@ -14,19 +14,19 @@ t("home.greeting", "Ada"); // function leaves receive the extra arguments
 
 ## 在哪里可用
 
-| 环境           | 如何获取 `t`                                     |
-| -------------- | ------------------------------------------------ |
-| React          | 来自 `dialex/react` 的 `const t = useT()`        |
-| Vue / Nuxt     | 来自 `dialex/vue` 的 `const t = useT()`          |
-| 服务端（Next） | 来自 `dialex/server` 的 `const t = getT(locale)` |
-| Elysia         | 请求上下文中的 `t`                               |
-| SvelteKit      | `event.locals.t`                                 |
-| Astro          | `Astro.locals.t`                                 |
-| 其他任何地方   | 来自 `dialex` 的 `createT(getDictionary)`        |
+| 环境           | 如何获取 `t`                                       |
+| -------------- | -------------------------------------------------- |
+| React          | 来自 `dialexjs/react` 的 `const t = useT()`        |
+| Vue / Nuxt     | 来自 `dialexjs/vue` 的 `const t = useT()`          |
+| 服务端（Next） | 来自 `dialexjs/server` 的 `const t = getT(locale)` |
+| Elysia         | 请求上下文中的 `t`                                 |
+| SvelteKit      | `event.locals.t`                                   |
+| Astro          | `Astro.locals.t`                                   |
+| 其他任何地方   | 来自 `dialexjs` 的 `createT(getDictionary)`        |
 
 ## 类型
 
-运行 `dialex generate` 之后，注册表会扩展 `dialex` 模块，因此 `TranslationPath` 会变成类似 `"home.title" | "home.greeting" | "home.nav.about"` 的联合类型。传入未知路径或类型错误的参数都会产生编译错误：
+运行 `dialex generate` 之后，注册表会扩展 `dialexjs` 模块，因此 `TranslationPath` 会变成类似 `"home.title" | "home.greeting" | "home.nav.about"` 的联合类型。传入未知路径或类型错误的参数都会产生编译错误：
 
 ```ts
 t("home.greeting", 42); // Error: number is not assignable to string

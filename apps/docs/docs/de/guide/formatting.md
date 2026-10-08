@@ -1,9 +1,9 @@
 # Formatierung und Plurale
 
-Dialex liefert kleine, typisierte Helfer auf Basis von `Intl` mit. Sie gehören zum Paket `dialex` und funktionieren überall, wo Wörterbuchfunktionen laufen: auf dem Server oder im Client.
+Dialex liefert kleine, typisierte Helfer auf Basis von `Intl` mit. Sie gehören zum Paket `dialexjs` und funktionieren überall, wo Wörterbuchfunktionen laufen: auf dem Server oder im Client.
 
 ```ts
-import { defineDictionary, plural, formatters } from "dialex";
+import { defineDictionary, plural, formatters } from "dialexjs";
 
 const en = formatters("en");
 

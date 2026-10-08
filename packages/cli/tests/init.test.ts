@@ -81,7 +81,7 @@ export default defineConfig({
     });
 
     const updatedViteConfig = fs.readFileSync(path.join(viteDir, "vite.config.ts"), "utf-8");
-    expect(updatedViteConfig).toContain('import { i18nPlugin } from "dialex/vite"');
+    expect(updatedViteConfig).toContain('import { i18nPlugin } from "dialexjs/vite"');
     expect(updatedViteConfig).toContain("i18nPlugin()");
 
     fs.rmSync(viteDir, { recursive: true, force: true });
@@ -108,12 +108,12 @@ export default defineConfig({
     await runInit({ cwd: dir, yes: true });
 
     const config = fs.readFileSync(path.join(dir, "vite.config.ts"), "utf-8");
-    expect(config).toContain('import { i18nPlugin } from "dialex/vite"');
+    expect(config).toContain('import { i18nPlugin } from "dialexjs/vite"');
     expect(config).toContain("i18nPlugin()");
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
-  it("registers the dialex/nuxt module in nuxt.config.ts", async () => {
+  it("registers the dialexjs/nuxt module in nuxt.config.ts", async () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-nuxt-test-"));
     fs.writeFileSync(
       path.join(dir, "package.json"),
@@ -129,7 +129,7 @@ export default defineConfig({
     await runInit({ cwd: dir, defaultLocale: "en", locales: "en,tr", yes: true });
 
     const config = fs.readFileSync(path.join(dir, "nuxt.config.ts"), "utf-8");
-    expect(config).toContain("dialex/nuxt");
+    expect(config).toContain("dialexjs/nuxt");
     expect(config).toContain("defaultLocale");
     fs.rmSync(dir, { recursive: true, force: true });
   });

@@ -2,7 +2,7 @@
 
 ```ts
 // src/middleware.ts
-import { i18n } from "dialex/astro";
+import { i18n } from "dialexjs/astro";
 import dictionaries from "./i18n.generated.js";
 
 export const onRequest = i18n({

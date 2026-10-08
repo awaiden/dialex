@@ -21,7 +21,7 @@ const project = () => {
   );
   fs.writeFileSync(
     path.join(dir, "src/home.content.ts"),
-    `import { defineDictionary } from "dialex";
+    `import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("home", {
   en: {

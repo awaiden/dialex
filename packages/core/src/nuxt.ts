@@ -17,7 +17,7 @@ export interface NuxtI18nOptions extends I18nConfig {
  * ```ts
  * // nuxt.config.ts
  * export default defineNuxtConfig({
- *   modules: ["dialex/nuxt"],
+ *   modules: ["dialexjs/nuxt"],
  *   dialex: { defaultLocale: "en", locales: ["en", "tr"] },
  * });
  * ```
@@ -34,7 +34,7 @@ export default defineNuxtModule<NuxtI18nOptions>({
       filename: "dialex.plugin.mjs",
       getContents: () => `
 import { defineNuxtPlugin, useCookie } from "#imports";
-import { createI18n } from "dialex/vue";
+import { createI18n } from "dialexjs/vue";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const cookie = useCookie(${JSON.stringify(cookieName)}, { sameSite: "lax", path: "/" });
@@ -48,8 +48,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
 
     addImports([
-      { name: "useI18n", from: "dialex/vue" },
-      { name: "useDictionary", from: "dialex/vue" },
+      { name: "useI18n", from: "dialexjs/vue" },
+      { name: "useDictionary", from: "dialexjs/vue" },
     ]);
   },
 });

@@ -1,4 +1,4 @@
-import type { TranslateProvider } from "dialex";
+import type { TranslateProvider } from "dialexjs";
 import {
   buildSystemPrompt,
   parseTranslations,

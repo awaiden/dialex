@@ -3,7 +3,7 @@
 词典中的字符串可以是 [ICU MessageFormat](https://unicode-org.github.io/icu/userguide/format_parse/messages/) 消息。向 `t` 传入一个值对象，Dialex 就会按当前 locale 格式化该消息。
 
 ```ts
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 
 export default defineDictionary("cart", {
   en: {
@@ -51,7 +51,7 @@ ICU 消息可以与普通字符串和[函数值](./dictionaries.md#values)并存
 如果消息无法格式化（例如缺少某个值），`t` 会记录一条警告并原样返回消息，因此有问题的字符串绝不会让页面崩溃。`formatMessage` 本身会抛出 `IcuFormatError`（值缺失或无效）或 `IcuSyntaxError`（附带位置）。
 
 ```ts
-import { formatMessage } from "dialex";
+import { formatMessage } from "dialexjs";
 
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```

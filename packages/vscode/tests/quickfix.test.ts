@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { parseDictionaryText, getString, hasPath } from "@dialex/cli/api";
+import { parseDictionaryText, getString, hasPath } from "@dialexjs/cli/api";
 import { addMissingKeys, addUnknownKey } from "../src/quickfix.js";
 import { HOME } from "./helpers.js";
 

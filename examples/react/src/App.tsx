@@ -1,4 +1,4 @@
-import { useI18n, useDictionary } from "dialex/react";
+import { useI18n, useDictionary } from "dialexjs/react";
 import HomePage from "./pages/home/page";
 
 function App() {

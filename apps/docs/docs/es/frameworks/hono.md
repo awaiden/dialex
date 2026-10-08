@@ -2,7 +2,7 @@
 
 ```ts
 import { Hono } from "hono";
-import { i18n } from "dialex/hono";
+import { i18n } from "dialexjs/hono";
 import dictionaries from "./src/i18n.generated.js";
 
 const app = new Hono();

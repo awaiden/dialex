@@ -18,7 +18,7 @@ describe("CLI generate command", () => {
   it("generates i18n.generated.ts and dialex-env.d.ts", () => {
     // Set up mock content file
     const contentCode = `
-import { defineDictionary } from "dialex";
+import { defineDictionary } from "dialexjs";
 export default defineDictionary({
   name: "auth",
   dictionary: {

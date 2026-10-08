@@ -1,6 +1,6 @@
 # 路由辅助函数
 
-来自 `dialex/routing` 的、与框架无关的带 locale 前缀 URL 辅助函数。
+来自 `dialexjs/routing` 的、与框架无关的带 locale 前缀 URL 辅助函数。
 
 ```ts
 import {
@@ -9,7 +9,7 @@ import {
   alternateLinks,
   alternateLanguages,
   sitemapEntries,
-} from "dialex/routing";
+} from "dialexjs/routing";
 
 const options = { locales: ["en", "tr"], defaultLocale: "en" };
 

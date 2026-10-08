@@ -1,5 +1,5 @@
 import pc from "picocolors";
-import type { TranslateProvider } from "dialex";
+import type { TranslateProvider } from "dialexjs";
 import {
   TODO_PREFIX,
   listLeaves,
@@ -8,7 +8,7 @@ import {
   setString,
 } from "../utils/dictionary-edit.js";
 import { loadProject, toKey, type ProjectDictionary } from "../utils/project.js";
-import { isIcuStructured } from "dialex/icu";
+import { isIcuStructured } from "dialexjs/icu";
 import { preservesPlaceholders } from "../translate/placeholders.js";
 import { logger } from "../utils/logger.js";
 
@@ -56,7 +56,7 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
   if (!provider && !options.dryRun) {
     throw new Error(
       "No translate provider configured. Add `translate: { provider: claudeProvider() }` to dialex.config.ts " +
-        '(import it from "@dialex/cli/translate").',
+        '(import it from "@dialexjs/cli/translate").',
     );
   }
 

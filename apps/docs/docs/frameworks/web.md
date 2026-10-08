@@ -1,9 +1,9 @@
 # Fetch API (Request)
 
-`dialex/web` resolves the locale from a standard `Request`. Use it in any framework or runtime that hands you one: React Router and Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
+`dialexjs/web` resolves the locale from a standard `Request`. Use it in any framework or runtime that hands you one: React Router and Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialex/web";
+import { createI18nHandler } from "dialexjs/web";
 import dictionaries from "./i18n.generated.js";
 
 export const resolveI18n = createI18nHandler({
@@ -27,7 +27,7 @@ Detection order and options are the same as for the other adapters: see [Locale 
 
 ## Recipes
 
-These show how the pieces fit together. Only `dialex/web` itself is covered by Dialex's tests; the framework wiring below has not been run against real apps, so check it against your framework's current docs.
+These show how the pieces fit together. Only `dialexjs/web` itself is covered by Dialex's tests; the framework wiring below has not been run against real apps, so check it against your framework's current docs.
 
 ### React Router / Remix
 

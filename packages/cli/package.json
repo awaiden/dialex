@@ -1,5 +1,5 @@
 {
-  "name": "@dialex/cli",
+  "name": "@dialexjs/cli",
   "version": "0.1.0",
   "description": "High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking)",
   "homepage": "https://github.com/awaiden/dialex#readme",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "cli": "./dist/index.mjs"
+    "dialex": "./dist/index.mjs"
   },
   "files": [
     "dist"
@@ -38,7 +38,7 @@
     "@clack/prompts": "^1.8.1",
     "chokidar": "^5.0.0",
     "commander": "^15.0.0",
-    "dialex": "workspace:*",
+    "dialexjs": "workspace:*",
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.5",
     "picocolors": "^1.1.1",
