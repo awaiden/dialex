@@ -12,14 +12,3 @@ declare module "virtual:dialex-config" {
   const config: I18nConfig;
   export default config;
 }
-
-declare module "virtual:pregnancy-government-dictionaries" {
-  const dictionaries: Record<string, Record<string, any>>;
-  export default dictionaries;
-}
-
-declare module "virtual:pregnancy-government-config" {
-  import type { I18nConfig } from "./index.js";
-  const config: I18nConfig;
-  export default config;
-}

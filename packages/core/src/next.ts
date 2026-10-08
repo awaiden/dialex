@@ -141,8 +141,6 @@ export function withI18n(nextConfig: any = {}, inlineConfig: I18nConfig = {}) {
           ...webpackConfig.resolve.alias,
           "virtual:dialex-dictionaries": dictFilePath,
           "virtual:dialex-config": configFilePath,
-          "virtual:pregnancy-government-dictionaries": dictFilePath,
-          "virtual:pregnancy-government-config": configFilePath,
         };
 
         webpackConfig.plugins = webpackConfig.plugins || [];
@@ -159,20 +157,12 @@ export function withI18n(nextConfig: any = {}, inlineConfig: I18nConfig = {}) {
                   normalModuleFactory.hooks.resolveForScheme
                     .for("virtual")
                     .tap("DialexNextPlugin", (resourceData: any) => {
-                      if (
-                        resourceData.resource?.startsWith("virtual:dialex-dictionaries") ||
-                        resourceData.resource?.startsWith(
-                          "virtual:pregnancy-government-dictionaries",
-                        )
-                      ) {
+                      if (resourceData.resource?.startsWith("virtual:dialex-dictionaries")) {
                         resourceData.path = dictFilePath;
                         resourceData.resource = dictFilePath;
                         return true;
                       }
-                      if (
-                        resourceData.resource?.startsWith("virtual:dialex-config") ||
-                        resourceData.resource?.startsWith("virtual:pregnancy-government-config")
-                      ) {
+                      if (resourceData.resource?.startsWith("virtual:dialex-config")) {
                         resourceData.path = configFilePath;
                         resourceData.resource = configFilePath;
                         return true;
@@ -195,8 +185,6 @@ export function withI18n(nextConfig: any = {}, inlineConfig: I18nConfig = {}) {
           ...baseConfig?.turbopack?.resolveAlias,
           "virtual:dialex-dictionaries": dictFilePath,
           "virtual:dialex-config": configFilePath,
-          "virtual:pregnancy-government-dictionaries": dictFilePath,
-          "virtual:pregnancy-government-config": configFilePath,
         },
       },
       experimental: {
@@ -207,8 +195,6 @@ export function withI18n(nextConfig: any = {}, inlineConfig: I18nConfig = {}) {
             ...baseConfig?.experimental?.turbo?.resolveAlias,
             "virtual:dialex-dictionaries": dictFilePath,
             "virtual:dialex-config": configFilePath,
-            "virtual:pregnancy-government-dictionaries": dictFilePath,
-            "virtual:pregnancy-government-config": configFilePath,
           },
         },
       },

@@ -41,16 +41,6 @@ export function generateDictionaries(
   generateDts(root, files, config.locales);
   const dtsPath = path.join(srcDir, "dialex-env.d.ts");
 
-  // Remove legacy env file if it exists
-  const legacyDtsPath = path.join(srcDir, "pregnancy-government-env.d.ts");
-  if (fs.existsSync(legacyDtsPath)) {
-    try {
-      fs.unlinkSync(legacyDtsPath);
-    } catch {
-      // Ignore
-    }
-  }
-
   // 2. Build standalone generated module content
   const importLines: string[] = [];
   const dictIdentifiers: string[] = [];

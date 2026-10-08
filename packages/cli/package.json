@@ -13,7 +13,7 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "dialex": "./dist/index.mjs"
+    "cli": "./dist/index.mjs"
   },
   "files": [
     "dist"

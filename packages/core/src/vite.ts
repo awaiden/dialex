@@ -156,10 +156,10 @@ export function i18nPlugin(inlineConfig: I18nConfig = {}): Plugin {
       }
     },
     resolveId(id) {
-      if (id === VIRTUAL_MODULE_ID || id === "virtual:pregnancy-government-dictionaries") {
+      if (id === VIRTUAL_MODULE_ID) {
         return RESOLVED_VIRTUAL_MODULE_ID;
       }
-      if (id === VIRTUAL_CONFIG_ID || id === "virtual:pregnancy-government-config") {
+      if (id === VIRTUAL_CONFIG_ID) {
         return RESOLVED_VIRTUAL_CONFIG_ID;
       }
     },

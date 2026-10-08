@@ -142,16 +142,6 @@ declare module 'dialex/angular' {
     fs.mkdirSync(path.dirname(dtsPath), { recursive: true });
     fs.writeFileSync(dtsPath, dtsContent, "utf-8");
   }
-
-  // Remove legacy env file if it exists
-  const legacyDtsPath = path.join(dtsDir, "pregnancy-government-env.d.ts");
-  if (fs.existsSync(legacyDtsPath)) {
-    try {
-      fs.unlinkSync(legacyDtsPath);
-    } catch {
-      // Ignore
-    }
-  }
 }
 
 let scanned = false;

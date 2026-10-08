@@ -37,7 +37,6 @@ dist-ssr
 
 *-env.d.ts
 .dialex
-.pregnancy-government
 .next
 *.tsbuildinfo
 .turbo
