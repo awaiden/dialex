@@ -1,0 +1,90 @@
+{
+  "name": "dialex-vscode",
+  "displayName": "Dialex",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Diagnostics, hover, go to definition, completion and quick fixes for Dialex translations.",
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "dialex",
+    "i18n",
+    "internationalization",
+    "locale",
+    "translation"
+  ],
+  "homepage": "https://github.com/awaiden/dialex#readme",
+  "bugs": {
+    "url": "https://github.com/awaiden/dialex/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaiden/dialex.git",
+    "directory": "packages/vscode"
+  },
+  "publisher": "awaiden",
+  "type": "module",
+  "main": "./dist/extension.cjs",
+  "scripts": {
+    "build": "vp pack",
+    "package": "vsce package --no-dependencies",
+    "test": "vp test"
+  },
+  "devDependencies": {
+    "@dialex/cli": "workspace:*",
+    "@types/node": "^26.1.1",
+    "@types/vscode": "~1.90.0",
+    "@vscode/vsce": "^4.0.0",
+    "fast-glob": "^3.3.3",
+    "typescript": "^7.0.2",
+    "vite-plus": "catalog:"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "dialex.refresh",
+        "title": "Dialex: Refresh Diagnostics"
+      }
+    ],
+    "configuration": {
+      "title": "Dialex",
+      "properties": {
+        "dialex.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Dialex diagnostics, hover, definitions, completion and quick fixes."
+        },
+        "dialex.unusedKeys": {
+          "type": "boolean",
+          "default": false,
+          "description": "Fade out translation keys and dictionaries that no source file seems to use. This is a word-match heuristic, so it is off by default."
+        },
+        "dialex.configPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Dialex config file, relative to each project root. Leave empty to use dialex.config.* or i18n.config.*."
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "workspaceContains:**/*.content.ts",
+    "workspaceContains:**/dialex.config.*",
+    "workspaceContains:**/i18n.config.*"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Dialex reads dictionaries from disk."
+    }
+  }
+}

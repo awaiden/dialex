@@ -1,0 +1,20 @@
+{
+  "name": "@dialex/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "check-translations": "bun run scripts/check-translations.ts",
+    "test": "bun run scripts/check-translations.ts"
+  },
+  "devDependencies": {
+    "@mdit-vue/shared": "^3.0.2",
+    "@vuepress/bundler-vite": "2.0.0-rc.31",
+    "@vuepress/plugin-search": "2.0.0-rc.137",
+    "@vuepress/theme-default": "2.0.0-rc.137",
+    "vue": "^3.5.43",
+    "vuepress": "2.0.0-rc.31"
+  }
+}

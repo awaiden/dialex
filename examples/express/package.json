@@ -1,0 +1,23 @@
+{
+  "name": "example-express",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "i18n:generate": "dialex generate",
+    "build": "dialex generate && tsc --noEmit",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "dialex": "workspace:*",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@dialex/cli": "workspace:*",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "^7.0.2"
+  }
+}

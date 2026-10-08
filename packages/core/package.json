@@ -1,0 +1,163 @@
+{
+  "name": "dialex",
+  "version": "0.1.0",
+  "description": "Type-safe, zero-boilerplate internationalization (i18n) framework for React, Next.js, Hono, Express, Fastify, Koa, NestJS, and Vite.",
+  "homepage": "https://github.com/awaiden/dialex#readme",
+  "bugs": {
+    "url": "https://github.com/awaiden/dialex/issues"
+  },
+  "license": "MIT",
+  "author": "awaiden",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaiden/dialex.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./angular": "./dist/angular.mjs",
+    "./astro": "./dist/astro.mjs",
+    "./elysia": "./dist/elysia.mjs",
+    "./express": "./dist/express.mjs",
+    "./fastify": "./dist/fastify.mjs",
+    "./h3": "./dist/h3.mjs",
+    "./hono": "./dist/hono.mjs",
+    "./icu": "./dist/icu/index.mjs",
+    "./koa": "./dist/koa.mjs",
+    "./nestjs": "./dist/nestjs.mjs",
+    "./next": "./dist/next.mjs",
+    "./next/link": "./dist/next/link.mjs",
+    "./next/middleware": "./dist/next/middleware.mjs",
+    "./nuxt": "./dist/nuxt.mjs",
+    "./react": "./dist/react.mjs",
+    "./routing": "./dist/routing.mjs",
+    "./scanner": "./dist/scanner.mjs",
+    "./server": "./dist/server.mjs",
+    "./sveltekit": "./dist/sveltekit.mjs",
+    "./testing": "./dist/testing/index.mjs",
+    "./testing/react": "./dist/testing/react.mjs",
+    "./testing/vue": "./dist/testing/vue.mjs",
+    "./vite": "./dist/vite.mjs",
+    "./vue": "./dist/vue.mjs",
+    "./web": "./dist/web.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "test": "vp test",
+    "check": "vp check",
+    "prepublishOnly": "vp run build"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.3",
+    "unconfig": "^7.5.0"
+  },
+  "devDependencies": {
+    "@angular/common": "^22.2.1",
+    "@angular/compiler": "^22.2.1",
+    "@angular/core": "^22.2.1",
+    "@angular/platform-browser": "^22.2.1",
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/core": "^12.1.2",
+    "@nuxt/kit": "^4.6.0",
+    "@types/express": "^5.0.6",
+    "@types/koa": "^3.0.3",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^7.3.8",
+    "bumpp": "^11.1.0",
+    "elysia": "^1.4.30",
+    "express": "^5.2.1",
+    "fastify": "^5.12.5",
+    "fastify-plugin": "^6.0.0",
+    "h3": "^1.15.11",
+    "hono": "^4.13.13",
+    "jsdom": "^30.1.2",
+    "koa": "^3.2.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "typescript": "^7.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vue": "^3.5.43",
+    "zone.js": "^0.16.3"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=17.0.0",
+    "@nestjs/common": ">=10.0.0",
+    "@nestjs/core": ">=10.0.0",
+    "@nuxt/kit": ">=3.0.0",
+    "astro": ">=4.0.0",
+    "elysia": ">=1.0.0",
+    "express": ">=4.0.0",
+    "fastify": ">=4.0.0",
+    "h3": ">=1.8.0 <2",
+    "hono": ">=3.0.0",
+    "koa": ">=2.0.0",
+    "next": ">=13.0.0",
+    "react": "^19.3.0",
+    "rxjs": ">=7.0.0",
+    "vite": "^6.0.0",
+    "vue": "^3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/core": {
+      "optional": true
+    },
+    "@nestjs/common": {
+      "optional": true
+    },
+    "@nestjs/core": {
+      "optional": true
+    },
+    "@nuxt/kit": {
+      "optional": true
+    },
+    "astro": {
+      "optional": true
+    },
+    "elysia": {
+      "optional": true
+    },
+    "express": {
+      "optional": true
+    },
+    "fastify": {
+      "optional": true
+    },
+    "h3": {
+      "optional": true
+    },
+    "hono": {
+      "optional": true
+    },
+    "koa": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "inlinedDependencies": {
+    "fastify-plugin": "6.0.0"
+  }
+}

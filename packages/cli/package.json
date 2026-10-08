@@ -1,0 +1,52 @@
+{
+  "name": "@dialex/cli",
+  "version": "0.1.0",
+  "description": "High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking)",
+  "homepage": "https://github.com/awaiden/dialex#readme",
+  "bugs": {
+    "url": "https://github.com/awaiden/dialex/issues"
+  },
+  "license": "MIT",
+  "author": "awaiden",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaiden/dialex.git"
+  },
+  "bin": {
+    "cli": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./api": "./dist/api.mjs",
+    "./translate": "./dist/translate/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "test": "vp test",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "chokidar": "^5.0.0",
+    "commander": "^15.0.0",
+    "dialex": "workspace:*",
+    "fast-glob": "^3.3.3",
+    "magicast": "^0.5.5",
+    "picocolors": "^1.1.1",
+    "unconfig": "^7.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2",
+    "vite-plus": "catalog:"
+  }
+}

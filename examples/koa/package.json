@@ -1,0 +1,25 @@
+{
+  "name": "example-koa",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "i18n:generate": "dialex generate",
+    "build": "dialex generate && tsc --noEmit",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@koa/router": "^13.1.0",
+    "dialex": "workspace:*",
+    "koa": "^3.2.1"
+  },
+  "devDependencies": {
+    "@dialex/cli": "workspace:*",
+    "@types/koa": "^3.0.3",
+    "@types/koa__router": "^12.0.4",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "^7.0.2"
+  }
+}
