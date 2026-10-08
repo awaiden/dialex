@@ -19,11 +19,15 @@ export interface IcuFinding {
 /** `locale -> dotted path within the dictionary -> string value` */
 export type LocaleStrings = Map<string, Map<string, string>>;
 
+/** CLDR order. `resolvedOptions().pluralCategories` order differs between Node versions. */
+const CATEGORY_ORDER = ["zero", "one", "two", "few", "many"];
+
 function requiredCategories(locale: string, ordinal: boolean): string[] {
   try {
     return new Intl.PluralRules(locale, { type: ordinal ? "ordinal" : "cardinal" })
       .resolvedOptions()
-      .pluralCategories.filter((c) => c !== "other");
+      .pluralCategories.filter((c) => c !== "other")
+      .sort((a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b));
   } catch {
     return []; // not a valid BCP 47 tag; nothing to compare against
   }
