@@ -44,7 +44,7 @@ Devuelve los datos a tu componente y renderízalos allí. Envuelve la respuesta 
 
 ### TanStack Start y SolidStart
 
-Lee la petición actual con el helper de servidor de tu framework y pásala a `resolveDialex`. Por ejemplo, en SolidStart, `getRequestEvent()?.request` devuelve la `Request` activa. Como la llamada necesita un contexto de servidor, úsala en funciones de servidor o en middleware, no en código de cliente.
+Lee la petición actual con el helper de servidor de tu framework y pásala a `resolveDialex`. Por ejemplo, en SolidStart, `getRequestEvent()?.request` devuelve la `Request` activa. Como la llamada necesita un contexto de servidor, úsala en funciones de servidor o en middleware, no en código de cliente. En TanStack Start, llama a `getRequest()` de `@tanstack/react-start/server` dentro de un manejador de `createServerFn`. La aplicación [`examples/tanstack`](https://github.com/awaiden/dialex/tree/main/examples/tanstack) lo hace en el `beforeLoad` de la ruta raíz y pasa el resultado a `DialexProvider` como `initialLocale`; a diferencia de las demás recetas de aquí, funciona en una aplicación real.
 
 ### Workers, Deno, Bun
 

@@ -44,7 +44,7 @@ Veriyi bileşeninize döndürün ve orada render edin. Yanıtı kendiniz oluştu
 
 ### TanStack Start ve SolidStart
 
-Geçerli isteği çerçevenizin sunucu yardımcısıyla okuyun, ardından `resolveDialex` işlevine verin. Örneğin SolidStart'ta `getRequestEvent()?.request` etkin `Request` değerini döndürür. Çağrı bir sunucu bağlamı gerektirdiğinden, onu istemci kodunda değil, sunucu fonksiyonlarında veya middleware'de kullanın.
+Geçerli isteği çerçevenizin sunucu yardımcısıyla okuyun, ardından `resolveDialex` işlevine verin. Örneğin SolidStart'ta `getRequestEvent()?.request` etkin `Request` değerini döndürür. Çağrı bir sunucu bağlamı gerektirdiğinden, onu istemci kodunda değil, sunucu fonksiyonlarında veya middleware'de kullanın. TanStack Start'ta `getRequest()` işlevini `@tanstack/react-start/server` içinden bir `createServerFn` işleyicisinin içinde çağırın. [`examples/tanstack`](https://github.com/awaiden/dialex/tree/main/examples/tanstack) uygulaması bunu kök rotanın `beforeLoad` işlevinde yapar ve sonucu `DialexProvider`'a `initialLocale` olarak verir; buradaki diğer tariflerin aksine gerçek bir uygulamada çalışır.
 
 ### Workers, Deno, Bun
 

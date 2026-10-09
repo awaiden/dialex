@@ -44,7 +44,7 @@ Return the data to your component and render it there. Wrap the response with `a
 
 ### TanStack Start and SolidStart
 
-Read the current request with your framework's server helper, then pass it to `resolveDialex`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code.
+Read the current request with your framework's server helper, then pass it to `resolveDialex`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code. In TanStack Start, call `getRequest()` from `@tanstack/react-start/server` inside a `createServerFn` handler. The [`examples/tanstack`](https://github.com/awaiden/dialex/tree/main/examples/tanstack) app does this in the root route's `beforeLoad` and passes the result to `DialexProvider` as `initialLocale`; unlike the other recipes here, it runs in a real app.
 
 ### Workers, Deno, Bun
 

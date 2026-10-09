@@ -12,6 +12,10 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 
 ## [Unreleased]
 
+### Added
+
+- `examples/tanstack`: a TanStack Start (React, SSR) app with server-side locale detection, ICU plurals and a language switch.
+
 ### Fixed
 
 - `dialexjs/vite` under server-side rendering (reported with TanStack Start). Importing `dialexjs/react` in SSR failed with a `virtual:` import error until you set `ssr.noExternal` yourself; the plugin now sets `ssr.noExternal` and `optimizeDeps.exclude` for `dialexjs`.

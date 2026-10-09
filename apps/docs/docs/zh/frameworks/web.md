@@ -44,7 +44,7 @@ export async function loader({ request }: { request: Request }) {
 
 ### TanStack Start 与 SolidStart
 
-使用框架提供的服务端辅助函数读取当前请求，然后传给 `resolveDialex`。例如在 SolidStart 中，`getRequestEvent()?.request` 会返回当前的 `Request`。由于该调用需要服务端上下文，请在服务端函数或中间件中使用，而不是在客户端代码中。
+使用框架提供的服务端辅助函数读取当前请求，然后传给 `resolveDialex`。例如在 SolidStart 中，`getRequestEvent()?.request` 会返回当前的 `Request`。由于该调用需要服务端上下文，请在服务端函数或中间件中使用，而不是在客户端代码中。 在 TanStack Start 中，请在 `createServerFn` 处理函数内调用 `@tanstack/react-start/server` 的 `getRequest()`。[`examples/tanstack`](https://github.com/awaiden/dialex/tree/main/examples/tanstack) 应用在根路由的 `beforeLoad` 中这样做，并把结果作为 `initialLocale` 传给 `DialexProvider`；与这里的其他示例不同，它是在真实应用中运行的。
 
 ### Workers、Deno、Bun
 

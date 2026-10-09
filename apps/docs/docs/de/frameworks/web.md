@@ -44,7 +44,7 @@ Gib die Daten an deine Komponente zurück und rendere sie dort. Umhülle die Ant
 
 ### TanStack Start und SolidStart
 
-Lies den aktuellen Request mit dem Server-Helfer deines Frameworks und übergib ihn an `resolveDialex`. In SolidStart liefert zum Beispiel `getRequestEvent()?.request` den aktiven `Request`. Da der Aufruf einen Server-Kontext braucht, verwende ihn in Serverfunktionen oder Middleware, nicht in Client-Code.
+Lies den aktuellen Request mit dem Server-Helfer deines Frameworks und übergib ihn an `resolveDialex`. In SolidStart liefert zum Beispiel `getRequestEvent()?.request` den aktiven `Request`. Da der Aufruf einen Server-Kontext braucht, verwende ihn in Serverfunktionen oder Middleware, nicht in Client-Code. In TanStack Start rufst du `getRequest()` aus `@tanstack/react-start/server` innerhalb eines `createServerFn`-Handlers auf. Die App [`examples/tanstack`](https://github.com/awaiden/dialex/tree/main/examples/tanstack) macht das im `beforeLoad` der Root-Route und übergibt das Ergebnis als `initialLocale` an `DialexProvider`; anders als die übrigen Rezepte hier läuft sie in einer echten App.
 
 ### Workers, Deno, Bun
 

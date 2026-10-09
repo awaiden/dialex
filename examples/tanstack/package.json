@@ -1,0 +1,30 @@
+{
+  "name": "example-tanstack",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dx:generate": "dx generate",
+    "dev": "dx generate && vp dev --port 3000",
+    "build": "dx generate && vp build && tsc --noEmit",
+    "preview": "vp preview"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "1.170.41",
+    "@tanstack/react-start": "1.168.60",
+    "dialexjs": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@tanstack/router-cli": "^1.132.0",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "^7.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

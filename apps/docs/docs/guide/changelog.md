@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Added
+
+- `examples/tanstack`: a TanStack Start (React, SSR) app with server-side locale detection, ICU plurals and a language switch.
+
 ### Fixed
 
 - `dialexjs/vite` under server-side rendering (reported with TanStack Start). Importing `dialexjs/react` in SSR failed with a `virtual:` import error until you set `ssr.noExternal` yourself; the plugin now sets `ssr.noExternal` and `optimizeDeps.exclude` for `dialexjs`.

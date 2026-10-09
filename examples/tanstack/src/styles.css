@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #1c1c1e;
+}
+main,
+.header,
+.footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+}
+.header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e4e7;
+}
+.header nav {
+  display: flex;
+  gap: 1rem;
+}
+.locales {
+  display: flex;
+  gap: 0.5rem;
+}
+.card {
+  padding: 1rem 1.25rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  background: #fafafa;
+}
+.footer {
+  color: #71717a;
+  font-size: 0.9rem;
+}
