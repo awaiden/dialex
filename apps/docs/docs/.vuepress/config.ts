@@ -21,6 +21,7 @@ const PAGES = {
     "vscode",
     "ai",
     "configuration",
+    "changelog",
   ],
   frameworks: [
     "README",

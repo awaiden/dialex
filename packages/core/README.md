@@ -147,6 +147,10 @@ See the documentation site (`apps/docs`) for guides and the API reference.
 
 ---
 
+## 📝 Changelog
+
+See what changed in each release in the [changelog](https://github.com/awaiden/dialex/blob/main/CHANGELOG.md), or on [GitHub Releases](https://github.com/awaiden/dialex/releases).
+
 ## 📄 License
 
 MIT © [awaiden](https://github.com/awaiden)

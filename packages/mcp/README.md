@@ -59,6 +59,10 @@ The server exposes bundled documentation under `dialex://docs/<topic>`:
 - `dialex://docs/icu`
 - `dialex://docs/adapters`
 
+## Changelog
+
+See what changed in each release in the [changelog](https://github.com/awaiden/dialex/blob/main/CHANGELOG.md), or on [GitHub Releases](https://github.com/awaiden/dialex/releases).
+
 ## License
 
 MIT © [awaiden](https://github.com/awaiden)

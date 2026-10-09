@@ -15,7 +15,7 @@ jobs:
     name: Publish to npm
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # create the GitHub Release
       id-token: write
     steps:
       - name: Checkout repository
@@ -60,6 +60,11 @@ jobs:
             if (bad.length) { console.error(bad.join("\n")); process.exit(1); }
           '
 
+      # A release without notes is a mistake: fail before anything is published.
+      - name: Check changelog entry
+        if: github.ref_type == 'tag'
+        run: node scripts/release-notes.mjs "$GITHUB_REF_NAME" > "$RUNNER_TEMP/release-notes.md"
+
       - name: Publish Core Package (dialexjs)
         run: |
           cd packages/core
@@ -87,3 +92,13 @@ jobs:
           npm publish "$RUNNER_TEMP"/dialexjs-mcp-*.tgz --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: github.ref_type == 'tag'
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --verify-tag
+        env:
+          GH_TOKEN: ${{ github.token }}

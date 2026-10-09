@@ -29,6 +29,7 @@
 - [Vue / Nuxt](/frameworks/vue.html): Vue / Nuxt documentation and reference.
 - [Fetch API (Request)](/frameworks/web.html): Fetch API (Request) documentation and reference.
 - [AI Assistants & MCP](/guide/ai.html): AI Assistants & MCP documentation and reference.
+- [Changelog](/guide/changelog.html): Changelog documentation and reference.
 - [Configuration](/guide/configuration.html): Configuration documentation and reference.
 - [Dictionaries](/guide/dictionaries.html): Dictionaries documentation and reference.
 - [Locale Fallbacks](/guide/fallbacks.html): Locale Fallbacks documentation and reference.

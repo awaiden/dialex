@@ -403,6 +403,10 @@ bun run ready # Runs vp check, vp test, and vp build across all workspaces
 
 ---
 
+## 📝 Changelog
+
+See what changed in each release in the [changelog](https://github.com/awaiden/dialex/blob/main/CHANGELOG.md), or on [GitHub Releases](https://github.com/awaiden/dialex/releases).
+
 ## 📄 License
 
 MIT License © 2026 [awaiden](https://github.com/awaiden)
