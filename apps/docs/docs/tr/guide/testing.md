@@ -48,16 +48,17 @@ Göreli URL'ler `http://localhost` temel alınarak çözülür. Düz bir `Reques
 
 ## Bileşen testleri
 
-`useDictionary`, `useT` veya `useDialex` çağıran bileşenler eklentinin sanal modüllerini okur; bu yüzden test çalıştırıcınızın Dialex Vite eklentisine ihtiyacı vardır. Vitest `vite.config.ts` dosyanızı kullandığından, eklenti zaten orada ise başka bir şey gerekmez.
+`useDictionary`, `useT` veya `useDialex` çağıran bileşenlerin bir provider'dan sözlüklere ihtiyacı vardır. Aşağıdaki test yardımcılarına üretilen `dialex` dışa aktarımını (ya da kendi `dictionaries` değerlerinizi) verin; bundler eklentisine veya mock'lara gerek yoktur.
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+import { dialex } from "../dialex.generated";
 
 render(
-  <TestDialexProvider locale="tr">
+  <TestDialexProvider {...dialex} locale="tr">
     <Header />
   </TestDialexProvider>,
 );
@@ -71,10 +72,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+import { dialex } from "../dialex.generated";
 
-const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });
 ```
-
-::: tip Vite eklentisi olmadan
-Eklentiyi test yapılandırmanıza ekleyemiyorsanız, onun yerine iki sanal modülü taklit edin (`vi.mock("virtual:dialex-dictionaries", ...)` ve `vi.mock("virtual:dialex-config", ...)`). Dialex'in kendi test paketi de bunu yapar.
-:::

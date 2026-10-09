@@ -19,6 +19,7 @@ dialex lint -c ./dialex.config.ts
 - 明显使用了 [ICU](../guide/icu.md)（`plural`、`select`、`number` 等）的字符串不是有效的 ICU，或者某个 locale 对同一个键使用了与默认 locale 不同的参数。
 - 源代码用不存在的词典调用 `getDictionary("x")`、`useDictionary("x")` 或 `@DialexDictionary("x")`。
 - 源代码用不存在的路径调用 `t("home.nav.missing")`。只有第一段是已知词典名称的 `t()` 调用才会被检查，因此无关的 `t()` 函数会被忽略。
+- 存在生成文件（`dialex.generated.ts` 或 `dialex-env.d.ts`），但已经过期。运行 `dialex generate`，或使用 `--fix`。
 
 **警告**
 
@@ -41,7 +42,7 @@ dialex lint -c ./dialex.config.ts
 
 ## --fix
 
-对于某个 locale 有而另一个 locale 缺少的每个键，`--fix` 会把默认 locale 的值复制到缺失的位置。字符串会加上 `[TODO] ` 前缀以便查找；函数则按原样复制。缺少的已配置 locale 会被创建。编辑是在语法树上进行的，因此注释和文件的其余部分都会保留。
+对于某个 locale 有而另一个 locale 缺少的每个键，`--fix` 会把默认 locale 的值复制到缺失的位置。字符串会加上 `[TODO] ` 前缀以便查找；函数则按原样复制。缺少的已配置 locale 会被创建。编辑是在语法树上进行的，因此注释和文件的其余部分都会保留。 它还会重写已过期的生成文件。
 
 之后运行 [`dialex translate`](./translate.md)，用真实的翻译替换这些占位符。
 

@@ -57,13 +57,16 @@ Fixes replace the file's text in the editor, so they can be undone, and nothing 
 
 ## Settings
 
-| Setting             | Default | Description                                                                                           |
-| ------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `dialex.enable`     | `true`  | Turn all features on or off                                                                           |
-| `dialex.unusedKeys` | `false` | Fade out possibly unused keys and dictionaries. It is a word-match heuristic, so it is off by default |
-| `dialex.configPath` | `""`    | Config file path relative to each project root                                                        |
+| Setting               | Default | Description                                                                                                                                     |
+| --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`  | Turn all features on or off                                                                                                                     |
+| `dialex.unusedKeys`   | `false` | Fade out possibly unused keys and dictionaries. It is a word-match heuristic, so it is off by default                                           |
+| `dialex.autoGenerate` | `true`  | Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file changes, in projects that already have a generated file |
+| `dialex.configPath`   | `""`    | Config file path relative to each project root                                                                                                  |
 
 The command **Dialex: Refresh Diagnostics** re-analyzes everything. Diagnostics also refresh when you save a file or when a dictionary or config file changes.
+
+The command **Dialex: Regenerate dialex.generated.ts** does it on demand. Auto-generate reads the config from the syntax tree and never runs it, is skipped in untrusted workspaces, and only touches projects that already have a generated file, so it never creates files you did not ask for.
 
 ## Projects
 

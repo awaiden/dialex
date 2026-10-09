@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "tsc -b && vp build",
+    "dev": "dx generate && vp dev",
+    "build": "dx generate && tsc -b && vp build",
     "lint": "oxlint",
-    "preview": "vp preview"
+    "preview": "vp preview",
+    "dx:generate": "dx generate"
   },
   "dependencies": {
     "dialexjs": "workspace:*",
@@ -15,6 +16,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

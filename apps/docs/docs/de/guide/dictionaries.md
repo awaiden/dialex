@@ -35,4 +35,4 @@ en: {
 
 ## Locale-Parität
 
-Jedes Wörterbuch sollte für jedes Locale dieselben Schlüssel definieren. Führe [`dialex check`](../cli/check.md) in der CI aus, um das durchzusetzen. Ist `locales` in der Konfiguration gesetzt, bricht auch das Vite-Plugin den Build ab, wenn einem Wörterbuch ein konfiguriertes Locale fehlt.
+Jedes Wörterbuch sollte für jedes Locale dieselben Schlüssel definieren. Führe [`dialex check`](../cli/check.md) in der CI aus, um das durchzusetzen; es meldet auch ein konfiguriertes Locale, das einem Wörterbuch fehlt.

@@ -8,7 +8,7 @@ Desarrollado y probado con Angular 22. Usa únicamente `signal`, `computed`, `in
 
 ## Configuración
 
-Angular CLI no ejecuta el plugin de Vite de Dialex, así que los diccionarios se pasan de forma explícita. Genéralos con la CLI:
+Angular recibe los diccionarios de forma explícita, igual que los adaptadores de servidor. Genéralos con la CLI:
 
 ```bash
 dialex generate        # writes src/dialex.generated.ts

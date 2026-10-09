@@ -14,22 +14,20 @@ import {
   writePersistedLocale,
   type PersistMode,
 } from "./persist.js";
-import { createT, type Translate } from "./index.js";
-import { lookupLocale } from "./resolver.js";
+import { createT, type DialexClientConfig, type DialexSource, type Translate } from "./index.js";
+import { getDictionaryStore, readDictionary, type DictionaryStore } from "./store.js";
 
-// @ts-ignore
-import dictionaries, { lazy, loadDictionary } from "virtual:dialex-dictionaries";
-// @ts-ignore
-import config from "virtual:dialex-config";
+export { preloadDictionaries } from "./store.js";
 
 interface DialexContextType {
   locale: string;
   setLocale: (locale: string) => void;
+  store: DictionaryStore;
 }
 
 const DialexContext = createContext<DialexContextType | undefined>(undefined);
 
-export interface DialexProviderProps {
+export interface DialexProviderProps extends DialexSource {
   children: ReactNode;
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
   defaultLocale?: string;
@@ -53,19 +51,24 @@ export interface DialexProviderProps {
 
 export function DialexProvider({
   children,
+  dictionaries,
+  config,
+  loaders,
   defaultLocale,
   initialLocale,
   persist = "cookie",
   storageKey = "locale",
 }: DialexProviderProps) {
+  // One store per generated `dialex` object, so `preloadDictionaries(dialex, ...)` shares it.
+  const store = getDictionaryStore({ dictionaries, config, loaders });
   const [locale, setLocaleState] = useState<string>(
-    initialLocale || defaultLocale || config.defaultLocale || "en",
+    initialLocale || defaultLocale || store.config.defaultLocale || "en",
   );
 
   useEffect(() => {
     if (initialLocale) return;
     const stored = readPersistedLocale(persist, storageKey);
-    const supported = !config.locales?.length || config.locales.includes(stored);
+    const supported = !store.config.locales?.length || store.config.locales.includes(stored ?? "");
     if (stored && supported) setLocaleState(stored);
     // Only on mount: later changes go through setLocale.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,14 +86,14 @@ export function DialexProvider({
     [persist, storageKey],
   );
 
-  const value = useMemo(() => ({ locale, setLocale }), [locale, setLocale]);
+  const value = useMemo(() => ({ locale, setLocale, store }), [locale, setLocale, store]);
   return React.createElement(DialexContext.Provider, { value }, children);
 }
 
 export function useDialex() {
   const context = useContext(DialexContext);
   if (!context) {
-    throw new Error("useDialex must be used within an DialexProvider");
+    throw new Error("useDialex must be used within a DialexProvider");
   }
   return context;
 }
@@ -103,42 +106,17 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
-/**
- * Starts loading dictionaries (a no-op unless `lazy: true`). Call it from a route preloader or
- * an event handler to avoid showing a loading state later.
- */
-export function preloadDictionaries(...names: string[]): Promise<void> {
-  return Promise.all(names.map((name) => loadDictionary(name))).then(() => undefined);
-}
-
 /** Suspends until `name` is loaded when dictionaries are lazy. */
-function ensureLoaded(name: string): void {
-  if (lazy && !dictionaries[name]) use(loadDictionary(name));
+function ensureLoaded(store: DictionaryStore, name: string): void {
+  if (store.lazy && !store.dictionaries[name]) use(store.load(name));
 }
 
-/** Reads an already-loaded dictionary for a locale, following fallbacks. */
-function readLoaded(name: string, locale: string): any {
-  const dictionary = dictionaries[name];
-
-  if (!dictionary) {
-    console.warn(
-      lazy
-        ? `[dialex] Dictionary "${name}" is not loaded yet. Pass it to useT("${name}") or call useDictionary("${name}") first.`
-        : `[dialex] Dictionary "${name}" not found.`,
-    );
-    return {};
-  }
-
-  const defaultLocale = config.defaultLocale || Object.keys(dictionary)[0];
-  const found = lookupLocale(dictionary, locale, { fallbacks: config.fallbacks, defaultLocale });
-  if (!found) return {};
-
-  if (found.locale !== locale) {
-    console.warn(
-      `[dialex] Locale "${locale}" not found in dictionary "${name}", using "${found.locale}".`,
-    );
-  }
-  return found.content;
+/**
+ * The generated config of the nearest `DialexProvider`, for components that need `locales` or
+ * `prefixDefault` (such as `DialexLink`).
+ */
+export function useDialexConfig(): DialexClientConfig {
+  return useDialex().store.config;
 }
 
 /**
@@ -146,9 +124,9 @@ function readLoaded(name: string, locale: string): any {
  * dictionary has loaded, so render it under a `<Suspense>` boundary.
  */
 export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): T {
-  const { locale } = useDialex();
-  ensureLoaded(name as string);
-  return readLoaded(name as string, locale) as T;
+  const { locale, store } = useDialex();
+  ensureLoaded(store, name as string);
+  return readDictionary(store, name as string, locale) as T;
 }
 
 /**
@@ -158,7 +136,10 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  * (this suspends until they are): `const t = useT("home", "nav")`.
  */
 export function useT(...dictionaryNames: string[]): Translate {
-  const { locale } = useDialex();
-  for (const name of dictionaryNames) ensureLoaded(name);
-  return useMemo(() => createT((name) => readLoaded(name, locale), locale), [locale]);
+  const { locale, store } = useDialex();
+  for (const name of dictionaryNames) ensureLoaded(store, name);
+  return useMemo(
+    () => createT((name) => readDictionary(store, name, locale), locale),
+    [locale, store],
+  );
 }

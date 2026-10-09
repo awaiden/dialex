@@ -1,5 +1,6 @@
-import { addImports, addPluginTemplate, addVitePlugin, defineNuxtModule } from "@nuxt/kit";
-import { dialexPlugin } from "./vite.js";
+import fs from "node:fs";
+import path from "node:path";
+import { addImports, addPluginTemplate, defineNuxtModule } from "@nuxt/kit";
 import type { DialexConfig } from "./index.js";
 
 export interface NuxtDialexOptions extends DialexConfig {
@@ -8,41 +9,66 @@ export interface NuxtDialexOptions extends DialexConfig {
    * @default "locale"
    */
   cookieName?: string;
+  /**
+   * Path of the file `dx generate` writes, without the extension. Found automatically in the
+   * source directory, the project root or `src/` when omitted.
+   */
+  generated?: string;
+}
+
+function findGenerated(candidates: string[]): string | undefined {
+  return candidates.find((base) => fs.existsSync(`${base}.ts`) || fs.existsSync(`${base}.js`));
 }
 
 /**
- * Nuxt module: registers the dialex Vite plugin, installs the Vue plugin with a
- * cookie-backed locale, and auto-imports `useDialex` / `useDictionary`.
+ * Nuxt module: installs the Vue plugin with a cookie-backed locale, using the dictionaries and
+ * config from `dialex.generated.ts`, and auto-imports `useDialex` / `useDictionary`.
+ *
+ * Run `dx generate` first (`dx generate --watch` while developing); the module reads the file
+ * it writes.
  *
  * ```ts
  * // nuxt.config.ts
- * export default defineNuxtConfig({
- *   modules: ["dialexjs/nuxt"],
- *   dialex: { defaultLocale: "en", locales: ["en", "tr"] },
- * });
+ * export default defineNuxtConfig({ modules: ["dialexjs/nuxt"] });
  * ```
  */
 export default defineNuxtModule<NuxtDialexOptions>({
   meta: { name: "dialex", configKey: "dialex" },
-  defaults: { defaultLocale: "en", cookieName: "locale" },
-  setup(options: NuxtDialexOptions) {
-    const { cookieName, ...config } = options;
+  defaults: { cookieName: "locale" },
+  setup(options: NuxtDialexOptions, nuxt: { options: { rootDir: string; srcDir: string } }) {
+    const { cookieName, generated } = options;
 
-    addVitePlugin(dialexPlugin(config));
+    const root = nuxt.options.rootDir;
+    const found = generated
+      ? path.resolve(root, generated)
+      : findGenerated([
+          path.join(nuxt.options.srcDir, "dialex.generated"),
+          path.join(root, "dialex.generated"),
+          path.join(root, "src", "dialex.generated"),
+        ]);
+    if (!found) {
+      throw new Error(
+        "[dialex] Cannot find dialex.generated.ts. Run `dx generate` (or `dx init`) in your project, " +
+          "or set `dialex.generated` in nuxt.config.ts.",
+      );
+    }
+    const generatedImport = found.replace(/\\/g, "/").replace(/\.(ts|js)$/, "");
 
     addPluginTemplate({
       filename: "dialex.plugin.mjs",
       getContents: () => `
 import { defineNuxtPlugin, useCookie } from "#imports";
 import { createDialex } from "dialexjs/vue";
+import { dialex } from ${JSON.stringify(generatedImport)};
 
 export default defineNuxtPlugin((nuxtApp) => {
   const cookie = useCookie(${JSON.stringify(cookieName)}, { sameSite: "lax", path: "/" });
-  const dialex = createDialex({
-    defaultLocale: cookie.value || ${JSON.stringify(config.defaultLocale ?? "en")},
+  const instance = createDialex({
+    ...dialex,
+    defaultLocale: cookie.value || undefined,
     onLocaleChange: (locale) => { cookie.value = locale; },
   });
-  nuxtApp.vueApp.use(dialex);
+  nuxtApp.vueApp.use(instance);
 });
 `,
     });

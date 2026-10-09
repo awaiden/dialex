@@ -1,53 +1,70 @@
-// @ts-ignore
-import dictionaries from "virtual:dialex-dictionaries";
-// @ts-ignore
-import config from "virtual:dialex-config";
 import type { DictionaryRegistry } from "./react.js";
-import { createT, type Locales, type Translate } from "./index.js";
+import { createT, type DialexSource, type Locales, type Translate } from "./index.js";
 import { lookupLocale } from "./resolver.js";
+import { createDictionaryStore } from "./store.js";
 
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-/**
- * Retrieves a dictionary content for Server Components or Node.js server environments.
- * @param name The dictionary name (e.g. "home")
- * @param locale The desired locale (defaults to configured defaultLocale or first locale)
- */
-export function getDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(
-  name: K,
-  locale?: Locales,
-): T {
-  const dict = (dictionaries as Record<string, any>)[name as string];
-
-  if (!dict) {
-    console.warn(`[dialex] Dictionary "${name as string}" not found.`);
-    return {} as T;
-  }
-
-  const defaultLocale = config.defaultLocale || Object.keys(dict)[0] || "en";
-  const targetLocale = (locale as string) || defaultLocale;
-  const found = lookupLocale(dict, targetLocale, { fallbacks: config.fallbacks, defaultLocale });
-  if (!found) return {} as T;
-
-  if (found.locale !== targetLocale) {
-    console.warn(
-      `[dialex] Locale "${targetLocale}" not found in dictionary "${name as string}", using "${found.locale}".`,
-    );
-  }
-  return found.content as T;
+export interface DialexServer {
+  /**
+   * Retrieves a dictionary for Server Components or Node.js servers.
+   * @param name The dictionary name (e.g. "home")
+   * @param locale The desired locale (defaults to the configured default locale)
+   */
+  getDictionary: <K extends DictionaryKey, T = ResolveDictionaryType<K>>(
+    name: K,
+    locale?: Locales,
+  ) => T;
+  /** Builds a `t("dictionary.key.path", ...args)` function for a locale. */
+  getT: (locale?: Locales) => Translate;
 }
 
 /**
- * Builds a `t("dictionary.key.path", ...args)` function for a locale (Server Components, Node.js).
+ * Binds the generated `dialex` export to `getDictionary` and `getT` for server code. Create it
+ * once, for example in `src/dialex.ts`, and import the helpers from there.
+ *
+ * ```ts
+ * import { dialex } from "./dialex.generated";
+ * export const { getDictionary, getT } = createDialexServer(dialex);
+ * ```
+ *
+ * Needs the eager (default) generated file; lazy dictionaries are for client bundles.
  */
-export function getT(locale?: Locales): Translate {
-  return createT(
-    (name) => getDictionary(name, locale),
-    (locale as string | undefined) ?? config.defaultLocale,
-  );
+export function createDialexServer(source: DialexSource): DialexServer {
+  const { dictionaries, config } = createDictionaryStore(source);
+
+  function getDictionary(name: string, locale?: Locales): any {
+    const dict = dictionaries[name];
+
+    if (!dict) {
+      console.warn(`[dialex] Dictionary "${name}" not found.`);
+      return {};
+    }
+
+    const defaultLocale = config.defaultLocale || Object.keys(dict)[0] || "en";
+    const targetLocale = (locale as string) || defaultLocale;
+    const found = lookupLocale(dict, targetLocale, { fallbacks: config.fallbacks, defaultLocale });
+    if (!found) return {};
+
+    if (found.locale !== targetLocale) {
+      console.warn(
+        `[dialex] Locale "${targetLocale}" not found in dictionary "${name}", using "${found.locale}".`,
+      );
+    }
+    return found.content;
+  }
+
+  function getT(locale?: Locales): Translate {
+    return createT(
+      (name) => getDictionary(name, locale),
+      (locale as string | undefined) ?? config.defaultLocale,
+    );
+  }
+
+  return { getDictionary, getT } as DialexServer;
 }
 
 export type { DictionaryRegistry } from "./react.js";

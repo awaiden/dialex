@@ -1,28 +1,32 @@
 # React / Vite
 
-<a id="vite-plugin"></a>
+<a id="setup"></a>
 
-## Vite eklentisi
+## Kurulum
 
-```ts
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
+Bir paket yöneticisi eklentisi yoktur. `dx generate`, `dialex` değerini dışa aktaran `src/dialex.generated.ts` dosyasını yazar: sözlükleriniz ve yapılandırmanızın istemci için güvenli bir kopyası. Bunu provider'a yayın:
 
-export default defineConfig({
-  plugins: [react(), dialexPlugin()],
-});
+```tsx
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
 ```
 
-`dialexPlugin(inlineConfig?)` yapılandırmanızı yükler, `src/dialex-env.d.ts` dosyasını yeniden üretir ve bir `.content.ts` dosyası değiştiğinde HMR ile `virtual:dialex-dictionaries` ve `virtual:dialex-config` adlı iki sanal modülü sunar. `locales` ayarlıysa, bunlardan birini eksik olan bir sözlük derlemeyi başarısız kılar.
-
-Eklenti ayrıca `dialexjs` için `ssr.noExternal` ve `optimizeDeps.exclude` ayarlarını kendisi yapar; böylece sunucu tarafı oluşturma (örneğin Vite üzerinde TanStack Start veya React Router) ek Vite yapılandırması olmadan çalışır. `include`, CLI'ın kullandığıyla aynı, proje köküne göre sıradan bir glob desenidir; başındaki `/` kabul edilir.
+Dosyayı güncel tutmak için ikinci bir terminalde `dx generate --watch` çalıştırın ya da kaydettiğinizde dosyayı yeniden üreten VS Code eklentisini kurun. Dosya güncel değilse `dx check` başarısız olur; böylece unutulan bir çalıştırma CI'da yakalanır. Bundler'a takılan bir şey olmadığı için sunucu tarafı oluşturma (örneğin Vite üzerinde TanStack Start veya React Router) ek Vite yapılandırması olmadan çalışır.
 
 ## Provider ve hook'lar
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function App() {
   const { locale, setLocale } = useDialex();
@@ -39,17 +43,17 @@ function App() {
 }
 
 export default () => (
-  <DialexProvider defaultLocale="en">
+  <DialexProvider {...dialex} defaultLocale="en">
     <App />
   </DialexProvider>
 );
 ```
 
-| Dışa aktarım          | Açıklama                                                               |
-| --------------------- | ---------------------------------------------------------------------- |
-| `DialexProvider`      | Etkin yerel ayarı tutar. Aşağıdaki prop'lara bakın                     |
-| `useDialex()`         | `{ locale, setLocale }` döndürür. Provider'ın dışında hata verir       |
-| `useDictionary(name)` | Geçerli yerel ayar için sözlüğü döndürür, varsayılan yerel ayara döner |
+| Dışa aktarım          | Açıklama                                                                                                                                                                            |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DialexProvider`      | Etkin yerel ayarı ve sözlükleri tutar. Prop'lar: `children`, üretilen `dialex` (`dictionaries`, `config`, `loaders`) ve `defaultLocale` (yapılandırmaya, sonra `"en"`'e geri döner) |
+| `useDialex()`         | `{ locale, setLocale }` döndürür. Provider'ın dışında hata verir                                                                                                                    |
+| `useDictionary(name)` | Geçerli yerel ayar için sözlüğü döndürür, varsayılan yerel ayara döner                                                                                                              |
 
 ## Provider prop'ları
 
@@ -59,6 +63,9 @@ export default () => (
 | `initialLocale` |                            | İlk render edilecek yerel ayar. Hydration'ın eşleşmesi için sunucunun render ettiği yerel ayarı verin. Ayarlandığında, hatırlanan yerel ayar mount sırasında uygulanmaz |
 | `persist`       | `"cookie"`                 | Seçimin nerede hatırlanacağı: `"cookie"`, `"localStorage"` veya `false`                                                                                                 |
 | `storageKey`    | `"locale"`                 | Çerez veya localStorage anahtarı                                                                                                                                        |
+| `dictionaries`  |                            | `dialex.generated.ts` içindeki sözlükler (`{...dialex}` ile yayın)                                                                                                      |
+| `config`        |                            | Aynı dosyadaki istemci için güvenli yapılandırma: `locales`, `defaultLocale`, `fallbacks`, `prefixDefault`, `lazy`                                                      |
+| `loaders`       |                            | [Tembel modda](../guide/lazy-loading.md) bulunur: her sözlüğü ilk kullanıldığında yükler                                                                                |
 
 Provider önce varsayılan yerel ayarı render eder, ardından mount sonrasında hatırlanan yerel ayarı uygular (yalnızca yapılandırılmış `locales` arasındaysa). Bu, ilk istemci render'ını sunucuda render edilen işaretlemeyle aynı tutar; bedeli, geri dönen ziyaretçiler için fazladan bir render'dır. Bundan kaçınmak için çerezi sunucuda okuyun ve `initialLocale` olarak verin. `<html lang>`, etkin yerel ayarla eşitlenmiş tutulur.
 

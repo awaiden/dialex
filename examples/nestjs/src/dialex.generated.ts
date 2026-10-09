@@ -9,4 +9,14 @@ export const dictionaryMap = {
   [dict_0.name]: dict_0.dictionary,
 };
 
+export const config = {
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  fallbacks: {},
+  prefixDefault: true,
+  lazy: false,
+};
+
+export const dialex = { dictionaries, config };
+
 export default dictionaries;

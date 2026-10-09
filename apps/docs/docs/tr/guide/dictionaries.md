@@ -35,4 +35,4 @@ en: {
 
 ## Yerel ayar tutarlılığı
 
-Her sözlük, her yerel ayar için aynı anahtarları tanımlamalıdır. Bunu zorunlu kılmak için CI'da [`dialex check`](../cli/check.md) çalıştırın. Yapılandırmada `locales` ayarlıysa, bir sözlükte yapılandırılmış bir yerel ayar eksik olduğunda Vite eklentisi derleme sırasında da hata verir.
+Her sözlük her yerel ayar için aynı anahtarları tanımlamalıdır. Bunu zorunlu kılmak için CI'da [`dialex check`](../cli/check.md) çalıştırın; yapılandırılmış bir yerel ayarı eksik olan sözlükleri de bildirir.

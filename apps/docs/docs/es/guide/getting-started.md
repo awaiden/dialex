@@ -6,7 +6,7 @@ Dialex es un framework de i18n construido en torno a diccionarios definidos en T
 
 | Paquete         | Propósito                                                                                     |
 | --------------- | --------------------------------------------------------------------------------------------- |
-| `dialexjs`      | Runtime principal, adaptadores de frameworks, plugin de Vite                                  |
+| `dialexjs`      | Runtime principal y adaptadores de frameworks                                                 |
 | `@dialexjs/cli` | Binarios `dialex` / `dx` para generar el proyecto base, generar código y comprobar la paridad |
 
 ## Instalación

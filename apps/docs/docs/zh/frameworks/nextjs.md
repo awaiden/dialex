@@ -1,17 +1,36 @@
 # Next.js
 
-## 配置
+## 设置
+
+Next.js 不需要配置包装器或插件。`dx generate` 会写出 `src/dialex.generated.ts`。为服务端代码绑定一次：
 
 ```ts
-// next.config.mjs
-import { withDialex } from "dialexjs/next";
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
 
-export default withDialex({
-  // your Next.js config
-});
+export const { getDictionary, getT } = createDialexServer(dialex);
 ```
 
-`withDialex(nextConfig, inlineConfig?)` 会把词典解析接入 webpack 和 Turbopack，保留你已有的 `webpack` 函数，并同步生成的文件。
+然后在一个自行导入生成文件的客户端文件中渲染 provider。词典包含函数，无法从 Server Component 传给 Client Component：
+
+```tsx
+// src/components/providers.tsx
+"use client";
+
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "../dialex.generated";
+
+export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {
+  return (
+    <DialexProvider {...dialex} defaultLocale={locale}>
+      {children}
+    </DialexProvider>
+  );
+}
+```
+
+用 `dx generate --watch`（与 `next dev` 一起运行）或 VS Code 扩展让文件保持最新；文件过期时 `dx check` 会失败。
 
 ## 中间件
 
@@ -60,13 +79,13 @@ import { DialexLink } from "dialexjs/next/link";
 </DialexLink>; // /en/about
 ```
 
-它从 `dialex.config.ts` 读取 `locales`、`defaultLocale` 和 `prefixDefault`。外部 URL 和 `#片段` 保持不变。另请参见[路由辅助函数](../guide/routing.md)。
+它从生成的配置读取 `locales`、`defaultLocale` 和 `prefixDefault`，因此请在 `<DialexProvider {...dialex}>` 内渲染它。外部 URL 和 `#片段` 保持不变。另请参见[路由辅助函数](../guide/routing.md)。
 
 ## Server Components
 
 ```tsx
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

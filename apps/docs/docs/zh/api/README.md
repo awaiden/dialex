@@ -24,33 +24,27 @@
 
 ### 类型
 
-| 类型                                        | 说明                                                                                                   |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `DialexConfig`                              | `defaultLocale`、`locales`、`include`、`configFile`、`fallbacks`、`prefixDefault`、`lazy`、`translate` |
-| `Translate`、`TranslationPath`              | `t` 及其有效路径的类型                                                                                 |
-| `Register`                                  | 由生成的声明扩展（`locales`）                                                                          |
-| `Locales`                                   | 已配置 locale 的联合类型，或 `string`                                                                  |
-| `DictionaryRegistry`                        | 以你的词典名称和内容类型进行扩展                                                                       |
-| `DictionaryKey`、`ResolveDictionaryType<K>` | 键和内容的类型辅助工具                                                                                 |
-| `Dictionary<T>`                             | `Record<Locales, T>`                                                                                   |
-| `DictionaryDefinition<N, T>`                | `defineDictionary` 的返回类型                                                                          |
-| `globalDictionaries`                        | 由 `defineDictionary` 填充的进程内注册表                                                               |
+| 类型                                                      | 说明                                                                                                   |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `DialexConfig`                                            | `defaultLocale`、`locales`、`include`、`configFile`、`fallbacks`、`prefixDefault`、`lazy`、`translate` |
+| `DEFAULT_CONFIG`                                          | 某项设置或整个配置文件缺失时使用的默认值                                                               |
+| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | 生成的 `dialex` 导出及其组成部分：`dictionaries`、可安全用于客户端的 `config` 和懒加载的 `loaders`     |
+| `Translate`、`TranslationPath`                            | `t` 及其有效路径的类型                                                                                 |
+| `Register`                                                | 由生成的声明扩展（`locales`）                                                                          |
+| `Locales`                                                 | 已配置 locale 的联合类型，或 `string`                                                                  |
+| `DictionaryRegistry`                                      | 以你的词典名称和内容类型进行扩展                                                                       |
+| `DictionaryKey`、`ResolveDictionaryType<K>`               | 键和内容的类型辅助工具                                                                                 |
+| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                   |
+| `DictionaryDefinition<N, T>`                              | `defineDictionary` 的返回类型                                                                          |
+| `globalDictionaries`                                      | 由 `defineDictionary` 填充的进程内注册表                                                               |
 
 ## `dialexjs/server`
 
-`getDictionary(name, locale?)` 返回某个 locale 的词典内容，`getT(locale?)` 返回一个 `t` 函数。参见 [Next.js](../frameworks/nextjs.md)。
+`createDialexServer(dialex)` 绑定生成的 `dialex` 导出并返回 `{ getDictionary, getT }`：`getDictionary(name, locale?)` 返回某个 locale 的词典内容，`getT(locale?)` 返回 `t` 函数。参见 [Next.js](../frameworks/nextjs.md)。
 
 ## `dialexjs/react`
 
 `DialexProvider`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries`。参见 [React / Vite](../frameworks/react.md)。
-
-## `dialexjs/vite`
-
-`dialexPlugin(inlineConfig?)`。参见 [React / Vite](../frameworks/react.md)。
-
-## `dialexjs/next`
-
-`withDialex(nextConfig, inlineConfig?)`。参见 [Next.js](../frameworks/nextjs.md)。
 
 ## `dialexjs/vue` 和 `dialexjs/nuxt`
 

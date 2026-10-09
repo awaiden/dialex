@@ -1,6 +1,6 @@
 # Tembel Yükleme
 
-Varsayılan olarak her sözlük baştan pakete eklenir. `lazy: true` ile Vite eklentisi her sözlük dosyasını kendi parçasına (chunk) ayırır ve bir bileşen ilk kez ihtiyaç duyduğunda yükler. Bu, [React / Vite](../frameworks/react.md) ve [Vue / Nuxt](../frameworks/vue.md) için geçerlidir. Next.js kodu zaten rota başına böler, sunucu adaptörleri sözlükleri doğrudan okur ve [Angular](../frameworks/angular.md) sözlüklerini açıkça alır; bu yüzden bunlar etkilenmez.
+Varsayılan olarak her sözlük baştan pakete dahil edilir. `lazy: true` ile `dx generate` statik içe aktarmalar yerine dinamik içe aktarmalar yazar; böylece bundler'ınız her sözlük dosyasını kendi parçasına ayırır ve provider onu bir bileşen ilk ihtiyaç duyduğunda yükler. Bu, [React / Vite](../frameworks/react.md) ve [Vue / Nuxt](../frameworks/vue.md) için geçerlidir. Next.js kodu zaten rota başına böler, sunucu adaptörleri sözlükleri doğrudan okur ve [Angular](../frameworks/angular.md) sözlüklerini açıkça alır; bu yüzden bunlar etkilenmez.
 
 ```ts
 // dialex.config.ts
@@ -22,6 +22,7 @@ Bölme yerel ayara göre değil, **sözlük dosyası başına** yapılır. Her d
 ```tsx
 import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function Pricing() {
   const dict = useDictionary("pricing"); // suspends on first use
@@ -38,7 +39,7 @@ function Nav() {
 </Suspense>;
 
 // e.g. on hover, to avoid the fallback:
-preloadDictionaries("pricing");
+preloadDictionaries(dialex, "pricing");
 ```
 
 `t("dict.key")` kendi başına askıya alamaz; bu yüzden `useT`, okuyacağı sözlüklerin adlarını alır. Henüz yüklenmemiş bir ad bir uyarı kaydeder ve yolu döndürür.
@@ -59,10 +60,10 @@ const dict = useDictionary("pricing");
 </template>
 ```
 
-`useT("pricing")` işlevini aynı şekilde kullanın; bir rota korumasında ise `preloadDictionaries("pricing")` kullanın.
+`useT("pricing")` işlevini aynı şekilde kullanın; bir rota korumasında ise `preloadDictionaries(dialex, "pricing")` kullanın.
 
 ## Notlar
 
-- Sözlüğün adı kaynak metinden, çalıştırılmadan okunur; bu yüzden tembel mod `defineDictionary("name", ...)` ya da sabit bir `name: "..."` özelliği gerektirir. Aksi halde derleme, dosyanın adını belirten bir mesajla başarısız olur.
-- Yapılandırmadaki `locales` yine uygulanır: yapılandırılmış bir yerel ayarı eksik olan bir sözlüğü yüklemek bir hatayla reddedilir.
+- Bir sözlüğün adı, çalıştırılmadan kaynak metinden okunur; bu yüzden tembel mod `defineDictionary("name", ...)` ya da değişmez bir `name: "..."` özelliği gerektirir. Aksi halde `dx generate`, dosyayı belirten bir iletiyle başarısız olur.
+- Tembel mod istemci paketleri içindir: üretilen `dictionaries` dışa aktarımı boştur; bu yüzden `createDialexServer` ve sunucu adaptörleri istekli (eager) bir üretilmiş dosyaya ihtiyaç duyar.
 - Yükleme sonuçları sözlük başına önbelleğe alınır.

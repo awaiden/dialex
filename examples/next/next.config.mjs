@@ -1,5 +1,3 @@
-import { withDialex } from "dialexjs/next";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -8,4 +6,4 @@ const nextConfig = {
   },
 };
 
-export default withDialex(nextConfig);
+export default nextConfig;

@@ -48,16 +48,17 @@ Relative URLs resolve against `http://localhost`. It returns a plain `Request`, 
 
 ## Component tests
 
-Components that call `useDictionary`, `useT` or `useDialex` read the plugin's virtual modules, so your test runner needs the Dialex Vite plugin. Vitest uses your `vite.config.ts`, so if the plugin is already there nothing else is needed.
+Components that call `useDictionary`, `useT` or `useDialex` need dictionaries from a provider. Pass the generated `dialex` export (or your own `dictionaries`) to the test helpers below; no bundler plugin or mocks are needed.
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+import { dialex } from "../dialex.generated";
 
 render(
-  <TestDialexProvider locale="tr">
+  <TestDialexProvider {...dialex} locale="tr">
     <Header />
   </TestDialexProvider>,
 );
@@ -71,10 +72,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+import { dialex } from "../dialex.generated";
 
-const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });
 ```
-
-::: tip Without the Vite plugin
-If you cannot add the plugin to your test config, mock the two virtual modules instead (`vi.mock("virtual:dialex-dictionaries", ...)` and `vi.mock("virtual:dialex-config", ...)`). Dialex's own test suite does this.
-:::

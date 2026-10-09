@@ -12,7 +12,7 @@
 - 🏎️ **Zero Runtime Overhead in Production**: Standalone Ahead-of-Time (AOT) compilation eliminates filesystem reading on server runtimes.
 - 🔒 **End-to-End Type Safety**: Full autocomplete for dictionary keys and strict locale typing via TypeScript interface augmentation.
 - 🌐 **Full-Stack Ecosystem**: First-class adapters for **Next.js** (App Router & Pages Router), **Fastify**, **Koa**, **Hono**, **Express**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, and **React / Vite**.
-- 🧩 **Zero-Config Virtual Modules**: Instant HMR and automatic scanning with the Vite plugin.
+- 🧩 **No Bundler Plugin**: `dx generate` compiles your dictionaries and config into `dialex.generated.ts`; `dx generate --watch` or the VS Code extension keeps it current, and HMR works through ordinary imports.
 - 🎯 **Interpolation Functions**: Dictionaries support typed functions `(name: string) => string` with full type inference.
 - 🛠️ **CLI Tooling**: Companion CLI [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) with `dialex init`, `dialex generate`, and `dialex check`.
 
@@ -114,14 +114,15 @@ app.get("/", (req, res) => {
 #### Next.js (App Router Path Routing)
 
 ```typescript
-// next.config.ts
-import { withDialex } from "dialexjs/next";
-export default withDialex({/* next config */});
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
+export const { getDictionary, getT } = createDialexServer(dialex);
 ```
 
 ```typescript
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -138,7 +139,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `dialexjs`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT` |
 | `dialexjs/react`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/angular`                               | Providers, `useDictionary`, `useT`, Nuxt module                                               |
-| `dialexjs/vite`, `dialexjs/next`, `dialexjs/next/middleware`, `dialexjs/next/link`                  | Bundler plugins, Next.js middleware and link                                                  |
+| `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server`                                 | Next.js middleware and link, server helpers                                                   |
 | `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                   |
 | `dialexjs/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                   |
 | `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                                | Test helpers                                                                                  |

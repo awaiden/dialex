@@ -14,15 +14,15 @@ Unbekannte Pfade protokollieren eine Warnung und geben den Pfad selbst zurück.
 
 ## Wo es verfügbar ist
 
-| Umgebung      | So erhältst du `t`                             |
-| ------------- | ---------------------------------------------- |
-| React         | `const t = useT()` aus `dialexjs/react`        |
-| Vue / Nuxt    | `const t = useT()` aus `dialexjs/vue`          |
-| Server (Next) | `const t = getT(locale)` aus `dialexjs/server` |
-| Elysia        | `t` im Request-Kontext                         |
-| SvelteKit     | `event.locals.t`                               |
-| Astro         | `Astro.locals.t`                               |
-| Überall sonst | `createT(getDictionary)` aus `dialexjs`        |
+| Umgebung      | So erhältst du `t`                                        |
+| ------------- | --------------------------------------------------------- |
+| React         | `const t = useT()` aus `dialexjs/react`                   |
+| Vue / Nuxt    | `const t = useT()` aus `dialexjs/vue`                     |
+| Server (Next) | `const t = getT(locale)` aus `createDialexServer(dialex)` |
+| Elysia        | `t` im Request-Kontext                                    |
+| SvelteKit     | `event.locals.t`                                          |
+| Astro         | `Astro.locals.t`                                          |
+| Überall sonst | `createT(getDictionary)` aus `dialexjs`                   |
 
 ## Typisierung
 

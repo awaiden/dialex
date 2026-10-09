@@ -14,15 +14,15 @@ Unknown paths log a warning and return the path itself.
 
 ## Where it is available
 
-| Environment   | How to get `t`                                  |
-| ------------- | ----------------------------------------------- |
-| React         | `const t = useT()` from `dialexjs/react`        |
-| Vue / Nuxt    | `const t = useT()` from `dialexjs/vue`          |
-| Server (Next) | `const t = getT(locale)` from `dialexjs/server` |
-| Elysia        | `t` on the request context                      |
-| SvelteKit     | `event.locals.t`                                |
-| Astro         | `Astro.locals.t`                                |
-| Anywhere else | `createT(getDictionary)` from `dialexjs`        |
+| Environment   | How to get `t`                                             |
+| ------------- | ---------------------------------------------------------- |
+| React         | `const t = useT()` from `dialexjs/react`                   |
+| Vue / Nuxt    | `const t = useT()` from `dialexjs/vue`                     |
+| Server (Next) | `const t = getT(locale)` from `createDialexServer(dialex)` |
+| Elysia        | `t` on the request context                                 |
+| SvelteKit     | `event.locals.t`                                           |
+| Astro         | `Astro.locals.t`                                           |
+| Anywhere else | `createT(getDictionary)` from `dialexjs`                   |
 
 ## Typing
 

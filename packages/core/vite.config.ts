@@ -1,22 +1,10 @@
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite-plus";
 
-const stub = (name: string) => fileURLToPath(new URL(`./tests/stubs/${name}.ts`, import.meta.url));
-
 export default defineConfig({
-  test: {
-    // The bundler plugins provide these virtual modules at build time; tests mock them.
-    alias: {
-      "virtual:dialex-dictionaries": stub("dictionaries"),
-      "virtual:dialex-config": stub("config"),
-    },
-  },
   pack: {
     entry: [
       "src/index.ts",
       "src/react.ts",
-      "src/vite.ts",
-      "src/next.ts",
       "src/server.ts",
       "src/hono.ts",
       "src/express.ts",

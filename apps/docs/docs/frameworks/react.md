@@ -1,26 +1,30 @@
 # React / Vite
 
-## Vite plugin
+## Setup
 
-```ts
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
+There is no bundler plugin. `dx generate` writes `src/dialex.generated.ts`, which exports `dialex`: your dictionaries and a client-safe copy of your config. Spread it into the provider:
 
-export default defineConfig({
-  plugins: [react(), dialexPlugin()],
-});
+```tsx
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
 ```
 
-`dialexPlugin(inlineConfig?)` loads your config, regenerates `src/dialex-env.d.ts`, and serves two virtual modules, `virtual:dialex-dictionaries` and `virtual:dialex-config`, with HMR when a `.content.ts` file changes. If `locales` is set, a dictionary missing one of them fails the build.
-
-The plugin also sets `ssr.noExternal` and `optimizeDeps.exclude` for `dialexjs` itself, so server-side rendering (for example TanStack Start or React Router in Vite) works without extra Vite configuration. `include` is a plain glob relative to the project root, the same one the CLI uses; a leading `/` is accepted.
+Keep the file current with `dx generate --watch` in a second terminal, or install the VS Code extension, which regenerates it on save. `dx check` fails when the file is out of date, so a forgotten run is caught in CI. Because nothing plugs into the bundler, server-side rendering (for example TanStack Start or React Router in Vite) works without extra Vite configuration.
 
 ## Provider and hooks
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function App() {
   const { locale, setLocale } = useDialex();
@@ -37,17 +41,17 @@ function App() {
 }
 
 export default () => (
-  <DialexProvider defaultLocale="en">
+  <DialexProvider {...dialex} defaultLocale="en">
     <App />
   </DialexProvider>
 );
 ```
 
-| Export                | Description                                                                                         |
-| --------------------- | --------------------------------------------------------------------------------------------------- |
-| `DialexProvider`      | Holds the active locale. Props: `children`, `defaultLocale` (falls back to the config, then `"en"`) |
-| `useDialex()`         | Returns `{ locale, setLocale }`. Throws outside the provider                                        |
-| `useDictionary(name)` | Returns the dictionary for the current locale, falling back to the default locale                   |
+| Export                | Description                                                                                                                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DialexProvider`      | Holds the active locale and the dictionaries. Props: `children`, the generated `dialex` (`dictionaries`, `config`, `loaders`), and `defaultLocale` (falls back to the config, then `"en"`) |
+| `useDialex()`         | Returns `{ locale, setLocale }`. Throws outside the provider                                                                                                                               |
+| `useDictionary(name)` | Returns the dictionary for the current locale, falling back to the default locale                                                                                                          |
 
 ## Provider props
 
@@ -57,6 +61,9 @@ export default () => (
 | `initialLocale` |                     | The locale to render first. Pass the locale the server rendered with so hydration matches. When set, the remembered locale is not applied on mount |
 | `persist`       | `"cookie"`          | Where the choice is remembered: `"cookie"`, `"localStorage"` or `false`                                                                            |
 | `storageKey`    | `"locale"`          | Cookie or localStorage key                                                                                                                         |
+| `dictionaries`  |                     | The dictionaries from `dialex.generated.ts` (spread `{...dialex}`)                                                                                 |
+| `config`        |                     | The client-safe config from the same file: `locales`, `defaultLocale`, `fallbacks`, `prefixDefault`, `lazy`                                        |
+| `loaders`       |                     | Present in [lazy mode](../guide/lazy-loading.md): loads each dictionary the first time it is used                                                  |
 
 The provider renders the default locale first, then applies the remembered locale after mount (only if it is one of the configured `locales`). This keeps the first client render identical to server-rendered markup, at the cost of one extra render for returning visitors. To avoid it, read the cookie on the server and pass it as `initialLocale`. `<html lang>` is kept in sync with the active locale.
 

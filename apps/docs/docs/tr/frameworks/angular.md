@@ -8,7 +8,7 @@ Angular 22 ile geliştirildi ve test edildi. Yalnızca `signal`, `computed`, `in
 
 ## Kurulum
 
-Angular CLI, Dialex'in Vite eklentisini çalıştırmaz; bu yüzden sözlükler açıkça verilir. Bunları CLI ile üretin:
+Angular, sunucu adaptörleri gibi sözlükleri açıkça alır. Bunları CLI ile üretin:
 
 ```bash
 dialex generate        # writes src/dialex.generated.ts

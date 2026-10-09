@@ -6,16 +6,17 @@ let params: Record<string, string> | null = null;
 let config: Record<string, unknown> = {};
 
 vi.mock("next/navigation.js", () => ({ useParams: () => params }));
-vi.mock("virtual:dialex-config", () => ({
-  get default() {
-    return config;
-  },
-}));
-
 const { DialexLink } = await import("../src/next/link.js");
+const { DialexProvider } = await import("../src/react.js");
 
 const html = (props: Record<string, unknown>) =>
-  renderToStaticMarkup(createElement(DialexLink as any, props, "Go"));
+  renderToStaticMarkup(
+    createElement(
+      DialexProvider as any,
+      { config, dictionaries: {} },
+      createElement(DialexLink as any, props, "Go"),
+    ),
+  );
 
 describe("DialexLink", () => {
   beforeEach(() => {
@@ -51,5 +52,13 @@ describe("DialexLink", () => {
 
   it("passes other props through", () => {
     expect(html({ href: "/about", className: "nav" })).toContain('class="nav"');
+  });
+});
+
+describe("DialexLink without a provider", () => {
+  it("says what is missing", () => {
+    expect(() =>
+      renderToStaticMarkup(createElement(DialexLink as any, { href: "/about" }, "Go")),
+    ).toThrow(/DialexProvider/);
   });
 });

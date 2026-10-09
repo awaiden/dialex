@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import fg from "fast-glob";
 import { loadConfigSync } from "unconfig";
-import { globalDictionaries, type DialexConfig } from "./index.js";
+import { DEFAULT_CONFIG, globalDictionaries, type DialexConfig } from "./index.js";
 
 export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
   let loadedConfig: DialexConfig = {};
@@ -37,8 +37,7 @@ export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {
   }
 
   return {
-    defaultLocale: "en",
-    include: "**/*.content.ts",
+    ...DEFAULT_CONFIG,
     ...loadedConfig,
     ...inlineConfig,
   };
@@ -110,8 +109,16 @@ export function detectAdapters(root: string): string[] {
   return [...REGISTRY_ADAPTERS];
 }
 
-export function generateDts(root: string, files: string[], locales?: string[]) {
-  if (files.length === 0) return;
+/**
+ * The `dialex-env.d.ts` a project should have: its path and contents, or `undefined` when there
+ * are no dictionary files. Nothing is written.
+ */
+export function renderDts(
+  root: string,
+  files: string[],
+  locales?: string[],
+): { path: string; content: string } | undefined {
+  if (files.length === 0) return undefined;
 
   const dtsDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
   const imports: string[] = [];
@@ -158,11 +165,16 @@ declare module 'dialexjs' {
 ${adapterBlocks}
 `;
 
-  const dtsPath = path.join(dtsDir, "dialex-env.d.ts");
-  const existing = fs.existsSync(dtsPath) ? fs.readFileSync(dtsPath, "utf-8") : "";
-  if (existing !== dtsContent) {
-    fs.mkdirSync(path.dirname(dtsPath), { recursive: true });
-    fs.writeFileSync(dtsPath, dtsContent, "utf-8");
+  return { path: path.join(dtsDir, "dialex-env.d.ts"), content: dtsContent };
+}
+
+export function generateDts(root: string, files: string[], locales?: string[]) {
+  const dts = renderDts(root, files, locales);
+  if (!dts) return;
+  const existing = fs.existsSync(dts.path) ? fs.readFileSync(dts.path, "utf-8") : "";
+  if (existing !== dts.content) {
+    fs.mkdirSync(path.dirname(dts.path), { recursive: true });
+    fs.writeFileSync(dts.path, dts.content, "utf-8");
   }
 }
 

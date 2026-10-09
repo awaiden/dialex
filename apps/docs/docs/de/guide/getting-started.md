@@ -6,7 +6,7 @@ Dialex ist ein i18n-Framework rund um Wörterbücher, die in TypeScript definier
 
 | Paket           | Zweck                                                                                        |
 | --------------- | -------------------------------------------------------------------------------------------- |
-| `dialexjs`      | Kern-Laufzeit, Framework-Adapter, Vite-Plugin                                                |
+| `dialexjs`      | Kern-Laufzeit und Framework-Adapter                                                          |
 | `@dialexjs/cli` | Die Befehle `dialex` / `dx` für Projektgerüst, Codegenerierung und Vollständigkeitsprüfungen |
 
 ## Installation

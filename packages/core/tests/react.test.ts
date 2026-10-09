@@ -2,20 +2,15 @@
 import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { renderToString } from "react-dom/server";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { afterEach, beforeEach, describe, expect, it } from "vite-plus/test";
 
-vi.mock("virtual:dialex-dictionaries", () => ({
-  default: {
-    home: { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } },
-  },
-  lazy: false,
-  loadDictionary: async () => undefined,
-}));
-vi.mock("virtual:dialex-config", () => ({
-  default: { defaultLocale: "en", locales: ["en", "tr"] },
-}));
+import { DialexProvider, useDictionary, useDialex, useT } from "../src/react.js";
 
-const { DialexProvider, useDictionary, useDialex, useT } = await import("../src/react.js");
+const home = { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } };
+const dialex = {
+  dictionaries: [{ name: "home", dictionary: home }],
+  config: { defaultLocale: "en", locales: ["en", "tr"] },
+};
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -34,7 +29,9 @@ let root: Root;
 
 const mount = async (props: Record<string, unknown> = {}) => {
   await act(async () => {
-    root.render(createElement(DialexProvider as any, props, createElement(Probe)));
+    root.render(
+      createElement(DialexProvider as any, { ...dialex, ...props }, createElement(Probe)),
+    );
   });
 };
 const text = () => container.textContent;
@@ -61,7 +58,9 @@ describe("DialexProvider", () => {
 
   it("server-renders the default first, then applies the remembered locale after mount", async () => {
     document.cookie = "locale=tr; path=/";
-    const ssr = renderToString(createElement(DialexProvider as any, {}, createElement(Probe)));
+    const ssr = renderToString(
+      createElement(DialexProvider as any, { ...dialex }, createElement(Probe)),
+    );
     expect(ssr).toContain("en|Welcome");
 
     await mount();

@@ -138,6 +138,7 @@ export const state = {
   configHandlers: [] as Handler[],
   collection: { entries: new Map<string, Diagnostic[]>(), cleared: 0, disposed: false },
   output: [] as string[],
+  status: [] as string[],
 };
 
 export function resetState() {
@@ -153,6 +154,7 @@ export function resetState() {
     saveHandlers: [],
     configHandlers: [],
     output: [],
+    status: [],
   });
   state.collection = { entries: new Map(), cleared: 0, disposed: false };
 }
@@ -192,6 +194,7 @@ export const window = {
     appendLine: (line: string) => void state.output.push(line),
     dispose() {},
   }),
+  setStatusBarMessage: (message: string) => void state.status.push(message),
 };
 
 export const commands = {

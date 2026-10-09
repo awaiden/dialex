@@ -3,21 +3,18 @@ import { act, createElement } from "react";
 import { createRoot } from "react-dom/client";
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "vue/server-renderer";
-import { describe, expect, it, vi } from "vite-plus/test";
+import { describe, expect, it } from "vite-plus/test";
 
-vi.mock("virtual:dialex-dictionaries", () => ({
-  default: { home: { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } } },
-  lazy: false,
-  loadDictionary: async () => undefined,
-}));
-vi.mock("virtual:dialex-config", () => ({
-  default: { defaultLocale: "en", locales: ["en", "tr"] },
-}));
+import * as react from "../src/react.js";
+import { TestDialexProvider } from "../src/testing/react.js";
+import * as vue from "../src/vue.js";
+import { createTestDialex } from "../src/testing/vue.js";
 
-const react = await import("../src/react.js");
-const { TestDialexProvider } = await import("../src/testing/react.js");
-const vue = await import("../src/vue.js");
-const { createTestDialex } = await import("../src/testing/vue.js");
+const home = { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } };
+const dialex = {
+  dictionaries: [{ name: "home", dictionary: home }],
+  config: { defaultLocale: "en", locales: ["en", "tr"] },
+};
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -33,7 +30,9 @@ describe("TestDialexProvider (React)", () => {
     const root = createRoot(container);
 
     await act(async () => {
-      root.render(createElement(TestDialexProvider, { locale: "tr" }, createElement(Title)));
+      root.render(
+        createElement(TestDialexProvider, { ...dialex, locale: "tr" }, createElement(Title)),
+      );
     });
     expect(container.textContent).toBe("Hoş Geldiniz");
 
@@ -48,7 +47,7 @@ describe("TestDialexProvider (React)", () => {
     const container = document.createElement("div");
     const root = createRoot(container);
     await act(async () => {
-      root.render(createElement(TestDialexProvider, {}, createElement(Title)));
+      root.render(createElement(TestDialexProvider, { ...dialex }, createElement(Title)));
     });
     expect(container.textContent).toBe("Welcome");
     await act(async () => root.unmount());
@@ -64,9 +63,11 @@ describe("createTestDialex (Vue)", () => {
   });
 
   it("starts in the given locale", async () => {
-    expect(await renderToString(createSSRApp(Comp).use(createTestDialex("tr")))).toBe(
+    expect(await renderToString(createSSRApp(Comp).use(createTestDialex("tr", dialex)))).toBe(
       "<p>Hoş Geldiniz</p>",
     );
-    expect(await renderToString(createSSRApp(Comp).use(createTestDialex()))).toBe("<p>Welcome</p>");
+    expect(await renderToString(createSSRApp(Comp).use(createTestDialex(undefined, dialex)))).toBe(
+      "<p>Welcome</p>",
+    );
   });
 });

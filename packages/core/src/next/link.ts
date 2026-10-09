@@ -4,8 +4,7 @@ import * as LinkModule from "next/link.js";
 import type { LinkProps } from "next/link.js";
 import { useParams } from "next/navigation.js";
 import { createElement, type AnchorHTMLAttributes, type ComponentType } from "react";
-// @ts-ignore
-import config from "virtual:dialex-config";
+import { useDialexConfig } from "../react.js";
 import { localizePath } from "../routing.js";
 
 // Under Node-style ESM interop `next/link.js` exposes the component as `default` or `default.default`;
@@ -30,9 +29,11 @@ export interface DialexLinkProps
  * <DialexLink href="/about" locale="en">English</DialexLink>
  * ```
  *
- * Uses `locales`, `defaultLocale`, and `prefixDefault` from `dialex.config.ts`.
+ * Reads `locales`, `defaultLocale`, and `prefixDefault` from the generated config, so it must be
+ * rendered inside a `<DialexProvider {...dialex}>`.
  */
 export function DialexLink({ href, locale, ...rest }: DialexLinkProps) {
+  const config = useDialexConfig();
   const params = useParams<{ locale?: string }>();
   const target =
     locale ??

@@ -1,5 +1,12 @@
 import * as vscode from "vscode";
-import { analyzeProject, readStaticConfig, type AnalysisIssue } from "@dialexjs/cli/api";
+import fs from "node:fs";
+import {
+  analyzeProject,
+  generateDictionaries,
+  readStaticConfig,
+  renderGenerated,
+  type AnalysisIssue,
+} from "@dialexjs/cli/api";
 import { completionContextAt, completionEntries, type CompletionEntry } from "./completion.js";
 import { definitionFor } from "./definition.js";
 import { buildHover } from "./hover.js";
@@ -62,6 +69,7 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
   const states = new Map<string, ProjectState>();
   const issueOf = new WeakMap<vscode.Diagnostic, AnalysisIssue>();
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let generateTimer: ReturnType<typeof setTimeout> | undefined;
 
   const settings = () => vscode.workspace.getConfiguration("dialex");
   const modelFor = (doc: vscode.TextDocument) =>
@@ -132,6 +140,41 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
   function schedule() {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => void refresh(), 300);
+  }
+
+  /**
+   * Keeps `dialex.generated.ts` and `dialex-env.d.ts` current by regenerating them when a
+   * dictionary or config file changes, in projects that already have a generated file. The config
+   * is read from its syntax tree, so no workspace code runs.
+   */
+  function regenerate(): void {
+    if (!settings().get<boolean>("autoGenerate", true)) return;
+    if ((vscode.workspace as { isTrusted?: boolean }).isTrusted === false) return;
+
+    const configPath = settings().get<string>("configPath") || undefined;
+    for (const folder of vscode.workspace.workspaceFolders ?? []) {
+      for (const { root } of discoverProjects(folder.uri.fsPath)) {
+        try {
+          const options = { config: configPath, static: true };
+          const { outputPath } = renderGenerated(root, options);
+          if (!fs.existsSync(outputPath)) continue; // the project does not use a generated file
+          const before = fs.readFileSync(outputPath, "utf-8");
+          const { files } = generateDictionaries(root, options);
+          if (fs.readFileSync(outputPath, "utf-8") !== before) {
+            const where = outputPath.slice(root.length + 1);
+            output.appendLine(`[${root}] regenerated ${where} (${files.length} dictionaries)`);
+            vscode.window.setStatusBarMessage(`Dialex: regenerated ${where}`, 3000);
+          }
+        } catch (error) {
+          output.appendLine(`[${root}] generate failed: ${(error as Error).message}`);
+        }
+      }
+    }
+  }
+
+  function scheduleGenerate() {
+    if (generateTimer) clearTimeout(generateTimer);
+    generateTimer = setTimeout(regenerate, 250);
   }
 
   const sourceSelector = SOURCE_LANGUAGES.map((language) => ({ language, scheme: "file" }));
@@ -287,6 +330,10 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     ),
 
     vscode.commands.registerCommand("dialex.refresh", () => refresh()),
+    vscode.commands.registerCommand("dialex.generate", () => {
+      regenerate();
+      return refresh();
+    }),
 
     vscode.workspace.onDidSaveTextDocument(schedule),
     vscode.workspace.onDidChangeWorkspaceFolders(schedule),
@@ -297,15 +344,18 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
 
   for (const pattern of ["**/*.content.ts", "**/dialex.config.*", "**/i18n.config.*"]) {
     const watcher = vscode.workspace.createFileSystemWatcher(pattern);
-    watcher.onDidCreate(schedule);
-    watcher.onDidChange(schedule);
-    watcher.onDidDelete(schedule);
+    for (const handler of [schedule, scheduleGenerate]) {
+      watcher.onDidCreate(handler);
+      watcher.onDidChange(handler);
+      watcher.onDidDelete(handler);
+    }
     context.subscriptions.push(watcher);
   }
 
   context.subscriptions.push({
     dispose() {
       if (timer) clearTimeout(timer);
+      if (generateTimer) clearTimeout(generateTimer);
     },
   });
 

@@ -35,4 +35,4 @@ en: {
 
 ## Locale 一致性
 
-每个词典都应为每个 locale 定义相同的键。在 CI 中运行 [`dialex check`](../cli/check.md) 来强制执行。如果配置中设置了 `locales`，当词典缺少某个已配置的 locale 时，Vite 插件也会在构建时报错。
+每个词典都应该为每个 locale 定义相同的键。在 CI 中运行 [`dialex check`](../cli/check.md) 来强制执行；它也会报告词典缺少的已配置 locale。

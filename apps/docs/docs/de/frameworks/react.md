@@ -1,26 +1,32 @@
 # React / Vite
 
-## Vite-Plugin
+<a id="setup"></a>
 
-```ts
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
+## Einrichtung
 
-export default defineConfig({
-  plugins: [react(), dialexPlugin()],
-});
+Es gibt kein Bundler-Plugin. `dx generate` schreibt `src/dialex.generated.ts`, das `dialex` exportiert: deine Wörterbücher und eine clientsichere Kopie deiner Konfiguration. Übergib es per Spread an den Provider:
+
+```tsx
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
 ```
 
-`dialexPlugin(inlineConfig?)` lädt deine Konfiguration, generiert `src/dialex-env.d.ts` neu und stellt zwei virtuelle Module bereit, `virtual:dialex-dictionaries` und `virtual:dialex-config`, mit HMR, wenn sich eine `.content.ts`-Datei ändert. Ist `locales` gesetzt, lässt ein Wörterbuch, dem eines davon fehlt, den Build fehlschlagen.
-
-Das Plugin setzt außerdem `ssr.noExternal` und `optimizeDeps.exclude` für `dialexjs` selbst, sodass Server-Side-Rendering (zum Beispiel TanStack Start oder React Router mit Vite) ohne zusätzliche Vite-Konfiguration funktioniert. `include` ist ein gewöhnliches Glob-Muster relativ zum Projektstamm, dasselbe wie in der CLI; ein führendes `/` ist erlaubt.
+Halte die Datei aktuell mit `dx generate --watch` in einem zweiten Terminal, oder installiere die VS-Code-Erweiterung, die sie beim Speichern neu erzeugt. `dx check` schlägt fehl, wenn die Datei veraltet ist, sodass ein vergessener Lauf in der CI auffällt. Da sich nichts in den Bundler einklinkt, funktioniert Server-Side-Rendering (zum Beispiel TanStack Start oder React Router mit Vite) ohne zusätzliche Vite-Konfiguration.
 
 ## Provider und Hooks
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function App() {
   const { locale, setLocale } = useDialex();
@@ -37,17 +43,17 @@ function App() {
 }
 
 export default () => (
-  <DialexProvider defaultLocale="en">
+  <DialexProvider {...dialex} defaultLocale="en">
     <App />
   </DialexProvider>
 );
 ```
 
-| Export                | Beschreibung                                                                            |
-| --------------------- | --------------------------------------------------------------------------------------- |
-| `DialexProvider`      | Hält das aktive Locale. Siehe die Props unten                                           |
-| `useDialex()`         | Liefert `{ locale, setLocale }`. Wirft außerhalb des Providers einen Fehler             |
-| `useDictionary(name)` | Liefert das Wörterbuch für das aktuelle Locale und fällt auf das Standard-Locale zurück |
+| Export                | Beschreibung                                                                                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DialexProvider`      | Hält das aktive Locale und die Wörterbücher. Props: `children`, das generierte `dialex` (`dictionaries`, `config`, `loaders`) und `defaultLocale` (fällt auf die Konfiguration zurück, dann auf `"en"`) |
+| `useDialex()`         | Liefert `{ locale, setLocale }`. Wirft außerhalb des Providers einen Fehler                                                                                                                             |
+| `useDictionary(name)` | Liefert das Wörterbuch für das aktuelle Locale und fällt auf das Standard-Locale zurück                                                                                                                 |
 
 ## Provider-Props
 
@@ -57,6 +63,9 @@ export default () => (
 | `initialLocale` |                            | Das Locale, das zuerst gerendert wird. Übergib das Locale, mit dem der Server gerendert hat, damit die Hydration übereinstimmt. Ist es gesetzt, wird das gespeicherte Locale beim Mounten nicht angewendet |
 | `persist`       | `"cookie"`                 | Wo die Wahl gespeichert wird: `"cookie"`, `"localStorage"` oder `false`                                                                                                                                    |
 | `storageKey`    | `"locale"`                 | Cookie- oder localStorage-Schlüssel                                                                                                                                                                        |
+| `dictionaries`  |                            | Die Wörterbücher aus `dialex.generated.ts` (per `{...dialex}`)                                                                                                                                             |
+| `config`        |                            | Die clientsichere Konfiguration aus derselben Datei: `locales`, `defaultLocale`, `fallbacks`, `prefixDefault`, `lazy`                                                                                      |
+| `loaders`       |                            | Im [Lazy-Modus](../guide/lazy-loading.md) vorhanden: lädt jedes Wörterbuch bei der ersten Verwendung                                                                                                       |
 
 Der Provider rendert zuerst das Standard-Locale und wendet das gespeicherte Locale nach dem Mounten an (nur wenn es eines der konfigurierten `locales` ist). So bleibt das erste Client-Rendering identisch mit dem serverseitig gerenderten Markup, auf Kosten eines zusätzlichen Renderings für wiederkehrende Besucher. Um das zu vermeiden, lies den Cookie auf dem Server und übergib ihn als `initialLocale`. `<html lang>` wird mit dem aktiven Locale synchron gehalten.
 

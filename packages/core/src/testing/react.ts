@@ -1,7 +1,8 @@
 import { createElement, type ReactNode } from "react";
+import type { DialexSource } from "../index.js";
 import { DialexProvider } from "../react.js";
 
-export interface TestDialexProviderProps {
+export interface TestDialexProviderProps extends DialexSource {
   /** Locale to render with. @default the configured default locale */
   locale?: string;
   children?: ReactNode;
@@ -11,13 +12,18 @@ export interface TestDialexProviderProps {
  * `DialexProvider` for component tests: renders `locale` immediately and never touches cookies or
  * localStorage, so tests do not leak state into each other.
  *
- * Needs the Dialex Vite plugin in your Vitest config (Vitest reads `vite.config.ts`), because
- * `useDictionary` reads the plugin's virtual modules.
+ * Give it the generated `dialex` export, or your own `dictionaries`:
  *
  * ```tsx
- * render(<TestDialexProvider locale="tr"><Header /></TestDialexProvider>);
+ * import { dialex } from "../dialex.generated";
+ * render(<TestDialexProvider {...dialex} locale="tr"><Header /></TestDialexProvider>);
  * ```
  */
-export function TestDialexProvider({ locale, children }: TestDialexProviderProps) {
-  return createElement(DialexProvider, { initialLocale: locale, persist: false, children });
+export function TestDialexProvider({ locale, children, ...source }: TestDialexProviderProps) {
+  return createElement(DialexProvider, {
+    ...source,
+    initialLocale: locale,
+    persist: false,
+    children,
+  });
 }

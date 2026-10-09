@@ -4,26 +4,15 @@ Dialex provides zero-runtime overhead integrations for common web frameworks.
 
 ## React & Vite
 
-Install plugin in `vite.config.ts`:
-
-```typescript
-import { defineConfig } from "vite";
-import { dialexPlugin } from "dialexjs/vite";
-
-export default defineConfig({
-  plugins: [dialexPlugin()],
-});
-```
-
-Wrap your root component with `DialexProvider`:
+There is no bundler plugin. Run `dx generate` (keep `dx generate --watch` running while you develop), then spread the generated `dialex` export into the provider:
 
 ```tsx
 import { DialexProvider } from "dialexjs/react";
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated";
 
 export function App() {
   return (
-    <DialexProvider dictionaries={dictionaries} initialLocale="en">
+    <DialexProvider {...dialex} initialLocale="en">
       <Main />
     </DialexProvider>
   );
@@ -35,7 +24,8 @@ export function App() {
 In server components:
 
 ```tsx
-import { getDictionary } from "dialexjs/server";
+// src/dialex.ts: export const { getDictionary } = createDialexServer(dialex);
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale = "en" } = await params;

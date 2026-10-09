@@ -8,7 +8,7 @@ Developed and tested against Angular 22. It uses only `signal`, `computed`, `inj
 
 ## Setup
 
-The Angular CLI does not run Dialex's Vite plugin, so dictionaries are passed in explicitly. Generate them with the CLI:
+Angular passes dictionaries explicitly, like the server adapters. Generate them with the CLI:
 
 ```bash
 dialex generate        # writes src/dialex.generated.ts

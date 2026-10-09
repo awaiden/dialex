@@ -57,13 +57,16 @@ Düzeltmeler dosyanın metnini editörde değiştirir; bu yüzden geri alınabil
 
 ## Ayarlar
 
-| Ayar                | Varsayılan | Açıklama                                                                                                                                                       |
-| ------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dialex.enable`     | `true`     | Tüm özellikleri açar veya kapatır                                                                                                                              |
-| `dialex.unusedKeys` | `false`    | Büyük olasılıkla kullanılmayan anahtarları ve sözlükleri soluklaştırır. Kelime eşleştirmeye dayalı bir sezgisel yöntem olduğu için varsayılan olarak kapalıdır |
-| `dialex.configPath` | `""`       | Her proje köküne göre yapılandırma dosyası yolu                                                                                                                |
+| Ayar                  | Varsayılan | Açıklama                                                                                                                                                         |
+| --------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`     | Tüm özellikleri açar veya kapatır                                                                                                                                |
+| `dialex.unusedKeys`   | `false`    | Büyük olasılıkla kullanılmayan anahtarları ve sözlükleri soluklaştırır. Kelime eşleştirmeye dayalı bir sezgisel yöntem olduğu için varsayılan olarak kapalıdır   |
+| `dialex.autoGenerate` | `true`     | Bir sözlük veya yapılandırma dosyası değiştiğinde, zaten üretilmiş dosyası olan projelerde `dialex.generated.ts` ve `dialex-env.d.ts` dosyalarını yeniden üretir |
+| `dialex.configPath`   | `""`       | Her proje köküne göre yapılandırma dosyası yolu                                                                                                                  |
 
 **Dialex: Refresh Diagnostics** komutu her şeyi yeniden analiz eder. Tanılamalar ayrıca bir dosyayı kaydettiğinizde ya da bir sözlük veya yapılandırma dosyası değiştiğinde yenilenir.
+
+**Dialex: Regenerate dialex.generated.ts** komutu bunu istek üzerine yapar. Otomatik üretim yapılandırmayı sözdizimi ağacından okur ve asla çalıştırmaz, güvenilmeyen çalışma alanlarında atlanır ve yalnızca zaten üretilmiş dosyası olan projelere dokunur; bu yüzden istemediğiniz dosyaları asla oluşturmaz.
 
 ## Projeler
 

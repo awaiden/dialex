@@ -61,65 +61,62 @@ describe("CLI init command", () => {
     expect(fs.readFileSync(path.join(tempDir, "AGENTS.md"), "utf-8")).toContain("Dialex");
   });
 
-  it("injects dialexPlugin into vite.config.ts for React/Vite projects via Magicast", async () => {
-    const viteDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-vite-test-"));
-    fs.mkdirSync(path.join(viteDir, "src"), { recursive: true });
-    fs.writeFileSync(
-      path.join(viteDir, "package.json"),
-      JSON.stringify(
-        {
-          name: "test-vite-app",
-          dependencies: { react: "^19.0.0", vite: "^6.0.0" },
-          scripts: {},
-        },
-        null,
-        2,
-      ),
-      "utf-8",
-    );
-
-    const initialViteConfig = `import { defineConfig } from 'vite';
-export default defineConfig({
-  plugins: [],
-});
-`;
-    fs.writeFileSync(path.join(viteDir, "vite.config.ts"), initialViteConfig, "utf-8");
-
-    await runInit({
-      cwd: viteDir,
-      yes: true,
-    });
-
-    const updatedViteConfig = fs.readFileSync(path.join(viteDir, "vite.config.ts"), "utf-8");
-    expect(updatedViteConfig).toContain('import { dialexPlugin } from "dialexjs/vite"');
-    expect(updatedViteConfig).toContain("dialexPlugin()");
-
-    fs.rmSync(viteDir, { recursive: true, force: true });
-  });
-
-  it("injects dialexPlugin into vite.config.ts for Vue projects", async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-vue-test-"));
+  it.each([
+    ["react", { react: "^19.0.0", vite: "^6.0.0" }],
+    ["vue", { vue: "^3.5.0", vite: "^6.0.0" }],
+  ])("leaves vite.config.ts alone for %s: there is no plugin to add", async (_name, deps) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-vite-test-"));
     fs.mkdirSync(path.join(dir, "src"), { recursive: true });
     fs.writeFileSync(
       path.join(dir, "package.json"),
-      JSON.stringify({
-        name: "vue-app",
-        dependencies: { vue: "^3.5.0" },
-        devDependencies: { vite: "^6.0.0" },
-      }),
-      "utf-8",
+      JSON.stringify({ name: "x", dependencies: deps }),
     );
-    fs.writeFileSync(
-      path.join(dir, "vite.config.ts"),
-      "import { defineConfig } from 'vite';\nexport default defineConfig({\n  plugins: [],\n});\n",
-      "utf-8",
-    );
+    const viteConfig =
+      "import { defineConfig } from 'vite';\nexport default defineConfig({ plugins: [] });\n";
+    fs.writeFileSync(path.join(dir, "vite.config.ts"), viteConfig);
 
     await runInit({ cwd: dir, yes: true });
 
-    const config = fs.readFileSync(path.join(dir, "vite.config.ts"), "utf-8");
-    expect(config).toContain('import { dialexPlugin } from "dialexjs/vite"');
-    expect(config).toContain("dialexPlugin()");
+    expect(fs.readFileSync(path.join(dir, "vite.config.ts"), "utf-8")).toBe(viteConfig);
+    expect(fs.existsSync(path.join(dir, "src/dialex.generated.ts"))).toBe(true);
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  it.each([
+    ["react", { react: "^19.0.0" }],
+    ["vue", { vue: "^3.5.0" }],
+    ["next", { next: "^15.0.0", react: "^19.0.0" }],
+    ["nuxt", { nuxt: "^4.0.0" }],
+    ["sveltekit", { "@sveltejs/kit": "^2.0.0" }],
+    ["astro", { astro: "^5.0.0" }],
+    ["hono", { hono: "^4.0.0" }],
+    ["express", { express: "^5.0.0" }],
+    ["fastify", { fastify: "^5.0.0" }],
+    ["koa", { koa: "^3.0.0" }],
+    ["nestjs", { "@nestjs/core": "^11.0.0" }],
+    ["elysia", { elysia: "^1.0.0" }],
+    [undefined, {}],
+  ])("creates dialex.config.ts for %s", async (framework, deps) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-config-test-"));
+    fs.mkdirSync(path.join(dir, "src"), { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "package.json"),
+      JSON.stringify({ name: "x", dependencies: deps }),
+    );
+
+    await runInit({ cwd: dir, yes: true, framework, defaultLocale: "tr", locales: "tr,en" });
+
+    const config = fs.readFileSync(path.join(dir, "dialex.config.ts"), "utf-8");
+    expect(config).toContain('defaultLocale: "tr"');
+    expect(config).toContain('"en"');
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("creates dialex.config.ts with --ai too", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-config-ai-"));
+    fs.writeFileSync(path.join(dir, "package.json"), JSON.stringify({ name: "x" }));
+    await runInit({ cwd: dir, yes: true, ai: true });
+    expect(fs.existsSync(path.join(dir, "dialex.config.ts"))).toBe(true);
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
@@ -140,7 +137,7 @@ export default defineConfig({
 
     const config = fs.readFileSync(path.join(dir, "nuxt.config.ts"), "utf-8");
     expect(config).toContain("dialexjs/nuxt");
-    expect(config).toContain("defaultLocale");
+    expect(config).not.toContain("defaultLocale"); // locales come from dialex.config.ts now
     fs.rmSync(dir, { recursive: true, force: true });
   });
 

@@ -2,16 +2,17 @@
 
 ## Vue
 
-Añade el plugin de Vite (consulta [React / Vite](./react.md#vite-plugin)) y después instala el plugin:
+Ejecuta `dx generate` y luego instala el plugin con el export `dialex` generado:
 
 ```ts
 // src/main.ts
 import { createApp } from "vue";
 import { createDialex } from "dialexjs/vue";
+import { dialex } from "./dialex.generated";
 import App from "./App.vue";
 
 createApp(App)
-  .use(createDialex({ defaultLocale: "en" }))
+  .use(createDialex({ ...dialex, defaultLocale: "en" }))
   .mount("#app");
 ```
 
@@ -29,11 +30,11 @@ const dict = useDictionary("home");
 </template>
 ```
 
-| Exportación             | Descripción                                                                                                                              |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `createDialex(options)` | Plugin de Vue. Opciones: `defaultLocale` (recurre a la configuración y luego a `"en"`), `onLocaleChange(locale)`                         |
-| `useDialex()`           | Devuelve `{ locale, setLocale }`, donde `locale` es un `Ref<string>`. Lanza un error si el plugin no está instalado                      |
-| `useDictionary(name)`   | Devuelve un `ComputedRef` del diccionario del locale actual, recurriendo al locale por defecto. Usa `dict.value` en el código del script |
+| Exportación             | Descripción                                                                                                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createDialex(options)` | Plugin de Vue. Opciones: el `dialex` generado (`dictionaries`, `config`, `loaders`), `defaultLocale` (recurre a la configuración y luego a `"en"`), `onLocaleChange(locale)` |
+| `useDialex()`           | Devuelve `{ locale, setLocale }`, donde `locale` es un `Ref<string>`. Lanza un error si el plugin no está instalado                                                          |
+| `useDictionary(name)`   | Devuelve un `ComputedRef` del diccionario del locale actual, recurriendo al locale por defecto. Usa `dict.value` en el código del script                                     |
 
 Con la [carga diferida](../guide/lazy-loading.md) activada, `useDictionary` está vacío hasta que se carga el diccionario, y `preloadDictionaries(...names)` puede cargarlo por adelantado.
 
@@ -44,14 +45,12 @@ Con la [carga diferida](../guide/lazy-loading.md) activada, `useDictionary` est�
 export default defineNuxtConfig({
   modules: ["dialexjs/nuxt"],
   dialex: {
-    defaultLocale: "en",
-    locales: ["en", "tr"],
     cookieName: "locale",
   },
 });
 ```
 
-El módulo registra el plugin de Vite, instala el plugin de Vue con el locale seleccionado guardado en una cookie (nombre por defecto `locale`, que también se lee en el servidor) e importa automáticamente `useDialex` y `useDictionary`. Las claves de configuración distintas de `cookieName` son las mismas que en [Configuración](../guide/configuration.md).
+El módulo instala el plugin de Vue con los diccionarios de `dialex.generated.ts` (se busca en el directorio de código, en la raíz del proyecto o en `src/`; usa `generated` para señalar otro sitio), guarda el locale elegido en una cookie (nombre por defecto `locale`, también se lee en el servidor) e importa automáticamente `useDialex` y `useDictionary`. Ejecuta primero `dx generate`. Todo lo demás, salvo `cookieName` y `generated`, viene de [Configuración](../guide/configuration.md).
 
 ::: warning
 El módulo de Nuxt solo está cubierto por pruebas unitarias de sus llamadas de configuración. Todavía no se ha ejecutado dentro de una aplicación Nuxt completa.

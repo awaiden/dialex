@@ -14,15 +14,15 @@ t("home.greeting", "Ada"); // function leaves receive the extra arguments
 
 ## 在哪里可用
 
-| 环境           | 如何获取 `t`                                       |
-| -------------- | -------------------------------------------------- |
-| React          | 来自 `dialexjs/react` 的 `const t = useT()`        |
-| Vue / Nuxt     | 来自 `dialexjs/vue` 的 `const t = useT()`          |
-| 服务端（Next） | 来自 `dialexjs/server` 的 `const t = getT(locale)` |
-| Elysia         | 请求上下文中的 `t`                                 |
-| SvelteKit      | `event.locals.t`                                   |
-| Astro          | `Astro.locals.t`                                   |
-| 其他任何地方   | 来自 `dialexjs` 的 `createT(getDictionary)`        |
+| 环境           | 如何获取 `t`                                                  |
+| -------------- | ------------------------------------------------------------- |
+| React          | 来自 `dialexjs/react` 的 `const t = useT()`                   |
+| Vue / Nuxt     | 来自 `dialexjs/vue` 的 `const t = useT()`                     |
+| 服务端（Next） | 来自 `createDialexServer(dialex)` 的 `const t = getT(locale)` |
+| Elysia         | 请求上下文中的 `t`                                            |
+| SvelteKit      | `event.locals.t`                                              |
+| Astro          | `Astro.locals.t`                                              |
+| 其他任何地方   | 来自 `dialexjs` 的 `createT(getDictionary)`                   |
 
 ## 类型
 

@@ -10,19 +10,19 @@ import {
   type Ref,
 } from "vue";
 import { createT, type Translate } from "./index.js";
-import { lookupLocale } from "./resolver.js";
 
-// @ts-ignore
-import dictionaries, { lazy, loadDictionary } from "virtual:dialex-dictionaries";
-// @ts-ignore
-import config from "virtual:dialex-config";
+import type { DialexSource } from "./index.js";
+import { getDictionaryStore, readDictionary, type DictionaryStore } from "./store.js";
+
+export { preloadDictionaries } from "./store.js";
 
 export interface DialexContext {
   locale: Ref<string>;
   setLocale: (locale: string) => void;
+  store: DictionaryStore;
 }
 
-export interface CreateDialexOptions {
+export interface CreateDialexOptions extends DialexSource {
   /** Initial locale. Falls back to the project config, then `"en"`. */
   defaultLocale?: string;
   /** Called after the locale changes, e.g. to persist it in a cookie. */
@@ -47,8 +47,10 @@ export const DIALEX_KEY: InjectionKey<DialexContext> = Symbol("dialex");
  * ```
  */
 export function createDialex(options: CreateDialexOptions = {}) {
-  const locale = ref(options.defaultLocale || config?.defaultLocale || "en");
+  const store = getDictionaryStore(options);
+  const locale = ref(options.defaultLocale || store.config.defaultLocale || "en");
   const context: DialexContext = {
+    store,
     locale,
     setLocale(next) {
       locale.value = next;
@@ -75,43 +77,20 @@ export function useDialex(): DialexContext {
 /** Bumped whenever a lazy dictionary finishes loading, so computed values re-read. */
 const loadedVersion = ref(0);
 
-/**
- * Starts loading dictionaries (a no-op unless `lazy: true`). Call it from a route guard or an
- * event handler to avoid showing empty content later.
- */
-export function preloadDictionaries(...names: string[]): Promise<void> {
-  return Promise.all(names.map((name) => loadDictionary(name))).then(() => undefined);
-}
-
 /** Starts loading `name` if needed, and makes SSR wait for it. */
-function ensureLoaded(name: string): void {
-  if (!lazy || dictionaries[name]) return;
-  const pending = loadDictionary(name).then(() => {
+function ensureLoaded(store: DictionaryStore, name: string): void {
+  if (!store.lazy || store.dictionaries[name]) return;
+  const pending = store.load(name).then(() => {
     loadedVersion.value++;
   });
   if (getCurrentInstance()) onServerPrefetch(() => pending);
 }
 
-/** Reads an already-loaded dictionary for a locale, following fallbacks. */
-function readLoaded(name: string, locale: string): any {
-  void loadedVersion.value; // track lazy loads
-  const dictionary = dictionaries[name];
-  if (!dictionary) {
-    // While a lazy dictionary is still loading there is nothing to warn about yet.
-    if (!lazy) console.warn(`[dialex] Dictionary "${name}" not found.`);
-    return {};
-  }
-
-  const defaultLocale = config?.defaultLocale || Object.keys(dictionary)[0];
-  const found = lookupLocale(dictionary, locale, { fallbacks: config?.fallbacks, defaultLocale });
-  if (!found) return {};
-
-  if (found.locale !== locale) {
-    console.warn(
-      `[dialex] Locale "${locale}" not found in dictionary "${name}", using "${found.locale}".`,
-    );
-  }
-  return found.content;
+/** Reads an already-loaded dictionary, tracking lazy loads so computed values re-read. */
+function readLoaded(store: DictionaryStore, name: string, locale: string): any {
+  void loadedVersion.value;
+  // While a lazy dictionary is still loading there is nothing to warn about yet.
+  return readDictionary(store, name, locale, store.lazy);
 }
 
 /**
@@ -121,9 +100,9 @@ function readLoaded(name: string, locale: string): any {
 export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(
   name: K,
 ): ComputedRef<T> {
-  const { locale } = useDialex();
-  ensureLoaded(name as string);
-  return computed(() => readLoaded(name as string, locale.value) as T);
+  const { locale, store } = useDialex();
+  ensureLoaded(store, name as string);
+  return computed(() => readLoaded(store, name as string, locale.value) as T);
 }
 
 /**
@@ -134,10 +113,10 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  * `const t = useT("home", "nav")`.
  */
 export function useT(...dictionaryNames: string[]): Translate {
-  const { locale } = useDialex();
-  for (const name of dictionaryNames) ensureLoaded(name);
+  const { locale, store } = useDialex();
+  for (const name of dictionaryNames) ensureLoaded(store, name);
   return ((path: string, ...args: any[]) =>
-    (createT((name) => readLoaded(name, locale.value), locale.value) as any)(
+    (createT((name) => readLoaded(store, name, locale.value), locale.value) as any)(
       path,
       ...args,
     )) as Translate;

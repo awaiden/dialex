@@ -1,6 +1,6 @@
 # Seguridad de tipos
 
-`dialex generate` (y el plugin de Vite, y `withDialex` para Next.js) escribe `src/dialex-env.d.ts`. Este archivo amplía tres interfaces:
+`dialex generate` escribe `src/dialex-env.d.ts` junto a `src/dialex.generated.ts`. Amplía tres interfaces:
 
 ```ts
 declare module "dialexjs" {

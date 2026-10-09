@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
 import { HOME, cleanup, writeProject } from "./helpers.js";
@@ -272,5 +273,81 @@ describe("quick fixes", () => {
     await start();
     const actions = await actionsFor("src/app.ts", (d) => d.code === "unknown-dictionary");
     expect(actions).toEqual([]);
+  });
+});
+
+describe("auto-generate", () => {
+  const generated = (rel = "src/dialex.generated.ts") => path.join(dir, rel);
+  const addDictionary = (name: string) => {
+    fs.writeFileSync(
+      path.join(dir, `src/${name}.content.ts`),
+      `export default { name: "${name}", dictionary: { en: { a: "x" }, tr: { a: "y" } } };\n`,
+    );
+    state.watchers[0].fire.create();
+  };
+
+  it("regenerates an existing generated file when a dictionary is added", async () => {
+    vi.useFakeTimers();
+    try {
+      await start({ "src/dialex.generated.ts": "// stale\n" });
+      addDictionary("extra");
+      await vi.advanceTimersByTimeAsync(400);
+
+      const text = fs.readFileSync(generated(), "utf-8");
+      expect(text).toContain("extra.content.js");
+      expect(text).toContain("home.content.js");
+      expect(fs.existsSync(generated("src/dialex-env.d.ts"))).toBe(true);
+      expect(state.status.some((m) => m.includes("regenerated"))).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not create a generated file in a project that has none", async () => {
+    vi.useFakeTimers();
+    try {
+      await start();
+      addDictionary("extra");
+      await vi.advanceTimersByTimeAsync(400);
+      expect(fs.existsSync(generated())).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("respects dialex.autoGenerate = false", async () => {
+    vi.useFakeTimers();
+    try {
+      await start({ "src/dialex.generated.ts": "// stale\n" }, { autoGenerate: false });
+      addDictionary("extra");
+      await vi.advanceTimersByTimeAsync(400);
+      expect(fs.readFileSync(generated(), "utf-8")).toBe("// stale\n");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("never runs the project's config file", async () => {
+    vi.useFakeTimers();
+    const marker = path.join(os.tmpdir(), `dialex-ext-ran-${Date.now()}`);
+    try {
+      await start({
+        "src/dialex.generated.ts": "// stale\n",
+        "dialex.config.ts": `import fs from "node:fs";\nfs.writeFileSync(${JSON.stringify(marker)}, "x");\nexport default { defaultLocale: "en", locales: ["en", "tr"] };\n`,
+      });
+      addDictionary("extra");
+      await vi.advanceTimersByTimeAsync(400);
+      expect(fs.readFileSync(generated(), "utf-8")).toContain("extra.content.js");
+      expect(fs.existsSync(marker)).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("registers a regenerate command that works on demand", async () => {
+    await start({ "src/dialex.generated.ts": "// stale\n" });
+    expect(state.commands.has("dialex.generate")).toBe(true);
+    await state.commands.get("dialex.generate")!();
+    expect(fs.readFileSync(generated(), "utf-8")).toContain("home.content.js");
   });
 });

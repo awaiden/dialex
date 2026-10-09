@@ -8,7 +8,7 @@
 
 ## 设置
 
-Angular CLI 不会运行 Dialex 的 Vite 插件，所以词典需要显式传入。使用 CLI 生成它们：
+Angular 像服务端适配器一样显式接收词典。用 CLI 生成它们：
 
 ```bash
 dialex generate        # writes src/dialex.generated.ts

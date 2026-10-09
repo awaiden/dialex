@@ -1,17 +1,36 @@
 # Next.js
 
-## Config
+## Setup
+
+Next.js needs no config wrapper or plugin. `dx generate` writes `src/dialex.generated.ts`. Bind it once for server code:
 
 ```ts
-// next.config.mjs
-import { withDialex } from "dialexjs/next";
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
 
-export default withDialex({
-  // your Next.js config
-});
+export const { getDictionary, getT } = createDialexServer(dialex);
 ```
 
-`withDialex(nextConfig, inlineConfig?)` wires dictionary resolution into webpack and Turbopack, keeps your existing `webpack` function, and syncs generated files.
+Then render the provider from a client file that imports the generated file itself. Dictionaries contain functions, which cannot be passed from a Server Component to a Client Component:
+
+```tsx
+// src/components/providers.tsx
+"use client";
+
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "../dialex.generated";
+
+export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {
+  return (
+    <DialexProvider {...dialex} defaultLocale={locale}>
+      {children}
+    </DialexProvider>
+  );
+}
+```
+
+Keep the file current with `dx generate --watch` next to `next dev`, or with the VS Code extension; `dx check` fails when it is out of date.
 
 ## Middleware
 
@@ -60,13 +79,13 @@ import { DialexLink } from "dialexjs/next/link";
 </DialexLink>; // /en/about
 ```
 
-It reads `locales`, `defaultLocale` and `prefixDefault` from `dialex.config.ts`. External URLs and `#fragments` are left alone. See also [Routing helpers](../guide/routing.md).
+It reads `locales`, `defaultLocale` and `prefixDefault` from the generated config, so render it inside `<DialexProvider {...dialex}>`. External URLs and `#fragments` are left alone. See also [Routing helpers](../guide/routing.md).
 
 ## Server Components
 
 ```tsx
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

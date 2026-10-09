@@ -48,16 +48,17 @@ expect(res.headers.get("content-language")).toBe("tr");
 
 ## 组件测试
 
-调用 `useDictionary`、`useT` 或 `useDialex` 的组件会读取插件的虚拟模块，所以你的测试运行器需要 Dialex 的 Vite 插件。Vitest 使用你的 `vite.config.ts`，如果插件已经在其中，就不需要其他配置。
+调用 `useDictionary`、`useT` 或 `useDialex` 的组件需要 provider 提供词典。把生成的 `dialex` 导出（或你自己的 `dictionaries`）传给下面的测试辅助函数即可，不需要打包器插件或 mock。
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+import { dialex } from "../dialex.generated";
 
 render(
-  <TestDialexProvider locale="tr">
+  <TestDialexProvider {...dialex} locale="tr">
     <Header />
   </TestDialexProvider>,
 );
@@ -71,10 +72,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+import { dialex } from "../dialex.generated";
 
-const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });
 ```
-
-::: tip 没有 Vite 插件时
-如果无法把插件加入测试配置，可以改为模拟这两个虚拟模块（`vi.mock("virtual:dialex-dictionaries", ...)` 和 `vi.mock("virtual:dialex-config", ...)`）。Dialex 自己的测试套件就是这样做的。
-:::

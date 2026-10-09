@@ -19,6 +19,7 @@ dialex lint -c ./dialex.config.ts
 - Una cadena que claramente usa [ICU](../guide/icu.md) (`plural`, `select`, `number`, ...) no es ICU válido, o un locale usa argumentos distintos a los del locale por defecto para la misma clave.
 - El código fuente llama a `getDictionary("x")`, `useDictionary("x")` o `@DialexDictionary("x")` con un diccionario que no existe.
 - El código fuente llama a `t("home.nav.missing")` con una ruta que no existe. Solo se comprueban las llamadas a `t()` cuyo primer segmento es el nombre de un diccionario conocido, de modo que se ignoran las funciones `t()` ajenas.
+- Existe un archivo generado (`dialex.generated.ts` o `dialex-env.d.ts`) pero está desactualizado. Ejecuta `dialex generate` o usa `--fix`.
 
 **Advertencias**
 
@@ -41,7 +42,7 @@ Las comprobaciones de referencias y de claves sin usar analizan `**/*.{ts,tsx,js
 
 ## --fix
 
-Para cada clave que un locale tiene y otro no, `--fix` copia el valor del locale por defecto en el lugar que falta. Las cadenas reciben el prefijo `[TODO] ` para encontrarlas fácilmente; las funciones se copian tal como están escritas. Se crean los locales configurados que faltan. Las ediciones se hacen sobre el árbol sintáctico, así que se conservan los comentarios y el resto del archivo.
+Para cada clave que un locale tiene y otro no, `--fix` copia el valor del locale por defecto en el lugar que falta. Las cadenas reciben el prefijo `[TODO] ` para encontrarlas fácilmente; las funciones se copian tal como están escritas. Se crean los locales configurados que faltan. Las ediciones se hacen sobre el árbol sintáctico, así que se conservan los comentarios y el resto del archivo. También reescribe los archivos generados desactualizados.
 
 Ejecuta después [`dialex translate`](./translate.md) para sustituir los marcadores por traducciones reales.
 

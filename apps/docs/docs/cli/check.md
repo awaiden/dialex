@@ -19,6 +19,7 @@ dialex lint -c ./dialex.config.ts
 - A string that clearly uses [ICU](../guide/icu.md) (`plural`, `select`, `number`, ...) is not valid ICU, or a locale uses different arguments than the default locale for the same key.
 - Source code calls `getDictionary("x")`, `useDictionary("x")` or `@DialexDictionary("x")` with a dictionary that does not exist.
 - Source code calls `t("home.nav.missing")` with a path that does not exist. Only `t()` calls whose first segment is a known dictionary name are checked, so unrelated `t()` functions are ignored.
+- A generated file (`dialex.generated.ts` or `dialex-env.d.ts`) exists but is out of date. Run `dialex generate`, or use `--fix`.
 
 **Warnings**
 
@@ -41,7 +42,7 @@ Reference and unused-key checks scan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,ast
 
 ## --fix
 
-For every key that one locale has and another lacks, `--fix` copies the default-locale value into the missing place. Strings get a `[TODO] ` prefix so they are easy to find; functions are copied as written. Missing configured locales are created. Edits are made on the syntax tree, so comments and the rest of the file are kept.
+For every key that one locale has and another lacks, `--fix` copies the default-locale value into the missing place. Strings get a `[TODO] ` prefix so they are easy to find; functions are copied as written. Missing configured locales are created. Edits are made on the syntax tree, so comments and the rest of the file are kept. It also rewrites out-of-date generated files.
 
 Run [`dialex translate`](./translate.md) afterwards to replace the placeholders with real translations.
 

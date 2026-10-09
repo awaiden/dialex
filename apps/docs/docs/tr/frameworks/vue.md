@@ -2,16 +2,17 @@
 
 ## Vue
 
-Vite eklentisini ekleyin ([React / Vite](./react.md#vite-plugin) bölümüne bakın), ardından eklentiyi kurun:
+`dx generate` çalıştırın, ardından eklentiyi üretilen `dialex` dışa aktarımıyla kurun:
 
 ```ts
 // src/main.ts
 import { createApp } from "vue";
 import { createDialex } from "dialexjs/vue";
+import { dialex } from "./dialex.generated";
 import App from "./App.vue";
 
 createApp(App)
-  .use(createDialex({ defaultLocale: "en" }))
+  .use(createDialex({ ...dialex, defaultLocale: "en" }))
   .mount("#app");
 ```
 
@@ -29,11 +30,11 @@ const dict = useDictionary("home");
 </template>
 ```
 
-| Dışa aktarım            | Açıklama                                                                                                                                |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `createDialex(options)` | Vue eklentisi. Seçenekler: `defaultLocale` (yapılandırmaya, sonra `"en"` değerine döner), `onLocaleChange(locale)`                      |
-| `useDialex()`           | `{ locale, setLocale }` döndürür; `locale` bir `Ref<string>`'dir. Eklenti kurulu değilse hata verir                                     |
-| `useDictionary(name)`   | Geçerli yerel ayar için sözlüğün bir `ComputedRef` değerini döndürür, varsayılan yerel ayara döner. Betik kodunda `dict.value` kullanın |
+| Dışa aktarım            | Açıklama                                                                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createDialex(options)` | Vue eklentisi. Seçenekler: üretilen `dialex` (`dictionaries`, `config`, `loaders`), `defaultLocale` (yapılandırmaya, sonra `"en"`'e geri döner), `onLocaleChange(locale)` |
+| `useDialex()`           | `{ locale, setLocale }` döndürür; `locale` bir `Ref<string>`'dir. Eklenti kurulu değilse hata verir                                                                       |
+| `useDictionary(name)`   | Geçerli yerel ayar için sözlüğün bir `ComputedRef` değerini döndürür, varsayılan yerel ayara döner. Betik kodunda `dict.value` kullanın                                   |
 
 [Tembel yükleme](../guide/lazy-loading.md) etkinken `useDictionary`, sözlük yüklenene kadar boştur ve `preloadDictionaries(...names)` onu önceden yükleyebilir.
 
@@ -44,14 +45,12 @@ const dict = useDictionary("home");
 export default defineNuxtConfig({
   modules: ["dialexjs/nuxt"],
   dialex: {
-    defaultLocale: "en",
-    locales: ["en", "tr"],
     cookieName: "locale",
   },
 });
 ```
 
-Modül Vite eklentisini kaydeder, Vue eklentisini seçilen yerel ayarın bir çerezde saklandığı biçimde kurar (varsayılan ad `locale`, sunucuda da okunur) ve `useDialex` ile `useDictionary` işlevlerini otomatik içe aktarır. `cookieName` dışındaki yapılandırma anahtarları [Yapılandırma](../guide/configuration.md) sayfasındakilerle aynıdır.
+Modül, Vue eklentisini `dialex.generated.ts` içindeki sözlüklerle kurar (kaynak dizininde, proje kökünde veya `src/` içinde aranır; başka bir yeri göstermek için `generated` ayarlayın), seçilen yerel ayarı bir çerezde saklar (varsayılan ad `locale`, sunucuda da okunur) ve `useDialex` ile `useDictionary` işlevlerini otomatik içe aktarır. Önce `dx generate` çalıştırın. `cookieName` ve `generated` dışındaki her şey [Yapılandırma](../guide/configuration.md) sayfasından gelir.
 
 ::: warning
 Nuxt modülü yalnızca kurulum çağrılarını kapsayan birim testleriyle test edilmiştir. Henüz tam bir Nuxt uygulaması içinde çalıştırılmamıştır.

@@ -1,7 +1,7 @@
 {
   "name": "dialex-vscode",
   "displayName": "Dialex",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Diagnostics, hover, go to definition, completion and quick fixes for Dialex translations.",
   "categories": [
@@ -47,6 +47,10 @@
       {
         "command": "dialex.refresh",
         "title": "Dialex: Refresh Diagnostics"
+      },
+      {
+        "command": "dialex.generate",
+        "title": "Dialex: Regenerate dialex.generated.ts"
       }
     ],
     "configuration": {
@@ -61,6 +65,11 @@
           "type": "boolean",
           "default": false,
           "description": "Fade out translation keys and dictionaries that no source file seems to use. This is a word-match heuristic, so it is off by default."
+        },
+        "dialex.autoGenerate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Regenerate dialex.generated.ts and dialex-env.d.ts when a dictionary or config file changes, in projects that already have a generated file. The config is read without running it."
         },
         "dialex.configPath": {
           "type": "string",

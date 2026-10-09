@@ -57,4 +57,9 @@ export {
   type ProjectDictionary,
 } from "./utils/project.js";
 
-export { generateDictionaries, type GenerateOptions } from "./commands/generate.js";
+export {
+  generateDictionaries,
+  renderGenerated,
+  type GenerateOptions,
+  type RenderedGenerate,
+} from "./commands/generate.js";

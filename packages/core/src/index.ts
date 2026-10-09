@@ -38,6 +38,43 @@ export interface TranslateConfig {
   sourceLocale?: string;
 }
 
+/**
+ * What every tool uses when a setting (or the whole `dialex.config.ts`) is missing. `locales` is
+ * empty here: `dx generate` then infers it from the dictionaries.
+ */
+export const DEFAULT_CONFIG = {
+  defaultLocale: "en",
+  locales: [] as string[],
+  include: "**/*.content.ts" as string | string[],
+  fallbacks: {} as Record<string, string[]>,
+  prefixDefault: true,
+  lazy: false,
+};
+
+/** The settings `dx generate` writes into `dialex.generated.ts` for the runtime to read. */
+export interface DialexClientConfig {
+  defaultLocale?: string;
+  locales?: string[];
+  fallbacks?: Record<string, string[]>;
+  prefixDefault?: boolean;
+  lazy?: boolean;
+}
+
+/** Loads one dictionary on demand (`() => import("./home.content.js")`). */
+export type DictionaryLoaders = Record<string, () => Promise<any>>;
+
+/**
+ * What the generated `dialex` export holds and providers accept:
+ * `<DialexProvider {...dialex}>`, `createDialex({ ...dialex })`, `createDialexServer(dialex)`.
+ */
+export interface DialexSource {
+  /** Dictionary definitions, or a map of name to dictionary. */
+  dictionaries?: Record<string, Record<string, any>> | any[];
+  config?: DialexClientConfig;
+  /** Present in lazy mode. Dictionaries are then loaded the first time they are used. */
+  loaders?: DictionaryLoaders;
+}
+
 export interface DialexConfig {
   /**
    * The default locale to use.

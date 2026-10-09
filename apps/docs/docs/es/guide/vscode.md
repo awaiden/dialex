@@ -57,13 +57,16 @@ Las correcciones reemplazan el texto del archivo en el editor, por lo que se pue
 
 ## Ajustes
 
-| Ajuste              | Valor por defecto | Descripción                                                                                                                                            |
-| ------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `dialex.enable`     | `true`            | Activa o desactiva todas las funciones                                                                                                                 |
-| `dialex.unusedKeys` | `false`           | Atenúa las claves y los diccionarios posiblemente sin usar. Es una heurística basada en coincidencia de palabras, por eso está desactivado por defecto |
-| `dialex.configPath` | `""`              | Ruta del archivo de configuración, relativa a la raíz de cada proyecto                                                                                 |
+| Ajuste                | Valor por defecto | Descripción                                                                                                                                                   |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`            | Activa o desactiva todas las funciones                                                                                                                        |
+| `dialex.unusedKeys`   | `false`           | Atenúa las claves y los diccionarios posiblemente sin usar. Es una heurística basada en coincidencia de palabras, por eso está desactivado por defecto        |
+| `dialex.autoGenerate` | `true`            | Regenera `dialex.generated.ts` y `dialex-env.d.ts` cuando cambia un diccionario o un archivo de configuración, en proyectos que ya tienen un archivo generado |
+| `dialex.configPath`   | `""`              | Ruta del archivo de configuración, relativa a la raíz de cada proyecto                                                                                        |
 
 El comando **Dialex: Refresh Diagnostics** vuelve a analizarlo todo. Los diagnósticos también se actualizan cuando guardas un archivo o cuando cambia un diccionario o un archivo de configuración.
+
+El comando **Dialex: Regenerate dialex.generated.ts** lo hace bajo demanda. La generación automática lee la configuración desde el árbol de sintaxis y nunca la ejecuta, se omite en espacios de trabajo no confiables y solo toca proyectos que ya tienen un archivo generado, así que nunca crea archivos que no hayas pedido.
 
 ## Proyectos
 

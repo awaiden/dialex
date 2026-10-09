@@ -1,6 +1,6 @@
 # Lazy Loading
 
-By default every dictionary is bundled up front. With `lazy: true` the Vite plugin splits each dictionary file into its own chunk and loads it when a component first needs it. This applies to [React / Vite](../frameworks/react.md) and [Vue / Nuxt](../frameworks/vue.md). Next.js already splits code per route, the server adapters read dictionaries directly, and [Angular](../frameworks/angular.md) receives its dictionaries explicitly, so they are unaffected.
+By default every dictionary is bundled up front. With `lazy: true`, `dx generate` writes dynamic imports instead of static ones, so your bundler splits each dictionary file into its own chunk and the provider loads it when a component first needs it. This applies to [React / Vite](../frameworks/react.md) and [Vue / Nuxt](../frameworks/vue.md). Next.js already splits code per route, the server adapters read dictionaries directly, and [Angular](../frameworks/angular.md) receives its dictionaries explicitly, so they are unaffected.
 
 ```ts
 // dialex.config.ts
@@ -22,6 +22,7 @@ Splitting is **per dictionary file**, not per locale. Each file defines all of i
 ```tsx
 import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function Pricing() {
   const dict = useDictionary("pricing"); // suspends on first use
@@ -38,7 +39,7 @@ function Nav() {
 </Suspense>;
 
 // e.g. on hover, to avoid the fallback:
-preloadDictionaries("pricing");
+preloadDictionaries(dialex, "pricing");
 ```
 
 `t("dict.key")` cannot suspend on its own, so `useT` takes the names of the dictionaries it will read. A name that is not loaded yet logs a warning and returns the path.
@@ -59,10 +60,10 @@ const dict = useDictionary("pricing");
 </template>
 ```
 
-Use `useT("pricing")` the same way, and `preloadDictionaries("pricing")` in a route guard.
+Use `useT("pricing")` the same way, and `preloadDictionaries(dialex, "pricing")` in a route guard.
 
 ## Notes
 
-- A dictionary's name is read from the source text without running it, so lazy mode needs `defineDictionary("name", ...)` or a literal `name: "..."` property. Otherwise the build fails with a message naming the file.
-- `locales` in the config is still enforced: loading a dictionary that lacks a configured locale rejects with an error.
+- A dictionary's name is read from the source text without running it, so lazy mode needs `defineDictionary("name", ...)` or a literal `name: "..."` property. Otherwise `dx generate` fails with a message naming the file.
+- Lazy mode is for client bundles: the generated `dictionaries` export is empty, so `createDialexServer` and the server adapters need an eager generated file.
 - Load results are cached per dictionary.

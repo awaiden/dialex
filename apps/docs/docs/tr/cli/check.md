@@ -19,6 +19,7 @@ dialex lint -c ./dialex.config.ts
 - Açıkça [ICU](../guide/icu.md) kullanan (`plural`, `select`, `number`, ...) bir metin geçerli ICU değildir ya da bir yerel ayar, aynı anahtar için varsayılan yerel ayardan farklı argümanlar kullanır.
 - Kaynak kod, var olmayan bir sözlükle `getDictionary("x")`, `useDictionary("x")` veya `@DialexDictionary("x")` çağırır.
 - Kaynak kod, var olmayan bir yolla `t("home.nav.missing")` çağırır. Yalnızca ilk segmenti bilinen bir sözlük adı olan `t()` çağrıları denetlenir; bu yüzden ilgisiz `t()` fonksiyonları yok sayılır.
+- Üretilmiş bir dosya (`dialex.generated.ts` veya `dialex-env.d.ts`) var ama güncel değil. `dialex generate` çalıştırın ya da `--fix` kullanın.
 
 **Uyarılar**
 
@@ -41,7 +42,7 @@ Başvuru ve kullanılmayan anahtar denetimleri `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,
 
 ## --fix
 
-Bir yerel ayarda olup diğerinde bulunmayan her anahtar için `--fix`, varsayılan yerel ayarın değerini eksik yere kopyalar. Metinler kolay bulunsun diye `[TODO] ` öneki alır; fonksiyonlar yazıldığı gibi kopyalanır. Eksik yapılandırılmış yerel ayarlar oluşturulur. Düzenlemeler sözdizimi ağacı üzerinde yapıldığından yorumlar ve dosyanın geri kalanı korunur.
+Bir yerel ayarda olup diğerinde bulunmayan her anahtar için `--fix`, varsayılan yerel ayarın değerini eksik yere kopyalar. Metinler kolay bulunsun diye `[TODO] ` öneki alır; fonksiyonlar yazıldığı gibi kopyalanır. Eksik yapılandırılmış yerel ayarlar oluşturulur. Düzenlemeler sözdizimi ağacı üzerinde yapıldığından yorumlar ve dosyanın geri kalanı korunur. Ayrıca güncel olmayan üretilmiş dosyaları yeniden yazar.
 
 Yer tutucuları gerçek çevirilerle değiştirmek için ardından [`dialex translate`](./translate.md) çalıştırın.
 

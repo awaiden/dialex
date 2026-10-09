@@ -3,7 +3,7 @@
 Initialisiert Dialex im aktuellen Projekt.
 
 - Erkennt das Framework (Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, React/Vite).
-- Bearbeitet `dialex.config.ts` mit AST-Transformationen von Magicast, fügt in React- und Vue-Projekten `dialexPlugin()` in `vite.config.ts` ein und registriert in Nuxt-Projekten das Modul `dialexjs/nuxt` in `nuxt.config.ts`.
+- Bearbeitet `dialex.config.ts` mit Magicast-AST-Transformationen (für jedes Framework wird eine Konfigurationsdatei angelegt) und registriert in Nuxt-Projekten das Modul `dialexjs/nuxt` in `nuxt.config.ts`.
 - Schreibt ein Start-Wörterbuch und eine TypeScript-Deklarationsdatei.
 - Fügt `dialexjs` und die Dev-Abhängigkeit `@dialexjs/cli` zur `package.json` hinzu (bereits aufgeführte Pakete bleiben unverändert) sowie ein Skript `dx:generate`. Führe danach den Install-Befehl deines Paketmanagers aus.
 

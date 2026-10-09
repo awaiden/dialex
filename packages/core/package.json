@@ -1,6 +1,6 @@
 {
   "name": "dialexjs",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Type-safe, zero-boilerplate internationalization (i18n) framework for React, Next.js, Hono, Express, Fastify, Koa, NestJS, and Vite.",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
@@ -28,7 +28,6 @@
     "./icu": "./dist/icu/index.mjs",
     "./koa": "./dist/koa.mjs",
     "./nestjs": "./dist/nestjs.mjs",
-    "./next": "./dist/next.mjs",
     "./next/link": "./dist/next/link.mjs",
     "./next/middleware": "./dist/next/middleware.mjs",
     "./nuxt": "./dist/nuxt.mjs",
@@ -40,7 +39,6 @@
     "./testing": "./dist/testing/index.mjs",
     "./testing/react": "./dist/testing/react.mjs",
     "./testing/vue": "./dist/testing/vue.mjs",
-    "./vite": "./dist/vite.mjs",
     "./vue": "./dist/vue.mjs",
     "./web": "./dist/web.mjs",
     "./package.json": "./package.json"
@@ -108,7 +106,6 @@
     "next": ">=13.0.0",
     "react": "^19.3.0",
     "rxjs": ">=7.0.0",
-    "vite": "^6.0.0",
     "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
@@ -149,9 +146,6 @@
       "optional": true
     },
     "rxjs": {
-      "optional": true
-    },
-    "vite": {
       "optional": true
     },
     "vue": {

@@ -16,7 +16,7 @@ app/
 In `page.tsx`:
 
 ```tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex"; // createDialexServer(dialex)
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

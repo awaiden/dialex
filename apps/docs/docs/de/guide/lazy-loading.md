@@ -1,6 +1,6 @@
 # Lazy Loading
 
-Standardmäßig wird jedes Wörterbuch von Anfang an gebündelt. Mit `lazy: true` teilt das Vite-Plugin jede Wörterbuchdatei in einen eigenen Chunk auf und lädt ihn, sobald eine Komponente ihn zum ersten Mal braucht. Das gilt für [React / Vite](../frameworks/react.md) und [Vue / Nuxt](../frameworks/vue.md). Next.js teilt den Code bereits pro Route auf, die Server-Adapter lesen Wörterbücher direkt, und [Angular](../frameworks/angular.md) erhält seine Wörterbücher explizit; sie sind daher nicht betroffen.
+Standardmäßig wird jedes Wörterbuch von Anfang an gebündelt. Mit `lazy: true` schreibt `dx generate` dynamische statt statischer Imports, sodass dein Bundler jede Wörterbuchdatei in einen eigenen Chunk aufteilt und der Provider sie lädt, wenn eine Komponente sie zum ersten Mal braucht. Das gilt für [React / Vite](../frameworks/react.md) und [Vue / Nuxt](../frameworks/vue.md). Next.js teilt den Code ohnehin pro Route, die Server-Adapter lesen Wörterbücher direkt und [Angular](../frameworks/angular.md) erhält seine Wörterbücher explizit, daher sind sie nicht betroffen.
 
 ```ts
 // dialex.config.ts
@@ -22,6 +22,7 @@ Aufgeteilt wird **pro Wörterbuchdatei**, nicht pro Locale. Jede Datei definiert
 ```tsx
 import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function Pricing() {
   const dict = useDictionary("pricing"); // suspends on first use
@@ -38,7 +39,7 @@ function Nav() {
 </Suspense>;
 
 // e.g. on hover, to avoid the fallback:
-preloadDictionaries("pricing");
+preloadDictionaries(dialex, "pricing");
 ```
 
 `t("dict.key")` kann nicht von selbst suspendieren, deshalb nimmt `useT` die Namen der Wörterbücher entgegen, die es lesen wird. Ein Name, der noch nicht geladen ist, protokolliert eine Warnung und gibt den Pfad zurück.
@@ -59,10 +60,10 @@ const dict = useDictionary("pricing");
 </template>
 ```
 
-Verwende `useT("pricing")` genauso, und `preloadDictionaries("pricing")` in einem Route-Guard.
+Verwende `useT("pricing")` genauso, und `preloadDictionaries(dialex, "pricing")` in einem Route-Guard.
 
 ## Hinweise
 
-- Der Name eines Wörterbuchs wird aus dem Quelltext gelesen, ohne ihn auszuführen. Der Lazy-Modus benötigt daher `defineDictionary("name", ...)` oder eine literale Eigenschaft `name: "..."`. Andernfalls schlägt der Build mit einer Meldung fehl, die die Datei nennt.
-- `locales` in der Konfiguration wird weiterhin durchgesetzt: Das Laden eines Wörterbuchs, dem ein konfiguriertes Locale fehlt, wird mit einem Fehler abgelehnt.
+- Der Name eines Wörterbuchs wird aus dem Quelltext gelesen, ohne ihn auszuführen. Der Lazy-Modus braucht daher `defineDictionary("name", ...)` oder eine literale Eigenschaft `name: "..."`. Andernfalls schlägt `dx generate` mit einer Meldung fehl, die die Datei nennt.
+- Der Lazy-Modus ist für Client-Bundles gedacht: Der generierte Export `dictionaries` ist leer, daher brauchen `createDialexServer` und die Server-Adapter eine generierte Datei im normalen (eager) Modus.
 - Ladeergebnisse werden pro Wörterbuch zwischengespeichert.

@@ -33,4 +33,4 @@ en: {
 
 ## Locale parity
 
-Every dictionary should define the same keys for every locale. Run [`dialex check`](../cli/check.md) in CI to enforce it. When `locales` is set in the config, the Vite plugin also throws at build time if a dictionary is missing a configured locale.
+Every dictionary should define the same keys for every locale. Run [`dialex check`](../cli/check.md) in CI to enforce it; it also reports a configured locale that a dictionary lacks.

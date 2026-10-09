@@ -6,7 +6,7 @@ Dialex is an i18n framework built around dictionaries defined in TypeScript. A c
 
 | Package         | Purpose                                                              |
 | --------------- | -------------------------------------------------------------------- |
-| `dialexjs`      | Core runtime, framework adapters, Vite plugin                        |
+| `dialexjs`      | Core runtime and framework adapters                                  |
 | `@dialexjs/cli` | `dialex` / `dx` binaries for scaffolding, codegen, and parity checks |
 
 ## Install

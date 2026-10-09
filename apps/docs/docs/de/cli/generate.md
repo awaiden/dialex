@@ -4,7 +4,7 @@ Kompiliert `.content.ts`-Wörterbücher zu statischen Modulen für eine Serverau
 
 Ausgaben:
 
-- `src/dialex.generated.ts`, die statische Wörterbuch-Map, die du als `dictionaries` übergibst.
+- `src/dialex.generated.ts`, das `dictionaries` exportiert (der Default-Export, für die Server-Adapter), `config` (eine clientsichere Kopie deiner Konfiguration) und `dialex` (`{ dictionaries, config }`, per Spread an `<DialexProvider {...dialex}>` oder `createDialex({ ...dialex })` übergeben). Mit `lazy: true` enthält sie stattdessen dynamische Imports und einen Export `loaders`.
 - `src/dialex-env.d.ts`, die [Erweiterung der Typ-Registry](../guide/type-safety.md).
 
 ```bash
@@ -20,3 +20,5 @@ dialex gen -o src/custom.generated.ts
 | `-c, --config <path>` | Eigener Konfigurationspfad                                    |
 
 Führe es aus, bevor du eine serverseitige App baust oder startest, üblicherweise über das Skript `dx:generate`, das `init` hinzufügt.
+
+Nichts erzeugt diese Datei für dich, halte sie also aktuell: Führe `dialex generate --watch` in einem zweiten Terminal aus (es reagiert auf hinzugefügte, geänderte und entfernte Wörterbuchdateien sowie auf Konfigurationsänderungen), nutze die Dialex-VS-Code-Erweiterung (sie erzeugt beim Speichern neu) oder führe `dx generate` vor `dev` und `build` aus. [`dialex check`](./check.md) meldet eine veraltete Datei als Fehler, und `dialex check --fix` schreibt sie neu. Ohne `dialex.config.*` gelten die Standardwerte, und `locales` stammen aus deinen Wörterbüchern.

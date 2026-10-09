@@ -3,7 +3,7 @@ import path from "node:path";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { parseModule, loadFile, writeFile } from "magicast";
-import { addNuxtModule, addVitePlugin } from "magicast/helpers";
+import { addNuxtModule } from "magicast/helpers";
 import { generateDictionaries } from "./generate.js";
 import { detectFramework, type SupportedFramework } from "../utils/detector.js";
 import { logger } from "../utils/logger.js";
@@ -195,34 +195,7 @@ export default defineConfig({
     fs.writeFileSync(configPath, fallback, "utf-8");
   }
 
-  // 2. Magicast AST injection for Vite and Nuxt projects
-  if (framework === "react" || framework === "vue") {
-    const possibleViteConfigs = [
-      path.join(root, "vite.config.ts"),
-      path.join(root, "vite.config.js"),
-      path.join(root, "vite.config.mjs"),
-    ];
-    for (const vConfig of possibleViteConfigs) {
-      if (fs.existsSync(vConfig)) {
-        try {
-          const vMod = await loadFile(vConfig);
-          addVitePlugin(vMod, {
-            from: "dialexjs/vite",
-            imported: "dialexPlugin",
-            constructor: "dialexPlugin",
-          });
-          await writeFile(vMod, vConfig);
-          logger.success(
-            `Injected dialexPlugin() into ${pc.bold(path.basename(vConfig))} via Magicast`,
-          );
-          break;
-        } catch {
-          // If already added or non-standard, continue
-        }
-      }
-    }
-  }
-
+  // 2. Nuxt reads the generated file through its module; other frameworks need no config edits
   if (framework === "nuxt") {
     const nuxtConfig = ["nuxt.config.ts", "nuxt.config.js", "nuxt.config.mjs"]
       .map((f) => path.join(root, f))
@@ -230,10 +203,7 @@ export default defineConfig({
     if (nuxtConfig) {
       try {
         const nMod = await loadFile(nuxtConfig);
-        addNuxtModule(nMod, "dialexjs/nuxt", "dialex", {
-          defaultLocale,
-          locales: localeList,
-        });
+        addNuxtModule(nMod, "dialexjs/nuxt", "dialex", {});
         await writeFile(nMod, nuxtConfig);
         logger.success(
           `Registered dialexjs/nuxt in ${pc.bold(path.basename(nuxtConfig))} via Magicast`,
@@ -452,13 +422,43 @@ export class AppModule {}
       break;
     case "next":
       logger.log(`
-import { getDictionary } from "dialexjs/server";
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
+
+export const { getDictionary, getT } = createDialexServer(dialex);
+
+// app/[locale]/page.tsx (Server Component)
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale = "en" } = await params;
   const dict = getDictionary("home", locale);
   return <h1>{dict.title}</h1>;
 }
+
+// For client components, render the provider inside a "use client" file:
+//   "use client";
+//   import { DialexProvider } from "dialexjs/react";
+//   import { dialex } from "./dialex.generated";
+//   export const Providers = ({ children }) => <DialexProvider {...dialex}>{children}</DialexProvider>;
+`);
+      break;
+    case "react":
+      logger.log(`
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
+
+// In components: const dict = useDictionary("home")
 `);
       break;
     case "elysia":
@@ -501,9 +501,10 @@ export const onRequest = dialex({ dictionaries });
 // src/main.ts
 import { createApp } from "vue";
 import { createDialex } from "dialexjs/vue";
+import { dialex } from "./dialex.generated";
 import App from "./App.vue";
 
-createApp(App).use(createDialex()).mount("#app");
+createApp(App).use(createDialex({ ...dialex })).mount("#app");
 
 // In components: const dict = useDictionary("home")
 `);
@@ -525,6 +526,10 @@ Run \`npm run dx:generate\` whenever you add new dictionary files.
 `);
       break;
   }
+
+  logger.info(
+    "Keep dialex.generated.ts current: run `dx generate --watch` while you develop, or use the Dialex VS Code extension, which regenerates on save.",
+  );
 
   if (isInteractive) {
     p.outro(pc.green("✔ dialex is configured and ready to go!"));

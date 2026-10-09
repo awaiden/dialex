@@ -1,6 +1,6 @@
 # 懒加载
 
-默认情况下，所有词典都会预先打包。设置 `lazy: true` 后，Vite 插件会把每个词典文件拆分为独立的 chunk，并在组件首次需要时才加载。这适用于 [React / Vite](../frameworks/react.md) 和 [Vue / Nuxt](../frameworks/vue.md)。Next.js 已经按路由拆分代码，服务端适配器直接读取词典，[Angular](../frameworks/angular.md) 则显式接收词典，因此它们不受影响。
+默认情况下，所有词典都会预先打包。设置 `lazy: true` 后，`dx generate` 会写出动态导入而不是静态导入，于是打包器把每个词典文件拆成独立的 chunk，由 provider 在组件第一次需要时加载。这适用于 [React / Vite](../frameworks/react.md) 和 [Vue / Nuxt](../frameworks/vue.md)。Next.js 本来就按路由拆分代码，服务端适配器直接读取词典，[Angular](../frameworks/angular.md) 则显式接收词典，因此它们不受影响。
 
 ```ts
 // dialex.config.ts
@@ -22,6 +22,7 @@ export default defineConfig({
 ```tsx
 import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function Pricing() {
   const dict = useDictionary("pricing"); // suspends on first use
@@ -38,7 +39,7 @@ function Nav() {
 </Suspense>;
 
 // e.g. on hover, to avoid the fallback:
-preloadDictionaries("pricing");
+preloadDictionaries(dialex, "pricing");
 ```
 
 `t("dict.key")` 自身无法挂起，所以 `useT` 接收它要读取的词典名称。尚未加载的名称会记录一条警告并返回路径。
@@ -59,10 +60,10 @@ const dict = useDictionary("pricing");
 </template>
 ```
 
-以同样的方式使用 `useT("pricing")`，并在路由守卫中使用 `preloadDictionaries("pricing")`。
+以同样的方式使用 `useT("pricing")`，并在路由守卫中使用 `preloadDictionaries(dialex, "pricing")`。
 
 ## 注意事项
 
-- 词典的名称是从源文本中读取的，不会执行代码，因此懒加载模式需要 `defineDictionary("name", ...)` 或字面量的 `name: "..."` 属性。否则构建会失败，并给出指明文件的消息。
-- 配置中的 `locales` 仍然会被强制执行：加载缺少已配置 locale 的词典会以错误被拒绝。
+- 词典的名称是在不运行源码的情况下从源文本读取的，所以懒加载模式需要 `defineDictionary("name", ...)` 或字面量的 `name: "..."` 属性。否则 `dx generate` 会失败，并给出指明文件的消息。
+- 懒加载模式适用于客户端包：生成的 `dictionaries` 导出为空，因此 `createDialexServer` 和服务端适配器需要一个非懒加载（eager）的生成文件。
 - 加载结果按词典缓存。

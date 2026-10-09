@@ -8,14 +8,42 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-09
+
+### Changed
+
+- **Breaking:** the virtual modules (`virtual:dialex-dictionaries`, `virtual:dialex-config`) and the bundler plugins that provided them are gone. Dictionaries and config now come from `dialex.generated.ts`, which `dx generate` writes, so Dialex works with any bundler, `dialexjs/react` loads in plain Node (the cause of the SSR failures on TanStack Start), and tests need no stubs. Keep the file current with `dx generate --watch` in a second terminal, the VS Code extension (regenerates on save), or a script that runs before `dev` and `build`.
+
+  | Before                                                         | After                                                                             |
+  | -------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+  | `dialexPlugin()` from `dialexjs/vite` in `vite.config.ts`      | Remove it. Run `dx generate`                                                      |
+  | `withDialex(nextConfig)` from `dialexjs/next`                  | Remove it. `dialexjs/next` is gone; `next/middleware` and `next/link` stay        |
+  | `<DialexProvider>`                                             | `<DialexProvider {...dialex}>` with `import { dialex } from "./dialex.generated"` |
+  | `createDialex({ defaultLocale })` (Vue)                        | `createDialex({ ...dialex, defaultLocale })`                                      |
+  | `getDictionary`, `getT` from `dialexjs/server`                 | `export const { getDictionary, getT } = createDialexServer(dialex)`               |
+  | `preloadDictionaries("pricing")`                               | `preloadDictionaries(dialex, "pricing")`                                          |
+  | `TestDialexProvider locale="tr"`, `createTestDialex("tr")`     | `<TestDialexProvider {...dialex} locale="tr">`, `createTestDialex("tr", dialex)`  |
+  | Nuxt: `dialex: { defaultLocale, locales }` in `nuxt.config.ts` | Put them in `dialex.config.ts`; the module reads `dialex.generated.ts`            |
+
+  `vite` is no longer a peer dependency. In Next.js, render the provider from a `"use client"` file that imports the generated file, because dictionaries hold functions that cannot be passed from a Server Component.
+
+- `DialexLink` reads its settings from the provider, so it must be rendered inside a `DialexProvider`.
+- The build-time "dictionary is missing a configured locale" error is gone with the plugin; `dx check` reports it.
+- With `lazy: true`, `dx generate` writes dynamic imports (a `loaders` export) instead of static ones. The generated `dictionaries` export is then empty, so server code needs an eager file.
+- `dialex-env.d.ts` and `dialex.generated.ts` use the locales your dictionaries define when `locales` is not set in the config.
+
 ### Added
 
+- `dx generate` works without a `dialex.config.*`: every default applies and `locales` come from your dictionaries. `dx init` creates the config file for every framework.
+- `dialex.generated.ts` also exports `config` (a client-safe copy of your settings, without `translate`), `dialex` (`{ dictionaries, config }`) and, in lazy mode, `loaders`.
+- `dx check` reports a generated file that is out of date, and `dx check --fix` rewrites it.
+- VS Code: `dialex.autoGenerate` (on by default) regenerates the generated files when a dictionary or config file changes, in projects that already have one, without running your config. New command **Dialex: Regenerate dialex.generated.ts**.
+- `createDialexServer(dialex)` in `dialexjs/server`, `useDialexConfig()` in `dialexjs/react`, and `DEFAULT_CONFIG`.
 - `examples/tanstack`: a TanStack Start (React, SSR) app with server-side locale detection, ICU plurals and a language switch.
 
 ### Fixed
 
-- `dialexjs/vite` under server-side rendering (reported with TanStack Start). Importing `dialexjs/react` in SSR failed with a `virtual:` import error until you set `ssr.noExternal` yourself; the plugin now sets `ssr.noExternal` and `optimizeDeps.exclude` for `dialexjs`.
-- The dev server could hang and run out of memory (a 4 GB heap crash in a clean project). The dictionaries module no longer uses `import.meta.glob`; it imports the files the plugin finds with the same glob the CLI uses. `include` may now start with `/` or `./`, and `dist` and `.next` are ignored like in the CLI. New dictionary files are picked up while the dev server runs.
+- `dx generate --watch` never regenerated anything: chokidar 4 and later no longer understand globs. It now watches the project and reacts to added, edited and removed dictionary files and to config changes.
 - Server adapters (`web`, `hono`, `express`, `koa`, `fastify`, `elysia`, `astro`, `h3`, `nestjs`, `sveltekit`) imported the project scanner (`fast-glob`, `unconfig`, `node:fs`) even when you pass `dictionaries`, which pulled those packages into SSR bundles. The scanner now loads only when no `dictionaries` are given.
 
 ## [0.3.0] - 2026-10-09
@@ -106,7 +134,8 @@ First release.
 - A VS Code extension with diagnostics, hover, go to definition, completion and quick fixes.
 - Documentation in English, Turkish, Spanish, German and Simplified Chinese.
 
-[Unreleased]: https://github.com/awaiden/dialex/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/awaiden/dialex/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/awaiden/dialex/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/awaiden/dialex/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/awaiden/dialex/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/awaiden/dialex/compare/v0.2.1...v0.2.2

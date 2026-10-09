@@ -1,7 +1,9 @@
+import fs from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import pc from "picocolors";
 import { resolveDialexConfig } from "dialexjs/scanner";
+import { renderGenerated } from "./generate.js";
 import { analyzeProject, type AnalysisIssue } from "../analysis.js";
 import { logger } from "../utils/logger.js";
 import {
@@ -47,7 +49,7 @@ export interface CheckResult {
   diagnostics: CheckDiagnostic[];
   totalIssues: number;
   totalWarnings: number;
-  /** Number of missing keys inserted by `--fix`. */
+  /** Number of missing keys inserted by `--fix`, plus generated files it rewrote. */
   fixed: number;
 }
 
@@ -112,6 +114,44 @@ function escapeAnnotation(value: string): string {
   return value.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 }
 
+/**
+ * Generated files that exist but no longer match the dictionaries and config. Nothing builds them
+ * for you any more, so a stale `dialex.generated.ts` would otherwise fail silently at runtime.
+ * With `fix` they are rewritten.
+ */
+function staleGeneratedFiles(
+  root: string,
+  options: CheckOptions,
+): { stale: { file: string; message: string }[]; rewritten: number } {
+  let rendered;
+  try {
+    rendered = renderGenerated(root, { config: options.config });
+  } catch {
+    return { stale: [], rewritten: 0 }; // not renderable (for example lazy mode with an unreadable name); `generate` reports it
+  }
+  const stale: { file: string; message: string }[] = [];
+  let rewritten = 0;
+  const targets: [string, string | undefined][] = [
+    [rendered.outputPath, rendered.content],
+    [rendered.dtsPath, rendered.dtsContent],
+  ];
+  for (const [file, content] of targets) {
+    if (content === undefined || !fs.existsSync(file)) continue;
+    if (fs.readFileSync(file, "utf-8") === content) continue;
+    if (options.fix) {
+      fs.writeFileSync(file, content, "utf-8");
+      rewritten++;
+    } else {
+      stale.push({
+        file: path.relative(root, file),
+        message:
+          "Out of date with your dictionaries or config. Run `dx generate` (or `dx check --fix`).",
+      });
+    }
+  }
+  return { stale, rewritten };
+}
+
 export async function runCheck(options: CheckOptions = {}): Promise<CheckResult> {
   const root = options.cwd || process.cwd();
   const quiet = options.json === true;
@@ -149,6 +189,14 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
     }
   }
 
+  const generated = staleGeneratedFiles(root, options);
+  fixed += generated.rewritten;
+  if (generated.rewritten > 0 && !quiet) {
+    logger.success(
+      `Regenerated ${generated.rewritten} out-of-date generated file${generated.rewritten === 1 ? "" : "s"}`,
+    );
+  }
+
   const analysis = await analyzeProject({
     root,
     config,
@@ -170,6 +218,15 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
     if (dictionaryFiles.has(issue.file) && issue.dictionary && !diag.name)
       diag.name = issue.dictionary;
     addIssue(diag, issue);
+  }
+  for (const { file, message } of generated.stale) {
+    let diag = byFile.get(file);
+    if (!diag) {
+      diag = { file, errors: [], warnings: [], annotations: [] };
+      byFile.set(file, diag);
+    }
+    diag.errors.push(message);
+    diag.annotations.push({ level: "error", message });
   }
   const diagnostics = [...byFile.values()];
 

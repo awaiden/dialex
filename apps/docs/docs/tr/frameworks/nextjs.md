@@ -1,17 +1,36 @@
 # Next.js
 
-## Yapılandırma
+## Kurulum
+
+Next.js bir yapılandırma sarmalayıcısına ya da eklentiye ihtiyaç duymaz. `dx generate`, `src/dialex.generated.ts` dosyasını yazar. Sunucu kodu için bunu bir kez bağlayın:
 
 ```ts
-// next.config.mjs
-import { withDialex } from "dialexjs/next";
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
 
-export default withDialex({
-  // your Next.js config
-});
+export const { getDictionary, getT } = createDialexServer(dialex);
 ```
 
-`withDialex(nextConfig, inlineConfig?)` sözlük çözümlemesini webpack ve Turbopack'e bağlar, mevcut `webpack` fonksiyonunuzu korur ve üretilen dosyaları eşitler.
+Ardından provider'ı, üretilen dosyayı kendisi içe aktaran bir istemci dosyasından oluşturun. Sözlükler fonksiyon içerir ve bunlar bir Server Component'ten Client Component'e aktarılamaz:
+
+```tsx
+// src/components/providers.tsx
+"use client";
+
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "../dialex.generated";
+
+export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {
+  return (
+    <DialexProvider {...dialex} defaultLocale={locale}>
+      {children}
+    </DialexProvider>
+  );
+}
+```
+
+Dosyayı `next dev` yanında `dx generate --watch` ile ya da VS Code eklentisiyle güncel tutun; güncel değilse `dx check` başarısız olur.
 
 ## Middleware
 
@@ -60,13 +79,13 @@ import { DialexLink } from "dialexjs/next/link";
 </DialexLink>; // /en/about
 ```
 
-`locales`, `defaultLocale` ve `prefixDefault` değerlerini `dialex.config.ts` dosyasından okur. Harici URL'lere ve `#parçalara` dokunmaz. Ayrıca bkz. [Yönlendirme yardımcıları](../guide/routing.md).
+`locales`, `defaultLocale` ve `prefixDefault` değerlerini üretilen yapılandırmadan okur; bu yüzden `<DialexProvider {...dialex}>` içinde oluşturun. Harici URL'lere ve `#parçalara` dokunmaz. Ayrıca bkz. [Yönlendirme yardımcıları](../guide/routing.md).
 
 ## Server Components
 
 ```tsx
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

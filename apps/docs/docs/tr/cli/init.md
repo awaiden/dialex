@@ -3,7 +3,7 @@
 Dialex'i geçerli projede başlatır.
 
 - Çerçeveyi algılar (Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, React/Vite).
-- Magicast AST dönüşümlerini kullanarak `dialex.config.ts` dosyasını düzenler, React ve Vue projelerinde `vite.config.ts` içine `dialexPlugin()` ekler ve Nuxt projelerinde `nuxt.config.ts` içine `dialexjs/nuxt` modülünü kaydeder.
+- `dialex.config.ts` dosyasını Magicast AST dönüşümleriyle düzenler (her çerçeve için bir yapılandırma dosyası oluşturulur) ve Nuxt projelerinde `nuxt.config.ts` içine `dialexjs/nuxt` modülünü kaydeder.
 - Başlangıç sözlüğünü ve TypeScript bildirim dosyasını yazar.
 - `dialexjs` paketini ve `@dialexjs/cli` geliştirme bağımlılığını `package.json` dosyasına ekler (zaten listelenen paketlere dokunmaz) ve bir `dx:generate` betiği ekler. Ardından paket yöneticinizin install komutunu çalıştırın.
 

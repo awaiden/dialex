@@ -14,15 +14,15 @@ Bilinmeyen yollar bir uyarı kaydeder ve yolun kendisini döndürür.
 
 ## Nerede kullanılabilir
 
-| Ortam           | `t` nasıl alınır                                   |
-| --------------- | -------------------------------------------------- |
-| React           | `dialexjs/react` içinden `const t = useT()`        |
-| Vue / Nuxt      | `dialexjs/vue` içinden `const t = useT()`          |
-| Sunucu (Next)   | `dialexjs/server` içinden `const t = getT(locale)` |
-| Elysia          | İstek bağlamındaki `t`                             |
-| SvelteKit       | `event.locals.t`                                   |
-| Astro           | `Astro.locals.t`                                   |
-| Başka her yerde | `dialexjs` içinden `createT(getDictionary)`        |
+| Ortam           | `t` nasıl alınır                                              |
+| --------------- | ------------------------------------------------------------- |
+| React           | `dialexjs/react` içinden `const t = useT()`                   |
+| Vue / Nuxt      | `dialexjs/vue` içinden `const t = useT()`                     |
+| Sunucu (Next)   | `createDialexServer(dialex)` içinden `const t = getT(locale)` |
+| Elysia          | İstek bağlamındaki `t`                                        |
+| SvelteKit       | `event.locals.t`                                              |
+| Astro           | `Astro.locals.t`                                              |
+| Başka her yerde | `dialexjs` içinden `createT(getDictionary)`                   |
 
 ## Tipler
 

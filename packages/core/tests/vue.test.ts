@@ -2,19 +2,16 @@ import { describe, expect, it, vi } from "vite-plus/test";
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "vue/server-renderer";
 
-vi.mock("virtual:dialex-dictionaries", () => ({
-  default: {
-    home: {
-      en: { title: "Welcome" },
-      tr: { title: "Hoş Geldiniz" },
-    },
-  },
-  lazy: false,
-  loadDictionary: async () => undefined,
-}));
-vi.mock("virtual:dialex-config", () => ({ default: { defaultLocale: "en" } }));
+import { createDialex as create, useDialex, useDictionary, useT } from "../src/vue.js";
 
-const { createDialex, useDialex, useDictionary, useT } = await import("../src/vue.js");
+const source = {
+  dictionaries: [
+    { name: "home", dictionary: { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } } },
+  ],
+  config: { defaultLocale: "en" },
+};
+const createDialex = (options: Parameters<typeof create>[0] = {}) =>
+  create({ ...source, ...options });
 
 const render = async (dialex: ReturnType<typeof createDialex>, name = "home") => {
   const Comp = defineComponent({

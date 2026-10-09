@@ -31,7 +31,7 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
   const server = new Server(
     {
       name: "dialex",
-      version: "0.3.0",
+      version: "0.4.0",
     },
     {
       capabilities: {

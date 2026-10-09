@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3004",
-    "build": "next build",
-    "lint": "oxlint"
+    "dev": "dx generate && next dev -p 3004",
+    "build": "dx generate && next build",
+    "lint": "oxlint",
+    "dx:generate": "dx generate"
   },
   "dependencies": {
     "dialexjs": "workspace:*",
@@ -15,6 +16,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

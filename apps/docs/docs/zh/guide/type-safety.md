@@ -1,6 +1,6 @@
 # 类型安全
 
-`dialex generate`（以及 Vite 插件和 Next.js 的 `withDialex`）会写入 `src/dialex-env.d.ts`，它扩展了三个接口：
+`dialex generate` 会在 `src/dialex.generated.ts` 旁边写出 `src/dialex-env.d.ts`。它扩充三个接口：
 
 ```ts
 declare module "dialexjs" {

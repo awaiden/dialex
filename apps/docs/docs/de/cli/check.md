@@ -19,6 +19,7 @@ dialex lint -c ./dialex.config.ts
 - Ein String, der eindeutig [ICU](../guide/icu.md) verwendet (`plural`, `select`, `number`, ...), ist kein gültiges ICU, oder ein Locale verwendet für denselben Schlüssel andere Argumente als das Standard-Locale.
 - Quellcode ruft `getDictionary("x")`, `useDictionary("x")` oder `@DialexDictionary("x")` mit einem Wörterbuch auf, das nicht existiert.
 - Quellcode ruft `t("home.nav.missing")` mit einem Pfad auf, der nicht existiert. Es werden nur `t()`-Aufrufe geprüft, deren erstes Segment ein bekannter Wörterbuchname ist; fremde `t()`-Funktionen werden daher ignoriert.
+- Eine generierte Datei (`dialex.generated.ts` oder `dialex-env.d.ts`) existiert, ist aber veraltet. Führe `dialex generate` aus oder nutze `--fix`.
 
 **Warnungen**
 
@@ -41,7 +42,7 @@ Die Prüfungen auf Referenzen und ungenutzte Schlüssel durchsuchen `**/*.{ts,ts
 
 ## --fix
 
-Für jeden Schlüssel, den ein Locale hat und ein anderes nicht, kopiert `--fix` den Wert des Standard-Locales an die fehlende Stelle. Strings erhalten das Präfix `[TODO] `, damit sie leicht zu finden sind; Funktionen werden unverändert kopiert. Fehlende konfigurierte Locales werden angelegt. Die Änderungen erfolgen am Syntaxbaum, daher bleiben Kommentare und der Rest der Datei erhalten.
+Für jeden Schlüssel, den ein Locale hat und ein anderes nicht, kopiert `--fix` den Wert des Standard-Locales an die fehlende Stelle. Strings erhalten das Präfix `[TODO] `, damit sie leicht zu finden sind; Funktionen werden unverändert kopiert. Fehlende konfigurierte Locales werden angelegt. Die Änderungen erfolgen am Syntaxbaum, daher bleiben Kommentare und der Rest der Datei erhalten. Außerdem schreibt es veraltete generierte Dateien neu.
 
 Führe anschließend [`dialex translate`](./translate.md) aus, um die Platzhalter durch echte Übersetzungen zu ersetzen.
 

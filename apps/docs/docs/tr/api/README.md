@@ -24,33 +24,27 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 ### Tipler
 
-| Tip                                         | Açıklama                                                                                               |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
-| `Translate`, `TranslationPath`              | `t` işlevinin tipleri ve geçerli yolları                                                               |
-| `Register`                                  | Üretilen bildirimlerle genişletilir (`locales`)                                                        |
-| `Locales`                                   | Yapılandırılmış yerel ayarların birleşimi veya `string`                                                |
-| `DictionaryRegistry`                        | Sözlük adlarınız ve içerik tiplerinizle genişletilir                                                   |
-| `DictionaryKey`, `ResolveDictionaryType<K>` | Anahtar ve içerik tipleme yardımcıları                                                                 |
-| `Dictionary<T>`                             | `Record<Locales, T>`                                                                                   |
-| `DictionaryDefinition<N, T>`                | `defineDictionary` dönüş tipi                                                                          |
-| `globalDictionaries`                        | `defineDictionary` ile doldurulan işlem içi kayıt defteri                                              |
+| Tip                                                       | Açıklama                                                                                                            |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `DialexConfig`                                            | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate`              |
+| `DEFAULT_CONFIG`                                          | Bir ayar ya da yapılandırma dosyasının tamamı eksik olduğunda kullanılan varsayılanlar                              |
+| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | Üretilen `dialex` dışa aktarımı ve parçaları: `dictionaries`, istemci için güvenli bir `config` ve tembel `loaders` |
+| `Translate`, `TranslationPath`                            | `t` işlevinin tipleri ve geçerli yolları                                                                            |
+| `Register`                                                | Üretilen bildirimlerle genişletilir (`locales`)                                                                     |
+| `Locales`                                                 | Yapılandırılmış yerel ayarların birleşimi veya `string`                                                             |
+| `DictionaryRegistry`                                      | Sözlük adlarınız ve içerik tiplerinizle genişletilir                                                                |
+| `DictionaryKey`, `ResolveDictionaryType<K>`               | Anahtar ve içerik tipleme yardımcıları                                                                              |
+| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                                |
+| `DictionaryDefinition<N, T>`                              | `defineDictionary` dönüş tipi                                                                                       |
+| `globalDictionaries`                                      | `defineDictionary` ile doldurulan işlem içi kayıt defteri                                                           |
 
 ## `dialexjs/server`
 
-`getDictionary(name, locale?)` bir yerel ayar için sözlük içeriğini, `getT(locale?)` ise bir `t` fonksiyonunu döndürür. Bkz. [Next.js](../frameworks/nextjs.md).
+`createDialexServer(dialex)`, üretilen `dialex` dışa aktarımını bağlar ve `{ getDictionary, getT }` döndürür: `getDictionary(name, locale?)` bir yerel ayar için sözlük içeriğini, `getT(locale?)` ise bir `t` işlevini döndürür. Bkz. [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/react`
 
-`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
-
-## `dialexjs/vite`
-
-`dialexPlugin(inlineConfig?)`. Bkz. [React / Vite](../frameworks/react.md).
-
-## `dialexjs/next`
-
-`withDialex(nextConfig, inlineConfig?)`. Bkz. [Next.js](../frameworks/nextjs.md).
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/vue` ve `dialexjs/nuxt`
 

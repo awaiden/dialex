@@ -14,15 +14,15 @@ Las rutas desconocidas registran una advertencia y devuelven la propia ruta.
 
 ## Dónde está disponible
 
-| Entorno                 | Cómo obtener `t`                                 |
-| ----------------------- | ------------------------------------------------ |
-| React                   | `const t = useT()` desde `dialexjs/react`        |
-| Vue / Nuxt              | `const t = useT()` desde `dialexjs/vue`          |
-| Servidor (Next)         | `const t = getT(locale)` desde `dialexjs/server` |
-| Elysia                  | `t` en el contexto de la petición                |
-| SvelteKit               | `event.locals.t`                                 |
-| Astro                   | `Astro.locals.t`                                 |
-| En cualquier otro lugar | `createT(getDictionary)` desde `dialexjs`        |
+| Entorno                 | Cómo obtener `t`                                            |
+| ----------------------- | ----------------------------------------------------------- |
+| React                   | `const t = useT()` desde `dialexjs/react`                   |
+| Vue / Nuxt              | `const t = useT()` desde `dialexjs/vue`                     |
+| Servidor (Next)         | `const t = getT(locale)` desde `createDialexServer(dialex)` |
+| Elysia                  | `t` en el contexto de la petición                           |
+| SvelteKit               | `event.locals.t`                                            |
+| Astro                   | `Astro.locals.t`                                            |
+| En cualquier otro lugar | `createT(getDictionary)` desde `dialexjs`                   |
 
 ## Tipos
 

@@ -1,10 +1,9 @@
 import { defineConfig } from "vite-plus";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
 
-// No `ssr.noExternal` needed: `dialexPlugin()` configures SSR for dialexjs itself.
+// No Dialex plugin: dictionaries come from src/dialex.generated.ts (see `dx generate`).
 export default defineConfig({
   resolve: { tsconfigPaths: true },
-  plugins: [dialexPlugin(), tanstackStart(), viteReact()],
+  plugins: [tanstackStart(), viteReact()],
 });

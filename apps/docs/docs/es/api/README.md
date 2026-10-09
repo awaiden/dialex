@@ -24,33 +24,27 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 ### Tipos
 
-| Tipo                                        | Descripción                                                                                            |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
-| `Translate`, `TranslationPath`              | Tipos de `t` y de sus rutas válidas                                                                    |
-| `Register`                                  | Ampliado por las declaraciones generadas (`locales`)                                                   |
-| `Locales`                                   | Unión de los locales configurados, o `string`                                                          |
-| `DictionaryRegistry`                        | Ampliado con los nombres y los tipos de contenido de tus diccionarios                                  |
-| `DictionaryKey`, `ResolveDictionaryType<K>` | Helpers de tipado de claves y contenido                                                                |
-| `Dictionary<T>`                             | `Record<Locales, T>`                                                                                   |
-| `DictionaryDefinition<N, T>`                | Tipo de retorno de `defineDictionary`                                                                  |
-| `globalDictionaries`                        | Registro en proceso que rellena `defineDictionary`                                                     |
+| Tipo                                                      | Descripción                                                                                                        |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `DialexConfig`                                            | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate`             |
+| `DEFAULT_CONFIG`                                          | Valores por defecto cuando falta un ajuste, o todo el archivo de configuración                                     |
+| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | El export `dialex` generado y sus partes: `dictionaries`, un `config` seguro para el cliente y `loaders` diferidos |
+| `Translate`, `TranslationPath`                            | Tipos de `t` y de sus rutas válidas                                                                                |
+| `Register`                                                | Ampliado por las declaraciones generadas (`locales`)                                                               |
+| `Locales`                                                 | Unión de los locales configurados, o `string`                                                                      |
+| `DictionaryRegistry`                                      | Ampliado con los nombres y los tipos de contenido de tus diccionarios                                              |
+| `DictionaryKey`, `ResolveDictionaryType<K>`               | Helpers de tipado de claves y contenido                                                                            |
+| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                               |
+| `DictionaryDefinition<N, T>`                              | Tipo de retorno de `defineDictionary`                                                                              |
+| `globalDictionaries`                                      | Registro en proceso que rellena `defineDictionary`                                                                 |
 
 ## `dialexjs/server`
 
-`getDictionary(name, locale?)` devuelve el contenido del diccionario para un locale, y `getT(locale?)` devuelve una función `t`. Consulta [Next.js](../frameworks/nextjs.md).
+`createDialexServer(dialex)` enlaza el export `dialex` generado y devuelve `{ getDictionary, getT }`: `getDictionary(name, locale?)` devuelve el contenido del diccionario para un locale y `getT(locale?)` devuelve una función `t`. Consulta [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/react`
 
-`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [React / Vite](../frameworks/react.md).
-
-## `dialexjs/vite`
-
-`dialexPlugin(inlineConfig?)`. Consulta [React / Vite](../frameworks/react.md).
-
-## `dialexjs/next`
-
-`withDialex(nextConfig, inlineConfig?)`. Consulta [Next.js](../frameworks/nextjs.md).
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/vue` y `dialexjs/nuxt`
 

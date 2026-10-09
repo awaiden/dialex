@@ -1,15 +1,15 @@
+import type { DialexSource } from "../index.js";
 import { createDialex } from "../vue.js";
 
 /**
- * Vue plugin for component tests: starts in `locale`, with no persistence.
- *
- * Needs the Dialex Vite plugin in your Vitest config, because `useDictionary` reads the plugin's
- * virtual modules.
+ * Vue plugin for component tests: starts in `locale`, with no persistence. Pass the generated
+ * `dialex` export (or your own `dictionaries`) as the second argument.
  *
  * ```ts
- * mount(Header, { global: { plugins: [createTestDialex("tr")] } });
+ * import { dialex } from "../dialex.generated";
+ * mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });
  * ```
  */
-export function createTestDialex(locale?: string) {
-  return createDialex({ defaultLocale: locale });
+export function createTestDialex(locale?: string, source: DialexSource = {}) {
+  return createDialex({ ...source, defaultLocale: locale });
 }

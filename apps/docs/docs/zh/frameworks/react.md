@@ -1,28 +1,32 @@
 # React / Vite
 
-<a id="vite-plugin"></a>
+<a id="setup"></a>
 
-## Vite 插件
+## 设置
 
-```ts
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
+没有打包器插件。`dx generate` 会写出 `src/dialex.generated.ts`，它导出 `dialex`：你的词典以及配置中可安全用于客户端的副本。用展开语法传给 provider：
 
-export default defineConfig({
-  plugins: [react(), dialexPlugin()],
-});
+```tsx
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
 ```
 
-`dialexPlugin(inlineConfig?)` 会加载你的配置，重新生成 `src/dialex-env.d.ts`，并提供两个虚拟模块 `virtual:dialex-dictionaries` 和 `virtual:dialex-config`；当 `.content.ts` 文件变化时支持 HMR。如果设置了 `locales`，缺少其中任何一个 locale 的词典都会导致构建失败。
-
-该插件还会为 `dialexjs` 自动设置 `ssr.noExternal` 和 `optimizeDeps.exclude`，因此服务端渲染（例如基于 Vite 的 TanStack Start 或 React Router）无需额外的 Vite 配置即可工作。`include` 是相对于项目根目录的普通 glob，与 CLI 使用的相同；开头的 `/` 也可以。
+在第二个终端中运行 `dx generate --watch` 让文件保持最新，或安装会在保存时重新生成它的 VS Code 扩展。文件过期时 `dx check` 会失败，因此忘记运行会在 CI 中被发现。由于没有任何东西接入打包器，服务端渲染（例如基于 Vite 的 TanStack Start 或 React Router）无需额外的 Vite 配置即可工作。
 
 ## Provider 与 Hooks
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
 
 function App() {
   const { locale, setLocale } = useDialex();
@@ -39,17 +43,17 @@ function App() {
 }
 
 export default () => (
-  <DialexProvider defaultLocale="en">
+  <DialexProvider {...dialex} defaultLocale="en">
     <App />
   </DialexProvider>
 );
 ```
 
-| 导出                  | 说明                                                         |
-| --------------------- | ------------------------------------------------------------ |
-| `DialexProvider`      | 保存当前 locale。参见下面的 props                            |
-| `useDialex()`         | 返回 `{ locale, setLocale }`。在 provider 之外使用会抛出错误 |
-| `useDictionary(name)` | 返回当前 locale 的词典，并回退到默认 locale                  |
+| 导出                  | 说明                                                                                                                                                |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DialexProvider`      | 保存当前 locale 和词典。属性：`children`、生成的 `dialex`（`dictionaries`、`config`、`loaders`）以及 `defaultLocale`（回退到配置，再回退到 `"en"`） |
+| `useDialex()`         | 返回 `{ locale, setLocale }`。在 provider 之外使用会抛出错误                                                                                        |
+| `useDictionary(name)` | 返回当前 locale 的词典，并回退到默认 locale                                                                                                         |
 
 ## Provider 的 props
 
@@ -59,6 +63,9 @@ export default () => (
 | `initialLocale` |                     | 首先渲染的 locale。请传入服务端渲染时使用的 locale，以便 hydration 一致。设置后，挂载时不会应用已记住的 locale |
 | `persist`       | `"cookie"`          | 选择记住在哪里：`"cookie"`、`"localStorage"` 或 `false`                                                        |
 | `storageKey`    | `"locale"`          | Cookie 或 localStorage 的键                                                                                    |
+| `dictionaries`  |                     | 来自 `dialex.generated.ts` 的词典（用 `{...dialex}` 展开）                                                     |
+| `config`        |                     | 同一文件中可安全用于客户端的配置：`locales`、`defaultLocale`、`fallbacks`、`prefixDefault`、`lazy`             |
+| `loaders`       |                     | 在[懒加载模式](../guide/lazy-loading.md)下提供：在首次使用时加载每个词典                                       |
 
 Provider 先渲染默认 locale，然后在挂载后应用已记住的 locale（仅当它属于已配置的 `locales`）。这样首次客户端渲染与服务端渲染的标记完全一致，代价是回访用户会多一次渲染。要避免这一点，请在服务端读取 Cookie，并将其作为 `initialLocale` 传入。`<html lang>` 会与当前 locale 保持同步。
 

@@ -6,7 +6,7 @@ Dialex, TypeScript ile tanımlanan sözlükler etrafında kurulmuş bir i18n çe
 
 | Paket           | Amaç                                                                                   |
 | --------------- | -------------------------------------------------------------------------------------- |
-| `dialexjs`      | Çekirdek çalışma zamanı, çerçeve adaptörleri, Vite eklentisi                           |
+| `dialexjs`      | Çekirdek çalışma zamanı ve çerçeve adaptörleri                                         |
 | `@dialexjs/cli` | İskele oluşturma, kod üretimi ve tutarlılık denetimleri için `dialex` / `dx` komutları |
 
 ## Kurulum

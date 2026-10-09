@@ -116,14 +116,14 @@ const dict = req.getDictionary("home");
 
 ### Next.js (App Router Path Routing)
 
-Wrap your `next.config.mjs`:
+Generate the dictionaries with `dx generate`, then bind them once for server code:
 
 ```typescript
-import { withDialex } from "dialexjs/next";
+// src/dialex.ts
+import { createDialexServer } from "dialexjs/server";
+import { dialex } from "./dialex.generated";
 
-export default withDialex({
-  // Your Next.js config
-});
+export const { getDictionary, getT } = createDialexServer(dialex);
 ```
 
 Add the middleware that keeps every page under a locale prefix:
@@ -145,7 +145,7 @@ Server Components:
 
 ```typescript
 // src/app/[locale]/page.tsx
-import { getDictionary } from "dialexjs/server";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -283,15 +283,18 @@ Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/as
 
 ### React 19 / Vite
 
-```typescript
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { dialexPlugin } from "dialexjs/vite";
+Run `dx generate` (or keep `dx generate --watch` running, or use the VS Code extension), then give the provider the generated dictionaries. There is no bundler plugin:
 
-export default defineConfig({
-  plugins: [react(), dialexPlugin()],
-});
+```tsx
+// src/main.tsx
+import { DialexProvider } from "dialexjs/react";
+import { dialex } from "./dialex.generated";
+
+createRoot(document.getElementById("root")!).render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+);
 ```
 
 ```tsx

@@ -1,6 +1,6 @@
 # Type Safety
 
-`dialex generate` (and the Vite plugin, and `withDialex` for Next.js) writes `src/dialex-env.d.ts`. It augments three interfaces:
+`dialex generate` writes `src/dialex-env.d.ts` next to `src/dialex.generated.ts`. It augments three interfaces:
 
 ```ts
 declare module "dialexjs" {
