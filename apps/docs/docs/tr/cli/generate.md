@@ -4,7 +4,7 @@
 
 Çıktılar:
 
-- `src/dialex.generated.ts`; şunları dışa aktarır: `dictionaries` (varsayılan dışa aktarım, sunucu adaptörleri için), `config` (yapılandırmanızın istemci için güvenli bir kopyası) ve `dialex` (`{ dictionaries, config }`; `<DialexProvider {...dialex}>` veya `createDialex({ ...dialex })` içine yayılır). `lazy: true` ile bunun yerine dinamik içe aktarmalar ve bir `loaders` dışa aktarımı içerir.
+- `src/dialex.generated.ts`; şunları dışa aktarır: `dictionaries` (varsayılan dışa aktarım, sunucu adaptörleri için), `config` (yapılandırmanızın istemci için güvenli bir kopyası) ve `dialex` (`{ dictionaries, config }`; `<DialexProvider {...dialex}>` veya `createDialex({ ...dialex })` içine yayılır). `lazy: true` ile bunun yerine dinamik içe aktarmalar ve bir `loaders` dışa aktarımı içerir. Ayrıca `locales` (salt okunur bir demet; dil değiştirici için kullanışlıdır) ve ona karşılık gelen `Locale` birleşim tipini dışa aktarır.
 - `src/dialex-env.d.ts`, [tip kayıt defteri genişletmesi](../guide/type-safety.md).
 
 ```bash

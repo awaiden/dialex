@@ -220,3 +220,27 @@ describe("dx check and formatters", () => {
     expect(normalizeGenerated(`const a = 1;`)).not.toBe(normalizeGenerated(`const a = 2;`));
   });
 });
+
+describe("generated locales and Locale type", () => {
+  it("exports the locales as a readonly tuple and their union", () => {
+    const dir = project({ "src/home.content.ts": home() });
+    const { content } = renderGenerated(dir);
+    expect(content).toContain('export const locales = ["en","tr"] as const;');
+    expect(content).toContain("export type Locale = (typeof locales)[number];");
+  });
+
+  it("uses the configured locales, also in lazy mode", () => {
+    const dir = project({
+      "src/home.content.ts": `import { defineDictionary } from "dialexjs";\nexport default defineDictionary("home", { en: { a: "x" }, tr: { a: "y" } });\n`,
+      "dialex.config.ts": `export default { locales: ["tr"], lazy: true };\n`,
+    });
+    expect(renderGenerated(dir).content).toContain('export const locales = ["tr"] as const;');
+  });
+
+  it("falls back to string when no locales are known", () => {
+    const dir = project({});
+    const { content } = renderGenerated(dir);
+    expect(content).toContain("export const locales: readonly string[] = [];");
+    expect(content).toContain("export type Locale = string;");
+  });
+});

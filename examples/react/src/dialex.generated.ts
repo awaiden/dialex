@@ -19,6 +19,9 @@ export const config = {
   lazy: false,
 };
 
+export const locales = ["en", "tr"] as const;
+export type Locale = (typeof locales)[number];
+
 export const dialex = { dictionaries, config };
 
 export default dictionaries;

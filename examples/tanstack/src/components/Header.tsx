@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useDialex, useDictionary } from "dialexjs/react";
+import { locales } from "../dialex.generated";
 
-const LOCALES = [
-  { code: "en", label: "English" },
-  { code: "tr", label: "Türkçe" },
-] as const;
+const languageName = (code: string) =>
+  new Intl.DisplayNames([code], { type: "language" }).of(code) ?? code;
 
 export function Header() {
   const { locale, setLocale } = useDialex();
@@ -18,9 +17,9 @@ export function Header() {
         <Link to="/plurals">{common.nav.plurals}</Link>
       </nav>
       <div className="locales">
-        {LOCALES.map(({ code, label }) => (
+        {locales.map((code) => (
           <button key={code} disabled={locale === code} onClick={() => setLocale(code)}>
-            {label}
+            {languageName(code)}
           </button>
         ))}
       </div>

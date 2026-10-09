@@ -39,7 +39,7 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 ### Added
 
 - `dx generate` works without a `dialex.config.*`: every default applies and `locales` come from your dictionaries. `dx init` creates the config file for every framework.
-- `dialex.generated.ts` also exports `config` (a client-safe copy of your settings, without `translate`), `dialex` (`{ dictionaries, config }`) and, in lazy mode, `loaders`.
+- `dialex.generated.ts` also exports `config` (a client-safe copy of your settings, without `translate`), `dialex` (`{ dictionaries, config }`) and, in lazy mode, `loaders`. It also exports `locales` (a readonly tuple, handy for a language switcher) and the matching `Locale` union type.
 - `dx check` reports a generated file that is out of date, and `dx check --fix` rewrites it. The comparison ignores formatting, so a formatter may rewrite the generated files.
 - VS Code: `dialex.autoGenerate` (on by default) regenerates the generated files when a dictionary or config file changes, in projects that already have one, without running your config. New command **Dialex: Regenerate dialex.generated.ts**.
 - `createDialexServer(dialex)` in `dialexjs/server`, `useDialexConfig()` in `dialexjs/react`, and `DEFAULT_CONFIG`.
