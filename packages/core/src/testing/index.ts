@@ -1,7 +1,7 @@
 import { createT, type Locales, type Translate } from "../index.js";
 import { createGetDictionary, normalizeDictionaries, type DictionaryInput } from "../shared.js";
 
-export interface TestI18nOptions {
+export interface TestDialexOptions {
   /** Dictionaries to serve: `defineDictionary` results or a `{ name: { locale: content } }` map. */
   dictionaries: DictionaryInput;
   /** Active locale. Defaults to `defaultLocale`. */
@@ -12,24 +12,24 @@ export interface TestI18nOptions {
   fallbacks?: Record<string, string[]>;
 }
 
-export interface TestI18n {
+export interface TestDialex {
   locale: Locales;
   getDictionary: (name: string) => any;
   t: Translate;
   /** The same dictionaries under another locale. */
-  withLocale(locale: string): TestI18n;
+  withLocale(locale: string): TestDialex;
 }
 
 /**
  * A self-contained i18n context for unit tests: no bundler plugin, config file, or request needed.
  *
  * ```ts
- * const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
- * expect(i18n.t("home.title")).toBe("Hoş Geldiniz");
- * expect(i18n.withLocale("en").getDictionary("home").title).toBe("Welcome");
+ * const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
+ * expect(dialex.t("home.title")).toBe("Hoş Geldiniz");
+ * expect(dialex.withLocale("en").getDictionary("home").title).toBe("Welcome");
  * ```
  */
-export function createTestI18n(options: TestI18nOptions): TestI18n {
+export function createTestDialex(options: TestDialexOptions): TestDialex {
   const defaultLocale = options.defaultLocale ?? "en";
   const locale = options.locale ?? defaultLocale;
   const customDictMap = normalizeDictionaries(options.dictionaries) ?? {};
@@ -46,7 +46,7 @@ export function createTestI18n(options: TestI18nOptions): TestI18n {
     locale: locale as Locales,
     getDictionary,
     t: createT(getDictionary, locale),
-    withLocale: (next) => createTestI18n({ ...options, locale: next }),
+    withLocale: (next) => createTestDialex({ ...options, locale: next }),
   };
 }
 

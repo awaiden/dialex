@@ -50,4 +50,4 @@ sitemapEntries(["/", "/about"], { ...seo, lastModified: "2024-01-01" });
 
 `alternateLanguages` 的形状与 Next.js 的 `metadata.alternates.languages` 一致；`sitemapEntries` 为每个路径和 locale 返回一个条目，每个条目都带有 `alternates.languages`，与 `MetadataRoute.Sitemap` 匹配。传入 `xDefault: false` 可省略 `x-default`。
 
-对于 Next.js，还有 [`createI18nMiddleware` 和 `I18nLink`](../frameworks/nextjs.md)。
+对于 Next.js，还有 [`createDialexMiddleware` 和 `DialexLink`](../frameworks/nextjs.md)。

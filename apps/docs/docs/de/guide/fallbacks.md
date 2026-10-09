@@ -33,7 +33,7 @@ Immer wenn der Inhalt aus einem anderen als dem angeforderten Locale stammt, wir
 Server-Adapter akzeptieren `fallbacks` auch direkt. Das ist praktisch, wenn du `dictionaries` übergibst, statt dich auf die Konfigurationsdatei zu verlassen:
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 Fallbacks gelten für Wörterbuchzugriffe. Die [Locale-Erkennung](./locale-detection.md) liefert weiterhin nur Locales, die in `locales` aufgeführt sind.

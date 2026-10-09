@@ -4,11 +4,11 @@
 
 ```ts
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialexjs/nestjs";
+import { DialexModule } from "dialexjs/nestjs";
 import dictionaries from "./dialex.generated.js";
 
 @Module({
-  imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -17,7 +17,7 @@ export class AppModule {}
 `forRoot` also accepts `isGlobal` (default `true`). For async configuration:
 
 ```ts
-I18nModule.forRootAsync({
+DialexModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (config: ConfigService) => ({
@@ -31,12 +31,12 @@ I18nModule.forRootAsync({
 
 ```ts
 import { Controller, Get } from "@nestjs/common";
-import { I18nLocale, I18nDictionary } from "dialexjs/nestjs";
+import { DialexLocale, DialexDictionary } from "dialexjs/nestjs";
 
 @Controller()
 export class AppController {
   @Get(":locale")
-  getHome(@I18nLocale() locale: string, @I18nDictionary("home") dict: any) {
+  getHome(@DialexLocale() locale: string, @DialexDictionary("home") dict: any) {
     return { title: dict.title, locale };
   }
 }
@@ -44,13 +44,13 @@ export class AppController {
 
 ## Exports
 
-| Export                              | Description                                                                                         |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `I18nModule.forRoot / forRootAsync` | Dynamic module registration                                                                         |
-| `I18nService`                       | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
-| `I18nInterceptor`, `I18nMiddleware` | Attach `req.locale` and `req.getDictionary`                                                         |
-| `@I18nLocale()`                     | Parameter decorator for the resolved locale                                                         |
-| `@I18nDictionary(name)`             | Parameter decorator for a dictionary                                                                |
-| `I18N_OPTIONS`                      | Injection token for the module options                                                              |
+| Export                                  | Description                                                                                         |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `DialexModule.forRoot / forRootAsync`   | Dynamic module registration                                                                         |
+| `DialexService`                         | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
+| `DialexInterceptor`, `DialexMiddleware` | Attach `req.locale` and `req.getDictionary`                                                         |
+| `@DialexLocale()`                       | Parameter decorator for the resolved locale                                                         |
+| `@DialexDictionary(name)`               | Parameter decorator for a dictionary                                                                |
+| `DIALEX_OPTIONS`                        | Injection token for the module options                                                              |
 
-`I18nLocale` and `I18nDictionary` read what the interceptor or middleware attached to the request, so make sure one of them is applied. All [locale detection options](../guide/locale-detection.md#options) apply.
+`DialexLocale` and `DialexDictionary` read what the interceptor or middleware attached to the request, so make sure one of them is applied. All [locale detection options](../guide/locale-detection.md#options) apply.

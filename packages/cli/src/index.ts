@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name("dialex")
   .description("Dialex CLI - High-performance, type-safe internationalization compiler and tooling")
-  .version("0.2.3");
+  .version("0.3.0");
 
 program
   .command("generate")
@@ -61,7 +61,7 @@ program
   .command("export")
   .description("Export dictionary strings for translators (json, csv, or xliff)")
   .option("-f, --format <format>", "Output format: json, csv, xliff", "json")
-  .option("-o, --out <dir>", "Output directory", "i18n-export")
+  .option("-o, --out <dir>", "Output directory", "dialex-export")
   .option("-l, --locale <locales...>", "Limit to these locales")
   .option("-c, --config <path>", "Custom config path")
   .option("--json", "Print machine-readable JSON")

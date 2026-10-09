@@ -17,7 +17,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export interface ExpressI18nOptions extends LocaleResolverOptions {
+export interface ExpressDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
    * If omitted, falls back to the bundled virtual dictionary registry.
@@ -48,7 +48,7 @@ declare global {
 /**
  * Express middleware for i18n detection and dictionary resolution.
  */
-export function i18n(options: ExpressI18nOptions = {}): RequestHandler {
+export function dialex(options: ExpressDialexOptions = {}): RequestHandler {
   const {
     defaultLocale = "en",
     locales,

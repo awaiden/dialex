@@ -109,7 +109,7 @@ const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID;
 const VIRTUAL_CONFIG_ID = "virtual:dialex-config";
 const RESOLVED_VIRTUAL_CONFIG_ID = "\0" + VIRTUAL_CONFIG_ID;
 
-export function i18nPlugin(inlineConfig: DialexConfig = {}): Plugin {
+export function dialexPlugin(inlineConfig: DialexConfig = {}): Plugin {
   let resolvedConfig: DialexConfig = {};
   let viteConfig: ResolvedConfig;
 

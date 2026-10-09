@@ -37,30 +37,30 @@ Führe `dialex generate` (oder `dialex generate --watch`) erneut aus, wenn du ei
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
+import { injectDictionary, injectDialex, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",
   template: `
     <h1>{{ dict().title }}</h1>
     <p>{{ t("home.items", { count: 3 }) }}</p>
-    <button (click)="toggle()">{{ i18n.locale() }}</button>
+    <button (click)="toggle()">{{ dialex.locale() }}</button>
   `,
 })
 export class HeaderComponent {
-  protected readonly i18n = injectI18n();
+  protected readonly dialex = injectDialex();
   protected readonly dict = injectDictionary("home"); // Signal of the dictionary
   protected readonly t = injectT();
 
   toggle() {
-    this.i18n.setLocale(this.i18n.locale() === "en" ? "tr" : "en");
+    this.dialex.setLocale(this.dialex.locale() === "en" ? "tr" : "en");
   }
 }
 ```
 
 | Funktion                 | Liefert                                                                                                       |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `injectI18n()`           | Den Store: `locale` (ein `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`                      |
+| `injectDialex()`         | Den Store: `locale` (ein `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`                      |
 | `injectDictionary(name)` | Ein `Signal` mit dem Wörterbuch für das aktive Locale, unter Beachtung der [Fallbacks](../guide/fallbacks.md) |
 | `injectT()`              | Eine [`t`-Funktion](../guide/key-paths.md) für das aktive Locale, mit [ICU](../guide/icu.md)-Unterstützung    |
 
@@ -120,4 +120,4 @@ TestBed.configureTestingModule({
 });
 ```
 
-Für Code, der Angular nicht benötigt, verwende [`createTestI18n`](../guide/testing.md).
+Für Code, der Angular nicht benötigt, verwende [`createTestDialex`](../guide/testing.md).

@@ -3,8 +3,8 @@
 把文件中已翻译的字符串写回你的词典源文件。
 
 ```bash
-dialex import i18n-export/tr.json
-dialex import i18n-export/translations.csv
+dialex import dialex-export/tr.json
+dialex import dialex-export/translations.csv
 dialex import translations/tr.xlf
 dialex import --locale tr strings.json
 ```

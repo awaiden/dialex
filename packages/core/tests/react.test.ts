@@ -15,18 +15,18 @@ vi.mock("virtual:dialex-config", () => ({
   default: { defaultLocale: "en", locales: ["en", "tr"] },
 }));
 
-const { I18nProvider, useDictionary, useI18n, useT } = await import("../src/react.js");
+const { DialexProvider, useDictionary, useDialex, useT } = await import("../src/react.js");
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
 let setLocale: (l: string) => void = () => {};
 
 function Probe() {
-  const i18n = useI18n();
+  const dialex = useDialex();
   const dict = useDictionary("home") as { title: string };
   const t = useT() as any;
-  setLocale = i18n.setLocale;
-  return createElement("p", null, `${i18n.locale}|${dict.title}|${t("home.title")}`);
+  setLocale = dialex.setLocale;
+  return createElement("p", null, `${dialex.locale}|${dict.title}|${t("home.title")}`);
 }
 
 let container: HTMLElement;
@@ -34,7 +34,7 @@ let root: Root;
 
 const mount = async (props: Record<string, unknown> = {}) => {
   await act(async () => {
-    root.render(createElement(I18nProvider as any, props, createElement(Probe)));
+    root.render(createElement(DialexProvider as any, props, createElement(Probe)));
   });
 };
 const text = () => container.textContent;
@@ -52,7 +52,7 @@ afterEach(async () => {
   container.remove();
 });
 
-describe("I18nProvider", () => {
+describe("DialexProvider", () => {
   it("renders the default locale and sets <html lang>", async () => {
     await mount();
     expect(text()).toBe("en|Welcome|Welcome");
@@ -61,7 +61,7 @@ describe("I18nProvider", () => {
 
   it("server-renders the default first, then applies the remembered locale after mount", async () => {
     document.cookie = "locale=tr; path=/";
-    const ssr = renderToString(createElement(I18nProvider as any, {}, createElement(Probe)));
+    const ssr = renderToString(createElement(DialexProvider as any, {}, createElement(Probe)));
     expect(ssr).toContain("en|Welcome");
 
     await mount();

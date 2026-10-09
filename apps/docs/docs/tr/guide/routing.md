@@ -50,4 +50,4 @@ sitemapEntries(["/", "/about"], { ...seo, lastModified: "2024-01-01" });
 
 `alternateLanguages`, Next.js'in `metadata.alternates.languages` biçimiyle eşleşir; `sitemapEntries` her yol ve yerel ayar için, her biri `alternates.languages` içeren birer kayıt döndürür ve `MetadataRoute.Sitemap` ile uyumludur. `x-default` girdisini dışarıda bırakmak için `xDefault: false` verin.
 
-Next.js için ayrıca [`createI18nMiddleware` ve `I18nLink`](../frameworks/nextjs.md) vardır.
+Next.js için ayrıca [`createDialexMiddleware` ve `DialexLink`](../frameworks/nextjs.md) vardır.

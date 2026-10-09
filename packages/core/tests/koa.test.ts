@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vite-plus/test";
-import { i18n } from "../src/koa.js";
+import { dialex } from "../src/koa.js";
 
 describe("Koa integration", () => {
   const homeDict = {
@@ -11,7 +11,7 @@ describe("Koa integration", () => {
   };
 
   it("detects locale from Accept-Language header", async () => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -36,7 +36,7 @@ describe("Koa integration", () => {
   });
 
   it("detects locale from URL path", async () => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -58,7 +58,7 @@ describe("Koa integration", () => {
   });
 
   it("falls back to defaultLocale", async () => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],

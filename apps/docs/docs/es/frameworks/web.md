@@ -3,16 +3,16 @@
 `dialexjs/web` resuelve el locale a partir de una `Request` estándar. Úsalo en cualquier framework o runtime que te entregue una: loaders de React Router y Remix, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | Resultado                | Descripción                                                                                                          |
@@ -35,7 +35,7 @@ Los loaders reciben la `Request`:
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -44,15 +44,15 @@ Devuelve los datos a tu componente y renderízalos allí. Envuelve la respuesta 
 
 ### TanStack Start y SolidStart
 
-Lee la petición actual con el helper de servidor de tu framework y pásala a `resolveI18n`. Por ejemplo, en SolidStart, `getRequestEvent()?.request` devuelve la `Request` activa. Como la llamada necesita un contexto de servidor, úsala en funciones de servidor o en middleware, no en código de cliente.
+Lee la petición actual con el helper de servidor de tu framework y pásala a `resolveDialex`. Por ejemplo, en SolidStart, `getRequestEvent()?.request` devuelve la `Request` activa. Como la llamada necesita un contexto de servidor, úsala en funciones de servidor o en middleware, no en código de cliente.
 
 ### Workers, Deno, Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```

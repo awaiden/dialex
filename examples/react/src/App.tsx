@@ -1,8 +1,8 @@
-import { useI18n, useDictionary } from "dialexjs/react";
+import { useDialex, useDictionary } from "dialexjs/react";
 import HomePage from "./pages/home/page";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const tCommon = useDictionary("common");
 
   return (

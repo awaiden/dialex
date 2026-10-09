@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
-import { createTestI18n, mockRequest } from "../src/testing/index.js";
-import { createI18nHandler } from "../src/web.js";
+import { createTestDialex, mockRequest } from "../src/testing/index.js";
+import { createDialexHandler } from "../src/web.js";
 
 const home = {
   name: "home",
@@ -11,22 +11,22 @@ const home = {
   },
 };
 
-describe("createTestI18n", () => {
+describe("createTestDialex", () => {
   it("serves dictionaries and t() for a locale", () => {
-    const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
-    expect(i18n.locale).toBe("tr");
-    expect(i18n.getDictionary("home").title).toBe("Hoş Geldiniz");
-    expect((i18n.t as any)("home.greet", "Ada")).toBe("Selam Ada");
+    const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
+    expect(dialex.locale).toBe("tr");
+    expect(dialex.getDictionary("home").title).toBe("Hoş Geldiniz");
+    expect((dialex.t as any)("home.greet", "Ada")).toBe("Selam Ada");
   });
 
   it("defaults to the default locale and accepts a dictionary map", () => {
-    const i18n = createTestI18n({ dictionaries: { home: home.dictionary } });
-    expect(i18n.locale).toBe("en");
-    expect(i18n.getDictionary("home").title).toBe("Welcome");
+    const dialex = createTestDialex({ dictionaries: { home: home.dictionary } });
+    expect(dialex.locale).toBe("en");
+    expect(dialex.getDictionary("home").title).toBe("Welcome");
   });
 
   it("switches locale without mutating the original", () => {
-    const en = createTestI18n({ dictionaries: [home] });
+    const en = createTestDialex({ dictionaries: [home] });
     const tr = en.withLocale("tr");
     expect(tr.getDictionary("home").title).toBe("Hoş Geldiniz");
     expect(en.getDictionary("home").title).toBe("Welcome");
@@ -34,16 +34,20 @@ describe("createTestI18n", () => {
   });
 
   it("follows fallbacks and subtag truncation", () => {
-    const chain = createTestI18n({ dictionaries: [home], locale: "pt", fallbacks: { pt: ["es"] } });
+    const chain = createTestDialex({
+      dictionaries: [home],
+      locale: "pt",
+      fallbacks: { pt: ["es"] },
+    });
     expect(chain.getDictionary("home").title).toBe("Bienvenido");
     expect(
-      createTestI18n({ dictionaries: [home], locale: "tr-TR" }).getDictionary("home").title,
+      createTestDialex({ dictionaries: [home], locale: "tr-TR" }).getDictionary("home").title,
     ).toBe("Hoş Geldiniz");
   });
 });
 
 describe("mockRequest", () => {
-  const resolve = createI18nHandler({ locales: ["en", "tr"], dictionaries: [home] });
+  const resolve = createDialexHandler({ locales: ["en", "tr"], dictionaries: [home] });
   const localeOf = async (request: Request) => (await resolve(request)).locale;
 
   it("resolves to the requested locale through each mechanism", async () => {

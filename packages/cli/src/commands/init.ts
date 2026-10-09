@@ -208,12 +208,12 @@ export default defineConfig({
           const vMod = await loadFile(vConfig);
           addVitePlugin(vMod, {
             from: "dialexjs/vite",
-            imported: "i18nPlugin",
-            constructor: "i18nPlugin",
+            imported: "dialexPlugin",
+            constructor: "dialexPlugin",
           });
           await writeFile(vMod, vConfig);
           logger.success(
-            `Injected i18nPlugin() into ${pc.bold(path.basename(vConfig))} via Magicast`,
+            `Injected dialexPlugin() into ${pc.bold(path.basename(vConfig))} via Magicast`,
           );
           break;
         } catch {
@@ -381,11 +381,11 @@ This project uses [Dialex](https://github.com/awaiden/dialex) for type-safe inte
     case "hono":
       logger.log(`
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ dictionaries }));
+app.use("*", dialex({ dictionaries }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");
@@ -396,11 +396,11 @@ app.get("/", (c) => {
     case "fastify":
       logger.log(`
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
-await app.register(i18nPlugin, { dictionaries });
+await app.register(dialexPlugin, { dictionaries });
 
 app.get("/", (req) => {
   const dict = req.getDictionary("home");
@@ -411,11 +411,11 @@ app.get("/", (req) => {
     case "express":
       logger.log(`
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
-app.use(i18n({ dictionaries }));
+app.use(dialex({ dictionaries }));
 
 app.get("/", (req, res) => {
   const dict = req.getDictionary("home");
@@ -426,11 +426,11 @@ app.get("/", (req, res) => {
     case "koa":
       logger.log(`
 import Koa from "koa";
-import { i18n } from "dialexjs/koa";
+import { dialex } from "dialexjs/koa";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
-app.use(i18n({ dictionaries }));
+app.use(dialex({ dictionaries }));
 
 app.use((ctx) => {
   const dict = ctx.getDictionary("home");
@@ -441,11 +441,11 @@ app.use((ctx) => {
     case "nestjs":
       logger.log(`
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialexjs/nestjs";
+import { DialexModule } from "dialexjs/nestjs";
 import dictionaries from "./src/dialex.generated.js";
 
 @Module({
-  imports: [I18nModule.forRoot({ dictionaries })],
+  imports: [DialexModule.forRoot({ dictionaries })],
 })
 export class AppModule {}
 `);
@@ -464,11 +464,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     case "elysia":
       logger.log(`
 import { Elysia } from "elysia";
-import { i18n } from "dialexjs/elysia";
+import { dialex } from "dialexjs/elysia";
 import dictionaries from "./src/dialex.generated.js";
 
 new Elysia()
-  .use(i18n({ dictionaries }))
+  .use(dialex({ dictionaries }))
   .get("/", ({ getDictionary }) => ({ title: getDictionary("home").title }))
   .listen(3000);
 `);
@@ -476,10 +476,10 @@ new Elysia()
     case "sveltekit":
       logger.log(`
 // src/hooks.server.ts
-import { i18nHandle } from "dialexjs/sveltekit";
+import { dialexHandle } from "dialexjs/sveltekit";
 import dictionaries from "./dialex.generated.js";
 
-export const handle = i18nHandle({ dictionaries });
+export const handle = dialexHandle({ dictionaries });
 
 // src/app.html: <html lang="%dialex.lang%">
 // In load functions: locals.getDictionary("home")
@@ -488,10 +488,10 @@ export const handle = i18nHandle({ dictionaries });
     case "astro":
       logger.log(`
 // src/middleware.ts
-import { i18n } from "dialexjs/astro";
+import { dialex } from "dialexjs/astro";
 import dictionaries from "./dialex.generated.js";
 
-export const onRequest = i18n({ dictionaries });
+export const onRequest = dialex({ dictionaries });
 
 // In pages: Astro.locals.getDictionary("home")
 `);
@@ -500,10 +500,10 @@ export const onRequest = i18n({ dictionaries });
       logger.log(`
 // src/main.ts
 import { createApp } from "vue";
-import { createI18n } from "dialexjs/vue";
+import { createDialex } from "dialexjs/vue";
 import App from "./App.vue";
 
-createApp(App).use(createI18n()).mount("#app");
+createApp(App).use(createDialex()).mount("#app");
 
 // In components: const dict = useDictionary("home")
 `);

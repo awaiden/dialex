@@ -40,7 +40,7 @@ Hover a key in `t("home.title")`, a dictionary name in `getDictionary("home")`, 
 
 ### Completion
 
-Inside the string of `t("…")`, `getDictionary("…")`, `useDictionary("…")` or `@I18nDictionary("…")`:
+Inside the string of `t("…")`, `getDictionary("…")`, `useDictionary("…")` or `@DialexDictionary("…")`:
 
 - dictionary names, with the number of keys and locales;
 - after `t("home.`, the keys at that level, with the default-locale text as a preview. Groups continue with a dot and reopen the list.

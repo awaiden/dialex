@@ -4,10 +4,10 @@
 
 ```ts
 // src/hooks.server.ts
-import { i18nHandle } from "dialexjs/sveltekit";
+import { dialexHandle } from "dialexjs/sveltekit";
 import dictionaries from "./dialex.generated.js";
 
-export const handle = i18nHandle({
+export const handle = dialexHandle({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -18,7 +18,7 @@ export const handle = i18nHandle({
 
 ## Locals
 
-`i18nHandle` 会填充 `event.locals.locale` 和 `event.locals.getDictionary(name)`，并扩展 `App.Locals`，使二者都有类型：
+`dialexHandle` 会填充 `event.locals.locale` 和 `event.locals.getDictionary(name)`，并扩展 `App.Locals`，使二者都有类型：
 
 ```ts
 // src/routes/+page.server.ts

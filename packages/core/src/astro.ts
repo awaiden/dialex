@@ -15,7 +15,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export type AstroI18nOptions = BaseAdapterOptions;
+export type AstroDialexOptions = BaseAdapterOptions;
 
 declare global {
   namespace App {
@@ -33,10 +33,10 @@ declare global {
  *
  * ```ts
  * // src/middleware.ts
- * export const onRequest = i18n({ locales: ["en", "tr"] });
+ * export const onRequest = dialex({ locales: ["en", "tr"] });
  * ```
  */
-export function i18n(options: AstroI18nOptions = {}): MiddlewareHandler {
+export function dialex(options: AstroDialexOptions = {}): MiddlewareHandler {
   const {
     defaultLocale = "en",
     locales,
@@ -88,4 +88,4 @@ export function i18n(options: AstroI18nOptions = {}): MiddlewareHandler {
   };
 }
 
-export default i18n;
+export default dialex;

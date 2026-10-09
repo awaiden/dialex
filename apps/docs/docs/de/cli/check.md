@@ -17,7 +17,7 @@ dialex lint -c ./dialex.config.ts
 - In einem Wörterbuch fehlt ein konfiguriertes Locale.
 - In einem Locale fehlt ein Schlüssel, den ein anderes Locale hat. Verschachtelte Schlüssel werden über ihren Punktpfad verglichen, zum Beispiel `nav.about`.
 - Ein String, der eindeutig [ICU](../guide/icu.md) verwendet (`plural`, `select`, `number`, ...), ist kein gültiges ICU, oder ein Locale verwendet für denselben Schlüssel andere Argumente als das Standard-Locale.
-- Quellcode ruft `getDictionary("x")`, `useDictionary("x")` oder `@I18nDictionary("x")` mit einem Wörterbuch auf, das nicht existiert.
+- Quellcode ruft `getDictionary("x")`, `useDictionary("x")` oder `@DialexDictionary("x")` mit einem Wörterbuch auf, das nicht existiert.
 - Quellcode ruft `t("home.nav.missing")` mit einem Pfad auf, der nicht existiert. Es werden nur `t()`-Aufrufe geprüft, deren erstes Segment ein bekannter Wörterbuchname ist; fremde `t()`-Funktionen werden daher ignoriert.
 
 **Warnungen**

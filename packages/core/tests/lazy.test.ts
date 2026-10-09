@@ -58,7 +58,7 @@ describe("lazy dictionaries in React", () => {
     await act(async () => {
       root.render(
         createElement(
-          react.I18nProvider as any,
+          react.DialexProvider as any,
           { persist: false },
           createElement(
             Suspense,
@@ -86,7 +86,7 @@ describe("lazy dictionaries in React", () => {
     await act(async () => {
       root.render(
         createElement(
-          react.I18nProvider as any,
+          react.DialexProvider as any,
           { persist: false },
           createElement(Suspense, { fallback: "loading" }, createElement(Greeting)),
         ),
@@ -111,7 +111,7 @@ describe("lazy dictionaries in Vue", () => {
     });
 
   it("server-side rendering waits for the dictionary", async () => {
-    const app = createSSRApp(Comp("lazy-vue-ssr")).use(vue.createI18n({ defaultLocale: "tr" }));
+    const app = createSSRApp(Comp("lazy-vue-ssr")).use(vue.createDialex({ defaultLocale: "tr" }));
     const html = renderToString(app);
     await vi.waitFor(() => expect(state.releases["lazy-vue-ssr"]).toBeTypeOf("function"));
     state.releases["lazy-vue-ssr"]();
@@ -126,7 +126,7 @@ describe("lazy dictionaries in Vue", () => {
         return () => h("p");
       },
     });
-    const app = createSSRApp(Probe).use(vue.createI18n());
+    const app = createSSRApp(Probe).use(vue.createDialex());
     const el = document.createElement("div");
     app.mount(el);
 

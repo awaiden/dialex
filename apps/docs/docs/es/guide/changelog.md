@@ -8,13 +8,30 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
-### Added
-
-- `dialex init` adds `dialexjs` and `@dialexjs/cli` to `package.json` (at the CLI's own version; packages you already list are left alone) and tells you which install command to run.
+## [0.3.0] - 2026-10-09
 
 ### Changed
 
-- The config type is now `DialexConfig`. `I18nConfig` still works as a deprecated alias. `resolveI18nConfig` in `dialexjs/scanner` is now `resolveDialexConfig`.
+- **Breaking:** every public name that started with `I18n` or `i18n` now starts with `Dialex` or `dialex`. The old names are gone, with no aliases. Rename imports as follows:
+
+  | Before                                                                           | After                                                                                    |
+  | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+  | `I18nConfig`, `resolveI18nConfig`                                                | `DialexConfig`, `resolveDialexConfig`                                                    |
+  | `i18n()` in `dialexjs/hono`, `express`, `koa`, `elysia`, `astro`, `h3`           | `dialex()`                                                                               |
+  | `i18nPlugin` (`dialexjs/vite`, `dialexjs/fastify`), `withI18n` (`dialexjs/next`) | `dialexPlugin`, `withDialex`                                                             |
+  | `I18nProvider`, `useI18n`, `createI18n`, `I18nLink`, `I18nContext`               | `DialexProvider`, `useDialex`, `createDialex`, `DialexLink`, `DialexContext`             |
+  | `I18nModule`, `I18nService`, `I18nInterceptor`, `I18nMiddleware`, `injectI18n`   | `DialexModule`, `DialexService`, `DialexInterceptor`, `DialexMiddleware`, `injectDialex` |
+  | `i18nHandle` (`dialexjs/sveltekit`), `resolveI18n` (`dialexjs/web`)              | `dialexHandle`, `resolveDialex`                                                          |
+  | `createTestI18n`, `TestI18nProvider` (`dialexjs/testing`)                        | `createTestDialex`, `TestDialexProvider`                                                 |
+  | Option types such as `HonoI18nOptions`, `NestI18nOptions`, `NuxtI18nOptions`     | `HonoDialexOptions`, `NestDialexOptions`, `NuxtDialexOptions`                            |
+
+  Anything else with `I18n` in its name follows the same rule. A project that still has `i18n.config.ts` keeps working.
+
+- `dialex export` writes to `dialex-export` by default instead of `i18n-export`.
+
+### Added
+
+- `dialex init` adds `dialexjs` and `@dialexjs/cli` to `package.json` (at the CLI's own version; packages you already list are left alone) and tells you which install command to run.
 
 ## [0.2.3] - 2026-10-09
 
@@ -79,7 +96,8 @@ First release.
 - A VS Code extension with diagnostics, hover, go to definition, completion and quick fixes.
 - Documentation in English, Turkish, Spanish, German and Simplified Chinese.
 
-[Unreleased]: https://github.com/awaiden/dialex/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/awaiden/dialex/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/awaiden/dialex/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/awaiden/dialex/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/awaiden/dialex/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/awaiden/dialex/compare/v0.2.0...v0.2.1

@@ -3,16 +3,16 @@
 `dialexjs/web` 从标准的 `Request` 解析 locale。可用于任何向你提供 `Request` 的框架或运行时：React Router 和 Remix 的 loader、TanStack Start、SolidStart、Cloudflare Workers、Deno、Bun。
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | 结果                     | 说明                                                                                 |
@@ -35,7 +35,7 @@ Loader 会接收 `Request`：
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -44,15 +44,15 @@ export async function loader({ request }: { request: Request }) {
 
 ### TanStack Start 与 SolidStart
 
-使用框架提供的服务端辅助函数读取当前请求，然后传给 `resolveI18n`。例如在 SolidStart 中，`getRequestEvent()?.request` 会返回当前的 `Request`。由于该调用需要服务端上下文，请在服务端函数或中间件中使用，而不是在客户端代码中。
+使用框架提供的服务端辅助函数读取当前请求，然后传给 `resolveDialex`。例如在 SolidStart 中，`getRequestEvent()?.request` 会返回当前的 `Request`。由于该调用需要服务端上下文，请在服务端函数或中间件中使用，而不是在客户端代码中。
 
 ### Workers、Deno、Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```

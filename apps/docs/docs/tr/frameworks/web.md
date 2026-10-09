@@ -3,16 +3,16 @@
 `dialexjs/web`, yerel ayarı standart bir `Request` üzerinden çözer. Size bir `Request` veren her çerçevede ya da çalışma zamanında kullanın: React Router ve Remix loader'ları, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | Sonuç                    | Açıklama                                                                                                  |
@@ -35,7 +35,7 @@ Loader'lar `Request` alır:
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -44,15 +44,15 @@ Veriyi bileşeninize döndürün ve orada render edin. Yanıtı kendiniz oluştu
 
 ### TanStack Start ve SolidStart
 
-Geçerli isteği çerçevenizin sunucu yardımcısıyla okuyun, ardından `resolveI18n` işlevine verin. Örneğin SolidStart'ta `getRequestEvent()?.request` etkin `Request` değerini döndürür. Çağrı bir sunucu bağlamı gerektirdiğinden, onu istemci kodunda değil, sunucu fonksiyonlarında veya middleware'de kullanın.
+Geçerli isteği çerçevenizin sunucu yardımcısıyla okuyun, ardından `resolveDialex` işlevine verin. Örneğin SolidStart'ta `getRequestEvent()?.request` etkin `Request` değerini döndürür. Çağrı bir sunucu bağlamı gerektirdiğinden, onu istemci kodunda değil, sunucu fonksiyonlarında veya middleware'de kullanın.
 
 ### Workers, Deno, Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```

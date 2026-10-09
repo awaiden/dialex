@@ -3,8 +3,8 @@
 Çevrilmiş metinleri bir dosyadan sözlük kaynak dosyalarınıza geri yazar.
 
 ```bash
-dialex import i18n-export/tr.json
-dialex import i18n-export/translations.csv
+dialex import dialex-export/tr.json
+dialex import dialex-export/translations.csv
 dialex import translations/tr.xlf
 dialex import --locale tr strings.json
 ```

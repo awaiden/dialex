@@ -6,22 +6,22 @@
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
-`i18nPlugin(inlineConfig?)` lädt deine Konfiguration, generiert `src/dialex-env.d.ts` neu und stellt zwei virtuelle Module bereit, `virtual:dialex-dictionaries` und `virtual:dialex-config`, mit HMR, wenn sich eine `.content.ts`-Datei ändert. Ist `locales` gesetzt, lässt ein Wörterbuch, dem eines davon fehlt, den Build fehlschlagen.
+`dialexPlugin(inlineConfig?)` lädt deine Konfiguration, generiert `src/dialex-env.d.ts` neu und stellt zwei virtuelle Module bereit, `virtual:dialex-dictionaries` und `virtual:dialex-config`, mit HMR, wenn sich eine `.content.ts`-Datei ändert. Ist `locales` gesetzt, lässt ein Wörterbuch, dem eines davon fehlt, den Build fehlschlagen.
 
 ## Provider und Hooks
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
+import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -35,16 +35,16 @@ function App() {
 }
 
 export default () => (
-  <I18nProvider defaultLocale="en">
+  <DialexProvider defaultLocale="en">
     <App />
-  </I18nProvider>
+  </DialexProvider>
 );
 ```
 
 | Export                | Beschreibung                                                                            |
 | --------------------- | --------------------------------------------------------------------------------------- |
-| `I18nProvider`        | Hält das aktive Locale. Siehe die Props unten                                           |
-| `useI18n()`           | Liefert `{ locale, setLocale }`. Wirft außerhalb des Providers einen Fehler             |
+| `DialexProvider`      | Hält das aktive Locale. Siehe die Props unten                                           |
+| `useDialex()`         | Liefert `{ locale, setLocale }`. Wirft außerhalb des Providers einen Fehler             |
 | `useDictionary(name)` | Liefert das Wörterbuch für das aktuelle Locale und fällt auf das Standard-Locale zurück |
 
 ## Provider-Props

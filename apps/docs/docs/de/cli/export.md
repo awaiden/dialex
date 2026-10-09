@@ -3,7 +3,7 @@
 Schreibt die Strings deiner Wörterbücher in Dateien, mit denen Übersetzer arbeiten können, ohne TypeScript anzufassen.
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -12,7 +12,7 @@ dialex export -l tr de
 | Option                      | Beschreibung                                                            |
 | --------------------------- | ----------------------------------------------------------------------- |
 | `-f, --format <format>`     | `json` (Standard), `csv` oder `xliff`                                   |
-| `-o, --out <dir>`           | Ausgabeverzeichnis (Standard `i18n-export`)                             |
+| `-o, --out <dir>`           | Ausgabeverzeichnis (Standard `dialex-export`)                           |
 | `-l, --locale <locales...>` | Auf diese Locales beschränken (das Standard-Locale ist immer enthalten) |
 | `-c, --config <path>`       | Eigener Konfigurationspfad                                              |
 

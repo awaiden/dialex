@@ -17,12 +17,12 @@ import dictionaries, { lazy, loadDictionary } from "virtual:dialex-dictionaries"
 // @ts-ignore
 import config from "virtual:dialex-config";
 
-export interface I18nContext {
+export interface DialexContext {
   locale: Ref<string>;
   setLocale: (locale: string) => void;
 }
 
-export interface CreateI18nOptions {
+export interface CreateDialexOptions {
   /** Initial locale. Falls back to the project config, then `"en"`. */
   defaultLocale?: string;
   /** Called after the locale changes, e.g. to persist it in a cookie. */
@@ -37,18 +37,18 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
-export const I18N_KEY: InjectionKey<I18nContext> = Symbol("dialex-i18n");
+export const DIALEX_KEY: InjectionKey<DialexContext> = Symbol("dialex");
 
 /**
- * Vue plugin that provides the active locale to `useI18n()` and `useDictionary()`.
+ * Vue plugin that provides the active locale to `useDialex()` and `useDictionary()`.
  *
  * ```ts
- * createApp(App).use(createI18n({ defaultLocale: "en" })).mount("#app");
+ * createApp(App).use(createDialex({ defaultLocale: "en" })).mount("#app");
  * ```
  */
-export function createI18n(options: CreateI18nOptions = {}) {
+export function createDialex(options: CreateDialexOptions = {}) {
   const locale = ref(options.defaultLocale || config?.defaultLocale || "en");
-  const context: I18nContext = {
+  const context: DialexContext = {
     locale,
     setLocale(next) {
       locale.value = next;
@@ -59,15 +59,15 @@ export function createI18n(options: CreateI18nOptions = {}) {
   return {
     ...context,
     install(app: App) {
-      app.provide(I18N_KEY, context);
+      app.provide(DIALEX_KEY, context);
     },
   };
 }
 
-export function useI18n(): I18nContext {
-  const context = inject(I18N_KEY, undefined);
+export function useDialex(): DialexContext {
+  const context = inject(DIALEX_KEY, undefined);
   if (!context) {
-    throw new Error("useI18n requires the plugin from createI18n() to be installed");
+    throw new Error("useDialex requires the plugin from createDialex() to be installed");
   }
   return context;
 }
@@ -121,7 +121,7 @@ function readLoaded(name: string, locale: string): any {
 export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(
   name: K,
 ): ComputedRef<T> {
-  const { locale } = useI18n();
+  const { locale } = useDialex();
   ensureLoaded(name as string);
   return computed(() => readLoaded(name as string, locale.value) as T);
 }
@@ -134,7 +134,7 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  * `const t = useT("home", "nav")`.
  */
 export function useT(...dictionaryNames: string[]): Translate {
-  const { locale } = useI18n();
+  const { locale } = useDialex();
   for (const name of dictionaryNames) ensureLoaded(name);
   return ((path: string, ...args: any[]) =>
     (createT((name) => readLoaded(name, locale.value), locale.value) as any)(

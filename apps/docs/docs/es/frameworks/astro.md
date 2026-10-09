@@ -2,10 +2,10 @@
 
 ```ts
 // src/middleware.ts
-import { i18n } from "dialexjs/astro";
+import { dialex } from "dialexjs/astro";
 import dictionaries from "./dialex.generated.js";
 
-export const onRequest = i18n({
+export const onRequest = dialex({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,

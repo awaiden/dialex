@@ -4,11 +4,11 @@
 
 ```ts
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialexjs/nestjs";
+import { DialexModule } from "dialexjs/nestjs";
 import dictionaries from "./dialex.generated.js";
 
 @Module({
-  imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -17,7 +17,7 @@ export class AppModule {}
 `forRoot` akzeptiert außerdem `isGlobal` (Standard `true`). Für asynchrone Konfiguration:
 
 ```ts
-I18nModule.forRootAsync({
+DialexModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (config: ConfigService) => ({
@@ -31,12 +31,12 @@ I18nModule.forRootAsync({
 
 ```ts
 import { Controller, Get } from "@nestjs/common";
-import { I18nLocale, I18nDictionary } from "dialexjs/nestjs";
+import { DialexLocale, DialexDictionary } from "dialexjs/nestjs";
 
 @Controller()
 export class AppController {
   @Get(":locale")
-  getHome(@I18nLocale() locale: string, @I18nDictionary("home") dict: any) {
+  getHome(@DialexLocale() locale: string, @DialexDictionary("home") dict: any) {
     return { title: dict.title, locale };
   }
 }
@@ -44,13 +44,13 @@ export class AppController {
 
 ## Exporte
 
-| Export                              | Beschreibung                                                                                        |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `I18nModule.forRoot / forRootAsync` | Registrierung des dynamischen Moduls                                                                |
-| `I18nService`                       | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
-| `I18nInterceptor`, `I18nMiddleware` | Hängen `req.locale` und `req.getDictionary` an                                                      |
-| `@I18nLocale()`                     | Parameter-Dekorator für das ermittelte Locale                                                       |
-| `@I18nDictionary(name)`             | Parameter-Dekorator für ein Wörterbuch                                                              |
-| `I18N_OPTIONS`                      | Injection-Token für die Moduloptionen                                                               |
+| Export                                  | Beschreibung                                                                                        |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `DialexModule.forRoot / forRootAsync`   | Registrierung des dynamischen Moduls                                                                |
+| `DialexService`                         | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
+| `DialexInterceptor`, `DialexMiddleware` | Hängen `req.locale` und `req.getDictionary` an                                                      |
+| `@DialexLocale()`                       | Parameter-Dekorator für das ermittelte Locale                                                       |
+| `@DialexDictionary(name)`               | Parameter-Dekorator für ein Wörterbuch                                                              |
+| `DIALEX_OPTIONS`                        | Injection-Token für die Moduloptionen                                                               |
 
-`I18nLocale` und `I18nDictionary` lesen, was der Interceptor oder die Middleware an die Anfrage angehängt hat; stelle also sicher, dass eines von beiden angewendet wird. Alle [Optionen der Locale-Erkennung](../guide/locale-detection.md#options) gelten.
+`DialexLocale` und `DialexDictionary` lesen, was der Interceptor oder die Middleware an die Anfrage angehängt hat; stelle also sicher, dass eines von beiden angewendet wird. Alle [Optionen der Locale-Erkennung](../guide/locale-detection.md#options) gelten.

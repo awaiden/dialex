@@ -3,7 +3,7 @@
 把词典中的字符串写入翻译人员可以处理的文件，无需改动 TypeScript。
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -12,7 +12,7 @@ dialex export -l tr de
 | 选项                        | 说明                                   |
 | --------------------------- | -------------------------------------- |
 | `-f, --format <format>`     | `json`（默认）、`csv` 或 `xliff`       |
-| `-o, --out <dir>`           | 输出目录（默认 `i18n-export`）         |
+| `-o, --out <dir>`           | 输出目录（默认 `dialex-export`）       |
 | `-l, --locale <locales...>` | 仅限这些 locale（始终包含默认 locale） |
 | `-c, --config <path>`       | 自定义配置路径                         |
 

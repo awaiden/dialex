@@ -13,9 +13,9 @@ describe("completionContextAt", () => {
       length: 2,
     });
     expect(completionContextAt(`useDictionary('`)).toMatchObject({ kind: "dictionary", typed: "" });
-    expect(completionContextAt("@I18nDictionary(`h")).toMatchObject({
+    expect(completionContextAt("@DialexDictionary(`h")).toMatchObject({
       kind: "dictionary",
-      call: "I18nDictionary",
+      call: "DialexDictionary",
     });
   });
 

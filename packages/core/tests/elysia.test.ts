@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import { Elysia } from "elysia";
-import { i18n } from "../src/elysia.js";
+import { dialex } from "../src/elysia.js";
 
 describe("Elysia integration", () => {
   const homeDict = {
@@ -11,9 +11,9 @@ describe("Elysia integration", () => {
     },
   };
 
-  const createApp = (options: Parameters<typeof i18n>[0] = {}) =>
+  const createApp = (options: Parameters<typeof dialex>[0] = {}) =>
     new Elysia()
-      .use(i18n({ defaultLocale: "en", dictionaries: [homeDict], ...options }))
+      .use(dialex({ defaultLocale: "en", dictionaries: [homeDict], ...options }))
       .get("/test", ({ locale, getDictionary }) => ({
         locale,
         title: getDictionary("home").title,
@@ -84,7 +84,7 @@ describe("Elysia integration", () => {
       },
     };
     const app = new Elysia()
-      .use(i18n({ defaultLocale: "en", dictionaries: [dict], fallbacks: { pt: ["es"] } }))
+      .use(dialex({ defaultLocale: "en", dictionaries: [dict], fallbacks: { pt: ["es"] } }))
       .get("/", ({ t }: any) => ({ title: t("nav.title"), greet: t("nav.greet", "Ada") }));
 
     const tr = await app.handle(
@@ -109,7 +109,7 @@ describe("Elysia integration", () => {
       },
     };
     const app = new Elysia()
-      .use(i18n({ defaultLocale: "en", locales: ["en", "ru"], dictionaries: [dict] }))
+      .use(dialex({ defaultLocale: "en", locales: ["en", "ru"], dictionaries: [dict] }))
       .get("/", ({ t }: any) => ({ text: t("cart.items", { count: 5 }) }));
 
     const en = await app.handle(new Request("http://localhost/"));

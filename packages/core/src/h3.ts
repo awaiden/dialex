@@ -15,7 +15,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export type H3I18nOptions = BaseAdapterOptions;
+export type H3DialexOptions = BaseAdapterOptions;
 
 declare module "h3" {
   interface H3EventContext {
@@ -30,11 +30,11 @@ declare module "h3" {
  * Adds `locale`, `getDictionary(name)` and `t` to `event.context`.
  *
  * ```ts
- * // server/middleware/i18n.ts (Nuxt / Nitro)
- * export default i18n({ locales: ["en", "tr"] });
+ * // server/middleware/dialex.ts (Nuxt / Nitro)
+ * export default dialex({ locales: ["en", "tr"] });
  * ```
  */
-export function i18n(options: H3I18nOptions = {}) {
+export function dialex(options: H3DialexOptions = {}) {
   const {
     defaultLocale = "en",
     locales,
@@ -68,7 +68,7 @@ export function i18n(options: H3I18nOptions = {}) {
       defaultLocale,
       fallbacks: options.fallbacks,
       tag: "h3",
-    }) as H3I18nContext["getDictionary"];
+    }) as H3DialexContext["getDictionary"];
 
     event.context.locale = locale as Locales;
     event.context.getDictionary = getDictionary;
@@ -78,8 +78,8 @@ export function i18n(options: H3I18nOptions = {}) {
   });
 }
 
-type H3I18nContext = {
+type H3DialexContext = {
   getDictionary: <K extends DictionaryKey>(name: K) => ResolveDictionaryType<K>;
 };
 
-export default i18n;
+export default dialex;

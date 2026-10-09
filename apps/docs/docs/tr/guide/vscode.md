@@ -40,7 +40,7 @@ Bir anahtar üzerinde `F12` veya ctrl/cmd-tıklama, sözlükte yazıldığı yer
 
 ### Otomatik tamamlama
 
-`t("…")`, `getDictionary("…")`, `useDictionary("…")` veya `@I18nDictionary("…")` içindeki metnin içinde:
+`t("…")`, `getDictionary("…")`, `useDictionary("…")` veya `@DialexDictionary("…")` içindeki metnin içinde:
 
 - sözlük adları, anahtar ve yerel ayar sayısıyla birlikte;
 - `t("home.` sonrasında, o düzeydeki anahtarlar ve önizleme olarak varsayılan yerel ayar metni. Gruplar bir nokta ile devam eder ve listeyi yeniden açar.

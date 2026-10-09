@@ -33,7 +33,7 @@ A warning is logged whenever content comes from a different locale than the one 
 Server adapters also accept `fallbacks` directly, which is useful when you pass `dictionaries` instead of relying on the config file:
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 Fallbacks apply to dictionary lookups. [Locale detection](./locale-detection.md) still only returns locales listed in `locales`.

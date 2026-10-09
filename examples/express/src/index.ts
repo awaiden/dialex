@@ -1,12 +1,12 @@
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./dialex.generated.js";
 
 const app = express();
 
 // Register i18n middleware with auto-generated standalone dictionary bundle
 app.use(
-  i18n({
+  dialex({
     defaultLocale: "en",
     locales: ["en", "tr"],
     dictionaries,

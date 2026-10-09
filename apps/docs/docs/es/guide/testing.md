@@ -2,19 +2,19 @@
 
 `dialexjs/testing` te ayuda a probar código que usa Dialex sin un servidor en ejecución, sin archivo de configuración y sin el plugin del bundler. Funciona con cualquier ejecutor de pruebas.
 
-## `createTestI18n`
+## `createTestDialex`
 
 Un contexto autocontenido con los mismos `getDictionary` y `t` que usa tu aplicación:
 
 ```ts
-import { createTestI18n } from "dialexjs/testing";
+import { createTestDialex } from "dialexjs/testing";
 import home from "../src/home.content";
 
-const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
+const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
 
-i18n.getDictionary("home").title; // "Hoş Geldiniz"
-i18n.t("home.greeting", "Ada"); // "Merhaba, Ada!"
-i18n.withLocale("en").getDictionary("home").title; // "Welcome"
+dialex.getDictionary("home").title; // "Hoş Geldiniz"
+dialex.t("home.greeting", "Ada"); // "Merhaba, Ada!"
+dialex.withLocale("en").getDictionary("home").title; // "Welcome"
 ```
 
 | Opción          | Valor por defecto | Descripción                                                                 |
@@ -48,31 +48,31 @@ Las URL relativas se resuelven respecto a `http://localhost`. Devuelve una `Requ
 
 ## Pruebas de componentes
 
-Los componentes que llaman a `useDictionary`, `useT` o `useI18n` leen los módulos virtuales del plugin, así que tu ejecutor de pruebas necesita el plugin de Vite de Dialex. Vitest usa tu `vite.config.ts`, así que si el plugin ya está ahí no hace falta nada más.
+Los componentes que llaman a `useDictionary`, `useT` o `useDialex` leen los módulos virtuales del plugin, así que tu ejecutor de pruebas necesita el plugin de Vite de Dialex. Vitest usa tu `vite.config.ts`, así que si el plugin ya está ahí no hace falta nada más.
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialexjs/testing/react";
+import { TestDialexProvider } from "dialexjs/testing/react";
 
 render(
-  <TestI18nProvider locale="tr">
+  <TestDialexProvider locale="tr">
     <Header />
-  </TestI18nProvider>,
+  </TestDialexProvider>,
 );
 expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```
 
-`TestI18nProvider` renderiza `locale` de inmediato y nunca lee ni escribe cookies ni `localStorage`, de modo que las pruebas no pueden filtrarse estado entre sí.
+`TestDialexProvider` renderiza `locale` de inmediato y nunca lee ni escribe cookies ni `localStorage`, de modo que las pruebas no pueden filtrarse estado entre sí.
 
 ### Vue
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialexjs/testing/vue";
+import { createTestDialex } from "dialexjs/testing/vue";
 
-const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
 ```
 
 ::: tip Sin el plugin de Vite

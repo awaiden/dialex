@@ -1,11 +1,11 @@
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./dialex.generated.js";
 
 const app = Fastify({ logger: false });
 
 // Register i18n plugin with auto-generated standalone dictionary bundle
-await app.register(i18nPlugin, {
+await app.register(dialexPlugin, {
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,

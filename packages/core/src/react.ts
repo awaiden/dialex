@@ -22,14 +22,14 @@ import dictionaries, { lazy, loadDictionary } from "virtual:dialex-dictionaries"
 // @ts-ignore
 import config from "virtual:dialex-config";
 
-interface I18nContextType {
+interface DialexContextType {
   locale: string;
   setLocale: (locale: string) => void;
 }
 
-const I18nContext = createContext<I18nContextType | undefined>(undefined);
+const DialexContext = createContext<DialexContextType | undefined>(undefined);
 
-export interface I18nProviderProps {
+export interface DialexProviderProps {
   children: ReactNode;
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
   defaultLocale?: string;
@@ -51,13 +51,13 @@ export interface I18nProviderProps {
   storageKey?: string;
 }
 
-export function I18nProvider({
+export function DialexProvider({
   children,
   defaultLocale,
   initialLocale,
   persist = "cookie",
   storageKey = "locale",
-}: I18nProviderProps) {
+}: DialexProviderProps) {
   const [locale, setLocaleState] = useState<string>(
     initialLocale || defaultLocale || config.defaultLocale || "en",
   );
@@ -84,13 +84,13 @@ export function I18nProvider({
   );
 
   const value = useMemo(() => ({ locale, setLocale }), [locale, setLocale]);
-  return React.createElement(I18nContext.Provider, { value }, children);
+  return React.createElement(DialexContext.Provider, { value }, children);
 }
 
-export function useI18n() {
-  const context = useContext(I18nContext);
+export function useDialex() {
+  const context = useContext(DialexContext);
   if (!context) {
-    throw new Error("useI18n must be used within an I18nProvider");
+    throw new Error("useDialex must be used within an DialexProvider");
   }
   return context;
 }
@@ -146,7 +146,7 @@ function readLoaded(name: string, locale: string): any {
  * dictionary has loaded, so render it under a `<Suspense>` boundary.
  */
 export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): T {
-  const { locale } = useI18n();
+  const { locale } = useDialex();
   ensureLoaded(name as string);
   return readLoaded(name as string, locale) as T;
 }
@@ -158,7 +158,7 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  * (this suspends until they are): `const t = useT("home", "nav")`.
  */
 export function useT(...dictionaryNames: string[]): Translate {
-  const { locale } = useI18n();
+  const { locale } = useDialex();
   for (const name of dictionaryNames) ensureLoaded(name);
   return useMemo(() => createT((name) => readLoaded(name, locale), locale), [locale]);
 }

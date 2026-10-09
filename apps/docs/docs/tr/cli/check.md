@@ -17,7 +17,7 @@ dialex lint -c ./dialex.config.ts
 - Bir sözlükte yapılandırılmış bir yerel ayar eksiktir.
 - Bir yerel ayarda, başka bir yerel ayarda bulunan bir anahtar eksiktir. İç içe anahtarlar noktalı yola göre karşılaştırılır, örneğin `nav.about`.
 - Açıkça [ICU](../guide/icu.md) kullanan (`plural`, `select`, `number`, ...) bir metin geçerli ICU değildir ya da bir yerel ayar, aynı anahtar için varsayılan yerel ayardan farklı argümanlar kullanır.
-- Kaynak kod, var olmayan bir sözlükle `getDictionary("x")`, `useDictionary("x")` veya `@I18nDictionary("x")` çağırır.
+- Kaynak kod, var olmayan bir sözlükle `getDictionary("x")`, `useDictionary("x")` veya `@DialexDictionary("x")` çağırır.
 - Kaynak kod, var olmayan bir yolla `t("home.nav.missing")` çağırır. Yalnızca ilk segmenti bilinen bir sözlük adı olan `t()` çağrıları denetlenir; bu yüzden ilgisiz `t()` fonksiyonları yok sayılır.
 
 **Uyarılar**

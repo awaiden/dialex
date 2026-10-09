@@ -37,30 +37,30 @@ export const appConfig: ApplicationConfig = {
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
+import { injectDictionary, injectDialex, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",
   template: `
     <h1>{{ dict().title }}</h1>
     <p>{{ t("home.items", { count: 3 }) }}</p>
-    <button (click)="toggle()">{{ i18n.locale() }}</button>
+    <button (click)="toggle()">{{ dialex.locale() }}</button>
   `,
 })
 export class HeaderComponent {
-  protected readonly i18n = injectI18n();
+  protected readonly dialex = injectDialex();
   protected readonly dict = injectDictionary("home"); // Signal of the dictionary
   protected readonly t = injectT();
 
   toggle() {
-    this.i18n.setLocale(this.i18n.locale() === "en" ? "tr" : "en");
+    this.dialex.setLocale(this.dialex.locale() === "en" ? "tr" : "en");
   }
 }
 ```
 
 | 函数                     | 返回                                                                                   |
 | ------------------------ | -------------------------------------------------------------------------------------- |
-| `injectI18n()`           | store：`locale`（一个 `Signal<string>`）、`setLocale(locale)`、`dictionary(name)`、`t` |
+| `injectDialex()`         | store：`locale`（一个 `Signal<string>`）、`setLocale(locale)`、`dictionary(name)`、`t` |
 | `injectDictionary(name)` | 一个包含当前 locale 词典的 `Signal`，遵循[回退](../guide/fallbacks.md)                 |
 | `injectT()`              | 当前 locale 的 [`t` 函数](../guide/key-paths.md)，支持 [ICU](../guide/icu.md)          |
 
@@ -120,4 +120,4 @@ TestBed.configureTestingModule({
 });
 ```
 
-对于不需要 Angular 的代码，请使用 [`createTestI18n`](../guide/testing.md)。
+对于不需要 Angular 的代码，请使用 [`createTestDialex`](../guide/testing.md)。

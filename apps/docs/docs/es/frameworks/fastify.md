@@ -2,12 +2,12 @@
 
 ```ts
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(i18nPlugin, {
+await app.register(dialexPlugin, {
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -21,4 +21,4 @@ app.get("/:locale", async (req) => {
 await app.listen({ port: 3000 });
 ```
 
-`i18nPlugin` está envuelto con `fastify-plugin` (nombre `dialex-fastify`, Fastify `>=4`), de modo que los decoradores de la petición son visibles entre contextos de encapsulación. También es la exportación por defecto. Se aplican todas las [opciones de detección de locale](../guide/locale-detection.md#options).
+`dialexPlugin` está envuelto con `fastify-plugin` (nombre `dialex-fastify`, Fastify `>=4`), de modo que los decoradores de la petición son visibles entre contextos de encapsulación. También es la exportación por defecto. Se aplican todas las [opciones de detección de locale](../guide/locale-detection.md#options).

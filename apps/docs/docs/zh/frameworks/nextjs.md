@@ -4,24 +4,24 @@
 
 ```ts
 // next.config.mjs
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
-export default withI18n({
+export default withDialex({
   // your Next.js config
 });
 ```
 
-`withI18n(nextConfig, inlineConfig?)` 会把词典解析接入 webpack 和 Turbopack，保留你已有的 `webpack` 函数，并同步生成的文件。
+`withDialex(nextConfig, inlineConfig?)` 会把词典解析接入 webpack 和 Turbopack，保留你已有的 `webpack` 函数，并同步生成的文件。
 
 ## 中间件
 
-`createI18nMiddleware` 让每个页面都位于 locale 前缀之下：
+`createDialexMiddleware` 让每个页面都位于 locale 前缀之下：
 
 ```ts
 // middleware.ts
-import { createI18nMiddleware } from "dialexjs/next/middleware";
+import { createDialexMiddleware } from "dialexjs/next/middleware";
 
-export default createI18nMiddleware({
+export default createDialexMiddleware({
   locales: ["en", "tr"],
   defaultLocale: "en",
 });
@@ -45,19 +45,19 @@ export const config = {
 | `ignore`                           | 见上文             | `(pathname) => boolean`，用于额外要跳过的路径                                                                           |
 | `queryKeys`、`headerKey`、`custom` |                    | 与 [locale 检测](../guide/locale-detection.md#options)相同                                                              |
 
-中间件运行在 edge 上，无法读取 `dialex.config.ts`，因此请显式传入 `locales` 和 `prefixDefault`，并让它们与 `I18nLink` 读取的配置中的值保持一致。
+中间件运行在 edge 上，无法读取 `dialex.config.ts`，因此请显式传入 `locales` 和 `prefixDefault`，并让它们与 `DialexLink` 读取的配置中的值保持一致。
 
 ## 链接
 
-`I18nLink` 是会在 URL 中保留当前 locale 的 `next/link`。它从 `[locale]` 路由参数中获取 locale：
+`DialexLink` 是会在 URL 中保留当前 locale 的 `next/link`。它从 `[locale]` 路由参数中获取 locale：
 
 ```tsx
-import { I18nLink } from "dialexjs/next/link";
+import { DialexLink } from "dialexjs/next/link";
 
-<I18nLink href="/about">About</I18nLink>; // /tr/about while viewing /tr/...
-<I18nLink href="/about" locale="en">
+<DialexLink href="/about">About</DialexLink>; // /tr/about while viewing /tr/...
+<DialexLink href="/about" locale="en">
   English
-</I18nLink>; // /en/about
+</DialexLink>; // /en/about
 ```
 
 它从 `dialex.config.ts` 读取 `locales`、`defaultLocale` 和 `prefixDefault`。外部 URL 和 `#片段` 保持不变。另请参见[路由辅助函数](../guide/routing.md)。

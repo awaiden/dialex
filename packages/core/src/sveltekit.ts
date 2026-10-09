@@ -14,7 +14,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export type SvelteKitI18nOptions = BaseAdapterOptions;
+export type SvelteKitDialexOptions = BaseAdapterOptions;
 
 type MaybePromise<T> = T | Promise<T>;
 
@@ -59,7 +59,7 @@ export const LANG_PLACEHOLDER = "%dialex.lang%";
  * Adds `locale` and `getDictionary(name)` to `event.locals` and replaces
  * `%dialex.lang%` in the rendered HTML with the resolved locale.
  */
-export function i18nHandle(options: SvelteKitI18nOptions = {}): Handle {
+export function dialexHandle(options: SvelteKitDialexOptions = {}): Handle {
   const {
     defaultLocale = "en",
     locales,
@@ -111,4 +111,4 @@ export function i18nHandle(options: SvelteKitI18nOptions = {}): Handle {
   };
 }
 
-export default i18nHandle;
+export default dialexHandle;

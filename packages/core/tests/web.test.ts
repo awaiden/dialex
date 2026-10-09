@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { createI18nHandler } from "../src/web.js";
+import { createDialexHandler } from "../src/web.js";
 
 const dict = {
   name: "home",
@@ -10,7 +10,7 @@ const dict = {
 };
 
 const make = (options = {}) =>
-  createI18nHandler({
+  createDialexHandler({
     defaultLocale: "en",
     locales: ["en", "tr"],
     dictionaries: [dict],
@@ -19,7 +19,7 @@ const make = (options = {}) =>
 const req = (url: string, headers: Record<string, string> = {}) =>
   new Request(`http://localhost${url}`, { headers });
 
-describe("createI18nHandler", () => {
+describe("createDialexHandler", () => {
   it("detects the locale from path, query, cookie, then Accept-Language", async () => {
     const resolve = make();
     expect((await resolve(req("/tr/x", { "accept-language": "en" }))).locale).toBe("tr");
@@ -30,20 +30,20 @@ describe("createI18nHandler", () => {
   });
 
   it("returns dictionaries, t(), and headers", async () => {
-    const i18n = await make()(req("/", { "accept-language": "tr" }));
-    expect(i18n.getDictionary("home").title).toBe("Hoş Geldiniz");
-    expect((i18n.t as any)("home.greet", "Ada")).toBe("Selam Ada");
-    expect(i18n.headers).toEqual({ "Content-Language": "tr" });
+    const dialex = await make()(req("/", { "accept-language": "tr" }));
+    expect(dialex.getDictionary("home").title).toBe("Hoş Geldiniz");
+    expect((dialex.t as any)("home.greet", "Ada")).toBe("Selam Ada");
+    expect(dialex.headers).toEqual({ "Content-Language": "tr" });
   });
 
   it("applies headers to mutable and immutable responses", async () => {
-    const i18n = await make()(req("/", { "accept-language": "tr" }));
+    const dialex = await make()(req("/", { "accept-language": "tr" }));
 
     const plain = new Response("ok");
-    expect(i18n.applyHeaders(plain).headers.get("content-language")).toBe("tr");
+    expect(dialex.applyHeaders(plain).headers.get("content-language")).toBe("tr");
 
     const redirect = Response.redirect("http://localhost/elsewhere", 302);
-    const patched = i18n.applyHeaders(redirect);
+    const patched = dialex.applyHeaders(redirect);
     expect(patched.headers.get("content-language")).toBe("tr");
     expect(patched.headers.get("location")).toBe("http://localhost/elsewhere");
     expect(patched.status).toBe(302);

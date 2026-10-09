@@ -67,11 +67,11 @@ bun x dialex generate
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ dictionaries }));
+app.use("*", dialex({ dictionaries }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");
@@ -83,11 +83,11 @@ app.get("/", (c) => {
 
 ```typescript
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
-await app.register(i18nPlugin, { dictionaries });
+await app.register(dialexPlugin, { dictionaries });
 
 app.get("/", (req) => {
   const dict = req.getDictionary("home");
@@ -99,11 +99,11 @@ app.get("/", (req) => {
 
 ```typescript
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
-app.use(i18n({ dictionaries }));
+app.use(dialex({ dictionaries }));
 
 app.get("/", (req, res) => {
   const dict = req.getDictionary("home");
@@ -115,8 +115,8 @@ app.get("/", (req, res) => {
 
 ```typescript
 // next.config.ts
-import { withI18n } from "dialexjs/next";
-export default withI18n({/* next config */});
+import { withDialex } from "dialexjs/next";
+export default withDialex({/* next config */});
 ```
 
 ```typescript

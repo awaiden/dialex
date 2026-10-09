@@ -5,7 +5,7 @@ export type CompletionContext =
   | { kind: "dictionary"; call: string; typed: string; length: number }
   | { kind: "path"; dictionary: string; parent: string[]; typed: string; length: number };
 
-const CALL = /(?<![\w$.])(t|getDictionary|useDictionary|I18nDictionary)\(\s*(["'`])([^"'`\n]*)$/;
+const CALL = /(?<![\w$.])(t|getDictionary|useDictionary|DialexDictionary)\(\s*(["'`])([^"'`\n]*)$/;
 
 /**
  * Whether the cursor is inside the string argument of a Dialex call, and what is being typed.

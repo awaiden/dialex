@@ -4,24 +4,24 @@
 
 ```ts
 // next.config.mjs
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
-export default withI18n({
+export default withDialex({
   // your Next.js config
 });
 ```
 
-`withI18n(nextConfig, inlineConfig?)` sözlük çözümlemesini webpack ve Turbopack'e bağlar, mevcut `webpack` fonksiyonunuzu korur ve üretilen dosyaları eşitler.
+`withDialex(nextConfig, inlineConfig?)` sözlük çözümlemesini webpack ve Turbopack'e bağlar, mevcut `webpack` fonksiyonunuzu korur ve üretilen dosyaları eşitler.
 
 ## Middleware
 
-`createI18nMiddleware` her sayfayı bir yerel ayar önekinin altında tutar:
+`createDialexMiddleware` her sayfayı bir yerel ayar önekinin altında tutar:
 
 ```ts
 // middleware.ts
-import { createI18nMiddleware } from "dialexjs/next/middleware";
+import { createDialexMiddleware } from "dialexjs/next/middleware";
 
-export default createI18nMiddleware({
+export default createDialexMiddleware({
   locales: ["en", "tr"],
   defaultLocale: "en",
 });
@@ -45,19 +45,19 @@ export const config = {
 | `ignore`                           | yukarıya bakın         | Atlanacak ek yollar için `(pathname) => boolean`                                                                                                                                      |
 | `queryKeys`, `headerKey`, `custom` |                        | [Yerel ayar algılama](../guide/locale-detection.md#options) ile aynı                                                                                                                  |
 
-Middleware edge üzerinde çalışır ve `dialex.config.ts` dosyasını okuyamaz; bu yüzden `locales` ve `prefixDefault` değerlerini açıkça verin ve bunları `I18nLink`'in okuduğu yapılandırmadaki değerlerle aynı tutun.
+Middleware edge üzerinde çalışır ve `dialex.config.ts` dosyasını okuyamaz; bu yüzden `locales` ve `prefixDefault` değerlerini açıkça verin ve bunları `DialexLink`'in okuduğu yapılandırmadaki değerlerle aynı tutun.
 
 ## Bağlantılar
 
-`I18nLink`, geçerli yerel ayarı URL'de tutan `next/link`'tir. Yerel ayarı `[locale]` rota parametresinden alır:
+`DialexLink`, geçerli yerel ayarı URL'de tutan `next/link`'tir. Yerel ayarı `[locale]` rota parametresinden alır:
 
 ```tsx
-import { I18nLink } from "dialexjs/next/link";
+import { DialexLink } from "dialexjs/next/link";
 
-<I18nLink href="/about">About</I18nLink>; // /tr/about while viewing /tr/...
-<I18nLink href="/about" locale="en">
+<DialexLink href="/about">About</DialexLink>; // /tr/about while viewing /tr/...
+<DialexLink href="/about" locale="en">
   English
-</I18nLink>; // /en/about
+</DialexLink>; // /en/about
 ```
 
 `locales`, `defaultLocale` ve `prefixDefault` değerlerini `dialex.config.ts` dosyasından okur. Harici URL'lere ve `#parçalara` dokunmaz. Ayrıca bkz. [Yönlendirme yardımcıları](../guide/routing.md).

@@ -1,6 +1,6 @@
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialexjs/koa";
+import { dialex } from "dialexjs/koa";
 import dictionaries from "./dialex.generated.js";
 
 const app = new Koa();
@@ -8,7 +8,7 @@ const router = new Router();
 
 // Register i18n middleware with auto-generated standalone dictionary bundle
 app.use(
-  i18n({
+  dialex({
     defaultLocale: "en",
     locales: ["en", "tr"],
     dictionaries,

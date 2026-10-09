@@ -50,4 +50,4 @@ sitemapEntries(["/", "/about"], { ...seo, lastModified: "2024-01-01" });
 
 `alternateLanguages` matches the shape of Next.js `metadata.alternates.languages`; `sitemapEntries` returns one entry per path and locale, each with `alternates.languages`, matching `MetadataRoute.Sitemap`. Pass `xDefault: false` to leave out `x-default`.
 
-For Next.js there are also [`createI18nMiddleware` and `I18nLink`](../frameworks/nextjs.md).
+For Next.js there are also [`createDialexMiddleware` and `DialexLink`](../frameworks/nextjs.md).

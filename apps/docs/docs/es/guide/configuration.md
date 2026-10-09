@@ -13,15 +13,15 @@ export default defineConfig({
 });
 ```
 
-| Opción          | Tipo                          | Valor por defecto   | Descripción                                                                                                                       |
-| --------------- | ----------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultLocale` | `string`                      | `"en"`              | Locale que se usa cuando no se puede resolver ninguno                                                                             |
-| `locales`       | `string[]`                    | —                   | Locales compatibles; activa el estrechamiento del tipo de locale y las comprobaciones de paridad                                  |
-| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) de los archivos de diccionario                                                                                            |
-| `configFile`    | `string`                      | —                   | Ruta personalizada de la configuración                                                                                            |
-| `fallbacks`     | `Record<string, string[]>`    | —                   | [Cadenas de fallback](./fallbacks.md) explícitas por locale                                                                       |
-| `prefixDefault` | `boolean`                     | `true`              | Indica si el locale por defecto también lleva prefijo en la URL. Lo leen `I18nLink` y los [helpers de enrutamiento](./routing.md) |
-| `lazy`          | `boolean`                     | `false`             | Carga los diccionarios bajo demanda (solo Vite). Consulta [Carga diferida](./lazy-loading.md)                                     |
-| `translate`     | `{ provider, sourceLocale? }` | —                   | Proveedor para [`dialex translate`](../cli/translate.md)                                                                          |
+| Opción          | Tipo                          | Valor por defecto   | Descripción                                                                                                                         |
+| --------------- | ----------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultLocale` | `string`                      | `"en"`              | Locale que se usa cuando no se puede resolver ninguno                                                                               |
+| `locales`       | `string[]`                    | —                   | Locales compatibles; activa el estrechamiento del tipo de locale y las comprobaciones de paridad                                    |
+| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) de los archivos de diccionario                                                                                              |
+| `configFile`    | `string`                      | —                   | Ruta personalizada de la configuración                                                                                              |
+| `fallbacks`     | `Record<string, string[]>`    | —                   | [Cadenas de fallback](./fallbacks.md) explícitas por locale                                                                         |
+| `prefixDefault` | `boolean`                     | `true`              | Indica si el locale por defecto también lleva prefijo en la URL. Lo leen `DialexLink` y los [helpers de enrutamiento](./routing.md) |
+| `lazy`          | `boolean`                     | `false`             | Carga los diccionarios bajo demanda (solo Vite). Consulta [Carga diferida](./lazy-loading.md)                                       |
+| `translate`     | `{ provider, sourceLocale? }` | —                   | Proveedor para [`dialex translate`](../cli/translate.md)                                                                            |
 
-Las opciones pasadas en línea a `i18nPlugin()` o `withI18n()` tienen prioridad sobre el archivo.
+Las opciones pasadas en línea a `dialexPlugin()` o `withDialex()` tienen prioridad sobre el archivo.

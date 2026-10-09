@@ -5,10 +5,10 @@ import { createApplication } from "@angular/platform-browser";
 import { afterEach, beforeEach, describe, expect, it } from "vite-plus/test";
 import {
   injectDictionary,
-  injectI18n,
+  injectDialex,
   injectT,
   provideDialex,
-  type AngularI18nOptions,
+  type AngularDialexOptions,
 } from "../src/angular.js";
 
 const dictionaries = [
@@ -37,7 +37,7 @@ const dictionaries = [
 type App = Awaited<ReturnType<typeof createApplication>>;
 const apps: App[] = [];
 
-const start = async (options: Partial<AngularI18nOptions> = {}, extra: any[] = []) => {
+const start = async (options: Partial<AngularDialexOptions> = {}, extra: any[] = []) => {
   const app = await createApplication({
     providers: [
       provideDialex({ dictionaries, defaultLocale: "en", persist: false, ...options }),
@@ -70,20 +70,20 @@ afterEach(() => {
 describe("provideDialex", () => {
   it("exposes the locale, dictionary, and t as signals and functions", async () => {
     const app = await start();
-    const i18n = inContext(app, () => injectI18n());
+    const dialex = inContext(app, () => injectDialex());
 
-    expect(i18n.locale()).toBe("en");
-    expect(i18n.dictionary("home")().title).toBe("Welcome");
-    expect((i18n.t as any)("home.title")).toBe("Welcome");
-    expect((i18n.t as any)("home.greet", "Ada")).toBe("Hi Ada");
-    expect((i18n.t as any)("home.items", { count: 3 })).toBe("3 items");
+    expect(dialex.locale()).toBe("en");
+    expect(dialex.dictionary("home")().title).toBe("Welcome");
+    expect((dialex.t as any)("home.title")).toBe("Welcome");
+    expect((dialex.t as any)("home.greet", "Ada")).toBe("Hi Ada");
+    expect((dialex.t as any)("home.items", { count: 3 })).toBe("3 items");
     expect(document.documentElement.lang).toBe("en");
   });
 
   it("switches locale: signals, t, ICU formatting, <html lang>", async () => {
     const app = await start();
     const { store, title, t } = inContext(app, () => ({
-      store: injectI18n(),
+      store: injectDialex(),
       title: injectDictionary("home"),
       t: injectT() as any,
     }));
@@ -102,7 +102,7 @@ describe("provideDialex", () => {
   it("follows fallback chains and region truncation", async () => {
     const app = await start({ fallbacks: { pt: ["es"] } });
     const { store, title } = inContext(app, () => ({
-      store: injectI18n(),
+      store: injectDialex(),
       title: injectDictionary("home"),
     }));
 
@@ -115,7 +115,7 @@ describe("provideDialex", () => {
   it("throws a helpful error when Dialex is not configured", async () => {
     const app = await createApplication({ providers: [] });
     apps.push(app);
-    expect(() => inContext(app, () => injectI18n())).toThrow(/provideDialex/);
+    expect(() => inContext(app, () => injectDialex())).toThrow(/provideDialex/);
   });
 });
 
@@ -123,28 +123,28 @@ describe("initial and remembered locale", () => {
   it("applies a remembered locale only after the first render", async () => {
     document.cookie = "locale=tr; path=/";
     const app = await start({ persist: "cookie", locales: ["en", "tr"] });
-    const i18n = inContext(app, () => injectI18n());
+    const dialex = inContext(app, () => injectDialex());
 
-    expect(i18n.locale()).toBe("en"); // matches server-rendered markup
+    expect(dialex.locale()).toBe("en"); // matches server-rendered markup
     await render(app);
-    expect(i18n.locale()).toBe("tr");
+    expect(dialex.locale()).toBe("tr");
     expect(document.documentElement.lang).toBe("tr");
   });
 
   it("ignores a remembered locale that is not supported", async () => {
     document.cookie = "locale=fr; path=/";
     const app = await start({ persist: "cookie", locales: ["en", "tr"] });
-    const i18n = inContext(app, () => injectI18n());
+    const dialex = inContext(app, () => injectDialex());
     await render(app);
-    expect(i18n.locale()).toBe("en");
+    expect(dialex.locale()).toBe("en");
   });
 
   it("uses initialLocale and then skips the remembered locale", async () => {
     document.cookie = "locale=tr; path=/";
     const app = await start({ persist: "cookie", initialLocale: "es" });
-    const i18n = inContext(app, () => injectI18n());
+    const dialex = inContext(app, () => injectDialex());
     await render(app);
-    expect(i18n.locale()).toBe("es");
+    expect(dialex.locale()).toBe("es");
   });
 
   it("evaluates initialLocale functions in the injection context", async () => {
@@ -152,21 +152,21 @@ describe("initial and remembered locale", () => {
     const app = await start({ initialLocale: () => inject(REQUEST_LOCALE) }, [
       { provide: REQUEST_LOCALE, useValue: "tr" },
     ]);
-    expect(inContext(app, () => injectI18n()).locale()).toBe("tr");
+    expect(inContext(app, () => injectDialex()).locale()).toBe("tr");
   });
 
   it("remembers changes in a cookie, localStorage, or nowhere", async () => {
     const cookieApp = await start({ persist: "cookie" });
-    inContext(cookieApp, () => injectI18n()).setLocale("tr");
+    inContext(cookieApp, () => injectDialex()).setLocale("tr");
     expect(document.cookie).toContain("locale=tr");
 
     const storageApp = await start({ persist: "localStorage", storageKey: "lng" });
-    inContext(storageApp, () => injectI18n()).setLocale("es");
+    inContext(storageApp, () => injectDialex()).setLocale("es");
     expect(localStorage.getItem("lng")).toBe("es");
 
     clearStorage();
     const offApp = await start({ persist: false });
-    inContext(offApp, () => injectI18n()).setLocale("tr");
+    inContext(offApp, () => injectDialex()).setLocale("tr");
     expect(document.cookie).toBe("");
     expect(localStorage.length).toBe(0);
   });

@@ -1,6 +1,6 @@
 import { createApp, defineEventHandler, toWebHandler } from "h3";
 import { describe, expect, it } from "vite-plus/test";
-import { i18n } from "../src/h3.js";
+import { dialex } from "../src/h3.js";
 
 const dict = {
   name: "home",
@@ -12,7 +12,7 @@ const dict = {
 
 const handler = (options = {}) => {
   const app = createApp();
-  app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries: [dict], ...options }));
+  app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries: [dict], ...options }));
   app.use(
     defineEventHandler((event) => ({
       locale: event.context.locale,

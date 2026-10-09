@@ -17,7 +17,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export interface FastifyI18nOptions extends LocaleResolverOptions {
+export interface FastifyDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
    * If omitted, falls back to the auto-scanned dictionary registry.
@@ -44,7 +44,7 @@ import fp from "fastify-plugin";
 /**
  * Fastify plugin for i18n detection and dictionary resolution.
  */
-const i18nPluginFn: FastifyPluginAsync<FastifyI18nOptions> = async (fastify, options) => {
+const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify, options) => {
   const {
     defaultLocale = "en",
     locales,
@@ -147,9 +147,9 @@ const i18nPluginFn: FastifyPluginAsync<FastifyI18nOptions> = async (fastify, opt
   });
 };
 
-export const i18nPlugin = fp(i18nPluginFn, {
+export const dialexPlugin = fp(dialexPluginFn, {
   name: "dialex-fastify",
   fastify: ">=4.0.0",
 });
 
-export default i18nPlugin;
+export default dialexPlugin;

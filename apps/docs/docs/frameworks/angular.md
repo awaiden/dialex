@@ -37,30 +37,30 @@ Re-run `dialex generate` (or `dialex generate --watch`) whenever you change a di
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
+import { injectDictionary, injectDialex, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",
   template: `
     <h1>{{ dict().title }}</h1>
     <p>{{ t("home.items", { count: 3 }) }}</p>
-    <button (click)="toggle()">{{ i18n.locale() }}</button>
+    <button (click)="toggle()">{{ dialex.locale() }}</button>
   `,
 })
 export class HeaderComponent {
-  protected readonly i18n = injectI18n();
+  protected readonly dialex = injectDialex();
   protected readonly dict = injectDictionary("home"); // Signal of the dictionary
   protected readonly t = injectT();
 
   toggle() {
-    this.i18n.setLocale(this.i18n.locale() === "en" ? "tr" : "en");
+    this.dialex.setLocale(this.dialex.locale() === "en" ? "tr" : "en");
   }
 }
 ```
 
 | Function                 | Returns                                                                                            |
 | ------------------------ | -------------------------------------------------------------------------------------------------- |
-| `injectI18n()`           | The store: `locale` (a `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`             |
+| `injectDialex()`         | The store: `locale` (a `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`             |
 | `injectDictionary(name)` | A `Signal` with the dictionary for the active locale, following [fallbacks](../guide/fallbacks.md) |
 | `injectT()`              | A [`t` function](../guide/key-paths.md) for the active locale, with [ICU](../guide/icu.md) support |
 
@@ -120,4 +120,4 @@ TestBed.configureTestingModule({
 });
 ```
 
-For code that does not need Angular, use [`createTestI18n`](../guide/testing.md).
+For code that does not need Angular, use [`createTestDialex`](../guide/testing.md).

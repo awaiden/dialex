@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./dialex.generated.js";
 
 const app = new Hono();
@@ -7,7 +7,7 @@ const app = new Hono();
 // Register i18n middleware with auto-generated standalone dictionary bundle
 app.use(
   "*",
-  i18n({
+  dialex({
     defaultLocale: "en",
     locales: ["en", "tr"],
     dictionaries,

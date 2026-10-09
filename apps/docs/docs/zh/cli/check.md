@@ -17,7 +17,7 @@ dialex lint -c ./dialex.config.ts
 - 词典缺少某个已配置的 locale。
 - 某个 locale 缺少其他 locale 已有的键。嵌套的键按点分路径比较，例如 `nav.about`。
 - 明显使用了 [ICU](../guide/icu.md)（`plural`、`select`、`number` 等）的字符串不是有效的 ICU，或者某个 locale 对同一个键使用了与默认 locale 不同的参数。
-- 源代码用不存在的词典调用 `getDictionary("x")`、`useDictionary("x")` 或 `@I18nDictionary("x")`。
+- 源代码用不存在的词典调用 `getDictionary("x")`、`useDictionary("x")` 或 `@DialexDictionary("x")`。
 - 源代码用不存在的路径调用 `t("home.nav.missing")`。只有第一段是已知词典名称的 `t()` 调用才会被检查，因此无关的 `t()` 函数会被忽略。
 
 **警告**

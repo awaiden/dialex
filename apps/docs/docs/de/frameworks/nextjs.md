@@ -4,24 +4,24 @@
 
 ```ts
 // next.config.mjs
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
-export default withI18n({
+export default withDialex({
   // your Next.js config
 });
 ```
 
-`withI18n(nextConfig, inlineConfig?)` bindet die Wörterbuchauflösung in webpack und Turbopack ein, behält deine bestehende `webpack`-Funktion bei und synchronisiert generierte Dateien.
+`withDialex(nextConfig, inlineConfig?)` bindet die Wörterbuchauflösung in webpack und Turbopack ein, behält deine bestehende `webpack`-Funktion bei und synchronisiert generierte Dateien.
 
 ## Middleware
 
-`createI18nMiddleware` hält jede Seite unter einem Locale-Präfix:
+`createDialexMiddleware` hält jede Seite unter einem Locale-Präfix:
 
 ```ts
 // middleware.ts
-import { createI18nMiddleware } from "dialexjs/next/middleware";
+import { createDialexMiddleware } from "dialexjs/next/middleware";
 
-export default createI18nMiddleware({
+export default createDialexMiddleware({
   locales: ["en", "tr"],
   defaultLocale: "en",
 });
@@ -45,19 +45,19 @@ export const config = {
 | `ignore`                           | siehe oben           | `(pathname) => boolean` für zusätzliche Pfade, die übersprungen werden                                                                                         |
 | `queryKeys`, `headerKey`, `custom` |                      | Wie bei der [Locale-Erkennung](../guide/locale-detection.md#options)                                                                                           |
 
-Die Middleware läuft am Edge und kann `dialex.config.ts` nicht lesen. Übergib `locales` und `prefixDefault` daher explizit und halte sie gleich den Werten in der Konfiguration, die `I18nLink` liest.
+Die Middleware läuft am Edge und kann `dialex.config.ts` nicht lesen. Übergib `locales` und `prefixDefault` daher explizit und halte sie gleich den Werten in der Konfiguration, die `DialexLink` liest.
 
 ## Links
 
-`I18nLink` ist `next/link`, das das aktuelle Locale in der URL behält. Es übernimmt das Locale aus dem Routenparameter `[locale]`:
+`DialexLink` ist `next/link`, das das aktuelle Locale in der URL behält. Es übernimmt das Locale aus dem Routenparameter `[locale]`:
 
 ```tsx
-import { I18nLink } from "dialexjs/next/link";
+import { DialexLink } from "dialexjs/next/link";
 
-<I18nLink href="/about">About</I18nLink>; // /tr/about while viewing /tr/...
-<I18nLink href="/about" locale="en">
+<DialexLink href="/about">About</DialexLink>; // /tr/about while viewing /tr/...
+<DialexLink href="/about" locale="en">
   English
-</I18nLink>; // /en/about
+</DialexLink>; // /en/about
 ```
 
 Es liest `locales`, `defaultLocale` und `prefixDefault` aus `dialex.config.ts`. Externe URLs und `#Fragmente` bleiben unberührt. Siehe auch die [Routing-Helfer](../guide/routing.md).

@@ -3,16 +3,16 @@
 `dialexjs/web` resolves the locale from a standard `Request`. Use it in any framework or runtime that hands you one: React Router and Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | Result                   | Description                                                                                                       |
@@ -35,7 +35,7 @@ Loaders receive the `Request`:
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -44,15 +44,15 @@ Return the data to your component and render it there. Wrap the response with `a
 
 ### TanStack Start and SolidStart
 
-Read the current request with your framework's server helper, then pass it to `resolveI18n`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code.
+Read the current request with your framework's server helper, then pass it to `resolveDialex`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code.
 
 ### Workers, Deno, Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```

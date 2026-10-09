@@ -42,23 +42,23 @@
 
 ## `dialexjs/react`
 
-`I18nProvider`、`useI18n`、`useDictionary`、`useT`、`preloadDictionaries`。参见 [React / Vite](../frameworks/react.md)。
+`DialexProvider`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries`。参见 [React / Vite](../frameworks/react.md)。
 
 ## `dialexjs/vite`
 
-`i18nPlugin(inlineConfig?)`。参见 [React / Vite](../frameworks/react.md)。
+`dialexPlugin(inlineConfig?)`。参见 [React / Vite](../frameworks/react.md)。
 
 ## `dialexjs/next`
 
-`withI18n(nextConfig, inlineConfig?)`。参见 [Next.js](../frameworks/nextjs.md)。
+`withDialex(nextConfig, inlineConfig?)`。参见 [Next.js](../frameworks/nextjs.md)。
 
 ## `dialexjs/vue` 和 `dialexjs/nuxt`
 
-`createI18n`、`useI18n`、`useDictionary`、`useT`、`preloadDictionaries` 以及 Nuxt 模块。参见 [Vue / Nuxt](../frameworks/vue.md)。
+`createDialex`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries` 以及 Nuxt 模块。参见 [Vue / Nuxt](../frameworks/vue.md)。
 
 ## 服务端适配器
 
-`dialexjs/express`（`i18n`）、`dialexjs/fastify`（`i18nPlugin`）、`dialexjs/koa`（`i18n`）、`dialexjs/hono`（`i18n`）、`dialexjs/nestjs`（`I18nModule` 及相关项）、`dialexjs/elysia`（`i18n`）、`dialexjs/sveltekit`（`i18nHandle`）、`dialexjs/astro`（`i18n`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
+`dialexjs/express`（`dialex`）、`dialexjs/fastify`（`dialexPlugin`）、`dialexjs/koa`（`dialex`）、`dialexjs/hono`（`dialex`）、`dialexjs/nestjs`（`DialexModule` 及相关项）、`dialexjs/elysia`（`dialex`）、`dialexjs/sveltekit`（`dialexHandle`）、`dialexjs/astro`（`dialex`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
 
 ## `dialexjs/routing`
 
@@ -66,19 +66,19 @@
 
 ## `dialexjs/next/middleware` 和 `dialexjs/next/link`
 
-`createI18nMiddleware(options)` 和 `I18nLink`。参见 [Next.js](../frameworks/nextjs.md)。
+`createDialexMiddleware(options)` 和 `DialexLink`。参见 [Next.js](../frameworks/nextjs.md)。
 
 ## `dialexjs/angular`
 
-`provideDialex`、`injectI18n`、`injectDictionary`、`injectT`、`DIALEX`。参见 [Angular](../frameworks/angular.md)。
+`provideDialex`、`injectDialex`、`injectDictionary`、`injectT`、`DIALEX`。参见 [Angular](../frameworks/angular.md)。
 
 ## `dialexjs/web` 和 `dialexjs/h3`
 
-适用于任意 `Request` 的 `createI18nHandler(options)`，以及 h3 1.x 的 `i18n(options)` 中间件。参见 [Fetch API](../frameworks/web.md) 和 [h3 / Nitro](../frameworks/h3.md)。
+适用于任意 `Request` 的 `createDialexHandler(options)`，以及 h3 1.x 的 `dialex(options)` 中间件。参见 [Fetch API](../frameworks/web.md) 和 [h3 / Nitro](../frameworks/h3.md)。
 
 ## `dialexjs/testing`
 
-`createTestI18n`、`mockRequest`，以及框架封装 `TestI18nProvider`（`dialexjs/testing/react`）和 `createTestI18n`（`dialexjs/testing/vue`）。参见[测试](../guide/testing.md)。
+`createTestDialex`、`mockRequest`，以及框架封装 `TestDialexProvider`（`dialexjs/testing/react`）和 `createTestDialex`（`dialexjs/testing/vue`）。参见[测试](../guide/testing.md)。
 
 ## `@dialexjs/cli/api`
 

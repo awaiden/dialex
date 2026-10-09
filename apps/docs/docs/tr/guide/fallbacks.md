@@ -33,7 +33,7 @@ export default defineConfig({
 Sunucu adaptörleri `fallbacks` seçeneğini doğrudan da kabul eder; yapılandırma dosyasına güvenmek yerine `dictionaries` verdiğinizde işe yarar:
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 Yedekler sözlük aramaları için geçerlidir. [Yerel ayar algılama](./locale-detection.md) yine yalnızca `locales` içinde listelenen yerel ayarları döndürür.

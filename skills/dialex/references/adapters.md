@@ -8,24 +8,24 @@ Install plugin in `vite.config.ts`:
 
 ```typescript
 import { defineConfig } from "vite";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [i18nPlugin()],
+  plugins: [dialexPlugin()],
 });
 ```
 
-Wrap your root component with `I18nProvider`:
+Wrap your root component with `DialexProvider`:
 
 ```tsx
-import { I18nProvider } from "dialexjs/react";
+import { DialexProvider } from "dialexjs/react";
 import dictionaries from "./dialex.generated.js";
 
 export function App() {
   return (
-    <I18nProvider dictionaries={dictionaries} initialLocale="en">
+    <DialexProvider dictionaries={dictionaries} initialLocale="en">
       <Main />
-    </I18nProvider>
+    </DialexProvider>
   );
 }
 ```
@@ -48,11 +48,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
 ```typescript
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./dialex.generated.js";
 
 const app = express();
-app.use(i18n({ dictionaries }));
+app.use(dialex({ dictionaries }));
 
 app.get("/", (req, res) => {
   const dict = req.getDictionary("home");
@@ -64,11 +64,11 @@ app.get("/", (req, res) => {
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ dictionaries }));
+app.use("*", dialex({ dictionaries }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");
@@ -80,11 +80,11 @@ app.get("/", (c) => {
 
 ```typescript
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./dialex.generated.js";
 
 const app = Fastify();
-await app.register(i18nPlugin, { dictionaries });
+await app.register(dialexPlugin, { dictionaries });
 
 app.get("/", (req) => {
   const dict = req.getDictionary("home");

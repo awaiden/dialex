@@ -1,4 +1,4 @@
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -8,4 +8,4 @@ const nextConfig = {
   },
 };
 
-export default withI18n(nextConfig);
+export default withDialex(nextConfig);

@@ -8,22 +8,22 @@
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
-`i18nPlugin(inlineConfig?)` yapılandırmanızı yükler, `src/dialex-env.d.ts` dosyasını yeniden üretir ve bir `.content.ts` dosyası değiştiğinde HMR ile `virtual:dialex-dictionaries` ve `virtual:dialex-config` adlı iki sanal modülü sunar. `locales` ayarlıysa, bunlardan birini eksik olan bir sözlük derlemeyi başarısız kılar.
+`dialexPlugin(inlineConfig?)` yapılandırmanızı yükler, `src/dialex-env.d.ts` dosyasını yeniden üretir ve bir `.content.ts` dosyası değiştiğinde HMR ile `virtual:dialex-dictionaries` ve `virtual:dialex-config` adlı iki sanal modülü sunar. `locales` ayarlıysa, bunlardan birini eksik olan bir sözlük derlemeyi başarısız kılar.
 
 ## Provider ve hook'lar
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
+import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -37,16 +37,16 @@ function App() {
 }
 
 export default () => (
-  <I18nProvider defaultLocale="en">
+  <DialexProvider defaultLocale="en">
     <App />
-  </I18nProvider>
+  </DialexProvider>
 );
 ```
 
 | Dışa aktarım          | Açıklama                                                               |
 | --------------------- | ---------------------------------------------------------------------- |
-| `I18nProvider`        | Etkin yerel ayarı tutar. Aşağıdaki prop'lara bakın                     |
-| `useI18n()`           | `{ locale, setLocale }` döndürür. Provider'ın dışında hata verir       |
+| `DialexProvider`      | Etkin yerel ayarı tutar. Aşağıdaki prop'lara bakın                     |
+| `useDialex()`         | `{ locale, setLocale }` döndürür. Provider'ın dışında hata verir       |
 | `useDictionary(name)` | Geçerli yerel ayar için sözlüğü döndürür, varsayılan yerel ayara döner |
 
 ## Provider prop'ları

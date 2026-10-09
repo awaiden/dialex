@@ -40,7 +40,7 @@ Bewege den Mauszeiger über einen Schlüssel in `t("home.title")`, einen Wörter
 
 ### Autovervollständigung
 
-Innerhalb des Strings von `t("…")`, `getDictionary("…")`, `useDictionary("…")` oder `@I18nDictionary("…")`:
+Innerhalb des Strings von `t("…")`, `getDictionary("…")`, `useDictionary("…")` oder `@DialexDictionary("…")`:
 
 - Wörterbuchnamen, mit der Anzahl der Schlüssel und Locales;
 - nach `t("home.` die Schlüssel dieser Ebene, mit dem Text des Standard-Locales als Vorschau. Gruppen werden mit einem Punkt fortgesetzt und öffnen die Liste erneut.

@@ -3,7 +3,7 @@ import { localizePath, stripLocale, type RoutingOptions } from "../routing.js";
 import { resolveRequestLocale } from "../shared.js";
 import type { LocaleResolverOptions } from "../resolver.js";
 
-export interface I18nMiddlewareOptions
+export interface DialexMiddlewareOptions
   extends RoutingOptions, Omit<LocaleResolverOptions, "locales" | "defaultLocale" | "usePath"> {
   /**
    * Cookie that remembers the visitor's locale.
@@ -39,11 +39,11 @@ const defaultIgnore = (pathname: string) =>
  *
  * ```ts
  * // middleware.ts
- * export default createI18nMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
+ * export default createDialexMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
  * export const config = { matcher: ["/((?!_next|api|.*\\..*).*)"] };
  * ```
  */
-export function createI18nMiddleware(options: I18nMiddlewareOptions) {
+export function createDialexMiddleware(options: DialexMiddlewareOptions) {
   const {
     locales,
     prefixDefault = true,
@@ -104,4 +104,4 @@ export function createI18nMiddleware(options: I18nMiddlewareOptions) {
   };
 }
 
-export default createI18nMiddleware;
+export default createDialexMiddleware;

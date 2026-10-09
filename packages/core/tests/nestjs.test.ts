@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { describe, expect, it } from "vite-plus/test";
 import { lastValueFrom, of, throwError } from "rxjs";
-import { I18nModule, I18nService, I18nInterceptor, I18nMiddleware } from "../src/nestjs.js";
+import { DialexModule, DialexService, DialexInterceptor, DialexMiddleware } from "../src/nestjs.js";
 
 describe("NestJS integration", () => {
   const homeDict = {
@@ -12,21 +12,21 @@ describe("NestJS integration", () => {
     },
   };
 
-  it("configures I18nModule.forRoot", () => {
-    const dynamicModule = I18nModule.forRoot({
+  it("configures DialexModule.forRoot", () => {
+    const dynamicModule = DialexModule.forRoot({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
     });
 
-    expect(dynamicModule.module).toBe(I18nModule);
+    expect(dynamicModule.module).toBe(DialexModule);
     expect(dynamicModule.global).toBe(true);
     expect(dynamicModule.providers).toBeDefined();
-    expect(dynamicModule.exports).toEqual([I18nService, I18nInterceptor, I18nMiddleware]);
+    expect(dynamicModule.exports).toEqual([DialexService, DialexInterceptor, DialexMiddleware]);
   });
 
-  it("configures I18nModule.forRootAsync", async () => {
-    const dynamicModule = I18nModule.forRootAsync({
+  it("configures DialexModule.forRootAsync", async () => {
+    const dynamicModule = DialexModule.forRootAsync({
       useFactory: () => ({
         defaultLocale: "en",
         locales: ["en", "tr"],
@@ -34,12 +34,12 @@ describe("NestJS integration", () => {
       }),
     });
 
-    expect(dynamicModule.module).toBe(I18nModule);
+    expect(dynamicModule.module).toBe(DialexModule);
     expect(dynamicModule.global).toBe(true);
   });
 
-  it("I18nService resolves locale and returns dictionary", () => {
-    const service = new I18nService({
+  it("DialexService resolves locale and returns dictionary", () => {
+    const service = new DialexService({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -62,14 +62,14 @@ describe("NestJS integration", () => {
     expect(defaultDict.title).toBe("Welcome");
   });
 
-  it("I18nMiddleware attaches locale and getDictionary to request", () => {
-    const service = new I18nService({
+  it("DialexMiddleware attaches locale and getDictionary to request", () => {
+    const service = new DialexService({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
     });
 
-    const middleware = new I18nMiddleware(service);
+    const middleware = new DialexMiddleware(service);
 
     const req: any = {
       headers: { "accept-language": "tr" },
@@ -91,8 +91,8 @@ describe("NestJS integration", () => {
     expect(res["Content-Language"]).toBe("tr");
   });
 
-  it("I18nInterceptor resolves the locale before the handler runs", async () => {
-    const service = new I18nService({
+  it("DialexInterceptor resolves the locale before the handler runs", async () => {
+    const service = new DialexService({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -113,7 +113,7 @@ describe("NestJS integration", () => {
       },
     };
 
-    const result = lastValueFrom(new I18nInterceptor(service).intercept(context, next));
+    const result = lastValueFrom(new DialexInterceptor(service).intercept(context, next));
     await Promise.resolve();
     expect(seenLocale).toBeUndefined();
 
@@ -124,8 +124,8 @@ describe("NestJS integration", () => {
     expect(res["Content-Language"]).toBe("tr");
   });
 
-  it("I18nInterceptor surfaces setup failures as observable errors", async () => {
-    const service = new I18nService({ dictionaries: [homeDict] });
+  it("DialexInterceptor surfaces setup failures as observable errors", async () => {
+    const service = new DialexService({ dictionaries: [homeDict] });
     service.waitForScan = () => Promise.reject(new Error("scan failed"));
     const context: any = {
       switchToHttp: () => ({ getRequest: () => ({}), getResponse: () => ({}) }),
@@ -139,7 +139,7 @@ describe("NestJS integration", () => {
     };
 
     await expect(
-      lastValueFrom(new I18nInterceptor(service).intercept(context, next)),
+      lastValueFrom(new DialexInterceptor(service).intercept(context, next)),
     ).rejects.toThrow("scan failed");
     expect(handled).toBe(false);
   });

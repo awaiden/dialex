@@ -42,23 +42,23 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 ## `dialexjs/react`
 
-`I18nProvider`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/vite`
 
-`i18nPlugin(inlineConfig?)`. Bkz. [React / Vite](../frameworks/react.md).
+`dialexPlugin(inlineConfig?)`. Bkz. [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/next`
 
-`withI18n(nextConfig, inlineConfig?)`. Bkz. [Next.js](../frameworks/nextjs.md).
+`withDialex(nextConfig, inlineConfig?)`. Bkz. [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/vue` ve `dialexjs/nuxt`
 
-`createI18n`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries` ve Nuxt modülü. Bkz. [Vue / Nuxt](../frameworks/vue.md).
+`createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries` ve Nuxt modülü. Bkz. [Vue / Nuxt](../frameworks/vue.md).
 
 ## Sunucu adaptörleri
 
-`dialexjs/express` (`i18n`), `dialexjs/fastify` (`i18nPlugin`), `dialexjs/koa` (`i18n`), `dialexjs/hono` (`i18n`), `dialexjs/nestjs` (`I18nModule` ve ilgili parçalar), `dialexjs/elysia` (`i18n`), `dialexjs/sveltekit` (`i18nHandle`), `dialexjs/astro` (`i18n`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` ve ilgili parçalar), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
 
 ## `dialexjs/routing`
 
@@ -66,19 +66,19 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 ## `dialexjs/next/middleware` ve `dialexjs/next/link`
 
-`createI18nMiddleware(options)` ve `I18nLink`. Bkz. [Next.js](../frameworks/nextjs.md).
+`createDialexMiddleware(options)` ve `DialexLink`. Bkz. [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/angular`
 
-`provideDialex`, `injectI18n`, `injectDictionary`, `injectT`, `DIALEX`. Bkz. [Angular](../frameworks/angular.md).
+`provideDialex`, `injectDialex`, `injectDictionary`, `injectT`, `DIALEX`. Bkz. [Angular](../frameworks/angular.md).
 
 ## `dialexjs/web` ve `dialexjs/h3`
 
-Herhangi bir `Request` için `createI18nHandler(options)` ve h3 1.x `i18n(options)` middleware'i. Bkz. [Fetch API](../frameworks/web.md) ve [h3 / Nitro](../frameworks/h3.md).
+Herhangi bir `Request` için `createDialexHandler(options)` ve h3 1.x `dialex(options)` middleware'i. Bkz. [Fetch API](../frameworks/web.md) ve [h3 / Nitro](../frameworks/h3.md).
 
 ## `dialexjs/testing`
 
-`createTestI18n`, `mockRequest` ve çerçeve sarmalayıcıları: `TestI18nProvider` (`dialexjs/testing/react`) ile `createTestI18n` (`dialexjs/testing/vue`). Bkz. [Test Etme](../guide/testing.md).
+`createTestDialex`, `mockRequest` ve çerçeve sarmalayıcıları: `TestDialexProvider` (`dialexjs/testing/react`) ile `createTestDialex` (`dialexjs/testing/vue`). Bkz. [Test Etme](../guide/testing.md).
 
 ## `@dialexjs/cli/api`
 

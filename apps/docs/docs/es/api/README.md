@@ -42,23 +42,23 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 ## `dialexjs/react`
 
-`I18nProvider`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [React / Vite](../frameworks/react.md).
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/vite`
 
-`i18nPlugin(inlineConfig?)`. Consulta [React / Vite](../frameworks/react.md).
+`dialexPlugin(inlineConfig?)`. Consulta [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/next`
 
-`withI18n(nextConfig, inlineConfig?)`. Consulta [Next.js](../frameworks/nextjs.md).
+`withDialex(nextConfig, inlineConfig?)`. Consulta [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/vue` y `dialexjs/nuxt`
 
-`createI18n`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries` y el módulo de Nuxt. Consulta [Vue / Nuxt](../frameworks/vue.md).
+`createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries` y el módulo de Nuxt. Consulta [Vue / Nuxt](../frameworks/vue.md).
 
 ## Adaptadores de servidor
 
-`dialexjs/express` (`i18n`), `dialexjs/fastify` (`i18nPlugin`), `dialexjs/koa` (`i18n`), `dialexjs/hono` (`i18n`), `dialexjs/nestjs` (`I18nModule` y compañía), `dialexjs/elysia` (`i18n`), `dialexjs/sveltekit` (`i18nHandle`), `dialexjs/astro` (`i18n`). Las opciones compartidas están en [Detección de locale](../guide/locale-detection.md#options).
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` y compañía), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Las opciones compartidas están en [Detección de locale](../guide/locale-detection.md#options).
 
 ## `dialexjs/routing`
 
@@ -66,19 +66,19 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 ## `dialexjs/next/middleware` y `dialexjs/next/link`
 
-`createI18nMiddleware(options)` e `I18nLink`. Consulta [Next.js](../frameworks/nextjs.md).
+`createDialexMiddleware(options)` e `DialexLink`. Consulta [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/angular`
 
-`provideDialex`, `injectI18n`, `injectDictionary`, `injectT`, `DIALEX`. Consulta [Angular](../frameworks/angular.md).
+`provideDialex`, `injectDialex`, `injectDictionary`, `injectT`, `DIALEX`. Consulta [Angular](../frameworks/angular.md).
 
 ## `dialexjs/web` y `dialexjs/h3`
 
-`createI18nHandler(options)` para cualquier `Request`, y el middleware `i18n(options)` de h3 1.x. Consulta [Fetch API](../frameworks/web.md) y [h3 / Nitro](../frameworks/h3.md).
+`createDialexHandler(options)` para cualquier `Request`, y el middleware `dialex(options)` de h3 1.x. Consulta [Fetch API](../frameworks/web.md) y [h3 / Nitro](../frameworks/h3.md).
 
 ## `dialexjs/testing`
 
-`createTestI18n`, `mockRequest` y los envoltorios para frameworks `TestI18nProvider` (`dialexjs/testing/react`) y `createTestI18n` (`dialexjs/testing/vue`). Consulta [Pruebas](../guide/testing.md).
+`createTestDialex`, `mockRequest` y los envoltorios para frameworks `TestDialexProvider` (`dialexjs/testing/react`) y `createTestDialex` (`dialexjs/testing/vue`). Consulta [Pruebas](../guide/testing.md).
 
 ## `@dialexjs/cli/api`
 

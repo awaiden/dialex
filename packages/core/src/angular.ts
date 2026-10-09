@@ -24,7 +24,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export interface AngularI18nOptions {
+export interface AngularDialexOptions {
   /**
    * The dictionaries, usually the output of `dialex generate`:
    * `import dictionaries from "./dialex.generated"`.
@@ -61,9 +61,9 @@ export interface DialexStore {
   readonly t: Translate;
 }
 
-export const DIALEX_OPTIONS = new InjectionToken<AngularI18nOptions>("DIALEX_OPTIONS");
+export const DIALEX_OPTIONS = new InjectionToken<AngularDialexOptions>("DIALEX_OPTIONS");
 
-function createStore(options: AngularI18nOptions): DialexStore {
+function createStore(options: AngularDialexOptions): DialexStore {
   const {
     defaultLocale = "en",
     locales,
@@ -143,12 +143,12 @@ export const DIALEX = new InjectionToken<DialexStore>("DIALEX", {
  * };
  * ```
  */
-export function provideDialex(options: AngularI18nOptions): EnvironmentProviders {
+export function provideDialex(options: AngularDialexOptions): EnvironmentProviders {
   return makeEnvironmentProviders([{ provide: DIALEX_OPTIONS, useValue: options }]);
 }
 
 /** The whole store: `locale`, `setLocale`, `dictionary`, `t`. Call in an injection context. */
-export function injectI18n(): DialexStore {
+export function injectDialex(): DialexStore {
   return inject(DIALEX);
 }
 

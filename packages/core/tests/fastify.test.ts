@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import Fastify from "fastify";
-import { i18nPlugin } from "../src/fastify.js";
+import { dialexPlugin } from "../src/fastify.js";
 
 describe("Fastify integration", () => {
   const homeDict = {
@@ -13,7 +13,7 @@ describe("Fastify integration", () => {
 
   it("detects locale from Accept-Language header", async () => {
     const app = Fastify();
-    await app.register(i18nPlugin, {
+    await app.register(dialexPlugin, {
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -39,7 +39,7 @@ describe("Fastify integration", () => {
 
   it("detects locale from URL path", async () => {
     const app = Fastify();
-    await app.register(i18nPlugin, {
+    await app.register(dialexPlugin, {
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -64,7 +64,7 @@ describe("Fastify integration", () => {
 
   it("falls back to defaultLocale", async () => {
     const app = Fastify();
-    await app.register(i18nPlugin, {
+    await app.register(dialexPlugin, {
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -87,7 +87,7 @@ describe("Fastify integration", () => {
 
   it("detects locale from URL path when a query string is present", async () => {
     const app = Fastify();
-    await app.register(i18nPlugin, {
+    await app.register(dialexPlugin, {
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -104,7 +104,7 @@ describe("Fastify integration", () => {
 
   it("does not treat the first path segment as a locale when locales is unset", async () => {
     const app = Fastify();
-    await app.register(i18nPlugin, { defaultLocale: "en", dictionaries: [homeDict] });
+    await app.register(dialexPlugin, { defaultLocale: "en", dictionaries: [homeDict] });
     app.get("/api/users", async (req) => ({ locale: req.locale }));
 
     const res = await app.inject({ method: "GET", url: "/api/users" });

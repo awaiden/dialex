@@ -3,7 +3,7 @@
 Escribe las cadenas de tus diccionarios en archivos con los que los traductores pueden trabajar, sin tocar TypeScript.
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -12,7 +12,7 @@ dialex export -l tr de
 | Opción                      | Descripción                                                                      |
 | --------------------------- | -------------------------------------------------------------------------------- |
 | `-f, --format <format>`     | `json` (por defecto), `csv` o `xliff`                                            |
-| `-o, --out <dir>`           | Directorio de salida (por defecto `i18n-export`)                                 |
+| `-o, --out <dir>`           | Directorio de salida (por defecto `dialex-export`)                               |
 | `-l, --locale <locales...>` | Limita la exportación a estos locales (el locale por defecto siempre se incluye) |
 | `-c, --config <path>`       | Ruta de configuración personalizada                                              |
 

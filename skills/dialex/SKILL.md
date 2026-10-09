@@ -73,11 +73,11 @@ export function Header() {
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ dictionaries }));
+app.use("*", dialex({ dictionaries }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");

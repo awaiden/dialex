@@ -33,7 +33,7 @@ Se registra una advertencia siempre que el contenido proviene de un locale disti
 Los adaptadores de servidor también aceptan `fallbacks` directamente, lo que resulta útil cuando pasas `dictionaries` en lugar de depender del archivo de configuración:
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 Los fallbacks se aplican a las búsquedas en diccionarios. La [detección de locale](./locale-detection.md) sigue devolviendo únicamente locales incluidos en `locales`.

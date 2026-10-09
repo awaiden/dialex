@@ -29,9 +29,9 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export const I18N_OPTIONS = Symbol("I18N_OPTIONS");
+export const DIALEX_OPTIONS = Symbol("DIALEX_OPTIONS");
 
-export interface NestI18nOptions extends LocaleResolverOptions {
+export interface NestDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
    */
@@ -45,10 +45,10 @@ export interface NestI18nOptions extends LocaleResolverOptions {
   isGlobal?: boolean;
 }
 
-export interface NestI18nAsyncOptions {
+export interface NestDialexAsyncOptions {
   isGlobal?: boolean;
   imports?: any[];
-  useFactory?: (...args: any[]) => Promise<NestI18nOptions> | NestI18nOptions;
+  useFactory?: (...args: any[]) => Promise<NestDialexOptions> | NestDialexOptions;
   inject?: any[];
 }
 
@@ -75,11 +75,11 @@ function normalizeDictionaries(
  * Injectable i18n service for NestJS applications.
  */
 @Injectable()
-export class I18nService {
+export class DialexService {
   private customDictMap?: Record<string, Record<string, any>>;
   private scanPromise?: Promise<any>;
 
-  constructor(@Inject(I18N_OPTIONS) private options: NestI18nOptions = {}) {
+  constructor(@Inject(DIALEX_OPTIONS) private options: NestDialexOptions = {}) {
     this.customDictMap = normalizeDictionaries(this.options.dictionaries);
     if (!this.customDictMap) {
       this.scanPromise = autoScanAndLoadDictionaries(process.cwd(), {
@@ -197,21 +197,21 @@ export class I18nService {
  * NestJS interceptor that automatically attaches resolved locale and dictionary accessor to requests.
  */
 @Injectable()
-export class I18nInterceptor implements NestInterceptor {
-  constructor(private i18nService: I18nService) {}
+export class DialexInterceptor implements NestInterceptor {
+  constructor(private dialexService: DialexService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const run = async () => {
-      await this.i18nService.waitForScan();
+      await this.dialexService.waitForScan();
       const http = context.switchToHttp();
       const req = http.getRequest();
       const res = http.getResponse();
 
       if (req) {
-        const locale = this.i18nService.resolveLocale(req);
+        const locale = this.dialexService.resolveLocale(req);
         req.locale = locale;
         req.getDictionary = <K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): T =>
-          this.i18nService.getDictionary(name, locale);
+          this.dialexService.getDictionary(name, locale);
 
         if (res && typeof res.setHeader === "function") {
           res.setHeader("Content-Language", locale);
@@ -228,16 +228,16 @@ export class I18nInterceptor implements NestInterceptor {
  * NestJS middleware that attaches resolved locale and dictionary accessor to requests.
  */
 @Injectable()
-export class I18nMiddleware implements NestMiddleware {
-  constructor(private i18nService: I18nService) {}
+export class DialexMiddleware implements NestMiddleware {
+  constructor(private dialexService: DialexService) {}
 
   use(req: any, res: any, next: (error?: any) => void) {
     const handle = () => {
       if (req) {
-        const locale = this.i18nService.resolveLocale(req);
+        const locale = this.dialexService.resolveLocale(req);
         req.locale = locale;
         req.getDictionary = <K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): T =>
-          this.i18nService.getDictionary(name, locale);
+          this.dialexService.getDictionary(name, locale);
 
         if (res && typeof res.setHeader === "function") {
           res.setHeader("Content-Language", locale);
@@ -246,8 +246,8 @@ export class I18nMiddleware implements NestMiddleware {
       next();
     };
 
-    if (this.i18nService.hasScanPromise()) {
-      this.i18nService.waitForScan().then(handle).catch(next);
+    if (this.dialexService.hasScanPromise()) {
+      this.dialexService.waitForScan().then(handle).catch(next);
     } else {
       handle();
     }
@@ -257,15 +257,17 @@ export class I18nMiddleware implements NestMiddleware {
 /**
  * Parameter decorator that extracts the resolved locale from the request.
  */
-export const I18nLocale = createParamDecorator((_data: unknown, ctx: ExecutionContext): Locales => {
-  const req = ctx.switchToHttp().getRequest();
-  return req?.locale || "en";
-});
+export const DialexLocale = createParamDecorator(
+  (_data: unknown, ctx: ExecutionContext): Locales => {
+    const req = ctx.switchToHttp().getRequest();
+    return req?.locale || "en";
+  },
+);
 
 /**
  * Parameter decorator that injects the resolved dictionary into a controller parameter.
  */
-export const I18nDictionary = createParamDecorator(
+export const DialexDictionary = createParamDecorator(
   (dictionaryName: string, ctx: ExecutionContext): any => {
     const req = ctx.switchToHttp().getRequest();
     if (typeof req?.getDictionary === "function") {
@@ -279,44 +281,44 @@ export const I18nDictionary = createParamDecorator(
  * NestJS dynamic module for dialex i18n.
  */
 @Module({})
-export class I18nModule {
-  static forRoot(options: NestI18nOptions = {}): DynamicModule {
+export class DialexModule {
+  static forRoot(options: NestDialexOptions = {}): DynamicModule {
     const providers: Provider[] = [
       {
-        provide: I18N_OPTIONS,
+        provide: DIALEX_OPTIONS,
         useValue: options,
       },
-      I18nService,
-      I18nInterceptor,
-      I18nMiddleware,
+      DialexService,
+      DialexInterceptor,
+      DialexMiddleware,
     ];
 
     return {
-      module: I18nModule,
+      module: DialexModule,
       global: options.isGlobal ?? true,
       providers,
-      exports: [I18nService, I18nInterceptor, I18nMiddleware],
+      exports: [DialexService, DialexInterceptor, DialexMiddleware],
     };
   }
 
-  static forRootAsync(asyncOptions: NestI18nAsyncOptions): DynamicModule {
+  static forRootAsync(asyncOptions: NestDialexAsyncOptions): DynamicModule {
     const providers: Provider[] = [
       {
-        provide: I18N_OPTIONS,
+        provide: DIALEX_OPTIONS,
         useFactory: asyncOptions.useFactory || (() => ({})),
         inject: asyncOptions.inject || [],
       },
-      I18nService,
-      I18nInterceptor,
-      I18nMiddleware,
+      DialexService,
+      DialexInterceptor,
+      DialexMiddleware,
     ];
 
     return {
-      module: I18nModule,
+      module: DialexModule,
       global: asyncOptions.isGlobal ?? true,
       imports: asyncOptions.imports || [],
       providers,
-      exports: [I18nService, I18nInterceptor, I18nMiddleware],
+      exports: [DialexService, DialexInterceptor, DialexMiddleware],
     };
   }
 }

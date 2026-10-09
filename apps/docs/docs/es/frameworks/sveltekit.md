@@ -4,10 +4,10 @@
 
 ```ts
 // src/hooks.server.ts
-import { i18nHandle } from "dialexjs/sveltekit";
+import { dialexHandle } from "dialexjs/sveltekit";
 import dictionaries from "./dialex.generated.js";
 
-export const handle = i18nHandle({
+export const handle = dialexHandle({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -18,7 +18,7 @@ Combínalo con otros hooks usando `sequence` de `@sveltejs/kit/hooks`.
 
 ## Locals
 
-`i18nHandle` rellena `event.locals.locale` y `event.locals.getDictionary(name)`, y amplía `App.Locals` para que ambos tengan tipos:
+`dialexHandle` rellena `event.locals.locale` y `event.locals.getDictionary(name)`, y amplía `App.Locals` para que ambos tengan tipos:
 
 ```ts
 // src/routes/+page.server.ts

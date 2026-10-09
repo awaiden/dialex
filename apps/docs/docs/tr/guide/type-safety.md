@@ -1,6 +1,6 @@
 # Tip Güvenliği
 
-`dialex generate` (ayrıca Vite eklentisi ve Next.js için `withI18n`) `src/dialex-env.d.ts` dosyasını yazar. Bu dosya üç arayüzü genişletir:
+`dialex generate` (ayrıca Vite eklentisi ve Next.js için `withDialex`) `src/dialex-env.d.ts` dosyasını yazar. Bu dosya üç arayüzü genişletir:
 
 ```ts
 declare module "dialexjs" {

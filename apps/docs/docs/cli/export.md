@@ -3,7 +3,7 @@
 Writes the strings of your dictionaries to files translators can work with, without touching TypeScript.
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -12,7 +12,7 @@ dialex export -l tr de
 | Option                      | Description                                                    |
 | --------------------------- | -------------------------------------------------------------- |
 | `-f, --format <format>`     | `json` (default), `csv`, or `xliff`                            |
-| `-o, --out <dir>`           | Output directory (default `i18n-export`)                       |
+| `-o, --out <dir>`           | Output directory (default `dialex-export`)                     |
 | `-l, --locale <locales...>` | Limit to these locales (the default locale is always included) |
 | `-c, --config <path>`       | Custom config path                                             |
 

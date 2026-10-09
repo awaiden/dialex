@@ -12,12 +12,12 @@ vi.mock("virtual:dialex-config", () => ({
   },
 }));
 
-const { I18nLink } = await import("../src/next/link.js");
+const { DialexLink } = await import("../src/next/link.js");
 
 const html = (props: Record<string, unknown>) =>
-  renderToStaticMarkup(createElement(I18nLink as any, props, "Go"));
+  renderToStaticMarkup(createElement(DialexLink as any, props, "Go"));
 
-describe("I18nLink", () => {
+describe("DialexLink", () => {
   beforeEach(() => {
     params = { locale: "tr" };
     config = { locales: ["en", "tr"], defaultLocale: "en" };

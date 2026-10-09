@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import { Hono } from "hono";
-import { i18n } from "../src/hono.js";
+import { dialex } from "../src/hono.js";
 
 describe("Hono integration", () => {
   const homeDict = {
@@ -15,7 +15,7 @@ describe("Hono integration", () => {
     const app = new Hono();
     app.use(
       "*",
-      i18n({
+      dialex({
         defaultLocale: "en",
         locales: ["en", "tr"],
         dictionaries: [homeDict],
@@ -42,7 +42,7 @@ describe("Hono integration", () => {
     const app = new Hono();
     app.use(
       "*",
-      i18n({
+      dialex({
         defaultLocale: "en",
         locales: ["en", "tr"],
         dictionaries: [homeDict],
@@ -67,7 +67,7 @@ describe("Hono integration", () => {
     const app = new Hono();
     app.use(
       "*",
-      i18n({
+      dialex({
         defaultLocale: "en",
         locales: ["en", "tr"],
         dictionaries: [homeDict],

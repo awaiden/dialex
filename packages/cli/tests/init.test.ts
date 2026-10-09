@@ -61,7 +61,7 @@ describe("CLI init command", () => {
     expect(fs.readFileSync(path.join(tempDir, "AGENTS.md"), "utf-8")).toContain("Dialex");
   });
 
-  it("injects i18nPlugin into vite.config.ts for React/Vite projects via Magicast", async () => {
+  it("injects dialexPlugin into vite.config.ts for React/Vite projects via Magicast", async () => {
     const viteDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-vite-test-"));
     fs.mkdirSync(path.join(viteDir, "src"), { recursive: true });
     fs.writeFileSync(
@@ -91,13 +91,13 @@ export default defineConfig({
     });
 
     const updatedViteConfig = fs.readFileSync(path.join(viteDir, "vite.config.ts"), "utf-8");
-    expect(updatedViteConfig).toContain('import { i18nPlugin } from "dialexjs/vite"');
-    expect(updatedViteConfig).toContain("i18nPlugin()");
+    expect(updatedViteConfig).toContain('import { dialexPlugin } from "dialexjs/vite"');
+    expect(updatedViteConfig).toContain("dialexPlugin()");
 
     fs.rmSync(viteDir, { recursive: true, force: true });
   });
 
-  it("injects i18nPlugin into vite.config.ts for Vue projects", async () => {
+  it("injects dialexPlugin into vite.config.ts for Vue projects", async () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-vue-test-"));
     fs.mkdirSync(path.join(dir, "src"), { recursive: true });
     fs.writeFileSync(
@@ -118,8 +118,8 @@ export default defineConfig({
     await runInit({ cwd: dir, yes: true });
 
     const config = fs.readFileSync(path.join(dir, "vite.config.ts"), "utf-8");
-    expect(config).toContain('import { i18nPlugin } from "dialexjs/vite"');
-    expect(config).toContain("i18nPlugin()");
+    expect(config).toContain('import { dialexPlugin } from "dialexjs/vite"');
+    expect(config).toContain("dialexPlugin()");
     fs.rmSync(dir, { recursive: true, force: true });
   });
 

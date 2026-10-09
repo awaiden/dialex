@@ -121,9 +121,9 @@ const SOURCE_IGNORE = [
   "**/i18n.config.*",
 ];
 
-/** `getDictionary("x")`, `useDictionary("x")`, `@I18nDictionary("x")` */
+/** `getDictionary("x")`, `useDictionary("x")`, `@DialexDictionary("x")` */
 const DICTIONARY_CALL =
-  /\b(?:getDictionary|useDictionary|I18nDictionary)\(\s*(["'`])([^"'`$\n]+)\1/dg;
+  /\b(?:getDictionary|useDictionary|DialexDictionary)\(\s*(["'`])([^"'`$\n]+)\1/dg;
 /** `t("dictionary.path.to.key")` */
 const T_CALL = /(?<![\w$.])t\(\s*(["'`])([\w-]+(?:\.[\w-]+)+)\1/dg;
 

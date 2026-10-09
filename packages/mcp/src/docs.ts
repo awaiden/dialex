@@ -68,7 +68,7 @@ All locales for a given key must declare the exact same variable placeholders.
 
 export const DIALEX_ADAPTERS_DOC = `# Dialex Adapters Reference
 
-- **React**: \`useDictionary("name")\`, \`useT()\` with \`I18nProvider\`.
+- **React**: \`useDictionary("name")\`, \`useT()\` with \`DialexProvider\`.
 - **Next.js App Router**: \`getDictionary("name", locale)\` in Server Components.
 - **Express / Hono / Fastify**: Middleware injecting \`getDictionary\` or context variable into requests.
 `;

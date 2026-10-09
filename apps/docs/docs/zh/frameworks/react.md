@@ -8,22 +8,22 @@
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
-`i18nPlugin(inlineConfig?)` 会加载你的配置，重新生成 `src/dialex-env.d.ts`，并提供两个虚拟模块 `virtual:dialex-dictionaries` 和 `virtual:dialex-config`；当 `.content.ts` 文件变化时支持 HMR。如果设置了 `locales`，缺少其中任何一个 locale 的词典都会导致构建失败。
+`dialexPlugin(inlineConfig?)` 会加载你的配置，重新生成 `src/dialex-env.d.ts`，并提供两个虚拟模块 `virtual:dialex-dictionaries` 和 `virtual:dialex-config`；当 `.content.ts` 文件变化时支持 HMR。如果设置了 `locales`，缺少其中任何一个 locale 的词典都会导致构建失败。
 
 ## Provider 与 Hooks
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
+import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -37,16 +37,16 @@ function App() {
 }
 
 export default () => (
-  <I18nProvider defaultLocale="en">
+  <DialexProvider defaultLocale="en">
     <App />
-  </I18nProvider>
+  </DialexProvider>
 );
 ```
 
 | 导出                  | 说明                                                         |
 | --------------------- | ------------------------------------------------------------ |
-| `I18nProvider`        | 保存当前 locale。参见下面的 props                            |
-| `useI18n()`           | 返回 `{ locale, setLocale }`。在 provider 之外使用会抛出错误 |
+| `DialexProvider`      | 保存当前 locale。参见下面的 props                            |
+| `useDialex()`         | 返回 `{ locale, setLocale }`。在 provider 之外使用会抛出错误 |
 | `useDictionary(name)` | 返回当前 locale 的词典，并回退到默认 locale                  |
 
 ## Provider 的 props

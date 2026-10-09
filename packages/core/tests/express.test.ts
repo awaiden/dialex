@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vite-plus/test";
-import { i18n } from "../src/express.js";
+import { dialex } from "../src/express.js";
 
 describe("Express integration", () => {
   const homeDict = {
@@ -11,7 +11,7 @@ describe("Express integration", () => {
   };
 
   it("attaches locale and getDictionary to req and res.locals", () => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
@@ -42,7 +42,7 @@ describe("Express integration", () => {
   });
 
   it("detects locale from cookie", () => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],

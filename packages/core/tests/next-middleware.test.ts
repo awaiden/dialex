@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import { NextRequest } from "next/server.js";
-import { createI18nMiddleware } from "../src/next/middleware.js";
+import { createDialexMiddleware } from "../src/next/middleware.js";
 
 const request = (path: string, headers: Record<string, string> = {}) =>
   new NextRequest(`http://localhost${path}`, { headers });
@@ -9,8 +9,8 @@ const location = (res: Response) => res.headers.get("location");
 const rewrite = (res: Response) => res.headers.get("x-middleware-rewrite");
 const next = (res: Response) => res.headers.get("x-middleware-next");
 
-describe("createI18nMiddleware", () => {
-  const middleware = createI18nMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
+describe("createDialexMiddleware", () => {
+  const middleware = createDialexMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
 
   it("redirects unprefixed paths using Accept-Language and keeps the query string", () => {
     const res = middleware(request("/about?x=1", { "accept-language": "tr-TR,tr;q=0.9" }));
@@ -51,16 +51,16 @@ describe("createI18nMiddleware", () => {
   });
 
   it("can skip the cookie and use a custom cookie name", () => {
-    const noCookie = createI18nMiddleware({ locales: ["en", "tr"], setCookie: false });
+    const noCookie = createDialexMiddleware({ locales: ["en", "tr"], setCookie: false });
     expect(noCookie(request("/tr")).cookies.get("locale")).toBeUndefined();
 
-    const named = createI18nMiddleware({ locales: ["en", "tr"], cookieName: "NEXT_LOCALE" });
+    const named = createDialexMiddleware({ locales: ["en", "tr"], cookieName: "NEXT_LOCALE" });
     const res = named(request("/", { cookie: "NEXT_LOCALE=tr" }));
     expect(location(res)).toBe("http://localhost/tr");
   });
 
   describe("with prefixDefault: false", () => {
-    const asNeeded = createI18nMiddleware({
+    const asNeeded = createDialexMiddleware({
       locales: ["en", "tr"],
       defaultLocale: "en",
       prefixDefault: false,

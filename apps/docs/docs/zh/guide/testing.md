@@ -2,19 +2,19 @@
 
 `dialexjs/testing` 帮助你在没有运行中的服务器、配置文件或打包器插件的情况下，测试使用 Dialex 的代码。它适用于任何测试运行器。
 
-## `createTestI18n`
+## `createTestDialex`
 
 一个自包含的上下文，提供与你的应用相同的 `getDictionary` 和 `t`：
 
 ```ts
-import { createTestI18n } from "dialexjs/testing";
+import { createTestDialex } from "dialexjs/testing";
 import home from "../src/home.content";
 
-const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
+const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
 
-i18n.getDictionary("home").title; // "Hoş Geldiniz"
-i18n.t("home.greeting", "Ada"); // "Merhaba, Ada!"
-i18n.withLocale("en").getDictionary("home").title; // "Welcome"
+dialex.getDictionary("home").title; // "Hoş Geldiniz"
+dialex.t("home.greeting", "Ada"); // "Merhaba, Ada!"
+dialex.withLocale("en").getDictionary("home").title; // "Welcome"
 ```
 
 | 选项            | 默认值          | 说明                                                               |
@@ -48,31 +48,31 @@ expect(res.headers.get("content-language")).toBe("tr");
 
 ## 组件测试
 
-调用 `useDictionary`、`useT` 或 `useI18n` 的组件会读取插件的虚拟模块，所以你的测试运行器需要 Dialex 的 Vite 插件。Vitest 使用你的 `vite.config.ts`，如果插件已经在其中，就不需要其他配置。
+调用 `useDictionary`、`useT` 或 `useDialex` 的组件会读取插件的虚拟模块，所以你的测试运行器需要 Dialex 的 Vite 插件。Vitest 使用你的 `vite.config.ts`，如果插件已经在其中，就不需要其他配置。
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialexjs/testing/react";
+import { TestDialexProvider } from "dialexjs/testing/react";
 
 render(
-  <TestI18nProvider locale="tr">
+  <TestDialexProvider locale="tr">
     <Header />
-  </TestI18nProvider>,
+  </TestDialexProvider>,
 );
 expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```
 
-`TestI18nProvider` 会立即渲染 `locale`，并且从不读取或写入 Cookie 或 `localStorage`，因此测试之间不会互相泄漏状态。
+`TestDialexProvider` 会立即渲染 `locale`，并且从不读取或写入 Cookie 或 `localStorage`，因此测试之间不会互相泄漏状态。
 
 ### Vue
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialexjs/testing/vue";
+import { createTestDialex } from "dialexjs/testing/vue";
 
-const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
 ```
 
 ::: tip 没有 Vite 插件时

@@ -55,23 +55,23 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 
 ## `dialexjs/react`
 
-`I18nProvider`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`. See [React / Vite](../frameworks/react.md).
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. See [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/vite`
 
-`i18nPlugin(inlineConfig?)`. See [React / Vite](../frameworks/react.md).
+`dialexPlugin(inlineConfig?)`. See [React / Vite](../frameworks/react.md).
 
 ## `dialexjs/next`
 
-`withI18n(nextConfig, inlineConfig?)`. See [Next.js](../frameworks/nextjs.md).
+`withDialex(nextConfig, inlineConfig?)`. See [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/vue` and `dialexjs/nuxt`
 
-`createI18n`, `useI18n`, `useDictionary`, `useT`, `preloadDictionaries`, and the Nuxt module. See [Vue / Nuxt](../frameworks/vue.md).
+`createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`, and the Nuxt module. See [Vue / Nuxt](../frameworks/vue.md).
 
 ## Server adapters
 
-`dialexjs/express` (`i18n`), `dialexjs/fastify` (`i18nPlugin`), `dialexjs/koa` (`i18n`), `dialexjs/hono` (`i18n`), `dialexjs/nestjs` (`I18nModule` and friends), `dialexjs/elysia` (`i18n`), `dialexjs/sveltekit` (`i18nHandle`), `dialexjs/astro` (`i18n`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` and friends), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
 
 ## `dialexjs/routing`
 
@@ -79,19 +79,19 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 
 ## `dialexjs/next/middleware` and `dialexjs/next/link`
 
-`createI18nMiddleware(options)` and `I18nLink`. See [Next.js](../frameworks/nextjs.md).
+`createDialexMiddleware(options)` and `DialexLink`. See [Next.js](../frameworks/nextjs.md).
 
 ## `dialexjs/angular`
 
-`provideDialex`, `injectI18n`, `injectDictionary`, `injectT`, `DIALEX`. See [Angular](../frameworks/angular.md).
+`provideDialex`, `injectDialex`, `injectDictionary`, `injectT`, `DIALEX`. See [Angular](../frameworks/angular.md).
 
 ## `dialexjs/web` and `dialexjs/h3`
 
-`createI18nHandler(options)` for any `Request`, and the h3 1.x `i18n(options)` middleware. See [Fetch API](../frameworks/web.md) and [h3 / Nitro](../frameworks/h3.md).
+`createDialexHandler(options)` for any `Request`, and the h3 1.x `dialex(options)` middleware. See [Fetch API](../frameworks/web.md) and [h3 / Nitro](../frameworks/h3.md).
 
 ## `dialexjs/testing`
 
-`createTestI18n`, `mockRequest`, and the framework wrappers `TestI18nProvider` (`dialexjs/testing/react`) and `createTestI18n` (`dialexjs/testing/vue`). See [Testing](../guide/testing.md).
+`createTestDialex`, `mockRequest`, and the framework wrappers `TestDialexProvider` (`dialexjs/testing/react`) and `createTestDialex` (`dialexjs/testing/vue`). See [Testing](../guide/testing.md).
 
 ## `@dialexjs/cli/api`
 
@@ -150,7 +150,7 @@ dialex lint -c ./dialex.config.ts
 - A configured locale is missing from a dictionary.
 - A locale is missing a key that another locale has. Nested keys are compared by dotted path, for example `nav.about`.
 - A string that clearly uses [ICU](../guide/icu.md) (`plural`, `select`, `number`, ...) is not valid ICU, or a locale uses different arguments than the default locale for the same key.
-- Source code calls `getDictionary("x")`, `useDictionary("x")` or `@I18nDictionary("x")` with a dictionary that does not exist.
+- Source code calls `getDictionary("x")`, `useDictionary("x")` or `@DialexDictionary("x")` with a dictionary that does not exist.
 - Source code calls `t("home.nav.missing")` with a path that does not exist. Only `t()` calls whose first segment is a known dictionary name are checked, so unrelated `t()` functions are ignored.
 
 **Warnings**
@@ -196,7 +196,7 @@ Errors and warnings show up as annotations on the files and lines they refer to.
 Writes the strings of your dictionaries to files translators can work with, without touching TypeScript.
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -205,7 +205,7 @@ dialex export -l tr de
 | Option                      | Description                                                    |
 | --------------------------- | -------------------------------------------------------------- |
 | `-f, --format <format>`     | `json` (default), `csv`, or `xliff`                            |
-| `-o, --out <dir>`           | Output directory (default `i18n-export`)                       |
+| `-o, --out <dir>`           | Output directory (default `dialex-export`)                     |
 | `-l, --locale <locales...>` | Limit to these locales (the default locale is always included) |
 | `-c, --config <path>`       | Custom config path                                             |
 
@@ -259,8 +259,8 @@ Run it before building or starting any server-side app, typically via the `dx:ge
 Writes translated strings from a file back into your dictionary source files.
 
 ```bash
-dialex import i18n-export/tr.json
-dialex import i18n-export/translations.csv
+dialex import dialex-export/tr.json
+dialex import dialex-export/translations.csv
 dialex import translations/tr.xlf
 dialex import --locale tr strings.json
 ```
@@ -296,7 +296,7 @@ dialex import --locale tr strings.json
 Initializes Dialex in the current project.
 
 - Detects the framework (Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, React/Vite).
-- Edits `dialex.config.ts` using Magicast AST transforms, injects `i18nPlugin()` into `vite.config.ts` for React and Vue projects, and registers the `dialexjs/nuxt` module in `nuxt.config.ts` for Nuxt projects.
+- Edits `dialex.config.ts` using Magicast AST transforms, injects `dialexPlugin()` into `vite.config.ts` for React and Vue projects, and registers the `dialexjs/nuxt` module in `nuxt.config.ts` for Nuxt projects.
 - Writes a starter dictionary and TypeScript declaration file.
 - Adds `dialexjs` and the `@dialexjs/cli` dev dependency to `package.json` (packages you already list are left alone) together with a `dx:generate` script. Run your package manager's install afterwards.
 
@@ -405,22 +405,22 @@ Review the changes in version control afterwards. Machine translation is a start
 
 Dialex ships one adapter per framework as a subpath export of `dialexjs`.
 
-| Framework                   | Import                                                                               | Entry point                                                     |
-| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| [Next.js](./nextjs.md)      | `dialexjs/next`, `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server` | `withI18n`, `createI18nMiddleware`, `I18nLink`, `getDictionary` |
-| [React / Vite](./react.md)  | `dialexjs/vite`, `dialexjs/react`                                                    | `i18nPlugin`, `I18nProvider`, `useI18n`, `useDictionary`        |
-| [Express](./express.md)     | `dialexjs/express`                                                                   | `i18n()` middleware                                             |
-| [Fastify](./fastify.md)     | `dialexjs/fastify`                                                                   | `i18nPlugin`                                                    |
-| [Koa](./koa.md)             | `dialexjs/koa`                                                                       | `i18n()` middleware                                             |
-| [Hono](./hono.md)           | `dialexjs/hono`                                                                      | `i18n()` middleware                                             |
-| [NestJS](./nestjs.md)       | `dialexjs/nestjs`                                                                    | `I18nModule`, decorators                                        |
-| [Elysia](./elysia.md)       | `dialexjs/elysia`                                                                    | `i18n()` plugin                                                 |
-| [SvelteKit](./sveltekit.md) | `dialexjs/sveltekit`                                                                 | `i18nHandle()` hook                                             |
-| [Astro](./astro.md)         | `dialexjs/astro`                                                                     | `i18n()` middleware                                             |
-| [Vue / Nuxt](./vue.md)      | `dialexjs/vue`, `dialexjs/nuxt`                                                      | `createI18n`, `useI18n`, `useDictionary`, Nuxt module           |
-| [Angular](./angular.md)     | `dialexjs/angular`                                                                   | `provideDialex`, `injectI18n`, `injectT`, `injectDictionary`    |
-| [h3 / Nitro](./h3.md)       | `dialexjs/h3`                                                                        | `i18n()` middleware (h3 1.x)                                    |
-| [Fetch API](./web.md)       | `dialexjs/web`                                                                       | `createI18nHandler()` for any `Request`                         |
+| Framework                   | Import                                                                               | Entry point                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [Next.js](./nextjs.md)      | `dialexjs/next`, `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server` | `withDialex`, `createDialexMiddleware`, `DialexLink`, `getDictionary` |
+| [React / Vite](./react.md)  | `dialexjs/vite`, `dialexjs/react`                                                    | `dialexPlugin`, `DialexProvider`, `useDialex`, `useDictionary`        |
+| [Express](./express.md)     | `dialexjs/express`                                                                   | `dialex()` middleware                                                 |
+| [Fastify](./fastify.md)     | `dialexjs/fastify`                                                                   | `dialexPlugin`                                                        |
+| [Koa](./koa.md)             | `dialexjs/koa`                                                                       | `dialex()` middleware                                                 |
+| [Hono](./hono.md)           | `dialexjs/hono`                                                                      | `dialex()` middleware                                                 |
+| [NestJS](./nestjs.md)       | `dialexjs/nestjs`                                                                    | `DialexModule`, decorators                                            |
+| [Elysia](./elysia.md)       | `dialexjs/elysia`                                                                    | `dialex()` plugin                                                     |
+| [SvelteKit](./sveltekit.md) | `dialexjs/sveltekit`                                                                 | `dialexHandle()` hook                                                 |
+| [Astro](./astro.md)         | `dialexjs/astro`                                                                     | `dialex()` middleware                                                 |
+| [Vue / Nuxt](./vue.md)      | `dialexjs/vue`, `dialexjs/nuxt`                                                      | `createDialex`, `useDialex`, `useDictionary`, Nuxt module             |
+| [Angular](./angular.md)     | `dialexjs/angular`                                                                   | `provideDialex`, `injectDialex`, `injectT`, `injectDictionary`        |
+| [h3 / Nitro](./h3.md)       | `dialexjs/h3`                                                                        | `dialex()` middleware (h3 1.x)                                        |
+| [Fetch API](./web.md)       | `dialexjs/web`                                                                       | `createDialexHandler()` for any `Request`                             |
 
 The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Pass the output of `dialex generate` as `dictionaries`:
 
@@ -474,30 +474,30 @@ Re-run `dialex generate` (or `dialex generate --watch`) whenever you change a di
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
+import { injectDictionary, injectDialex, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",
   template: `
     <h1>{{ dict().title }}</h1>
     <p>{{ t("home.items", { count: 3 }) }}</p>
-    <button (click)="toggle()">{{ i18n.locale() }}</button>
+    <button (click)="toggle()">{{ dialex.locale() }}</button>
   `,
 })
 export class HeaderComponent {
-  protected readonly i18n = injectI18n();
+  protected readonly dialex = injectDialex();
   protected readonly dict = injectDictionary("home"); // Signal of the dictionary
   protected readonly t = injectT();
 
   toggle() {
-    this.i18n.setLocale(this.i18n.locale() === "en" ? "tr" : "en");
+    this.dialex.setLocale(this.dialex.locale() === "en" ? "tr" : "en");
   }
 }
 ```
 
 | Function                 | Returns                                                                                            |
 | ------------------------ | -------------------------------------------------------------------------------------------------- |
-| `injectI18n()`           | The store: `locale` (a `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`             |
+| `injectDialex()`         | The store: `locale` (a `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`             |
 | `injectDictionary(name)` | A `Signal` with the dictionary for the active locale, following [fallbacks](../guide/fallbacks.md) |
 | `injectT()`              | A [`t` function](../guide/key-paths.md) for the active locale, with [ICU](../guide/icu.md) support |
 
@@ -557,7 +557,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-For code that does not need Angular, use [`createTestI18n`](../guide/testing.md).
+For code that does not need Angular, use [`createTestDialex`](../guide/testing.md).
 
 
 ---
@@ -568,10 +568,10 @@ For code that does not need Angular, use [`createTestI18n`](../guide/testing.md)
 
 ```ts
 // src/middleware.ts
-import { i18n } from "dialexjs/astro";
+import { dialex } from "dialexjs/astro";
 import dictionaries from "./dialex.generated.js";
 
-export const onRequest = i18n({
+export const onRequest = dialex({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -603,11 +603,11 @@ The middleware reads the request URL, headers, and cookies, so it applies to on-
 
 ```ts
 import { Elysia } from "elysia";
-import { i18n } from "dialexjs/elysia";
+import { dialex } from "dialexjs/elysia";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Elysia()
-  .use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))
+  .use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))
   .get("/:locale", ({ locale, getDictionary }) => {
     const dict = getDictionary("home");
     return { title: dict.title, locale };
@@ -626,11 +626,11 @@ The plugin is registered globally and derives two values on the request context:
 
 ```ts
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
-app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 app.get("/:locale", (req, res) => {
   const dict = req.getDictionary("home");
@@ -651,12 +651,12 @@ The middleware adds `req.locale` and `req.getDictionary(name)` (also on `res.loc
 
 ```ts
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(i18nPlugin, {
+await app.register(dialexPlugin, {
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -670,7 +670,7 @@ app.get("/:locale", async (req) => {
 await app.listen({ port: 3000 });
 ```
 
-`i18nPlugin` is wrapped with `fastify-plugin` (name `dialex-fastify`, Fastify `>=4`), so the request decorators are visible across encapsulation contexts. It is also the default export. All [locale detection options](../guide/locale-detection.md#options) apply.
+`dialexPlugin` is wrapped with `fastify-plugin` (name `dialex-fastify`, Fastify `>=4`), so the request decorators are visible across encapsulation contexts. It is also the default export. All [locale detection options](../guide/locale-detection.md#options) apply.
 
 
 ---
@@ -682,11 +682,11 @@ await app.listen({ port: 3000 });
 For h3 1.x servers: Nitro 2, and Nuxt server routes and middleware.
 
 ```ts
-// server/middleware/i18n.ts (Nuxt / Nitro)
-import { i18n } from "dialexjs/h3";
+// server/middleware/dialex.ts (Nuxt / Nitro)
+import { dialex } from "dialexjs/h3";
 import dictionaries from "~/dialex.generated";
 
-export default i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries });
+export default dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries });
 ```
 
 ```ts
@@ -716,11 +716,11 @@ Built and tested against h3 `>=1.8 <2`. h3 2.x has a different API and is not su
 
 ```ts
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use("*", dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 app.get("/:locale", (c) => {
   const dict = c.var.getDictionary("home");
@@ -742,13 +742,13 @@ The middleware sets `locale` and `getDictionary` as context variables, read thro
 ```ts
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialexjs/koa";
+import { dialex } from "dialexjs/koa";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -759,7 +759,7 @@ app.use(router.routes());
 app.listen(3000);
 ```
 
-Register `i18n()` before your routes. It adds `ctx.locale` and `ctx.getDictionary(name)`. All [locale detection options](../guide/locale-detection.md#options) apply.
+Register `dialex()` before your routes. It adds `ctx.locale` and `ctx.getDictionary(name)`. All [locale detection options](../guide/locale-detection.md#options) apply.
 
 
 ---
@@ -772,11 +772,11 @@ Register `i18n()` before your routes. It adds `ctx.locale` and `ctx.getDictionar
 
 ```ts
 import { Module } from "@nestjs/common";
-import { I18nModule } from "dialexjs/nestjs";
+import { DialexModule } from "dialexjs/nestjs";
 import dictionaries from "./dialex.generated.js";
 
 @Module({
-  imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -785,7 +785,7 @@ export class AppModule {}
 `forRoot` also accepts `isGlobal` (default `true`). For async configuration:
 
 ```ts
-I18nModule.forRootAsync({
+DialexModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (config: ConfigService) => ({
@@ -799,12 +799,12 @@ I18nModule.forRootAsync({
 
 ```ts
 import { Controller, Get } from "@nestjs/common";
-import { I18nLocale, I18nDictionary } from "dialexjs/nestjs";
+import { DialexLocale, DialexDictionary } from "dialexjs/nestjs";
 
 @Controller()
 export class AppController {
   @Get(":locale")
-  getHome(@I18nLocale() locale: string, @I18nDictionary("home") dict: any) {
+  getHome(@DialexLocale() locale: string, @DialexDictionary("home") dict: any) {
     return { title: dict.title, locale };
   }
 }
@@ -812,16 +812,16 @@ export class AppController {
 
 ## Exports
 
-| Export                              | Description                                                                                         |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `I18nModule.forRoot / forRootAsync` | Dynamic module registration                                                                         |
-| `I18nService`                       | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
-| `I18nInterceptor`, `I18nMiddleware` | Attach `req.locale` and `req.getDictionary`                                                         |
-| `@I18nLocale()`                     | Parameter decorator for the resolved locale                                                         |
-| `@I18nDictionary(name)`             | Parameter decorator for a dictionary                                                                |
-| `I18N_OPTIONS`                      | Injection token for the module options                                                              |
+| Export                                  | Description                                                                                         |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `DialexModule.forRoot / forRootAsync`   | Dynamic module registration                                                                         |
+| `DialexService`                         | `resolveLocale(req)`, `getDictionary(name, locale?)`, `getDefaultLocale()`, `getSupportedLocales()` |
+| `DialexInterceptor`, `DialexMiddleware` | Attach `req.locale` and `req.getDictionary`                                                         |
+| `@DialexLocale()`                       | Parameter decorator for the resolved locale                                                         |
+| `@DialexDictionary(name)`               | Parameter decorator for a dictionary                                                                |
+| `DIALEX_OPTIONS`                        | Injection token for the module options                                                              |
 
-`I18nLocale` and `I18nDictionary` read what the interceptor or middleware attached to the request, so make sure one of them is applied. All [locale detection options](../guide/locale-detection.md#options) apply.
+`DialexLocale` and `DialexDictionary` read what the interceptor or middleware attached to the request, so make sure one of them is applied. All [locale detection options](../guide/locale-detection.md#options) apply.
 
 
 ---
@@ -834,24 +834,24 @@ export class AppController {
 
 ```ts
 // next.config.mjs
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
-export default withI18n({
+export default withDialex({
   // your Next.js config
 });
 ```
 
-`withI18n(nextConfig, inlineConfig?)` wires dictionary resolution into webpack and Turbopack, keeps your existing `webpack` function, and syncs generated files.
+`withDialex(nextConfig, inlineConfig?)` wires dictionary resolution into webpack and Turbopack, keeps your existing `webpack` function, and syncs generated files.
 
 ## Middleware
 
-`createI18nMiddleware` keeps every page under a locale prefix:
+`createDialexMiddleware` keeps every page under a locale prefix:
 
 ```ts
 // middleware.ts
-import { createI18nMiddleware } from "dialexjs/next/middleware";
+import { createDialexMiddleware } from "dialexjs/next/middleware";
 
-export default createI18nMiddleware({
+export default createDialexMiddleware({
   locales: ["en", "tr"],
   defaultLocale: "en",
 });
@@ -875,19 +875,19 @@ export const config = {
 | `ignore`                           | see above          | `(pathname) => boolean` for extra paths to skip                                                                                                                 |
 | `queryKeys`, `headerKey`, `custom` |                    | Same as [locale detection](../guide/locale-detection.md#options)                                                                                                |
 
-The middleware runs on the edge and cannot read `dialex.config.ts`, so pass `locales` and `prefixDefault` explicitly, and keep them equal to the values in the config that `I18nLink` reads.
+The middleware runs on the edge and cannot read `dialex.config.ts`, so pass `locales` and `prefixDefault` explicitly, and keep them equal to the values in the config that `DialexLink` reads.
 
 ## Links
 
-`I18nLink` is `next/link` that keeps the current locale in the URL. It takes the locale from the `[locale]` route param:
+`DialexLink` is `next/link` that keeps the current locale in the URL. It takes the locale from the `[locale]` route param:
 
 ```tsx
-import { I18nLink } from "dialexjs/next/link";
+import { DialexLink } from "dialexjs/next/link";
 
-<I18nLink href="/about">About</I18nLink>; // /tr/about while viewing /tr/...
-<I18nLink href="/about" locale="en">
+<DialexLink href="/about">About</DialexLink>; // /tr/about while viewing /tr/...
+<DialexLink href="/about" locale="en">
   English
-</I18nLink>; // /en/about
+</DialexLink>; // /en/about
 ```
 
 It reads `locales`, `defaultLocale` and `prefixDefault` from `dialex.config.ts`. External URLs and `#fragments` are left alone. See also [Routing helpers](../guide/routing.md).
@@ -942,22 +942,22 @@ export default () => sitemapEntries(["/", "/about"], routing);
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
-`i18nPlugin(inlineConfig?)` loads your config, regenerates `src/dialex-env.d.ts`, and serves two virtual modules, `virtual:dialex-dictionaries` and `virtual:dialex-config`, with HMR when a `.content.ts` file changes. If `locales` is set, a dictionary missing one of them fails the build.
+`dialexPlugin(inlineConfig?)` loads your config, regenerates `src/dialex-env.d.ts`, and serves two virtual modules, `virtual:dialex-dictionaries` and `virtual:dialex-config`, with HMR when a `.content.ts` file changes. If `locales` is set, a dictionary missing one of them fails the build.
 
 ## Provider and hooks
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
+import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -971,16 +971,16 @@ function App() {
 }
 
 export default () => (
-  <I18nProvider defaultLocale="en">
+  <DialexProvider defaultLocale="en">
     <App />
-  </I18nProvider>
+  </DialexProvider>
 );
 ```
 
 | Export                | Description                                                                                         |
 | --------------------- | --------------------------------------------------------------------------------------------------- |
-| `I18nProvider`        | Holds the active locale. Props: `children`, `defaultLocale` (falls back to the config, then `"en"`) |
-| `useI18n()`           | Returns `{ locale, setLocale }`. Throws outside the provider                                        |
+| `DialexProvider`      | Holds the active locale. Props: `children`, `defaultLocale` (falls back to the config, then `"en"`) |
+| `useDialex()`         | Returns `{ locale, setLocale }`. Throws outside the provider                                        |
 | `useDictionary(name)` | Returns the dictionary for the current locale, falling back to the default locale                   |
 
 ## Provider props
@@ -1007,10 +1007,10 @@ The provider renders the default locale first, then applies the remembered local
 
 ```ts
 // src/hooks.server.ts
-import { i18nHandle } from "dialexjs/sveltekit";
+import { dialexHandle } from "dialexjs/sveltekit";
 import dictionaries from "./dialex.generated.js";
 
-export const handle = i18nHandle({
+export const handle = dialexHandle({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -1021,7 +1021,7 @@ Combine it with other hooks using `sequence` from `@sveltejs/kit/hooks`.
 
 ## Locals
 
-`i18nHandle` fills `event.locals.locale` and `event.locals.getDictionary(name)`, and augments `App.Locals` so both are typed:
+`dialexHandle` fills `event.locals.locale` and `event.locals.getDictionary(name)`, and augments `App.Locals` so both are typed:
 
 ```ts
 // src/routes/+page.server.ts
@@ -1055,19 +1055,19 @@ Add the Vite plugin (see [React / Vite](./react.md#vite-plugin)), then install t
 ```ts
 // src/main.ts
 import { createApp } from "vue";
-import { createI18n } from "dialexjs/vue";
+import { createDialex } from "dialexjs/vue";
 import App from "./App.vue";
 
 createApp(App)
-  .use(createI18n({ defaultLocale: "en" }))
+  .use(createDialex({ defaultLocale: "en" }))
   .mount("#app");
 ```
 
 ```vue
 <script setup lang="ts">
-import { useI18n, useDictionary } from "dialexjs/vue";
+import { useDialex, useDictionary } from "dialexjs/vue";
 
-const { locale, setLocale } = useI18n();
+const { locale, setLocale } = useDialex();
 const dict = useDictionary("home");
 </script>
 
@@ -1077,11 +1077,11 @@ const dict = useDictionary("home");
 </template>
 ```
 
-| Export                | Description                                                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `createI18n(options)` | Vue plugin. Options: `defaultLocale` (falls back to the config, then `"en"`), `onLocaleChange(locale)`                                |
-| `useI18n()`           | Returns `{ locale, setLocale }` where `locale` is a `Ref<string>`. Throws if the plugin is not installed                              |
-| `useDictionary(name)` | Returns a `ComputedRef` of the dictionary for the current locale, falling back to the default locale. Use `dict.value` in script code |
+| Export                  | Description                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `createDialex(options)` | Vue plugin. Options: `defaultLocale` (falls back to the config, then `"en"`), `onLocaleChange(locale)`                                |
+| `useDialex()`           | Returns `{ locale, setLocale }` where `locale` is a `Ref<string>`. Throws if the plugin is not installed                              |
+| `useDictionary(name)`   | Returns a `ComputedRef` of the dictionary for the current locale, falling back to the default locale. Use `dict.value` in script code |
 
 With [lazy loading](../guide/lazy-loading.md) enabled, `useDictionary` is empty until the dictionary loads, and `preloadDictionaries(...names)` can load it ahead of time.
 
@@ -1099,7 +1099,7 @@ export default defineNuxtConfig({
 });
 ```
 
-The module registers the Vite plugin, installs the Vue plugin with the selected locale persisted in a cookie (default name `locale`, read on the server too), and auto-imports `useI18n` and `useDictionary`. Config keys other than `cookieName` are the same as [Configuration](../guide/configuration.md).
+The module registers the Vite plugin, installs the Vue plugin with the selected locale persisted in a cookie (default name `locale`, read on the server too), and auto-imports `useDialex` and `useDictionary`. Config keys other than `cookieName` are the same as [Configuration](../guide/configuration.md).
 
 ::: warning
 The Nuxt module is covered by unit tests of its setup calls only. It has not been run inside a full Nuxt application yet.
@@ -1115,16 +1115,16 @@ The Nuxt module is covered by unit tests of its setup calls only. It has not bee
 `dialexjs/web` resolves the locale from a standard `Request`. Use it in any framework or runtime that hands you one: React Router and Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | Result                   | Description                                                                                                       |
@@ -1147,7 +1147,7 @@ Loaders receive the `Request`:
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -1156,15 +1156,15 @@ Return the data to your component and render it there. Wrap the response with `a
 
 ### TanStack Start and SolidStart
 
-Read the current request with your framework's server helper, then pass it to `resolveI18n`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code.
+Read the current request with your framework's server helper, then pass it to `resolveDialex`. For example, in SolidStart, `getRequestEvent()?.request` returns the active `Request`. Because the call needs a server context, use it in server functions or middleware, not in client code.
 
 ### Workers, Deno, Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```
@@ -1276,13 +1276,30 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
-### Added
-
-- `dialex init` adds `dialexjs` and `@dialexjs/cli` to `package.json` (at the CLI's own version; packages you already list are left alone) and tells you which install command to run.
+## [0.3.0] - 2026-10-09
 
 ### Changed
 
-- The config type is now `DialexConfig`. `I18nConfig` still works as a deprecated alias. `resolveI18nConfig` in `dialexjs/scanner` is now `resolveDialexConfig`.
+- **Breaking:** every public name that started with `I18n` or `i18n` now starts with `Dialex` or `dialex`. The old names are gone, with no aliases. Rename imports as follows:
+
+  | Before                                                                            | After                                                                                |
+  | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+  | `I18nConfig`, `resolveI18nConfig`                                                 | `DialexConfig`, `resolveDialexConfig`                                                |
+  | `i18n()` in `dialexjs/hono`, `express`, `koa`, `elysia`, `astro`, `h3`            | `dialex()`                                                                           |
+  | `i18nPlugin` (`dialexjs/vite`, `dialexjs/fastify`), `withI18n` (`dialexjs/next`)  | `dialexPlugin`, `withDialex`                                                         |
+  | `I18nProvider`, `useI18n`, `createI18n`, `I18nLink`, `I18nContext`                | `DialexProvider`, `useDialex`, `createDialex`, `DialexLink`, `DialexContext`         |
+  | `I18nModule`, `I18nService`, `I18nInterceptor`, `I18nMiddleware`, `injectI18n`    | `DialexModule`, `DialexService`, `DialexInterceptor`, `DialexMiddleware`, `injectDialex` |
+  | `i18nHandle` (`dialexjs/sveltekit`), `resolveI18n` (`dialexjs/web`)               | `dialexHandle`, `resolveDialex`                                                      |
+  | `createTestI18n`, `TestI18nProvider` (`dialexjs/testing`)                         | `createTestDialex`, `TestDialexProvider`                                             |
+  | Option types such as `HonoI18nOptions`, `NestI18nOptions`, `NuxtI18nOptions`      | `HonoDialexOptions`, `NestDialexOptions`, `NuxtDialexOptions`                        |
+
+  Anything else with `I18n` in its name follows the same rule. A project that still has `i18n.config.ts` keeps working.
+
+- `dialex export` writes to `dialex-export` by default instead of `i18n-export`.
+
+### Added
+
+- `dialex init` adds `dialexjs` and `@dialexjs/cli` to `package.json` (at the CLI's own version; packages you already list are left alone) and tells you which install command to run.
 
 ## [0.2.3] - 2026-10-09
 
@@ -1347,7 +1364,8 @@ First release.
 - A VS Code extension with diagnostics, hover, go to definition, completion and quick fixes.
 - Documentation in English, Turkish, Spanish, German and Simplified Chinese.
 
-[Unreleased]: https://github.com/awaiden/dialex/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/awaiden/dialex/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/awaiden/dialex/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/awaiden/dialex/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/awaiden/dialex/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/awaiden/dialex/compare/v0.2.0...v0.2.1
@@ -1374,18 +1392,18 @@ export default defineConfig({
 });
 ```
 
-| Option          | Type                          | Default             | Description                                                                                                   |
-| --------------- | ----------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `defaultLocale` | `string`                      | `"en"`              | Locale used when none can be resolved                                                                         |
-| `locales`       | `string[]`                    | —                   | Supported locales; enables locale type narrowing and parity checks                                            |
-| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) for dictionary files                                                                                  |
-| `configFile`    | `string`                      | —                   | Custom config path                                                                                            |
-| `fallbacks`     | `Record<string, string[]>`    | —                   | Explicit [fallback chains](./fallbacks.md) per locale                                                         |
-| `prefixDefault` | `boolean`                     | `true`              | Whether the default locale also gets a URL prefix. Read by `I18nLink` and the [routing helpers](./routing.md) |
-| `lazy`          | `boolean`                     | `false`             | Load dictionaries on demand (Vite only). See [Lazy Loading](./lazy-loading.md)                                |
-| `translate`     | `{ provider, sourceLocale? }` | —                   | Provider for [`dialex translate`](../cli/translate.md)                                                        |
+| Option          | Type                          | Default             | Description                                                                                                     |
+| --------------- | ----------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `defaultLocale` | `string`                      | `"en"`              | Locale used when none can be resolved                                                                           |
+| `locales`       | `string[]`                    | —                   | Supported locales; enables locale type narrowing and parity checks                                              |
+| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) for dictionary files                                                                                    |
+| `configFile`    | `string`                      | —                   | Custom config path                                                                                              |
+| `fallbacks`     | `Record<string, string[]>`    | —                   | Explicit [fallback chains](./fallbacks.md) per locale                                                           |
+| `prefixDefault` | `boolean`                     | `true`              | Whether the default locale also gets a URL prefix. Read by `DialexLink` and the [routing helpers](./routing.md) |
+| `lazy`          | `boolean`                     | `false`             | Load dictionaries on demand (Vite only). See [Lazy Loading](./lazy-loading.md)                                  |
+| `translate`     | `{ provider, sourceLocale? }` | —                   | Provider for [`dialex translate`](../cli/translate.md)                                                          |
 
-Inline options passed to `i18nPlugin()` or `withI18n()` override the file.
+Inline options passed to `dialexPlugin()` or `withDialex()` override the file.
 
 
 ---
@@ -1469,7 +1487,7 @@ A warning is logged whenever content comes from a different locale than the one 
 Server adapters also accept `fallbacks` directly, which is useful when you pass `dictionaries` instead of relying on the config file:
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 Fallbacks apply to dictionary lookups. [Locale detection](./locale-detection.md) still only returns locales listed in `locales`.
@@ -1879,7 +1897,7 @@ sitemapEntries(["/", "/about"], { ...seo, lastModified: "2024-01-01" });
 
 `alternateLanguages` matches the shape of Next.js `metadata.alternates.languages`; `sitemapEntries` returns one entry per path and locale, each with `alternates.languages`, matching `MetadataRoute.Sitemap`. Pass `xDefault: false` to leave out `x-default`.
 
-For Next.js there are also [`createI18nMiddleware` and `I18nLink`](../frameworks/nextjs.md).
+For Next.js there are also [`createDialexMiddleware` and `DialexLink`](../frameworks/nextjs.md).
 
 
 ---
@@ -1890,19 +1908,19 @@ For Next.js there are also [`createI18nMiddleware` and `I18nLink`](../frameworks
 
 `dialexjs/testing` helps you test code that uses Dialex without a running server, a config file, or the bundler plugin. It works with any test runner.
 
-## `createTestI18n`
+## `createTestDialex`
 
 A self-contained context with the same `getDictionary` and `t` your app uses:
 
 ```ts
-import { createTestI18n } from "dialexjs/testing";
+import { createTestDialex } from "dialexjs/testing";
 import home from "../src/home.content";
 
-const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
+const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
 
-i18n.getDictionary("home").title; // "Hoş Geldiniz"
-i18n.t("home.greeting", "Ada"); // "Merhaba, Ada!"
-i18n.withLocale("en").getDictionary("home").title; // "Welcome"
+dialex.getDictionary("home").title; // "Hoş Geldiniz"
+dialex.t("home.greeting", "Ada"); // "Merhaba, Ada!"
+dialex.withLocale("en").getDictionary("home").title; // "Welcome"
 ```
 
 | Option          | Default         | Description                                                          |
@@ -1936,31 +1954,31 @@ Relative URLs resolve against `http://localhost`. It returns a plain `Request`, 
 
 ## Component tests
 
-Components that call `useDictionary`, `useT` or `useI18n` read the plugin's virtual modules, so your test runner needs the Dialex Vite plugin. Vitest uses your `vite.config.ts`, so if the plugin is already there nothing else is needed.
+Components that call `useDictionary`, `useT` or `useDialex` read the plugin's virtual modules, so your test runner needs the Dialex Vite plugin. Vitest uses your `vite.config.ts`, so if the plugin is already there nothing else is needed.
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialexjs/testing/react";
+import { TestDialexProvider } from "dialexjs/testing/react";
 
 render(
-  <TestI18nProvider locale="tr">
+  <TestDialexProvider locale="tr">
     <Header />
-  </TestI18nProvider>,
+  </TestDialexProvider>,
 );
 expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```
 
-`TestI18nProvider` renders `locale` immediately and never reads or writes cookies or `localStorage`, so tests cannot leak state into each other.
+`TestDialexProvider` renders `locale` immediately and never reads or writes cookies or `localStorage`, so tests cannot leak state into each other.
 
 ### Vue
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialexjs/testing/vue";
+import { createTestDialex } from "dialexjs/testing/vue";
 
-const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
 ```
 
 ::: tip Without the Vite plugin
@@ -1974,7 +1992,7 @@ If you cannot add the plugin to your test config, mock the two virtual modules i
 
 # Type Safety
 
-`dialex generate` (and the Vite plugin, and `withI18n` for Next.js) writes `src/dialex-env.d.ts`. It augments three interfaces:
+`dialex generate` (and the Vite plugin, and `withDialex` for Next.js) writes `src/dialex-env.d.ts`. It augments three interfaces:
 
 ```ts
 declare module "dialexjs" {
@@ -2047,7 +2065,7 @@ Hover a key in `t("home.title")`, a dictionary name in `getDictionary("home")`, 
 
 ### Completion
 
-Inside the string of `t("…")`, `getDictionary("…")`, `useDictionary("…")` or `@I18nDictionary("…")`:
+Inside the string of `t("…")`, `getDictionary("…")`, `useDictionary("…")` or `@DialexDictionary("…")`:
 
 - dictionary names, with the number of keys and locales;
 - after `t("home.`, the keys at that level, with the default-locale text as a preview. Groups continue with a dot and reopen the list.

@@ -40,7 +40,7 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 ### 自动补全
 
-在 `t("…")`、`getDictionary("…")`、`useDictionary("…")` 或 `@I18nDictionary("…")` 的字符串内：
+在 `t("…")`、`getDictionary("…")`、`useDictionary("…")` 或 `@DialexDictionary("…")` 的字符串内：
 
 - 词典名称，附带键的数量和 locale；
 - 在 `t("home.` 之后，显示该层级的键，并以默认 locale 的文本作为预览。分组以点号继续，并会重新打开列表。

@@ -33,7 +33,7 @@ export default defineConfig({
 服务器适配器也直接接受 `fallbacks`，当你传入 `dictionaries` 而不依赖配置文件时很有用：
 
 ```ts
-app.use(i18n({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
+app.use(dialex({ dictionaries, locales: ["en", "es"], fallbacks: { pt: ["es"] } }));
 ```
 
 回退适用于词典查找。[Locale 检测](./locale-detection.md)仍然只会返回 `locales` 中列出的 locale。

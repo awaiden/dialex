@@ -3,7 +3,7 @@
 Sözlüklerinizdeki metinleri, TypeScript'e dokunmadan çevirmenlerin çalışabileceği dosyalara yazar.
 
 ```bash
-dialex export                      # JSON, into ./i18n-export
+dialex export                      # JSON, into ./dialex-export
 dialex export -f csv
 dialex export -f xliff -o translations
 dialex export -l tr de
@@ -12,7 +12,7 @@ dialex export -l tr de
 | Seçenek                     | Açıklama                                                              |
 | --------------------------- | --------------------------------------------------------------------- |
 | `-f, --format <format>`     | `json` (varsayılan), `csv` veya `xliff`                               |
-| `-o, --out <dir>`           | Çıktı dizini (varsayılan `i18n-export`)                               |
+| `-o, --out <dir>`           | Çıktı dizini (varsayılan `dialex-export`)                             |
 | `-l, --locale <locales...>` | Bu yerel ayarlarla sınırla (varsayılan yerel ayar her zaman dahildir) |
 | `-c, --config <path>`       | Özel yapılandırma yolu                                                |
 

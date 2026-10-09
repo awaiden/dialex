@@ -15,13 +15,13 @@ vi.mock("virtual:dialex-config", () => ({
 }));
 
 const react = await import("../src/react.js");
-const { TestI18nProvider } = await import("../src/testing/react.js");
+const { TestDialexProvider } = await import("../src/testing/react.js");
 const vue = await import("../src/vue.js");
-const { createTestI18n } = await import("../src/testing/vue.js");
+const { createTestDialex } = await import("../src/testing/vue.js");
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
-describe("TestI18nProvider (React)", () => {
+describe("TestDialexProvider (React)", () => {
   function Title() {
     const dict = react.useDictionary("home") as { title: string };
     return createElement("h1", null, dict.title);
@@ -33,7 +33,7 @@ describe("TestI18nProvider (React)", () => {
     const root = createRoot(container);
 
     await act(async () => {
-      root.render(createElement(TestI18nProvider, { locale: "tr" }, createElement(Title)));
+      root.render(createElement(TestDialexProvider, { locale: "tr" }, createElement(Title)));
     });
     expect(container.textContent).toBe("Hoş Geldiniz");
 
@@ -48,14 +48,14 @@ describe("TestI18nProvider (React)", () => {
     const container = document.createElement("div");
     const root = createRoot(container);
     await act(async () => {
-      root.render(createElement(TestI18nProvider, {}, createElement(Title)));
+      root.render(createElement(TestDialexProvider, {}, createElement(Title)));
     });
     expect(container.textContent).toBe("Welcome");
     await act(async () => root.unmount());
   });
 });
 
-describe("createTestI18n (Vue)", () => {
+describe("createTestDialex (Vue)", () => {
   const Comp = defineComponent({
     setup() {
       const dict = vue.useDictionary("home");
@@ -64,9 +64,9 @@ describe("createTestI18n (Vue)", () => {
   });
 
   it("starts in the given locale", async () => {
-    expect(await renderToString(createSSRApp(Comp).use(createTestI18n("tr")))).toBe(
+    expect(await renderToString(createSSRApp(Comp).use(createTestDialex("tr")))).toBe(
       "<p>Hoş Geldiniz</p>",
     );
-    expect(await renderToString(createSSRApp(Comp).use(createTestI18n()))).toBe("<p>Welcome</p>");
+    expect(await renderToString(createSSRApp(Comp).use(createTestDialex()))).toBe("<p>Welcome</p>");
   });
 });

@@ -2,19 +2,19 @@
 
 `dialexjs/testing`, Dialex kullanan kodu çalışan bir sunucu, yapılandırma dosyası ya da paketleyici eklentisi olmadan test etmenize yardımcı olur. Her test çalıştırıcısıyla çalışır.
 
-## `createTestI18n`
+## `createTestDialex`
 
 Uygulamanızın kullandığı `getDictionary` ve `t` ile aynı olan, kendi içinde bütünlüklü bir bağlam:
 
 ```ts
-import { createTestI18n } from "dialexjs/testing";
+import { createTestDialex } from "dialexjs/testing";
 import home from "../src/home.content";
 
-const i18n = createTestI18n({ dictionaries: [home], locale: "tr" });
+const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
 
-i18n.getDictionary("home").title; // "Hoş Geldiniz"
-i18n.t("home.greeting", "Ada"); // "Merhaba, Ada!"
-i18n.withLocale("en").getDictionary("home").title; // "Welcome"
+dialex.getDictionary("home").title; // "Hoş Geldiniz"
+dialex.t("home.greeting", "Ada"); // "Merhaba, Ada!"
+dialex.withLocale("en").getDictionary("home").title; // "Welcome"
 ```
 
 | Seçenek         | Varsayılan      | Açıklama                                                                        |
@@ -48,31 +48,31 @@ Göreli URL'ler `http://localhost` temel alınarak çözülür. Düz bir `Reques
 
 ## Bileşen testleri
 
-`useDictionary`, `useT` veya `useI18n` çağıran bileşenler eklentinin sanal modüllerini okur; bu yüzden test çalıştırıcınızın Dialex Vite eklentisine ihtiyacı vardır. Vitest `vite.config.ts` dosyanızı kullandığından, eklenti zaten orada ise başka bir şey gerekmez.
+`useDictionary`, `useT` veya `useDialex` çağıran bileşenler eklentinin sanal modüllerini okur; bu yüzden test çalıştırıcınızın Dialex Vite eklentisine ihtiyacı vardır. Vitest `vite.config.ts` dosyanızı kullandığından, eklenti zaten orada ise başka bir şey gerekmez.
 
 ### React
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { TestI18nProvider } from "dialexjs/testing/react";
+import { TestDialexProvider } from "dialexjs/testing/react";
 
 render(
-  <TestI18nProvider locale="tr">
+  <TestDialexProvider locale="tr">
     <Header />
-  </TestI18nProvider>,
+  </TestDialexProvider>,
 );
 expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```
 
-`TestI18nProvider`, `locale` değerini hemen render eder ve çerezleri ya da `localStorage`'ı asla okumaz veya yazmaz; böylece testler birbirine durum sızdıramaz.
+`TestDialexProvider`, `locale` değerini hemen render eder ve çerezleri ya da `localStorage`'ı asla okumaz veya yazmaz; böylece testler birbirine durum sızdıramaz.
 
 ### Vue
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { createTestI18n } from "dialexjs/testing/vue";
+import { createTestDialex } from "dialexjs/testing/vue";
 
-const wrapper = mount(Header, { global: { plugins: [createTestI18n("tr")] } });
+const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr")] } });
 ```
 
 ::: tip Vite eklentisi olmadan

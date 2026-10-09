@@ -21,7 +21,7 @@ Modern web development demands internationalization that doesn't compromise on r
 - 🛠️ **Universal Architecture**: One unified API across **Next.js**, **React 19**, **Hono**, **Fastify**, **Express**, **Koa**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, **Angular**, **h3 / Nitro**, and any **Fetch API** runtime.
 - 🔢 **Plurals & Formatting**: Typed `plural`, `number`, `date`, `relativeTime`, and `list` helpers built on `Intl`.
 - 🪜 **Locale Fallbacks**: `tr-TR` → `tr` automatically, plus explicit chains via `fallbacks` in the config.
-- 🧭 **Routing**: Locale-prefixed URL helpers, hreflang and sitemap generation, a Next.js middleware and `I18nLink`.
+- 🧭 **Routing**: Locale-prefixed URL helpers, hreflang and sitemap generation, a Next.js middleware and `DialexLink`.
 - 🚚 **Lazy Loading**: Per-dictionary code splitting for Vite apps with `lazy: true`.
 - 📝 **ICU Messages**: `{count, plural, one {# item} other {# items}}` strings, formatted by `t()` with CLDR plural rules for every language.
 - 🔑 **Key Paths**: A typed `t("home.nav.about")` alongside `getDictionary`.
@@ -119,9 +119,9 @@ const dict = req.getDictionary("home");
 Wrap your `next.config.mjs`:
 
 ```typescript
-import { withI18n } from "dialexjs/next";
+import { withDialex } from "dialexjs/next";
 
-export default withI18n({
+export default withDialex({
   // Your Next.js config
 });
 ```
@@ -130,16 +130,16 @@ Add the middleware that keeps every page under a locale prefix:
 
 ```typescript
 // middleware.ts
-import { createI18nMiddleware } from "dialexjs/next/middleware";
+import { createDialexMiddleware } from "dialexjs/next/middleware";
 
-export default createI18nMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
+export default createDialexMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });
 
 export const config = {
   matcher: ["/((?!_next|api|.*\\..*).*)"],
 };
 ```
 
-Use `I18nLink` from `dialexjs/next/link` for links that keep the current locale.
+Use `DialexLink` from `dialexjs/next/link` for links that keep the current locale.
 
 Server Components:
 
@@ -166,12 +166,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
 ```typescript
 import Fastify from "fastify";
-import { i18nPlugin } from "dialexjs/fastify";
+import { dialexPlugin } from "dialexjs/fastify";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(i18nPlugin, {
+await app.register(dialexPlugin, {
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
@@ -192,13 +192,13 @@ await app.listen({ port: 3000 });
 ```typescript
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialexjs/koa";
+import { dialex } from "dialexjs/koa";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -215,11 +215,11 @@ app.listen(3000);
 
 ```typescript
 import { Hono } from "hono";
-import { i18n } from "dialexjs/hono";
+import { dialex } from "dialexjs/hono";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use("*", dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 app.get("/:locale", (c) => {
   const dict = c.var.getDictionary("home");
@@ -235,11 +235,11 @@ export default app;
 
 ```typescript
 import express from "express";
-import { i18n } from "dialexjs/express";
+import { dialex } from "dialexjs/express";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
-app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 app.get("/:locale", (req, res) => {
   const dict = req.getDictionary("home");
@@ -255,19 +255,19 @@ app.listen(3000);
 
 ```typescript
 import { Module, Controller, Get } from "@nestjs/common";
-import { I18nModule, I18nLocale, I18nDictionary } from "dialexjs/nestjs";
+import { DialexModule, DialexLocale, DialexDictionary } from "dialexjs/nestjs";
 import dictionaries from "./src/dialex.generated.js";
 
 @Controller()
 export class AppController {
   @Get(":locale")
-  getHome(@I18nLocale() locale: string, @I18nDictionary("home") dict: any) {
+  getHome(@DialexLocale() locale: string, @DialexDictionary("home") dict: any) {
     return { title: dict.title, locale };
   }
 }
 
 @Module({
-  imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -287,19 +287,19 @@ Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/as
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
 ```tsx
 // src/App.tsx
-import { useI18n, useDictionary } from "dialexjs/react";
+import { useDialex, useDictionary } from "dialexjs/react";
 
 export function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -391,7 +391,7 @@ Check out runnable projects in [`examples/`](./examples):
 
 ## 🧪 Testing & Validation
 
-Test your own code with `dialexjs/testing` (`createTestI18n`, `mockRequest`, `TestI18nProvider`); see the docs.
+Test your own code with `dialexjs/testing` (`createTestDialex`, `mockRequest`, `TestDialexProvider`); see the docs.
 
 For this repository:
 

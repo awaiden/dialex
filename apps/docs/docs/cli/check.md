@@ -17,7 +17,7 @@ dialex lint -c ./dialex.config.ts
 - A configured locale is missing from a dictionary.
 - A locale is missing a key that another locale has. Nested keys are compared by dotted path, for example `nav.about`.
 - A string that clearly uses [ICU](../guide/icu.md) (`plural`, `select`, `number`, ...) is not valid ICU, or a locale uses different arguments than the default locale for the same key.
-- Source code calls `getDictionary("x")`, `useDictionary("x")` or `@I18nDictionary("x")` with a dictionary that does not exist.
+- Source code calls `getDictionary("x")`, `useDictionary("x")` or `@DialexDictionary("x")` with a dictionary that does not exist.
 - Source code calls `t("home.nav.missing")` with a path that does not exist. Only `t()` calls whose first segment is a known dictionary name are checked, so unrelated `t()` functions are ignored.
 
 **Warnings**

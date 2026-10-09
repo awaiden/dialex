@@ -37,30 +37,30 @@ Vuelve a ejecutar `dialex generate` (o `dialex generate --watch`) cada vez que c
 
 ```ts
 import { Component } from "@angular/core";
-import { injectDictionary, injectI18n, injectT } from "dialexjs/angular";
+import { injectDictionary, injectDialex, injectT } from "dialexjs/angular";
 
 @Component({
   selector: "app-header",
   template: `
     <h1>{{ dict().title }}</h1>
     <p>{{ t("home.items", { count: 3 }) }}</p>
-    <button (click)="toggle()">{{ i18n.locale() }}</button>
+    <button (click)="toggle()">{{ dialex.locale() }}</button>
   `,
 })
 export class HeaderComponent {
-  protected readonly i18n = injectI18n();
+  protected readonly dialex = injectDialex();
   protected readonly dict = injectDictionary("home"); // Signal of the dictionary
   protected readonly t = injectT();
 
   toggle() {
-    this.i18n.setLocale(this.i18n.locale() === "en" ? "tr" : "en");
+    this.dialex.setLocale(this.dialex.locale() === "en" ? "tr" : "en");
   }
 }
 ```
 
 | Función                  | Devuelve                                                                                                      |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `injectI18n()`           | El store: `locale` (un `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`                        |
+| `injectDialex()`         | El store: `locale` (un `Signal<string>`), `setLocale(locale)`, `dictionary(name)`, `t`                        |
 | `injectDictionary(name)` | Un `Signal` con el diccionario del locale activo, siguiendo los [fallbacks](../guide/fallbacks.md)            |
 | `injectT()`              | Una [función `t`](../guide/key-paths.md) para el locale activo, con compatibilidad con [ICU](../guide/icu.md) |
 
@@ -120,4 +120,4 @@ TestBed.configureTestingModule({
 });
 ```
 
-Para el código que no necesita Angular, usa [`createTestI18n`](../guide/testing.md).
+Para el código que no necesita Angular, usa [`createTestDialex`](../guide/testing.md).

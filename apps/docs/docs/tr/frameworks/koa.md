@@ -3,13 +3,13 @@
 ```ts
 import Koa from "koa";
 import Router from "@koa/router";
-import { i18n } from "dialexjs/koa";
+import { dialex } from "dialexjs/koa";
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -20,4 +20,4 @@ app.use(router.routes());
 app.listen(3000);
 ```
 
-`i18n()` işlevini rotalarınızdan önce kaydedin. `ctx.locale` ve `ctx.getDictionary(name)` ekler. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.
+`dialex()` işlevini rotalarınızdan önce kaydedin. `ctx.locale` ve `ctx.getDictionary(name)` ekler. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.

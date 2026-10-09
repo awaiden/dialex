@@ -1,8 +1,8 @@
 import { addImports, addPluginTemplate, addVitePlugin, defineNuxtModule } from "@nuxt/kit";
-import { i18nPlugin } from "./vite.js";
+import { dialexPlugin } from "./vite.js";
 import type { DialexConfig } from "./index.js";
 
-export interface NuxtI18nOptions extends DialexConfig {
+export interface NuxtDialexOptions extends DialexConfig {
   /**
    * Cookie used to persist the selected locale.
    * @default "locale"
@@ -12,7 +12,7 @@ export interface NuxtI18nOptions extends DialexConfig {
 
 /**
  * Nuxt module: registers the dialex Vite plugin, installs the Vue plugin with a
- * cookie-backed locale, and auto-imports `useI18n` / `useDictionary`.
+ * cookie-backed locale, and auto-imports `useDialex` / `useDictionary`.
  *
  * ```ts
  * // nuxt.config.ts
@@ -22,33 +22,33 @@ export interface NuxtI18nOptions extends DialexConfig {
  * });
  * ```
  */
-export default defineNuxtModule<NuxtI18nOptions>({
+export default defineNuxtModule<NuxtDialexOptions>({
   meta: { name: "dialex", configKey: "dialex" },
   defaults: { defaultLocale: "en", cookieName: "locale" },
-  setup(options: NuxtI18nOptions) {
+  setup(options: NuxtDialexOptions) {
     const { cookieName, ...config } = options;
 
-    addVitePlugin(i18nPlugin(config));
+    addVitePlugin(dialexPlugin(config));
 
     addPluginTemplate({
       filename: "dialex.plugin.mjs",
       getContents: () => `
 import { defineNuxtPlugin, useCookie } from "#imports";
-import { createI18n } from "dialexjs/vue";
+import { createDialex } from "dialexjs/vue";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const cookie = useCookie(${JSON.stringify(cookieName)}, { sameSite: "lax", path: "/" });
-  const i18n = createI18n({
+  const dialex = createDialex({
     defaultLocale: cookie.value || ${JSON.stringify(config.defaultLocale ?? "en")},
     onLocaleChange: (locale) => { cookie.value = locale; },
   });
-  nuxtApp.vueApp.use(i18n);
+  nuxtApp.vueApp.use(dialex);
 });
 `,
     });
 
     addImports([
-      { name: "useI18n", from: "dialexjs/vue" },
+      { name: "useDialex", from: "dialexjs/vue" },
       { name: "useDictionary", from: "dialexjs/vue" },
     ]);
   },

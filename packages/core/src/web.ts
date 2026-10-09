@@ -14,9 +14,9 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export type WebI18nOptions = BaseAdapterOptions;
+export type WebDialexOptions = BaseAdapterOptions;
 
-export interface WebI18n {
+export interface WebDialex {
   locale: Locales;
   getDictionary: <K extends DictionaryKey>(name: K) => ResolveDictionaryType<K>;
   t: Translate;
@@ -31,17 +31,17 @@ export interface WebI18n {
  * (React Router / Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun...).
  *
  * ```ts
- * const resolveI18n = createI18nHandler({ locales: ["en", "tr"], dictionaries });
+ * const resolveDialex = createDialexHandler({ locales: ["en", "tr"], dictionaries });
  *
  * export async function loader({ request }: { request: Request }) {
- *   const { locale, getDictionary } = await resolveI18n(request);
+ *   const { locale, getDictionary } = await resolveDialex(request);
  *   return { locale, title: getDictionary("home").title };
  * }
  * ```
  */
-export function createI18nHandler(
-  options: WebI18nOptions = {},
-): (request: Request) => Promise<WebI18n> {
+export function createDialexHandler(
+  options: WebDialexOptions = {},
+): (request: Request) => Promise<WebDialex> {
   const {
     defaultLocale = "en",
     locales,
@@ -75,7 +75,7 @@ export function createI18nHandler(
       defaultLocale,
       fallbacks: options.fallbacks,
       tag: "web",
-    }) as WebI18n["getDictionary"];
+    }) as WebDialex["getDictionary"];
 
     const headers: Record<string, string> = setHeader ? { "Content-Language": locale } : {};
 
@@ -99,4 +99,4 @@ export function createI18nHandler(
   };
 }
 
-export default createI18nHandler;
+export default createDialexHandler;

@@ -7,19 +7,19 @@
 ```ts
 // src/main.ts
 import { createApp } from "vue";
-import { createI18n } from "dialexjs/vue";
+import { createDialex } from "dialexjs/vue";
 import App from "./App.vue";
 
 createApp(App)
-  .use(createI18n({ defaultLocale: "en" }))
+  .use(createDialex({ defaultLocale: "en" }))
   .mount("#app");
 ```
 
 ```vue
 <script setup lang="ts">
-import { useI18n, useDictionary } from "dialexjs/vue";
+import { useDialex, useDictionary } from "dialexjs/vue";
 
-const { locale, setLocale } = useI18n();
+const { locale, setLocale } = useDialex();
 const dict = useDictionary("home");
 </script>
 
@@ -29,11 +29,11 @@ const dict = useDictionary("home");
 </template>
 ```
 
-| 导出                  | 说明                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------ |
-| `createI18n(options)` | Vue 插件。选项：`defaultLocale`（回退到配置，然后是 `"en"`）、`onLocaleChange(locale)`     |
-| `useI18n()`           | 返回 `{ locale, setLocale }`，其中 `locale` 是 `Ref<string>`。如果未安装该插件则会抛出错误 |
-| `useDictionary(name)` | 返回当前 locale 词典的 `ComputedRef`，并回退到默认 locale。在脚本代码中使用 `dict.value`   |
+| 导出                    | 说明                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `createDialex(options)` | Vue 插件。选项：`defaultLocale`（回退到配置，然后是 `"en"`）、`onLocaleChange(locale)`     |
+| `useDialex()`           | 返回 `{ locale, setLocale }`，其中 `locale` 是 `Ref<string>`。如果未安装该插件则会抛出错误 |
+| `useDictionary(name)`   | 返回当前 locale 词典的 `ComputedRef`，并回退到默认 locale。在脚本代码中使用 `dict.value`   |
 
 启用[懒加载](../guide/lazy-loading.md)后，`useDictionary` 在词典加载完成前为空，并且可以用 `preloadDictionaries(...names)` 提前加载。
 
@@ -51,7 +51,7 @@ export default defineNuxtConfig({
 });
 ```
 
-该模块会注册 Vite 插件，安装 Vue 插件并把所选的 locale 保存在 Cookie 中（默认名称 `locale`，服务端也会读取），并自动导入 `useI18n` 和 `useDictionary`。除 `cookieName` 之外的配置键与[配置](../guide/configuration.md)中的相同。
+该模块会注册 Vite 插件，安装 Vue 插件并把所选的 locale 保存在 Cookie 中（默认名称 `locale`，服务端也会读取），并自动导入 `useDialex` 和 `useDictionary`。除 `cookieName` 之外的配置键与[配置](../guide/configuration.md)中的相同。
 
 ::: warning
 Nuxt 模块目前只有针对其 setup 调用的单元测试。它尚未在完整的 Nuxt 应用中运行过。

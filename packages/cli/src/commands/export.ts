@@ -39,7 +39,7 @@ export async function runExport(options: ExportOptions = {}): Promise<ExportResu
   if (!["json", "csv", "xliff"].includes(format)) {
     throw new Error(`Unsupported format "${format}". Use json, csv, or xliff.`);
   }
-  const outDir = path.resolve(root, options.out || "i18n-export");
+  const outDir = path.resolve(root, options.out || "dialex-export");
 
   const project = await loadProject(root, options.config);
   const defaultLocale = project.config.defaultLocale || "en";

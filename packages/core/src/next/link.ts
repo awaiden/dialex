@@ -13,7 +13,7 @@ import { localizePath } from "../routing.js";
 const Link: ComponentType<any> =
   (LinkModule as any).default?.default ?? (LinkModule as any).default ?? LinkModule;
 
-export interface I18nLinkProps
+export interface DialexLinkProps
   extends
     Omit<LinkProps<any>, "locale" | "href">,
     Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> {
@@ -26,13 +26,13 @@ export interface I18nLinkProps
  * `next/link` that keeps the current locale in the URL.
  *
  * ```tsx
- * <I18nLink href="/about">About</I18nLink>            // -> /tr/about when viewing /tr/...
- * <I18nLink href="/about" locale="en">English</I18nLink>
+ * <DialexLink href="/about">About</DialexLink>            // -> /tr/about when viewing /tr/...
+ * <DialexLink href="/about" locale="en">English</DialexLink>
  * ```
  *
  * Uses `locales`, `defaultLocale`, and `prefixDefault` from `dialex.config.ts`.
  */
-export function I18nLink({ href, locale, ...rest }: I18nLinkProps) {
+export function DialexLink({ href, locale, ...rest }: DialexLinkProps) {
   const params = useParams<{ locale?: string }>();
   const target =
     locale ??
@@ -57,4 +57,4 @@ export function I18nLink({ href, locale, ...rest }: I18nLinkProps) {
   return createElement(Link, { ...rest, href: localized });
 }
 
-export default I18nLink;
+export default DialexLink;

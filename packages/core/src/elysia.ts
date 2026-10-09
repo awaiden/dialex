@@ -15,13 +15,13 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export type ElysiaI18nOptions = BaseAdapterOptions;
+export type ElysiaDialexOptions = BaseAdapterOptions;
 
 /**
  * Elysia plugin for i18n detection and dictionary resolution.
  * Adds `locale` and `getDictionary(name)` to the request context.
  */
-export function i18n(options: ElysiaI18nOptions = {}) {
+export function dialex(options: ElysiaDialexOptions = {}) {
   const {
     defaultLocale = "en",
     locales,
@@ -71,4 +71,4 @@ export function i18n(options: ElysiaI18nOptions = {}) {
     });
 }
 
-export default i18n;
+export default dialex;

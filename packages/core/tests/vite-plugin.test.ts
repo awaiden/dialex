@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterEach, describe, expect, it } from "vite-plus/test";
-import { i18nPlugin, readDictionaryName } from "../src/vite.js";
+import { dialexPlugin, readDictionaryName } from "../src/vite.js";
 
 const DICTIONARIES = "\0virtual:dialex-dictionaries";
 const dirs: string[] = [];
@@ -22,7 +22,7 @@ const project = (files: Record<string, string>) => {
 };
 
 const resolve = async (dir: string, config: Record<string, unknown>) => {
-  const plugin = i18nPlugin(config) as any;
+  const plugin = dialexPlugin(config) as any;
   await plugin.configResolved({ root: dir });
   return plugin;
 };

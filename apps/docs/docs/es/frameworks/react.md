@@ -8,22 +8,22 @@
 // vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { i18nPlugin } from "dialexjs/vite";
+import { dialexPlugin } from "dialexjs/vite";
 
 export default defineConfig({
-  plugins: [react(), i18nPlugin()],
+  plugins: [react(), dialexPlugin()],
 });
 ```
 
-`i18nPlugin(inlineConfig?)` carga tu configuración, regenera `src/dialex-env.d.ts` y sirve dos módulos virtuales, `virtual:dialex-dictionaries` y `virtual:dialex-config`, con HMR cuando cambia un archivo `.content.ts`. Si `locales` está definido, un diccionario al que le falte alguno hace fallar la compilación.
+`dialexPlugin(inlineConfig?)` carga tu configuración, regenera `src/dialex-env.d.ts` y sirve dos módulos virtuales, `virtual:dialex-dictionaries` y `virtual:dialex-config`, con HMR cuando cambia un archivo `.content.ts`. Si `locales` está definido, un diccionario al que le falte alguno hace fallar la compilación.
 
 ## Provider y hooks
 
 ```tsx
-import { I18nProvider, useI18n, useDictionary } from "dialexjs/react";
+import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
 
 function App() {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale } = useDialex();
   const dict = useDictionary("home");
 
   return (
@@ -37,16 +37,16 @@ function App() {
 }
 
 export default () => (
-  <I18nProvider defaultLocale="en">
+  <DialexProvider defaultLocale="en">
     <App />
-  </I18nProvider>
+  </DialexProvider>
 );
 ```
 
 | Exportación           | Descripción                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- |
-| `I18nProvider`        | Mantiene el locale activo. Consulta las props más abajo                      |
-| `useI18n()`           | Devuelve `{ locale, setLocale }`. Lanza un error fuera del provider          |
+| `DialexProvider`      | Mantiene el locale activo. Consulta las props más abajo                      |
+| `useDialex()`         | Devuelve `{ locale, setLocale }`. Lanza un error fuera del provider          |
 | `useDictionary(name)` | Devuelve el diccionario del locale actual, recurriendo al locale por defecto |
 
 ## Props del provider

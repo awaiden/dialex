@@ -3,16 +3,16 @@
 `dialexjs/web` ermittelt das Locale aus einem Standard-`Request`. Verwende es in jedem Framework oder jeder Laufzeitumgebung, die dir einen liefert: Loader von React Router und Remix, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun.
 
 ```ts
-import { createI18nHandler } from "dialexjs/web";
+import { createDialexHandler } from "dialexjs/web";
 import dictionaries from "./dialex.generated.js";
 
-export const resolveI18n = createI18nHandler({
+export const resolveDialex = createDialexHandler({
   defaultLocale: "en",
   locales: ["en", "tr"],
   dictionaries,
 });
 
-const { locale, getDictionary, t, headers, applyHeaders } = await resolveI18n(request);
+const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
 
 | Ergebnis                 | Beschreibung                                                                                                                 |
@@ -35,7 +35,7 @@ Loader erhalten den `Request`:
 
 ```ts
 export async function loader({ request }: { request: Request }) {
-  const { locale, getDictionary } = await resolveI18n(request);
+  const { locale, getDictionary } = await resolveDialex(request);
   return { locale, title: getDictionary("home").title };
 }
 ```
@@ -44,15 +44,15 @@ Gib die Daten an deine Komponente zurück und rendere sie dort. Umhülle die Ant
 
 ### TanStack Start und SolidStart
 
-Lies den aktuellen Request mit dem Server-Helfer deines Frameworks und übergib ihn an `resolveI18n`. In SolidStart liefert zum Beispiel `getRequestEvent()?.request` den aktiven `Request`. Da der Aufruf einen Server-Kontext braucht, verwende ihn in Serverfunktionen oder Middleware, nicht in Client-Code.
+Lies den aktuellen Request mit dem Server-Helfer deines Frameworks und übergib ihn an `resolveDialex`. In SolidStart liefert zum Beispiel `getRequestEvent()?.request` den aktiven `Request`. Da der Aufruf einen Server-Kontext braucht, verwende ihn in Serverfunktionen oder Middleware, nicht in Client-Code.
 
 ### Workers, Deno, Bun
 
 ```ts
 export default {
   async fetch(request: Request) {
-    const i18n = await resolveI18n(request);
-    return i18n.applyHeaders(new Response(i18n.getDictionary("home").title));
+    const dialex = await resolveDialex(request);
+    return dialex.applyHeaders(new Response(dialex.getDictionary("home").title));
   },
 };
 ```

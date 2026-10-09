@@ -1,4 +1,4 @@
-import { createI18n } from "../vue.js";
+import { createDialex } from "../vue.js";
 
 /**
  * Vue plugin for component tests: starts in `locale`, with no persistence.
@@ -7,9 +7,9 @@ import { createI18n } from "../vue.js";
  * virtual modules.
  *
  * ```ts
- * mount(Header, { global: { plugins: [createTestI18n("tr")] } });
+ * mount(Header, { global: { plugins: [createTestDialex("tr")] } });
  * ```
  */
-export function createTestI18n(locale?: string) {
-  return createI18n({ defaultLocale: locale });
+export function createTestDialex(locale?: string) {
+  return createDialex({ defaultLocale: locale });
 }

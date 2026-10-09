@@ -40,7 +40,7 @@ Pasa el cursor sobre una clave en `t("home.title")`, un nombre de diccionario en
 
 ### Autocompletado
 
-Dentro de la cadena de `t("…")`, `getDictionary("…")`, `useDictionary("…")` o `@I18nDictionary("…")`:
+Dentro de la cadena de `t("…")`, `getDictionary("…")`, `useDictionary("…")` o `@DialexDictionary("…")`:
 
 - nombres de diccionario, con el número de claves y de locales;
 - después de `t("home.`, las claves de ese nivel, con el texto del locale por defecto como vista previa. Los grupos continúan con un punto y vuelven a abrir la lista.

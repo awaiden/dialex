@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { i18n } from "../src/astro.js";
+import { dialex } from "../src/astro.js";
 
 describe("Astro integration", () => {
   const homeDict = {
@@ -11,7 +11,7 @@ describe("Astro integration", () => {
   };
 
   const run = async (url: string, headers: Record<string, string> = {}, options = {}) => {
-    const middleware = i18n({
+    const middleware = dialex({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],

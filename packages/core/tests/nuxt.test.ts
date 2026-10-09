@@ -25,7 +25,7 @@ describe("Nuxt module", () => {
     expect(contents).toContain('"tr"');
     expect(contents).toContain('from "dialexjs/vue"');
 
-    expect(calls.addImports[0][0].map((i: any) => i.name)).toEqual(["useI18n", "useDictionary"]);
+    expect(calls.addImports[0][0].map((i: any) => i.name)).toEqual(["useDialex", "useDictionary"]);
   });
 
   it("declares the module meta and defaults", () => {

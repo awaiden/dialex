@@ -17,7 +17,7 @@ dialex lint -c ./dialex.config.ts
 - A un diccionario le falta un locale configurado.
 - A un locale le falta una clave que otro locale tiene. Las claves anidadas se comparan por su ruta con puntos, por ejemplo `nav.about`.
 - Una cadena que claramente usa [ICU](../guide/icu.md) (`plural`, `select`, `number`, ...) no es ICU válido, o un locale usa argumentos distintos a los del locale por defecto para la misma clave.
-- El código fuente llama a `getDictionary("x")`, `useDictionary("x")` o `@I18nDictionary("x")` con un diccionario que no existe.
+- El código fuente llama a `getDictionary("x")`, `useDictionary("x")` o `@DialexDictionary("x")` con un diccionario que no existe.
 - El código fuente llama a `t("home.nav.missing")` con una ruta que no existe. Solo se comprueban las llamadas a `t()` cuyo primer segmento es el nombre de un diccionario conocido, de modo que se ignoran las funciones `t()` ajenas.
 
 **Advertencias**

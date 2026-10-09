@@ -64,7 +64,7 @@ export interface DialexConfig {
   fallbacks?: Record<string, string[]>;
   /**
    * Whether the default locale also gets a URL prefix (`/en/about`). When `false` it is served
-   * from the unprefixed path. Read by `I18nLink`; pass the same value to the Next.js middleware.
+   * from the unprefixed path. Read by `DialexLink`; pass the same value to the Next.js middleware.
    * @default true
    */
   prefixDefault?: boolean;
@@ -79,9 +79,6 @@ export interface DialexConfig {
    */
   translate?: TranslateConfig;
 }
-
-/** @deprecated Renamed to {@link DialexConfig}. */
-export type I18nConfig = DialexConfig;
 
 export function defineConfig(config: DialexConfig): DialexConfig {
   return config;

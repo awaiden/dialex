@@ -38,7 +38,7 @@ function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): Dia
   };
 }
 
-export function syncI18nFiles(root: string, config: DialexConfig) {
+export function syncDialexFiles(root: string, config: DialexConfig) {
   const include = config.include || "**/*.content.ts";
   const files = fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
 
@@ -127,11 +127,11 @@ export default dictionaries;
  * Next.js plugin wrapper for dialex.
  * Compatible with Next.js App Router & Pages Router (Webpack & Turbopack).
  */
-export function withI18n(nextConfig: any = {}, inlineConfig: DialexConfig = {}) {
+export function withDialex(nextConfig: any = {}, inlineConfig: DialexConfig = {}) {
   const applyConfig = (baseConfig: any) => {
     const root = process.cwd();
     const config = resolveDialexConfig(root, inlineConfig);
-    const { dictFilePath, configFilePath } = syncI18nFiles(root, config);
+    const { dictFilePath, configFilePath } = syncDialexFiles(root, config);
 
     return {
       ...baseConfig,
@@ -147,7 +147,7 @@ export function withI18n(nextConfig: any = {}, inlineConfig: DialexConfig = {}) 
         webpackConfig.plugins.push({
           apply(compiler: any) {
             compiler.hooks.beforeCompile.tapPromise("DialexNextPlugin", async () => {
-              syncI18nFiles(root, config);
+              syncDialexFiles(root, config);
             });
 
             compiler.hooks.compilation.tap(

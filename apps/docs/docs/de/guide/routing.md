@@ -50,4 +50,4 @@ sitemapEntries(["/", "/about"], { ...seo, lastModified: "2024-01-01" });
 
 `alternateLanguages` entspricht der Form von `metadata.alternates.languages` in Next.js; `sitemapEntries` liefert einen Eintrag pro Pfad und Locale, jeweils mit `alternates.languages`, passend zu `MetadataRoute.Sitemap`. Übergib `xDefault: false`, um `x-default` wegzulassen.
 
-Für Next.js gibt es außerdem [`createI18nMiddleware` und `I18nLink`](../frameworks/nextjs.md).
+Für Next.js gibt es außerdem [`createDialexMiddleware` und `DialexLink`](../frameworks/nextjs.md).

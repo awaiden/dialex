@@ -17,7 +17,7 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
-export interface KoaI18nOptions extends LocaleResolverOptions {
+export interface KoaDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
    * If omitted, falls back to the auto-scanned dictionary registry.
@@ -42,7 +42,7 @@ declare module "koa" {
 /**
  * Koa middleware for i18n detection and dictionary resolution.
  */
-export function i18n(options: KoaI18nOptions = {}): Middleware {
+export function dialex(options: KoaDialexOptions = {}): Middleware {
   const {
     defaultLocale = "en",
     locales,
@@ -142,4 +142,4 @@ export function i18n(options: KoaI18nOptions = {}): Middleware {
   };
 }
 
-export default i18n;
+export default dialex;

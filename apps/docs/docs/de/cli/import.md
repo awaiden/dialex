@@ -3,8 +3,8 @@
 Schreibt übersetzte Strings aus einer Datei zurück in die Quelldateien deiner Wörterbücher.
 
 ```bash
-dialex import i18n-export/tr.json
-dialex import i18n-export/translations.csv
+dialex import dialex-export/tr.json
+dialex import dialex-export/translations.csv
 dialex import translations/tr.xlf
 dialex import --locale tr strings.json
 ```

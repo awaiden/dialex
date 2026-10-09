@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
-import { withI18n } from "../src/next.js";
+import { withDialex } from "../src/next.js";
 
-describe("withI18n Next.js plugin", () => {
+describe("withDialex Next.js plugin", () => {
   it("wraps an object nextConfig and sets up aliases", () => {
     const nextConfig = {
       reactStrictMode: true,
     };
 
-    const enhanced = withI18n(nextConfig, {
+    const enhanced = withDialex(nextConfig, {
       defaultLocale: "en",
       locales: ["en", "tr"],
     });
@@ -33,7 +33,7 @@ describe("withI18n Next.js plugin", () => {
   });
 
   it("generates a dictionaries module with the lazy-loading exports and a client-safe config", () => {
-    const enhanced = withI18n(
+    const enhanced = withDialex(
       {},
       {
         defaultLocale: "en",
@@ -62,7 +62,7 @@ describe("withI18n Next.js plugin", () => {
       },
     };
 
-    const enhanced = withI18n(nextConfig);
+    const enhanced = withDialex(nextConfig);
     const webpackConfig: any = { resolve: { alias: {} }, plugins: [] };
     const res = enhanced.webpack(webpackConfig, {});
 
@@ -76,7 +76,7 @@ describe("withI18n Next.js plugin", () => {
       env: { PHASE: phase },
     });
 
-    const enhancedFn = withI18n(nextConfigFn);
+    const enhancedFn = withDialex(nextConfigFn);
     expect(typeof enhancedFn).toBe("function");
 
     const resolved = enhancedFn("phase-development-server", {});
@@ -89,7 +89,7 @@ describe("withI18n Next.js plugin", () => {
       env: { PHASE: phase },
     });
 
-    const enhancedFn = withI18n(asyncNextConfigFn);
+    const enhancedFn = withDialex(asyncNextConfigFn);
     expect(typeof enhancedFn).toBe("function");
 
     const resolved = await enhancedFn("phase-production-build", {});

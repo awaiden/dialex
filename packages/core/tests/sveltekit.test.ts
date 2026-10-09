@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { i18nHandle } from "../src/sveltekit.js";
+import { dialexHandle } from "../src/sveltekit.js";
 
 describe("SvelteKit integration", () => {
   const homeDict = {
@@ -11,7 +11,7 @@ describe("SvelteKit integration", () => {
   };
 
   const run = async (url: string, headers: Record<string, string> = {}, options = {}) => {
-    const handle = i18nHandle({
+    const handle = dialexHandle({
       defaultLocale: "en",
       locales: ["en", "tr"],
       dictionaries: [homeDict],
