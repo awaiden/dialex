@@ -13,7 +13,7 @@ dialex init --ai
 This will automatically:
 
 1. Install and register the Dialex MCP server in `.mcp.json`.
-2. Add the Dialex skill definition to `.claude/skills/dialex/SKILL.md`.
+2. Add the Dialex skill definition to `.agents/skills/dialex/SKILL.md`.
 3. Add key internationalization guidelines to `AGENTS.md`.
 
 ## MCP Server (`@dialexjs/mcp`)

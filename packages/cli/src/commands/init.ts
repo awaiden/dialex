@@ -289,14 +289,14 @@ ${dictRecords}
     }
   }
 
-  // 6. AI Agent Integration (.claude/skills, .mcp.json, AGENTS.md)
+  // 6. AI Agent Integration (.agents/skills, .mcp.json, AGENTS.md)
   const shouldSetupAi =
     options.ai === true || (options.yes && options.ai !== false && options.noAi !== true);
   if (shouldSetupAi) {
     try {
-      // 6a. Copy or create skill in .claude/skills/dialex/SKILL.md
-      const claudeSkillDir = path.join(root, ".claude/skills/dialex");
-      fs.mkdirSync(claudeSkillDir, { recursive: true });
+      // 6a. Copy or create skill in .agents/skills/dialex/SKILL.md
+      const skillDir = path.join(root, ".agents/skills/dialex");
+      fs.mkdirSync(skillDir, { recursive: true });
       const skillContent = `---
 name: dialex
 description: Guide for internationalizing JavaScript and TypeScript apps with Dialex. Use when adding translations, creating content dictionaries, configuring locales, or using Dialex with frameworks like Next.js, React, Express, Hono, Fastify, SvelteKit, and Nuxt.
@@ -318,7 +318,7 @@ Dialex is a high-performance, type-safe internationalization toolchain for JavaS
 - \`dialex generate\`: Rebuild standalone dictionary bundle and types.
 - \`dialex translate --locale <locale>\`: Automatically translate missing keys.
 `;
-      fs.writeFileSync(path.join(claudeSkillDir, "SKILL.md"), skillContent, "utf-8");
+      fs.writeFileSync(path.join(skillDir, "SKILL.md"), skillContent, "utf-8");
 
       // 6b. Merge .mcp.json
       const mcpConfigPath = path.join(root, ".mcp.json");
@@ -357,7 +357,7 @@ This project uses [Dialex](https://github.com/awaiden/dialex) for type-safe inte
         }
       }
 
-      logger.success("Configured AI assistant support (.claude/skills, .mcp.json, AGENTS.md)");
+      logger.success("Configured AI assistant support (.agents/skills, .mcp.json, AGENTS.md)");
     } catch (err: any) {
       logger.warn(`Could not finish AI configuration: ${err.message || String(err)}`);
     }

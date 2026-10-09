@@ -38,7 +38,7 @@ program
   .option("-d, --default-locale <locale>", "Default locale (e.g. en)")
   .option("-l, --locales <locales>", "Comma-separated supported locales (e.g. en,tr)")
   .option("-y, --yes", "Skip prompts and use defaults")
-  .option("--ai", "Configure AI agent support (.claude/skills, .mcp.json, AGENTS.md)")
+  .option("--ai", "Configure AI agent support (.agents/skills, .mcp.json, AGENTS.md)")
   .option("--no-ai", "Skip AI agent configuration")
   .action(async (opts) => {
     await runInit(opts);

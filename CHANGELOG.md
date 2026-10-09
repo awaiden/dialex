@@ -12,6 +12,10 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 
 ## [Unreleased]
 
+### Changed
+
+- `dialex init --ai` writes the skill to `.agents/skills/dialex/SKILL.md`, the agent-neutral location, instead of `.claude/skills/`. Tools that only read `.claude/skills` (Claude Code) need a copy or symlink there; `npx skills add` can install it for them.
+
 ### Added
 
 - This changelog, a Changelog page in the documentation (all five languages), and a GitHub Release for every version tag, created from the matching section of this file.

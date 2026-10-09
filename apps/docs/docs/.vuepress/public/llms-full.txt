@@ -1188,7 +1188,7 @@ dialex init --ai
 This will automatically:
 
 1. Install and register the Dialex MCP server in `.mcp.json`.
-2. Add the Dialex skill definition to `.claude/skills/dialex/SKILL.md`.
+2. Add the Dialex skill definition to `.agents/skills/dialex/SKILL.md`.
 3. Add key internationalization guidelines to `AGENTS.md`.
 
 ## MCP Server (`@dialexjs/mcp`)
@@ -1274,6 +1274,14 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+### Changed
+
+- `dialex init --ai` writes the skill to `.agents/skills/dialex/SKILL.md`, the agent-neutral location, instead of `.claude/skills/`. Tools that only read `.claude/skills` (Claude Code) need a copy or symlink there; `npx skills add` can install it for them.
+
+### Added
+
+- This changelog, a Changelog page in the documentation (all five languages), and a GitHub Release for every version tag, created from the matching section of this file.
 
 ## [0.2.2] - 2026-10-09
 

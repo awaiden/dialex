@@ -50,7 +50,7 @@ describe("CLI init command", () => {
     const pkg = JSON.parse(fs.readFileSync(path.join(tempDir, "package.json"), "utf-8"));
     expect(pkg.scripts["dx:generate"]).toBe("dx generate");
 
-    expect(fs.existsSync(path.join(tempDir, ".claude/skills/dialex/SKILL.md"))).toBe(true);
+    expect(fs.existsSync(path.join(tempDir, ".agents/skills/dialex/SKILL.md"))).toBe(true);
     expect(fs.existsSync(path.join(tempDir, ".mcp.json"))).toBe(true);
     const mcp = JSON.parse(fs.readFileSync(path.join(tempDir, ".mcp.json"), "utf-8"));
     expect(mcp.mcpServers.dialex).toBeDefined();

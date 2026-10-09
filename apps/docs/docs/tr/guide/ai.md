@@ -13,7 +13,7 @@ dialex init --ai
 Bu komut otomatik olarak şunları gerçekleştirir:
 
 1. `.mcp.json` dosyasına Dialex MCP sunucusunu kaydeder.
-2. Dialex yetenek tanımını `.claude/skills/dialex/SKILL.md` konumuna ekler.
+2. Dialex yetenek tanımını `.agents/skills/dialex/SKILL.md` konumuna ekler.
 3. `AGENTS.md` dosyasına temel uluslararasılaştırma yönergelerini ekler.
 
 ## MCP Sunucusu (`@dialexjs/mcp`)

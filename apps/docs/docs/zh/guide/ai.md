@@ -13,7 +13,7 @@ dialex init --ai
 这将自动执行：
 
 1. 在 `.mcp.json` 中安装并注册 Dialex MCP 服务端。
-2. 将 Dialex 技能定义添加到 `.claude/skills/dialex/SKILL.md`。
+2. 将 Dialex 技能定义添加到 `.agents/skills/dialex/SKILL.md`。
 3. 将核心国际化指导规则添加到 `AGENTS.md`。
 
 ## MCP 服务端 (`@dialexjs/mcp`)

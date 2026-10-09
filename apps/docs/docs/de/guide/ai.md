@@ -13,7 +13,7 @@ dialex init --ai
 Dadurch wird automatisch Folgendes ausgeführt:
 
 1. Der Dialex-MCP-Server wird in `.mcp.json` installiert und registriert.
-2. Die Dialex-Skill-Definition wird unter `.claude/skills/dialex/SKILL.md` hinzugefügt.
+2. Die Dialex-Skill-Definition wird unter `.agents/skills/dialex/SKILL.md` hinzugefügt.
 3. Wichtige Internationalisierungsrichtlinien werden zu `AGENTS.md` hinzugefügt.
 
 ## MCP-Server (`@dialexjs/mcp`)
