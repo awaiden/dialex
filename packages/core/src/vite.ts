@@ -5,8 +5,20 @@ import fg from "fast-glob";
 import type { DialexConfig } from "./index.js";
 import { generateDts } from "./scanner.js";
 
+const DICTIONARY_IGNORE = ["**/node_modules/**", "**/dist/**", "**/.next/**"];
+
+/**
+ * `include` is a glob relative to the project root, the same pattern the CLI and the scanner use.
+ * A leading `/` or `./` is accepted, because that is how Vite spells root-relative globs.
+ */
+function normalizeInclude(include: string | string[]): string[] {
+  return [include].flat().map((pattern) => pattern.replace(/^\.?\//, ""));
+}
+
 function findDictionaryFiles(root: string, include: string | string[]): string[] {
-  return fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
+  return fg
+    .sync(normalizeInclude(include), { cwd: root, absolute: true, ignore: DICTIONARY_IGNORE })
+    .sort();
 }
 
 function syncDts(root: string, include: string | string[], locales?: string[]) {
@@ -35,20 +47,20 @@ function check(def, source) {
   }
 }`;
 
-function eagerModuleCode(include: string | string[], locales: string[]): string {
-  const globPattern = Array.isArray(include)
-    ? include.map((p) => `'${p}'`).join(", ")
-    : `'${include}'`;
+function eagerModuleCode(files: string[], locales: string[]): string {
+  const imports = files.map((file, i) => `import dict${i} from ${JSON.stringify(file)};`);
+  const entries = files.map((file, i) => `  [dict${i}, ${JSON.stringify(file)}],`);
 
   return `
-    const modules = import.meta.glob(${globPattern}, { eager: true });
+    ${imports.join("\n    ")}
     const dictionaries = {};
     const configLocales = ${JSON.stringify(locales)};
     ${MISSING_LOCALE_CHECK}
 
-    for (const path in modules) {
-      const mod = modules[path];
-      const def = mod.default || mod;
+    for (const [mod, path] of [
+${entries.join("\n")}
+    ]) {
+      const def = mod && mod.default ? mod.default : mod;
       if (def && def.name && def.dictionary) {
         check(def, path);
         dictionaries[def.name] = def.dictionary;
@@ -113,8 +125,19 @@ export function dialexPlugin(inlineConfig: DialexConfig = {}): Plugin {
   let resolvedConfig: DialexConfig = {};
   let viteConfig: ResolvedConfig;
 
+  let knownFiles: string[] = [];
+
   return {
     name: "vite-plugin-dialex",
+    config() {
+      // `dialexjs/react` and `dialexjs/vue` import the virtual modules below. In SSR, Vite loads
+      // installed packages through Node, which cannot resolve `virtual:` specifiers, so those
+      // packages must go through Vite. The dependency optimizer cannot resolve them either.
+      return {
+        ssr: { noExternal: ["dialexjs"] },
+        optimizeDeps: { exclude: ["dialexjs"] },
+      };
+    },
     async configResolved(config) {
       viteConfig = config;
       const { config: loadedConfig } = await loadConfig<DialexConfig>({
@@ -155,6 +178,22 @@ export function dialexPlugin(inlineConfig: DialexConfig = {}): Plugin {
         );
       }
     },
+    configureServer(server) {
+      // New or deleted dictionary files change the virtual module, which Vite cannot know
+      // because it no longer globs. Edits to existing files are ordinary module updates.
+      const refresh = (file: string) => {
+        if (!file.endsWith(".ts") && !file.endsWith(".js") && !file.endsWith(".mjs")) return;
+        const include = resolvedConfig.include || "**/*.content.ts";
+        const files = findDictionaryFiles(viteConfig.root, include);
+        if (files.join("\n") === knownFiles.join("\n")) return;
+        knownFiles = files;
+        const mod = server.moduleGraph.getModuleById(RESOLVED_VIRTUAL_MODULE_ID);
+        if (mod) server.moduleGraph.invalidateModule(mod);
+        server.ws.send({ type: "full-reload" });
+      };
+      server.watcher.on("add", refresh);
+      server.watcher.on("unlink", refresh);
+    },
     resolveId(id) {
       if (id === VIRTUAL_MODULE_ID) {
         return RESOLVED_VIRTUAL_MODULE_ID;
@@ -173,9 +212,10 @@ export function dialexPlugin(inlineConfig: DialexConfig = {}): Plugin {
       if (id === RESOLVED_VIRTUAL_MODULE_ID) {
         const include = resolvedConfig.include || "**/*.content.ts";
         const locales = resolvedConfig.locales || [];
+        knownFiles = findDictionaryFiles(viteConfig.root, include);
         return resolvedConfig.lazy
-          ? lazyModuleCode(findDictionaryFiles(viteConfig.root, include), locales)
-          : eagerModuleCode(include, locales);
+          ? lazyModuleCode(knownFiles, locales)
+          : eagerModuleCode(knownFiles, locales);
       }
     },
   };

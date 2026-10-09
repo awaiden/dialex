@@ -15,6 +15,8 @@ export default defineConfig({
 
 `dialexPlugin(inlineConfig?)` lädt deine Konfiguration, generiert `src/dialex-env.d.ts` neu und stellt zwei virtuelle Module bereit, `virtual:dialex-dictionaries` und `virtual:dialex-config`, mit HMR, wenn sich eine `.content.ts`-Datei ändert. Ist `locales` gesetzt, lässt ein Wörterbuch, dem eines davon fehlt, den Build fehlschlagen.
 
+Das Plugin setzt außerdem `ssr.noExternal` und `optimizeDeps.exclude` für `dialexjs` selbst, sodass Server-Side-Rendering (zum Beispiel TanStack Start oder React Router mit Vite) ohne zusätzliche Vite-Konfiguration funktioniert. `include` ist ein gewöhnliches Glob-Muster relativ zum Projektstamm, dasselbe wie in der CLI; ein führendes `/` ist erlaubt.
+
 ## Provider und Hooks
 
 ```tsx

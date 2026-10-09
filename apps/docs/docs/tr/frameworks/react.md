@@ -17,6 +17,8 @@ export default defineConfig({
 
 `dialexPlugin(inlineConfig?)` yapılandırmanızı yükler, `src/dialex-env.d.ts` dosyasını yeniden üretir ve bir `.content.ts` dosyası değiştiğinde HMR ile `virtual:dialex-dictionaries` ve `virtual:dialex-config` adlı iki sanal modülü sunar. `locales` ayarlıysa, bunlardan birini eksik olan bir sözlük derlemeyi başarısız kılar.
 
+Eklenti ayrıca `dialexjs` için `ssr.noExternal` ve `optimizeDeps.exclude` ayarlarını kendisi yapar; böylece sunucu tarafı oluşturma (örneğin Vite üzerinde TanStack Start veya React Router) ek Vite yapılandırması olmadan çalışır. `include`, CLI'ın kullandığıyla aynı, proje köküne göre sıradan bir glob desenidir; başındaki `/` kabul edilir.
+
 ## Provider ve hook'lar
 
 ```tsx

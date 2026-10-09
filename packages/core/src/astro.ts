@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "astro";
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./scanner.js";
+import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   createGetDictionary,
   normalizeDictionaries,

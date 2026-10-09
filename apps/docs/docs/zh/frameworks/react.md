@@ -17,6 +17,8 @@ export default defineConfig({
 
 `dialexPlugin(inlineConfig?)` 会加载你的配置，重新生成 `src/dialex-env.d.ts`，并提供两个虚拟模块 `virtual:dialex-dictionaries` 和 `virtual:dialex-config`；当 `.content.ts` 文件变化时支持 HMR。如果设置了 `locales`，缺少其中任何一个 locale 的词典都会导致构建失败。
 
+该插件还会为 `dialexjs` 自动设置 `ssr.noExternal` 和 `optimizeDeps.exclude`，因此服务端渲染（例如基于 Vite 的 TanStack Start 或 React Router）无需额外的 Vite 配置即可工作。`include` 是相对于项目根目录的普通 glob，与 CLI 使用的相同；开头的 `/` 也可以。
+
 ## Provider 与 Hooks
 
 ```tsx

@@ -12,6 +12,12 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 
 ## [Unreleased]
 
+### Fixed
+
+- `dialexjs/vite` under server-side rendering (reported with TanStack Start). Importing `dialexjs/react` in SSR failed with a `virtual:` import error until you set `ssr.noExternal` yourself; the plugin now sets `ssr.noExternal` and `optimizeDeps.exclude` for `dialexjs`.
+- The dev server could hang and run out of memory (a 4 GB heap crash in a clean project). The dictionaries module no longer uses `import.meta.glob`; it imports the files the plugin finds with the same glob the CLI uses. `include` may now start with `/` or `./`, and `dist` and `.next` are ignored like in the CLI. New dictionary files are picked up while the dev server runs.
+- Server adapters (`web`, `hono`, `express`, `koa`, `fastify`, `elysia`, `astro`, `h3`, `nestjs`, `sveltekit`) imported the project scanner (`fast-glob`, `unconfig`, `node:fs`) even when you pass `dictionaries`, which pulled those packages into SSR bundles. The scanner now loads only when no `dictionaries` are given.
+
 ## [0.3.0] - 2026-10-09
 
 ### Changed

@@ -7,7 +7,7 @@ import {
   type LocaleResolverOptions,
 } from "./resolver.js";
 import type { DictionaryDefinition, Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./scanner.js";
+import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
 export interface DictionaryRegistry {}

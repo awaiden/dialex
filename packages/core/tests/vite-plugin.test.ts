@@ -51,7 +51,8 @@ describe("virtual dictionaries module", () => {
   it("eager mode globs dictionaries and exports the lazy flag", async () => {
     const plugin = await resolve(project({ "src/home.content.ts": home }), {});
     const code: string = plugin.load(DICTIONARIES);
-    expect(code).toContain("import.meta.glob('**/*.content.ts', { eager: true })");
+    expect(code).toMatch(/import dict0 from ".*home\.content\.ts";/);
+    expect(code).not.toContain("import.meta.glob");
     expect(code).toContain("export const lazy = false;");
     expect(code).toContain("export function loadDictionary");
   });
