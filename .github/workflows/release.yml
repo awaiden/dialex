@@ -40,25 +40,10 @@ jobs:
 
       # `bun pm pack` rewrites `workspace:*` dependencies to real versions;
       # plain `npm publish` would ship them as-is and break installs.
-      # Tag, package versions and the internal dependencies that `bun pm pack` writes from
-      # bun.lock must all agree, or published packages would depend on an old release.
+      # The tag, the four package versions, bun.lock (which `bun pm pack` reads to write real
+      # dependency versions) and the changelog must all agree before anything is published.
       - name: Check release versions
-        run: |
-          node -e '
-            const fs = require("fs");
-            const tag = process.env.GITHUB_REF_NAME.replace(/^v/, "");
-            let bad = [];
-            for (const dir of ["core", "cli", "mcp"]) {
-              const pkg = JSON.parse(fs.readFileSync(`packages/${dir}/package.json`, "utf8"));
-              if (process.env.GITHUB_REF_TYPE === "tag" && pkg.version !== tag) bad.push(`${pkg.name} is ${pkg.version}, tag is ${tag}`);
-            }
-            const lock = fs.readFileSync("bun.lock", "utf8");
-            for (const dir of ["core", "cli", "mcp"]) {
-              const v = JSON.parse(fs.readFileSync(`packages/${dir}/package.json`, "utf8")).version;
-              if (!lock.includes(`"version": "${v}"`)) bad.push(`bun.lock does not record version ${v} (${dir}); regenerate it`);
-            }
-            if (bad.length) { console.error(bad.join("\n")); process.exit(1); }
-          '
+        run: node scripts/release.mjs --check ${{ github.ref_type == 'tag' && github.ref_name || '' }}
 
       # A release without notes is a mistake: fail before anything is published.
       - name: Check changelog entry

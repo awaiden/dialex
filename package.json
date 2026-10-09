@@ -10,14 +10,17 @@
   "type": "module",
   "scripts": {
     "build:packages": "vp run --filter './packages/*' build && bun install --frozen-lockfile",
-    "ready": "bun run build:packages && vp check && vp run -r test && vp run -r build",
+    "ready": "bun run build:packages && vp check && vp run -r test && bun run test:scripts && vp run -r build",
     "dev": "vp run -r dev",
     "docs:dev": "bun run --cwd apps/docs dev",
     "docs:build": "bun run --cwd apps/docs build",
     "prepare": "vp config",
-    "docs:check-translations": "bun run --cwd apps/docs check-translations"
+    "docs:check-translations": "bun run --cwd apps/docs check-translations",
+    "test:scripts": "bun test scripts",
+    "release": "node scripts/release.mjs --preflight && bumpp"
   },
   "devDependencies": {
+    "bumpp": "^11.1.0",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },

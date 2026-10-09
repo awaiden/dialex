@@ -5,9 +5,10 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
 <!--
-Releasing: add entries under "Unreleased" while you work. To release, rename that section to
-"[x.y.z] - YYYY-MM-DD", add a fresh "Unreleased" above it, bump the versions, regenerate bun.lock and
-add the compare link at the bottom. The release workflow fails if the tag has no section here.
+Releasing: add entries under "Unreleased" while you work. To release, run
+`bun run release <x.y.z|patch|minor|major>`; it moves them under the new version, bumps the packages
+and regenerates bun.lock and the docs pages. See RELEASING.md. The release workflow fails if the tag
+has no section here.
 -->
 
 ## [Unreleased]

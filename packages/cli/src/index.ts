@@ -8,13 +8,14 @@ import { runCheck } from "./commands/check.js";
 import { runExport } from "./commands/export.js";
 import { runImport } from "./commands/import.js";
 import { runTranslate } from "./commands/translate.js";
+import pkg from "../package.json" with { type: "json" };
 
 const program = new Command();
 
 program
   .name("dialex")
   .description("Dialex CLI - High-performance, type-safe internationalization compiler and tooling")
-  .version("0.4.0");
+  .version(pkg.version);
 
 program
   .command("generate")

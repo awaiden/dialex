@@ -24,6 +24,7 @@ import {
   listLocales,
 } from "@dialexjs/cli/api";
 import { DOC_TOPICS } from "./docs.js";
+import pkg from "../package.json" with { type: "json" };
 
 export function createDialexMcpServer(options: { root?: string } = {}) {
   const getRoot = () => path.resolve(options.root || process.cwd());
@@ -31,7 +32,7 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
   const server = new Server(
     {
       name: "dialex",
-      version: "0.4.0",
+      version: pkg.version,
     },
     {
       capabilities: {
