@@ -4,10 +4,10 @@ Dialex, TypeScript ile tanımlanan sözlükler etrafında kurulmuş bir i18n çe
 
 ## Paketler
 
-| Paket           | Amaç                                                                                     |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| `dialexjs`      | Çekirdek çalışma zamanı, çerçeve adaptörleri, Vite eklentisi                             |
-| `@dialexjs/cli` | İskele oluşturma, kod üretimi ve tutarlılık denetimleri için `dialexjs` / `dx` komutları |
+| Paket           | Amaç                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------- |
+| `dialexjs`      | Çekirdek çalışma zamanı, çerçeve adaptörleri, Vite eklentisi                           |
+| `@dialexjs/cli` | İskele oluşturma, kod üretimi ve tutarlılık denetimleri için `dialex` / `dx` komutları |
 
 ## Kurulum
 
@@ -37,7 +37,7 @@ Ya da etkileşimsiz olarak:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-Bu komut `dialex.config.ts` dosyasını, başlangıç sözlüğü olan `src/home.content.ts` dosyasını oluşturur ve `package.json` dosyanıza bir `i18n:generate` betiği (`dialex generate`) ekler. Bkz. [`dialex init`](../cli/init.md).
+Bu komut `dialex.config.ts` dosyasını, başlangıç sözlüğü olan `src/home.content.ts` dosyasını oluşturur ve `package.json` dosyanıza bir `dx:generate` betiği (`dialex generate`) ekler. Bkz. [`dialex init`](../cli/init.md).
 
 ## Sözlük tanımlama
 
@@ -63,4 +63,4 @@ export default defineDictionary("home", {
 dialex generate
 ```
 
-`src/i18n.generated.ts` (sözlük kayıt defteri) ve `src/dialex-env.d.ts` (tip genişletmesi) dosyalarını üretir. Ardından [çerçevenizi](../frameworks/README.md) seçin.
+`src/dialex.generated.ts` (sözlük kayıt defteri) ve `src/dialex-env.d.ts` (tip genişletmesi) dosyalarını üretir. Ardından [çerçevenizi](../frameworks/README.md) seçin.

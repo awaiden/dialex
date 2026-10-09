@@ -47,7 +47,7 @@ dialex init --ai
 | `dialex_missing`           | 读取 | 列出缺失或仍包含 `[TODO]` 占位符的键                           |
 | `dialex_set_key`           | 编辑 | 通过 AST 安全设置字符串；除非 `overwrite: true`，否则阻止覆盖  |
 | `dialex_add_missing`       | 编辑 | 在所有 locale 中将缺失键插入为 `[TODO]` 占位项                 |
-| `dialex_generate`          | 工具 | 重新生成 `i18n.generated.ts` 和 `dialex-env.d.ts`              |
+| `dialex_generate`          | 工具 | 重新生成 `dialex.generated.ts` 和 `dialex-env.d.ts`            |
 
 ### 文档资源
 

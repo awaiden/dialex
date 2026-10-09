@@ -11,14 +11,14 @@ Developed and tested against Angular 22. It uses only `signal`, `computed`, `inj
 The Angular CLI does not run Dialex's Vite plugin, so dictionaries are passed in explicitly. Generate them with the CLI:
 
 ```bash
-dialex generate        # writes src/i18n.generated.ts
+dialex generate        # writes src/dialex.generated.ts
 ```
 
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
-import dictionaries from "../i18n.generated";
+import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
   providers: [

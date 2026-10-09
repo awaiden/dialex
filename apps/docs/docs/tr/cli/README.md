@@ -1,6 +1,6 @@
 # CLI
 
-`@dialexjs/cli` iki komut kurar: `dialexjs` ve takma adı `dx`.
+`@dialexjs/cli` iki komut kurar: `dialex` ve daha kısa takma adı `dx`; `package.json` betiklerinde kullanışlıdır (`"dx:generate": "dx generate"`).
 
 ```bash
 npm install -D @dialexjs/cli dialexjs

@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name("dialex")
   .description("Dialex CLI - High-performance, type-safe internationalization compiler and tooling")
-  .version("0.2.1");
+  .version("0.2.2");
 
 program
   .command("generate")

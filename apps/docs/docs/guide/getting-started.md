@@ -4,10 +4,10 @@ Dialex is an i18n framework built around dictionaries defined in TypeScript. A c
 
 ## Packages
 
-| Package         | Purpose                                                                |
-| --------------- | ---------------------------------------------------------------------- |
-| `dialexjs`      | Core runtime, framework adapters, Vite plugin                          |
-| `@dialexjs/cli` | `dialexjs` / `dx` binaries for scaffolding, codegen, and parity checks |
+| Package         | Purpose                                                              |
+| --------------- | -------------------------------------------------------------------- |
+| `dialexjs`      | Core runtime, framework adapters, Vite plugin                        |
+| `@dialexjs/cli` | `dialex` / `dx` binaries for scaffolding, codegen, and parity checks |
 
 ## Install
 
@@ -37,7 +37,7 @@ Or headless:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds an `i18n:generate` script (`dialex generate`) to your `package.json`. See [`dialex init`](../cli/init.md).
+This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds an `dx:generate` script (`dialex generate`) to your `package.json`. See [`dialex init`](../cli/init.md).
 
 ## Define a dictionary
 
@@ -63,4 +63,4 @@ export default defineDictionary("home", {
 dialex generate
 ```
 
-Emits `src/i18n.generated.ts` (the dictionary registry) and `src/dialex-env.d.ts` (type augmentation). Then pick your [framework](../frameworks/README.md).
+Emits `src/dialex.generated.ts` (the dictionary registry) and `src/dialex-env.d.ts` (type augmentation). Then pick your [framework](../frameworks/README.md).

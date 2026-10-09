@@ -48,7 +48,7 @@ Add the server to your project or user `.mcp.json`:
 
 - **`dialex_set_key`**: Safely sets or updates a translation string. Refuses to overwrite non-`[TODO]` strings unless `overwrite: true` is passed.
 - **`dialex_add_missing`**: Copies missing keys from the default locale as `[TODO]` stubs across all target locales.
-- **`dialex_generate`**: Triggers code generation to update `i18n.generated.ts` and ambient type definitions (`dialex-env.d.ts`).
+- **`dialex_generate`**: Triggers code generation to update `dialex.generated.ts` and ambient type definitions (`dialex-env.d.ts`).
 
 ## Documentation Resources
 

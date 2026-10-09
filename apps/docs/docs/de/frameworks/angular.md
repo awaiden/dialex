@@ -11,14 +11,14 @@ Entwickelt und getestet mit Angular 22. Es verwendet nur `signal`, `computed`, `
 Die Angular CLI führt das Vite-Plugin von Dialex nicht aus, daher werden die Wörterbücher explizit übergeben. Generiere sie mit der CLI:
 
 ```bash
-dialex generate        # writes src/i18n.generated.ts
+dialex generate        # writes src/dialex.generated.ts
 ```
 
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
-import dictionaries from "../i18n.generated";
+import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
   providers: [

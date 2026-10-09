@@ -74,7 +74,7 @@ export function Header() {
 ```typescript
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ dictionaries }));
@@ -87,7 +87,7 @@ app.get("/", (c) => {
 
 ## CLI Commands
 
-- `dialex generate` (`dialex gen`): Generates type definitions and registry bundle `i18n.generated.ts`. Pass `--json` for structured output.
+- `dialex generate` (`dialex gen`): Generates type definitions and registry bundle `dialex.generated.ts`. Pass `--json` for structured output.
 - `dialex check` (`dialex lint`): Verifies dictionary parity and code references.
   - `--fix`: Automatically inserts missing keys with `[TODO]` placeholder prefix.
   - `--json`: Machine-readable output for tooling and AI agents.

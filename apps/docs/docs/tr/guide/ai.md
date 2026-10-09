@@ -47,7 +47,7 @@ Bu komut otomatik olarak şunları gerçekleştirir:
 | `dialex_missing`           | Okuma     | Eksik olan veya hâlâ `[TODO]` yer tutucusu içeren anahtarları listeler                        |
 | `dialex_set_key`           | Düzenleme | AST aracılığıyla dizeyi güvenle ayarlar; `overwrite: true` olmadıkça üzerine yazmayı engeller |
 | `dialex_add_missing`       | Düzenleme | Eksik anahtarları yerel ayarlar genelinde `[TODO]` taslakları olarak ekler                    |
-| `dialex_generate`          | Araç      | `i18n.generated.ts` ve `dialex-env.d.ts` dosyalarını yeniden üretir                           |
+| `dialex_generate`          | Araç      | `dialex.generated.ts` ve `dialex-env.d.ts` dosyalarını yeniden üretir                         |
 
 ### Dokümantasyon Kaynakları
 

@@ -27,7 +27,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 export interface AngularI18nOptions {
   /**
    * The dictionaries, usually the output of `dialex generate`:
-   * `import dictionaries from "./i18n.generated"`.
+   * `import dictionaries from "./dialex.generated"`.
    */
   dictionaries: DictionaryInput;
   /** Locale used when nothing else decides. @default "en" */
@@ -136,7 +136,7 @@ export const DIALEX = new InjectionToken<DialexStore>("DIALEX", {
  *
  * ```ts
  * // app.config.ts
- * import dictionaries from "./i18n.generated";
+ * import dictionaries from "./dialex.generated";
  *
  * export const appConfig: ApplicationConfig = {
  *   providers: [provideDialex({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],

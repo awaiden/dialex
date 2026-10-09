@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/main.ts",
-    "i18n:generate": "dialex generate",
-    "build": "dialex generate && tsc --noEmit",
+    "dx:generate": "dx generate",
+    "build": "dx generate && tsc --noEmit",
     "lint": "oxlint"
   },
   "dependencies": {

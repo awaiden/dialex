@@ -3,7 +3,7 @@
 ```ts
 import { Elysia } from "elysia";
 import { i18n } from "dialexjs/elysia";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Elysia()
   .use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))

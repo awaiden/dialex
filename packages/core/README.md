@@ -68,7 +68,7 @@ bun x dialex generate
 ```typescript
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ dictionaries }));
@@ -84,7 +84,7 @@ app.get("/", (c) => {
 ```typescript
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 await app.register(i18nPlugin, { dictionaries });
@@ -100,7 +100,7 @@ app.get("/", (req) => {
 ```typescript
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
 app.use(i18n({ dictionaries }));

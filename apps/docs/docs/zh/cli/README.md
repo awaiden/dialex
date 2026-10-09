@@ -1,6 +1,6 @@
 # CLI
 
-`@dialexjs/cli` 会安装两个可执行命令：`dialexjs` 和别名 `dx`。
+`@dialexjs/cli` 会安装两个可执行命令：`dialex` 和更短的别名 `dx`，适合用在 `package.json` 脚本中（`"dx:generate": "dx generate"`）。
 
 ```bash
 npm install -D @dialexjs/cli dialexjs

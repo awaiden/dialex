@@ -22,7 +22,7 @@ Dialex, her çerçeve için `dialexjs` paketinin bir alt yol dışa aktarımı o
 Sunucu adaptörlerinin (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) hepsi aynı şekilde davranır: yerel ayarı çözer ([algılama bölümüne bakın](../guide/locale-detection.md)) ve istek üzerinde `locale` ile `getDictionary(name)` sunar. `dialex generate` çıktısını `dictionaries` olarak verin:
 
 ```ts
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 ```
 
 Çerçeve paketleri (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) isteğe bağlı eş bağımlılıklardır (peer dependency); yalnızca kullandıklarınızı kurun.

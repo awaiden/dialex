@@ -47,7 +47,7 @@ Agregue Dialex a su archivo `.mcp.json`:
 | `dialex_missing`           | Lectura     | Enumera claves faltantes o que aún contienen marcadores `[TODO]`                                    |
 | `dialex_set_key`           | Edición     | Establece de forma segura una cadena mediante AST; evita sobrescribir a menos que `overwrite: true` |
 | `dialex_add_missing`       | Edición     | Inserta claves faltantes en todos los locales como marcadores `[TODO]`                              |
-| `dialex_generate`          | Herramienta | Regenera `i18n.generated.ts` y `dialex-env.d.ts`                                                    |
+| `dialex_generate`          | Herramienta | Regenera `dialex.generated.ts` y `dialex-env.d.ts`                                                  |
 
 ### Recursos de documentación
 

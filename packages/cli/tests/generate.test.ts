@@ -15,7 +15,7 @@ describe("CLI generate command", () => {
     }
   });
 
-  it("generates i18n.generated.ts and dialex-env.d.ts", () => {
+  it("generates dialex.generated.ts and dialex-env.d.ts", () => {
     // Set up mock content file
     const contentCode = `
 import { defineDictionary } from "dialexjs";
@@ -64,7 +64,7 @@ export default defineDictionary({
       const json = JSON.parse(lines.join("\n"));
       expect(json.success).toBe(true);
       expect(json.files.length).toBe(1);
-      expect(json.outputPath).toContain("i18n.generated.ts");
+      expect(json.outputPath).toContain("dialex.generated.ts");
     } finally {
       console.log = origLog;
     }

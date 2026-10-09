@@ -11,14 +11,14 @@ Angular 22 ile geliştirildi ve test edildi. Yalnızca `signal`, `computed`, `in
 Angular CLI, Dialex'in Vite eklentisini çalıştırmaz; bu yüzden sözlükler açıkça verilir. Bunları CLI ile üretin:
 
 ```bash
-dialex generate        # writes src/i18n.generated.ts
+dialex generate        # writes src/dialex.generated.ts
 ```
 
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
-import dictionaries from "../i18n.generated";
+import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
   providers: [

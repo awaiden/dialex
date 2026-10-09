@@ -238,7 +238,7 @@ describe("Dialex MCP Server", () => {
 
     const genRes = await client.callTool({ name: "dialex_generate", arguments: {} });
     expect(genRes.isError).toBeFalsy();
-    expect(fs.existsSync(path.join(root, "src/i18n.generated.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(root, "src/dialex.generated.ts"))).toBe(true);
     expect(fs.existsSync(path.join(root, "src/dialex-env.d.ts"))).toBe(true);
   });
 });

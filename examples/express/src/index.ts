@@ -1,6 +1,6 @@
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 const app = express();
 

@@ -116,7 +116,7 @@ const SOURCE_IGNORE = [
   "**/coverage/**",
   "**/graphify-out/**",
   "**/*.d.ts",
-  "**/i18n.generated.*",
+  "**/dialex.generated.*",
   "**/dialex.config.*",
   "**/i18n.config.*",
 ];

@@ -4,7 +4,7 @@
 
 Çıktılar:
 
-- `src/i18n.generated.ts`, `dictionaries` olarak verdiğiniz statik sözlük haritası.
+- `src/dialex.generated.ts`, `dictionaries` olarak verdiğiniz statik sözlük haritası.
 - `src/dialex-env.d.ts`, [tip kayıt defteri genişletmesi](../guide/type-safety.md).
 
 ```bash
@@ -19,4 +19,4 @@ dialex gen -o src/custom.generated.ts
 | `-o, --output <path>` | Üretilen sözlükler için özel çıktı yolu               |
 | `-c, --config <path>` | Özel yapılandırma yolu                                |
 
-Herhangi bir sunucu tarafı uygulamayı derlemeden veya başlatmadan önce çalıştırın; genellikle `init` komutunun eklediği `i18n:generate` betiği aracılığıyla.
+Herhangi bir sunucu tarafı uygulamayı derlemeden veya başlatmadan önce çalıştırın; genellikle `init` komutunun eklediği `dx:generate` betiği aracılığıyla.

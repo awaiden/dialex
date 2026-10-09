@@ -4,7 +4,7 @@ Compiles `.content.ts` dictionaries into static modules for zero-overhead server
 
 Outputs:
 
-- `src/i18n.generated.ts`, the static dictionary map you pass as `dictionaries`.
+- `src/dialex.generated.ts`, the static dictionary map you pass as `dictionaries`.
 - `src/dialex-env.d.ts`, the [type registry augmentation](../guide/type-safety.md).
 
 ```bash
@@ -19,4 +19,4 @@ dialex gen -o src/custom.generated.ts
 | `-o, --output <path>` | Custom output path for the generated dictionaries |
 | `-c, --config <path>` | Custom config path                                |
 
-Run it before building or starting any server-side app, typically via the `i18n:generate` script that `init` adds.
+Run it before building or starting any server-side app, typically via the `dx:generate` script that `init` adds.

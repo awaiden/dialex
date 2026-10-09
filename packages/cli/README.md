@@ -18,7 +18,7 @@ bun add -d @dialexjs/cli dialexjs
 npm install -g @dialexjs/cli
 ```
 
-Binaries installed: `dialexjs` and alias `dx`.
+Binaries installed: `dialex` and the shorter alias `dx` (handy in package.json scripts).
 
 ---
 
@@ -44,7 +44,7 @@ dialex init --framework fastify --default-locale en --locales en,tr -y
 
 Compiles `.content.ts` dictionaries into static TypeScript modules for zero-overhead server execution:
 
-- Outputs `src/i18n.generated.ts` (static dictionary map).
+- Outputs `src/dialex.generated.ts` (static dictionary map).
 - Outputs `src/dialex-env.d.ts` (type registry augmentation).
 - **Watch Mode (`-w` / `--watch`)**: Continuously monitors dictionary changes and updates bundles instantaneously.
 

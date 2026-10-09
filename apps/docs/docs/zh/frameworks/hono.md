@@ -3,7 +3,7 @@
 ```ts
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));

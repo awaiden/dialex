@@ -47,7 +47,7 @@ Add Dialex to your `.mcp.json`:
 | `dialex_missing`           | Read | Lists keys that are missing or still contain `[TODO]` placeholders           |
 | `dialex_set_key`           | Edit | Safely sets a string via AST; prevents overwriting unless `overwrite: true`  |
 | `dialex_add_missing`       | Edit | Inserts missing keys across locales as `[TODO]` stubs                        |
-| `dialex_generate`          | Tool | Regenerates `i18n.generated.ts` and `dialex-env.d.ts`                        |
+| `dialex_generate`          | Tool | Regenerates `dialex.generated.ts` and `dialex-env.d.ts`                      |
 
 ### Documentation Resources
 

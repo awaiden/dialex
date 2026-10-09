@@ -31,11 +31,11 @@ Modern web development demands internationalization that doesn't compromise on r
 
 ## 📦 Packages
 
-| Package                           | Version                                                                                               | Description                                                                      |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`dialexjs`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)           | Core runtime library, framework adapters, and Vite plugin                        |
-| [`@dialexjs/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli) | Standalone CLI (`dialexjs`, `dx`) for scaffolding, codegen, and CI parity checks |
-| [`@dialexjs/mcp`](./packages/mcp) | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp) | Model Context Protocol (MCP) server for AI assistants and agent skills           |
+| Package                           | Version                                                                                               | Description                                                                    |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [`dialexjs`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)           | Core runtime library, framework adapters, and Vite plugin                      |
+| [`@dialexjs/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli) | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks |
+| [`@dialexjs/mcp`](./packages/mcp) | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp) | Model Context Protocol (MCP) server for AI assistants and agent skills         |
 
 ---
 
@@ -71,7 +71,7 @@ Or run headlessly in automated setups:
 bun x dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-This generates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds the `"i18n:generate": "dialex generate"` script to your `package.json`.
+This generates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds the `"dx:generate": "dx generate"` script to your `package.json`.
 
 ---
 
@@ -99,7 +99,7 @@ export default defineDictionary("home", {
 
 Whenever you run `dialex generate` (or during dev watch mode), Dialex compiles:
 
-1. `src/i18n.generated.ts`: A statically imported registry of dictionaries.
+1. `src/dialex.generated.ts`: A statically imported registry of dictionaries.
 2. `src/dialex-env.d.ts`: Ambient module declarations that register your dictionary schema with the TypeScript compiler:
 
 ```typescript
@@ -167,7 +167,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 ```typescript
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 
@@ -193,7 +193,7 @@ await app.listen({ port: 3000 });
 import Koa from "koa";
 import Router from "@koa/router";
 import { i18n } from "dialexjs/koa";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
@@ -216,7 +216,7 @@ app.listen(3000);
 ```typescript
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
@@ -236,7 +236,7 @@ export default app;
 ```typescript
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
 app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
@@ -256,7 +256,7 @@ app.listen(3000);
 ```typescript
 import { Module, Controller, Get } from "@nestjs/common";
 import { I18nModule, I18nLocale, I18nDictionary } from "dialexjs/nestjs";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 @Controller()
 export class AppController {
@@ -327,7 +327,7 @@ bun x dialex init
 
 ### `dialex generate` (`gen`)
 
-Statically compiles dictionary files to `src/i18n.generated.ts` and `src/dialex-env.d.ts`.
+Statically compiles dictionary files to `src/dialex.generated.ts` and `src/dialex-env.d.ts`.
 
 ```bash
 bun x dialex generate

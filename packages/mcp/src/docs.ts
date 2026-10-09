@@ -29,7 +29,7 @@ export default defineDictionary("home", {
 
 ## CLI & Tooling
 - \`dialex check\`: Parity checker. Use \`--fix\` to insert \`[TODO]\` stubs. Use \`--json\` for structured output.
-- \`dialex generate\`: Generates \`i18n.generated.ts\` and \`dialex-env.d.ts\`.
+- \`dialex generate\`: Generates \`dialex.generated.ts\` and \`dialex-env.d.ts\`.
 - \`dialex export\` / \`dialex import\`: JSON, CSV, XLIFF interchange.
 - \`dialex translate\`: Fill missing keys with AI providers (Claude, OpenAI, Gemini, DeepL).
 `;

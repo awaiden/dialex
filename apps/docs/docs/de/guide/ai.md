@@ -47,7 +47,7 @@ Fügen Sie Dialex zu Ihrer `.mcp.json` hinzu:
 | `dialex_missing`           | Lesen      | Listet Schlüssel auf, die fehlen oder noch `[TODO]`-Platzhalter enthalten                  |
 | `dialex_set_key`           | Bearbeiten | Setzt sicher einen String über AST; verhindert Überschreiben, außer wenn `overwrite: true` |
 | `dialex_add_missing`       | Bearbeiten | Fügt fehlende Schlüssel über alle Locales hinweg als `[TODO]`-Vorlagen ein                 |
-| `dialex_generate`          | Werkzeug   | Erzeugt `i18n.generated.ts` und `dialex-env.d.ts` neu                                      |
+| `dialex_generate`          | Werkzeug   | Erzeugt `dialex.generated.ts` und `dialex-env.d.ts` neu                                    |
 
 ### Dokumentationsressourcen
 

@@ -279,10 +279,10 @@ ${dictRecords}
     try {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
       pkg.scripts = pkg.scripts || {};
-      if (!pkg.scripts["i18n:generate"]) {
-        pkg.scripts["i18n:generate"] = "dialex generate";
+      if (!pkg.scripts["dx:generate"]) {
+        pkg.scripts["dx:generate"] = "dx generate";
         fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
-        logger.success('Added "i18n:generate" script to package.json');
+        logger.success('Added "dx:generate" script to package.json');
       }
     } catch {
       // Ignore JSON parse errors
@@ -346,7 +346,7 @@ This project uses [Dialex](https://github.com/awaiden/dialex) for type-safe inte
 - Dictionaries are in \`*.content.ts\` files using \`defineDictionary\`.
 - Run \`dialex check --json\` to verify parity.
 - Run \`dialex check --fix\` to insert missing keys marked with \`[TODO]\`.
-- Run \`dialex generate\` or \`npm run i18n:generate\` to compile dictionary bundles and update types.
+- Run \`dx generate\` (alias of \`dialex\`) or \`npm run dx:generate\` to compile dictionary bundles and update types.
 `;
       if (!fs.existsSync(agentsMdPath)) {
         fs.writeFileSync(agentsMdPath, dialexAgentSnippet.trimStart(), "utf-8");
@@ -372,7 +372,7 @@ This project uses [Dialex](https://github.com/awaiden/dialex) for type-safe inte
       logger.log(`
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ dictionaries }));
@@ -387,7 +387,7 @@ app.get("/", (c) => {
       logger.log(`
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 await app.register(i18nPlugin, { dictionaries });
@@ -402,7 +402,7 @@ app.get("/", (req) => {
       logger.log(`
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
 app.use(i18n({ dictionaries }));
@@ -417,7 +417,7 @@ app.get("/", (req, res) => {
       logger.log(`
 import Koa from "koa";
 import { i18n } from "dialexjs/koa";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 app.use(i18n({ dictionaries }));
@@ -432,7 +432,7 @@ app.use((ctx) => {
       logger.log(`
 import { Module } from "@nestjs/common";
 import { I18nModule } from "dialexjs/nestjs";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 @Module({
   imports: [I18nModule.forRoot({ dictionaries })],
@@ -455,7 +455,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       logger.log(`
 import { Elysia } from "elysia";
 import { i18n } from "dialexjs/elysia";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 new Elysia()
   .use(i18n({ dictionaries }))
@@ -467,7 +467,7 @@ new Elysia()
       logger.log(`
 // src/hooks.server.ts
 import { i18nHandle } from "dialexjs/sveltekit";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const handle = i18nHandle({ dictionaries });
 
@@ -479,7 +479,7 @@ export const handle = i18nHandle({ dictionaries });
       logger.log(`
 // src/middleware.ts
 import { i18n } from "dialexjs/astro";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const onRequest = i18n({ dictionaries });
 
@@ -511,7 +511,7 @@ export default defineNuxtConfig({
     default:
       logger.log(`
 Import dictionaries and register your framework middleware to begin!
-Run \`npm run i18n:generate\` whenever you add new dictionary files.
+Run \`npm run dx:generate\` whenever you add new dictionary files.
 `);
       break;
   }

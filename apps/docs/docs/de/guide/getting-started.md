@@ -4,10 +4,10 @@ Dialex ist ein i18n-Framework rund um Wörterbücher, die in TypeScript definier
 
 ## Pakete
 
-| Paket           | Zweck                                                                                          |
-| --------------- | ---------------------------------------------------------------------------------------------- |
-| `dialexjs`      | Kern-Laufzeit, Framework-Adapter, Vite-Plugin                                                  |
-| `@dialexjs/cli` | Die Befehle `dialexjs` / `dx` für Projektgerüst, Codegenerierung und Vollständigkeitsprüfungen |
+| Paket           | Zweck                                                                                        |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| `dialexjs`      | Kern-Laufzeit, Framework-Adapter, Vite-Plugin                                                |
+| `@dialexjs/cli` | Die Befehle `dialex` / `dx` für Projektgerüst, Codegenerierung und Vollständigkeitsprüfungen |
 
 ## Installation
 
@@ -37,7 +37,7 @@ Oder ohne Rückfragen:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-Das erzeugt `dialex.config.ts` und ein Start-Wörterbuch `src/home.content.ts` und fügt deiner `package.json` ein Skript `i18n:generate` (`dialex generate`) hinzu. Siehe [`dialex init`](../cli/init.md).
+Das erzeugt `dialex.config.ts` und ein Start-Wörterbuch `src/home.content.ts` und fügt deiner `package.json` ein Skript `dx:generate` (`dialex generate`) hinzu. Siehe [`dialex init`](../cli/init.md).
 
 ## Ein Wörterbuch definieren
 
@@ -63,4 +63,4 @@ export default defineDictionary("home", {
 dialex generate
 ```
 
-Erzeugt `src/i18n.generated.ts` (die Wörterbuch-Registry) und `src/dialex-env.d.ts` (Typerweiterung). Wähle danach dein [Framework](../frameworks/README.md).
+Erzeugt `src/dialex.generated.ts` (die Wörterbuch-Registry) und `src/dialex-env.d.ts` (Typerweiterung). Wähle danach dein [Framework](../frameworks/README.md).

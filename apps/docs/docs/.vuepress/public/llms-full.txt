@@ -108,7 +108,7 @@ Runtime dictionary scanning used by adapters when no `dictionaries` option is pa
 
 # CLI
 
-`@dialexjs/cli` installs two binaries: `dialexjs` and the alias `dx`.
+`@dialexjs/cli` installs two binaries: `dialex` and the shorter alias `dx`, which is handy in `package.json` scripts (`"dx:generate": "dx generate"`).
 
 ```bash
 npm install -D @dialexjs/cli dialexjs
@@ -232,7 +232,7 @@ Compiles `.content.ts` dictionaries into static modules for zero-overhead server
 
 Outputs:
 
-- `src/i18n.generated.ts`, the static dictionary map you pass as `dictionaries`.
+- `src/dialex.generated.ts`, the static dictionary map you pass as `dictionaries`.
 - `src/dialex-env.d.ts`, the [type registry augmentation](../guide/type-safety.md).
 
 ```bash
@@ -247,7 +247,7 @@ dialex gen -o src/custom.generated.ts
 | `-o, --output <path>` | Custom output path for the generated dictionaries |
 | `-c, --config <path>` | Custom config path                                |
 
-Run it before building or starting any server-side app, typically via the `i18n:generate` script that `init` adds.
+Run it before building or starting any server-side app, typically via the `dx:generate` script that `init` adds.
 
 
 ---
@@ -424,7 +424,7 @@ Dialex ships one adapter per framework as a subpath export of `dialexjs`.
 The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Pass the output of `dialex generate` as `dictionaries`:
 
 ```ts
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 ```
 
 Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.
@@ -447,14 +447,14 @@ Developed and tested against Angular 22. It uses only `signal`, `computed`, `inj
 The Angular CLI does not run Dialex's Vite plugin, so dictionaries are passed in explicitly. Generate them with the CLI:
 
 ```bash
-dialex generate        # writes src/i18n.generated.ts
+dialex generate        # writes src/dialex.generated.ts
 ```
 
 ```ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
-import dictionaries from "../i18n.generated";
+import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -568,7 +568,7 @@ For code that does not need Angular, use [`createTestI18n`](../guide/testing.md)
 ```ts
 // src/middleware.ts
 import { i18n } from "dialexjs/astro";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const onRequest = i18n({
   defaultLocale: "en",
@@ -603,7 +603,7 @@ The middleware reads the request URL, headers, and cookies, so it applies to on-
 ```ts
 import { Elysia } from "elysia";
 import { i18n } from "dialexjs/elysia";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Elysia()
   .use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))
@@ -626,7 +626,7 @@ The plugin is registered globally and derives two values on the request context:
 ```ts
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
 app.use(i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
@@ -651,7 +651,7 @@ The middleware adds `req.locale` and `req.getDictionary(name)` (also on `res.loc
 ```ts
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
 
@@ -683,7 +683,7 @@ For h3 1.x servers: Nitro 2, and Nuxt server routes and middleware.
 ```ts
 // server/middleware/i18n.ts (Nuxt / Nitro)
 import { i18n } from "dialexjs/h3";
-import dictionaries from "~/i18n.generated";
+import dictionaries from "~/dialex.generated";
 
 export default i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries });
 ```
@@ -716,7 +716,7 @@ Built and tested against h3 `>=1.8 <2`. h3 2.x has a different API and is not su
 ```ts
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
@@ -742,7 +742,7 @@ The middleware sets `locale` and `getDictionary` as context variables, read thro
 import Koa from "koa";
 import Router from "@koa/router";
 import { i18n } from "dialexjs/koa";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
@@ -772,7 +772,7 @@ Register `i18n()` before your routes. It adds `ctx.locale` and `ctx.getDictionar
 ```ts
 import { Module } from "@nestjs/common";
 import { I18nModule } from "dialexjs/nestjs";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 @Module({
   imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
@@ -1007,7 +1007,7 @@ The provider renders the default locale first, then applies the remembered local
 ```ts
 // src/hooks.server.ts
 import { i18nHandle } from "dialexjs/sveltekit";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const handle = i18nHandle({
   defaultLocale: "en",
@@ -1115,7 +1115,7 @@ The Nuxt module is covered by unit tests of its setup calls only. It has not bee
 
 ```ts
 import { createI18nHandler } from "dialexjs/web";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const resolveI18n = createI18nHandler({
   defaultLocale: "en",
@@ -1222,7 +1222,7 @@ Add Dialex to your `.mcp.json`:
 | `dialex_missing`           | Read | Lists keys that are missing or still contain `[TODO]` placeholders           |
 | `dialex_set_key`           | Edit | Safely sets a string via AST; prevents overwriting unless `overwrite: true`  |
 | `dialex_add_missing`       | Edit | Inserts missing keys across locales as `[TODO]` stubs                        |
-| `dialex_generate`          | Tool | Regenerates `i18n.generated.ts` and `dialex-env.d.ts`                        |
+| `dialex_generate`          | Tool | Regenerates `dialex.generated.ts` and `dialex-env.d.ts`                        |
 
 ### Documentation Resources
 
@@ -1439,7 +1439,7 @@ Dialex is an i18n framework built around dictionaries defined in TypeScript. A c
 | Package         | Purpose                                                                |
 | --------------- | ---------------------------------------------------------------------- |
 | `dialexjs`      | Core runtime, framework adapters, Vite plugin                          |
-| `@dialexjs/cli` | `dialexjs` / `dx` binaries for scaffolding, codegen, and parity checks |
+| `@dialexjs/cli` | `dialex` / `dx` binaries for scaffolding, codegen, and parity checks |
 
 ## Install
 
@@ -1469,7 +1469,7 @@ Or headless:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds an `i18n:generate` script (`dialex generate`) to your `package.json`. See [`dialex init`](../cli/init.md).
+This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds an `dx:generate` script (`dialex generate`) to your `package.json`. See [`dialex init`](../cli/init.md).
 
 ## Define a dictionary
 
@@ -1495,7 +1495,7 @@ export default defineDictionary("home", {
 dialex generate
 ```
 
-Emits `src/i18n.generated.ts` (the dictionary registry) and `src/dialex-env.d.ts` (type augmentation). Then pick your [framework](../frameworks/README.md).
+Emits `src/dialex.generated.ts` (the dictionary registry) and `src/dialex-env.d.ts` (type augmentation). Then pick your [framework](../frameworks/README.md).
 
 
 ---

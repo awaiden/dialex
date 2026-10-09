@@ -4,7 +4,7 @@
 
 ```ts
 import { createI18nHandler } from "dialexjs/web";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const resolveI18n = createI18nHandler({
   defaultLocale: "en",

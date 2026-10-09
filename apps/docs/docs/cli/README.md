@@ -1,6 +1,6 @@
 # CLI
 
-`@dialexjs/cli` installs two binaries: `dialexjs` and the alias `dx`.
+`@dialexjs/cli` installs two binaries: `dialex` and the shorter alias `dx`, which is handy in `package.json` scripts (`"dx:generate": "dx generate"`).
 
 ```bash
 npm install -D @dialexjs/cli dialexjs

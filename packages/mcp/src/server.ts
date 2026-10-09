@@ -31,7 +31,7 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
   const server = new Server(
     {
       name: "dialex",
-      version: "0.2.1",
+      version: "0.2.2",
     },
     {
       capabilities: {
@@ -237,7 +237,7 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
             properties: {
               output: {
                 type: "string",
-                description: "Optional custom output path for i18n.generated.ts.",
+                description: "Optional custom output path for dialex.generated.ts.",
               },
               config: {
                 type: "string",

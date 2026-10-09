@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 const app = Fastify({ logger: false });
 

@@ -22,7 +22,7 @@ Dialex 为每个框架提供一个适配器，作为 `dialexjs` 的子路径导�
 服务端适配器（Express、Fastify、Koa、Hono、NestJS、Elysia、SvelteKit、Astro、h3）的行为都相同：它们解析 locale（[参见检测](../guide/locale-detection.md)），并在请求上暴露 `locale` 和 `getDictionary(name)`。把 `dialex generate` 的输出作为 `dictionaries` 传入：
 
 ```ts
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 ```
 
 各框架的包（`express`、`fastify`、`hono`、`koa`、`elysia`、`astro`、`h3`、`@angular/core`、`next`、`react`、`vue`、`@nuxt/kit`、`@nestjs/*`、`rxjs`、`vite`）都是可选的对等依赖；只安装你用到的即可。

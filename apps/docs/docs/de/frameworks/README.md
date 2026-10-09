@@ -22,7 +22,7 @@ Dialex liefert pro Framework einen Adapter als Subpfad-Export von `dialexjs` mit
 Die Server-Adapter (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) verhalten sich alle gleich: Sie ermitteln das Locale ([siehe Erkennung](../guide/locale-detection.md)) und stellen `locale` und `getDictionary(name)` an der Anfrage bereit. Übergib die Ausgabe von `dialex generate` als `dictionaries`:
 
 ```ts
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 ```
 
 Die Framework-Pakete (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) sind optionale Peer-Abhängigkeiten; installiere nur, was du verwendest.

@@ -19,7 +19,7 @@ Wrap your root component with `I18nProvider`:
 
 ```tsx
 import { I18nProvider } from "dialexjs/react";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export function App() {
   return (
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 ```typescript
 import express from "express";
 import { i18n } from "dialexjs/express";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 const app = express();
 app.use(i18n({ dictionaries }));
@@ -65,7 +65,7 @@ app.get("/", (req, res) => {
 ```typescript
 import { Hono } from "hono";
 import { i18n } from "dialexjs/hono";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 const app = new Hono();
 app.use("*", i18n({ dictionaries }));
@@ -81,7 +81,7 @@ app.get("/", (c) => {
 ```typescript
 import Fastify from "fastify";
 import { i18nPlugin } from "dialexjs/fastify";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 const app = Fastify();
 await app.register(i18nPlugin, { dictionaries });

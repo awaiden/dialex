@@ -5,7 +5,7 @@
 ```ts
 import { Module } from "@nestjs/common";
 import { I18nModule } from "dialexjs/nestjs";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 @Module({
   imports: [I18nModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],

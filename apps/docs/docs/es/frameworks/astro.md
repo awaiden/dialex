@@ -3,7 +3,7 @@
 ```ts
 // src/middleware.ts
 import { i18n } from "dialexjs/astro";
-import dictionaries from "./i18n.generated.js";
+import dictionaries from "./dialex.generated.js";
 
 export const onRequest = i18n({
   defaultLocale: "en",

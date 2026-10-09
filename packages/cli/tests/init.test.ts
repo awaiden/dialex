@@ -40,7 +40,7 @@ describe("CLI init command", () => {
 
     expect(fs.existsSync(path.join(tempDir, "dialex.config.ts"))).toBe(true);
     expect(fs.existsSync(path.join(tempDir, "src/home.content.ts"))).toBe(true);
-    expect(fs.existsSync(path.join(tempDir, "src/i18n.generated.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(tempDir, "src/dialex.generated.ts"))).toBe(true);
     expect(fs.existsSync(path.join(tempDir, "src/dialex-env.d.ts"))).toBe(true);
 
     const configContent = fs.readFileSync(path.join(tempDir, "dialex.config.ts"), "utf-8");
@@ -48,7 +48,7 @@ describe("CLI init command", () => {
     expect(configContent).toContain('"tr"');
 
     const pkg = JSON.parse(fs.readFileSync(path.join(tempDir, "package.json"), "utf-8"));
-    expect(pkg.scripts["i18n:generate"]).toBe("dialex generate");
+    expect(pkg.scripts["dx:generate"]).toBe("dx generate");
 
     expect(fs.existsSync(path.join(tempDir, ".claude/skills/dialex/SKILL.md"))).toBe(true);
     expect(fs.existsSync(path.join(tempDir, ".mcp.json"))).toBe(true);

@@ -4,7 +4,7 @@
 import Koa from "koa";
 import Router from "@koa/router";
 import { i18n } from "dialexjs/koa";
-import dictionaries from "./src/i18n.generated.js";
+import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();

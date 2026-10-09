@@ -4,7 +4,7 @@
 
 输出：
 
-- `src/i18n.generated.ts`，你作为 `dictionaries` 传入的静态词典映射。
+- `src/dialex.generated.ts`，你作为 `dictionaries` 传入的静态词典映射。
 - `src/dialex-env.d.ts`，[类型注册表扩展](../guide/type-safety.md)。
 
 ```bash
@@ -19,4 +19,4 @@ dialex gen -o src/custom.generated.ts
 | `-o, --output <path>` | 生成的词典的自定义输出路径       |
 | `-c, --config <path>` | 自定义配置路径                   |
 
-在构建或启动任何服务端应用之前运行它，通常通过 `init` 添加的 `i18n:generate` 脚本来运行。
+在构建或启动任何服务端应用之前运行它，通常通过 `init` 添加的 `dx:generate` 脚本来运行。

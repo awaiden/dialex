@@ -4,10 +4,10 @@ Dialex 是一个围绕用 TypeScript 定义的词典构建的 i18n 框架。编�
 
 ## 软件包
 
-| 软件包          | 用途                                                           |
-| --------------- | -------------------------------------------------------------- |
-| `dialexjs`      | 核心运行时、框架适配器、Vite 插件                              |
-| `@dialexjs/cli` | `dialexjs` / `dx` 命令，用于生成项目骨架、生成代码和检查一致性 |
+| 软件包          | 用途                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `dialexjs`      | 核心运行时、框架适配器、Vite 插件                            |
+| `@dialexjs/cli` | `dialex` / `dx` 命令，用于生成项目骨架、生成代码和检查一致性 |
 
 ## 安装
 
@@ -37,7 +37,7 @@ dialex init
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-这会创建 `dialex.config.ts` 和初始词典 `src/home.content.ts`，并在 `package.json` 中添加 `i18n:generate` 脚本（`dialex generate`）。参见 [`dialex init`](../cli/init.md)。
+这会创建 `dialex.config.ts` 和初始词典 `src/home.content.ts`，并在 `package.json` 中添加 `dx:generate` 脚本（`dialex generate`）。参见 [`dialex init`](../cli/init.md)。
 
 ## 定义词典
 
@@ -63,4 +63,4 @@ export default defineDictionary("home", {
 dialex generate
 ```
 
-生成 `src/i18n.generated.ts`（词典注册表）和 `src/dialex-env.d.ts`（类型扩展）。然后选择你的[框架](../frameworks/README.md)。
+生成 `src/dialex.generated.ts`（词典注册表）和 `src/dialex-env.d.ts`（类型扩展）。然后选择你的[框架](../frameworks/README.md)。

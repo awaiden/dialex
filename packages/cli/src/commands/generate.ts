@@ -34,7 +34,7 @@ export function generateDictionaries(
   const srcDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
   const targetOutput = options.output
     ? path.resolve(root, options.output)
-    : path.join(srcDir, "i18n.generated.ts");
+    : path.join(srcDir, "dialex.generated.ts");
 
   const targetDir = path.dirname(targetOutput);
 

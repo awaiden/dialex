@@ -4,7 +4,7 @@ Compila los diccionarios `.content.ts` en módulos estáticos para una ejecució
 
 Salidas:
 
-- `src/i18n.generated.ts`, el mapa estático de diccionarios que pasas como `dictionaries`.
+- `src/dialex.generated.ts`, el mapa estático de diccionarios que pasas como `dictionaries`.
 - `src/dialex-env.d.ts`, la [ampliación del registro de tipos](../guide/type-safety.md).
 
 ```bash
@@ -19,4 +19,4 @@ dialex gen -o src/custom.generated.ts
 | `-o, --output <path>` | Ruta de salida personalizada para los diccionarios generados |
 | `-c, --config <path>` | Ruta de configuración personalizada                          |
 
-Ejecútalo antes de compilar o iniciar cualquier aplicación de servidor, normalmente mediante el script `i18n:generate` que añade `init`.
+Ejecútalo antes de compilar o iniciar cualquier aplicación de servidor, normalmente mediante el script `dx:generate` que añade `init`.
