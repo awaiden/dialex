@@ -20,7 +20,7 @@ export default defineDictionary("cart", {
 ```ts
 t("cart.items", { count: 5 }); // en: "5 items"   ru: "5 товаров"
 t("cart.owner", { name: "Ada" }); // "Hello, Ada!"
-t("cart.owner"); // no values: the string is returned unchanged
+t("cart.owner"); // type error: this message needs { name }
 ```
 
 ICU messages work next to plain strings and [function values](./dictionaries.md#values); nothing changes for existing dictionaries. Messages are parsed once and cached.
@@ -58,7 +58,7 @@ formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 
 
 ## Types
 
-Argument names are **not** type-checked: dictionary strings are typed as `string`, so TypeScript cannot see the arguments inside them. Mismatches between locales are caught by [`dialex check`](../cli/check.md) instead. `t` only checks that a string key receives a values object (or nothing), and function keys keep their own parameter types.
+After `dx generate`, the arguments of each message are type-checked: `t("cart.items", { count: 5 })` needs a numeric `count`. `plural`, `selectordinal` and `number` arguments are `number`, `date` and `time` are `Date | number`, `select` is the union of its options (other values are still allowed), and a plain `{name}` accepts a string, number, boolean or `Date`. The types come from the default locale, and [`dialex check`](../cli/check.md) makes sure the other locales use the same arguments. Strings without arguments take no values, and function keys keep their own parameter types.
 
 ## Tooling
 

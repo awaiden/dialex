@@ -123,6 +123,12 @@ export function defineConfig(config: DialexConfig): DialexConfig {
 
 export interface Register {}
 
+/**
+ * Augmented by `dialex generate` (in `dialex-env.d.ts`) with the ICU arguments of each message:
+ * `{ "cart.items": { count: number } }`. `t("cart.items", { count })` is then type-checked.
+ */
+export interface MessageArguments {}
+
 export interface DictionaryRegistry {}
 
 export type DictionaryKey = [keyof DictionaryRegistry] extends [never]

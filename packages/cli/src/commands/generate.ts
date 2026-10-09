@@ -6,6 +6,7 @@ import { DEFAULT_CONFIG } from "dialexjs";
 import { resolveDialexConfig, renderDts } from "dialexjs/scanner";
 import { listLocales, parseDictionaryText } from "../utils/dictionary-edit.js";
 import { readStaticConfig } from "../utils/static-config.js";
+import { messageArguments } from "../utils/message-arguments.js";
 import { relativeImportExtension } from "../utils/tsconfig.js";
 import { logger } from "../utils/logger.js";
 
@@ -142,7 +143,7 @@ export default dictionaries;
 `;
   }
 
-  const dts = renderDts(root, files, locales);
+  const dts = renderDts(root, files, locales, messageArguments(parsed, clientConfig.defaultLocale));
   return {
     files,
     outputPath,

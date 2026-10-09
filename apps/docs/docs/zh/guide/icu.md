@@ -20,7 +20,7 @@ export default defineDictionary("cart", {
 ```ts
 t("cart.items", { count: 5 }); // en: "5 items"   ru: "5 товаров"
 t("cart.owner", { name: "Ada" }); // "Hello, Ada!"
-t("cart.owner"); // no values: the string is returned unchanged
+t("cart.owner"); // type error: this message needs { name }
 ```
 
 ICU 消息可以与普通字符串和[函数值](./dictionaries.md#values)并存；现有词典不受任何影响。消息只会解析一次并被缓存。
@@ -56,9 +56,11 @@ import { formatMessage } from "dialexjs";
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```
 
+<a id="types"></a>
+
 ## 类型
 
-参数名称**不会**被类型检查：词典中的字符串类型为 `string`，所以 TypeScript 看不到其中的参数。不同 locale 之间的不一致改由 [`dialex check`](../cli/check.md) 发现。`t` 只检查字符串键是否收到值对象（或什么都不传），函数键则保留它们自己的参数类型。
+运行 `dx generate` 之后，每条消息的参数都会被类型检查：`t("cart.items", { count: 5 })` 需要数字类型的 `count`。`plural`、`selectordinal` 和 `number` 参数是 `number`，`date` 和 `time` 是 `Date | number`，`select` 是其选项的联合类型（仍允许其他值），普通的 `{name}` 接受 string、number、boolean 或 `Date`。类型来自默认 locale，[`dialex check`](../cli/check.md) 会确保其他 locale 使用相同的参数。没有参数的字符串不接受值，函数键保留各自的参数类型。
 
 ## 工具
 

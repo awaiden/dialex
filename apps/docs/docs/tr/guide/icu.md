@@ -20,7 +20,7 @@ export default defineDictionary("cart", {
 ```ts
 t("cart.items", { count: 5 }); // en: "5 items"   ru: "5 товаров"
 t("cart.owner", { name: "Ada" }); // "Hello, Ada!"
-t("cart.owner"); // no values: the string is returned unchanged
+t("cart.owner"); // type error: this message needs { name }
 ```
 
 ICU mesajları düz metinlerle ve [fonksiyon değerleriyle](./dictionaries.md#values) yan yana çalışır; mevcut sözlükler için hiçbir şey değişmez. Mesajlar bir kez ayrıştırılır ve önbelleğe alınır.
@@ -56,9 +56,11 @@ import { formatMessage } from "dialexjs";
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```
 
+<a id="types"></a>
+
 ## Tipler
 
-Argüman adları tip denetiminden **geçmez**: sözlük metinleri `string` olarak tiplenir, bu yüzden TypeScript içlerindeki argümanları göremez. Yerel ayarlar arasındaki uyumsuzlukları bunun yerine [`dialex check`](../cli/check.md) yakalar. `t` yalnızca bir metin anahtarının bir değerler nesnesi (veya hiçbir şey) aldığını denetler; fonksiyon anahtarları kendi parametre tiplerini korur.
+`dx generate` sonrasında her mesajın argümanları tip denetiminden geçer: `t("cart.items", { count: 5 })` sayısal bir `count` ister. `plural`, `selectordinal` ve `number` argümanları `number`, `date` ve `time` argümanları `Date | number` olur; `select`, seçeneklerinin birleşimidir (başka değerlere de izin verilir) ve sade bir `{name}` string, number, boolean veya `Date` kabul eder. Tipler varsayılan yerel ayardan gelir; diğer yerel ayarların aynı argümanları kullandığını [`dialex check`](../cli/check.md) doğrular. Argümansız metinler değer almaz, fonksiyon anahtarları kendi parametre tiplerini korur.
 
 ## Araçlar
 

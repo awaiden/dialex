@@ -10,11 +10,63 @@ export const REPO = "https://github.com/awaiden/dialex";
 const VERSION = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
 export const isVersion = (text) => VERSION.test(text);
 
-/** The text under `## [Unreleased]`, up to the next version heading or the link list. */
+const BUMPS = ["major", "minor", "patch"];
+const BUMP_HEADINGS = { major: "Major Changes", minor: "Minor Changes", patch: "Patch Changes" };
+
+/** Parses one `.changeset/*.md` file: `{ releases: { "pkg": "minor" }, summary }`. */
+export function parseChangeset(text) {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(text);
+  if (!match) throw new Error("A changeset must start with a --- frontmatter block");
+  const releases = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const entry = /^\s*["']?([^"':]+)["']?\s*:\s*["']?(\w+)["']?\s*$/.exec(line);
+    if (!entry) continue;
+    if (!BUMPS.includes(entry[2])) throw new Error(`Unknown bump "${entry[2]}" for ${entry[1]}`);
+    releases[entry[1].trim()] = entry[2];
+  }
+  return { releases, summary: match[2].trim() };
+}
+
+/** Pending changesets, in file-name order. `README.md` is documentation, not a change. */
+export function readChangesets(root) {
+  const dir = path.join(root, ".changeset");
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((name) => name.endsWith(".md") && name !== "README.md")
+    .sort()
+    .map((name) => ({ name, ...parseChangeset(fs.readFileSync(path.join(dir, name), "utf-8")) }));
+}
+
+/** The largest bump a changeset asks for. */
+export function highestBump(releases) {
+  const kinds = Object.values(releases);
+  return BUMPS.find((bump) => kinds.includes(bump));
+}
+
+/**
+ * The changelog text for a set of changesets: one section per bump (major, minor, patch), one list
+ * item per changeset. Extra paragraphs, tables and code blocks stay inside the item.
+ */
+export function changesetSections(changesets) {
+  const sections = [];
+  for (const bump of BUMPS) {
+    const items = changesets
+      .filter((c) => c.summary && highestBump(c.releases) === bump)
+      .map((c) => {
+        const [first, ...rest] = c.summary.split("\n");
+        return ["- " + first, ...rest.map((line) => (line.trim() ? "  " + line : ""))].join("\n");
+      });
+    if (items.length) sections.push(`### ${BUMP_HEADINGS[bump]}\n\n${items.join("\n\n")}`);
+  }
+  return sections.join("\n\n");
+}
+
+/** The text under a stray `## [Unreleased]` heading (not used any more; entries are changesets). */
 export function unreleasedBody(changelog) {
   const lines = changelog.split("\n");
   const start = lines.findIndex((line) => line.startsWith("## [Unreleased]"));
-  if (start === -1) throw new Error('CHANGELOG.md has no "## [Unreleased]" section');
+  if (start === -1) return "";
   const end = lines.findIndex((line, i) => i > start && /^## \[|^\[[^\]]+\]: /.test(line));
   return lines
     .slice(start + 1, end === -1 ? undefined : end)
@@ -23,40 +75,37 @@ export function unreleasedBody(changelog) {
 }
 
 /**
- * Turns the Unreleased section into a release: a fresh empty Unreleased on top, the entries under
- * `## [version] - date`, and the compare links at the bottom updated.
+ * Adds `## [version] - date` with `body` above the newest release, and the matching compare link.
  */
-export function releaseChangelog(changelog, version, date, { allowEmpty = false } = {}) {
-  const body = unreleasedBody(changelog);
-  if (!body && !allowEmpty) {
-    throw new Error("The Unreleased section of CHANGELOG.md is empty. Describe the changes first.");
-  }
+export function releaseChangelog(changelog, version, date, body) {
+  if (!body.trim()) throw new Error("There is nothing to release: no changeset has a description.");
   if (new RegExp(`^## \\[${version.replaceAll(".", "\\.")}\\]`, "m").test(changelog)) {
     throw new Error(`CHANGELOG.md already has a section for ${version}`);
   }
 
   const lines = changelog.split("\n");
-  const start = lines.findIndex((line) => line.startsWith("## [Unreleased]"));
-  const end = lines.findIndex((line, i) => i > start && /^## \[|^\[[^\]]+\]: /.test(line));
-  const section = ["## [Unreleased]", "", `## [${version}] - ${date}`, ""];
-  if (body) section.push(body, "");
-  const next = [
-    ...lines.slice(0, start),
-    ...section,
-    ...lines.slice(end === -1 ? lines.length : end),
-  ];
+  const firstRelease = lines.findIndex((line) => /^## \[\d/.test(line));
+  const at = firstRelease === -1 ? lines.length : firstRelease;
+  lines.splice(at, 0, `## [${version}] - ${date}`, "", body.trim(), "");
 
-  const linkIndex = next.findIndex((line) => line.startsWith("[Unreleased]: "));
-  if (linkIndex === -1) return next.join("\n");
-  const previous = /^\[([^\]]+)\]: /.exec(next[linkIndex + 1] ?? "")?.[1];
-  const links = [`[Unreleased]: ${REPO}/compare/v${version}...HEAD`];
-  links.push(
-    previous
+  const isLink = (line) => /^\[[^\]]+\]: /.test(line);
+  const firstLink = lines.findIndex(isLink);
+  if (firstLink !== -1) {
+    const unreleased = lines[firstLink].startsWith("[Unreleased]: ");
+    const previousLine = lines
+      .slice(firstLink)
+      .find((line) => isLink(line) && !line.startsWith("[Unreleased]: "));
+    const previous = previousLine && /^\[([^\]]+)\]/.exec(previousLine)?.[1];
+    const link = previous
       ? `[${version}]: ${REPO}/compare/v${previous}...v${version}`
-      : `[${version}]: ${REPO}/releases/tag/v${version}`,
-  );
-  next.splice(linkIndex, 1, ...links);
-  return next.join("\n");
+      : `[${version}]: ${REPO}/releases/tag/v${version}`;
+    if (unreleased) {
+      lines.splice(firstLink, 1, `[Unreleased]: ${REPO}/compare/v${version}...HEAD`, link);
+    } else {
+      lines.splice(firstLink, 0, link);
+    }
+  }
+  return lines.join("\n");
 }
 
 export function readVersions(root) {
@@ -116,8 +165,8 @@ export function checkRelease(root, tag) {
 }
 
 /**
- * Checks to make before bumping anything (`bumpp` does not roll back what it already wrote):
- * the packages agree, bun.lock matches them, and there is something to release.
+ * Checks to make before bumping anything (the version step cannot be undone half way): the
+ * packages agree, bun.lock matches them, and there is at least one changeset to release.
  */
 export function preflightErrors(root) {
   const errors = [];
@@ -139,8 +188,19 @@ export function preflightErrors(root) {
     }
   }
   const changelog = fs.readFileSync(path.join(root, "CHANGELOG.md"), "utf-8");
-  if (!unreleasedBody(changelog)) {
-    errors.push("The Unreleased section of CHANGELOG.md is empty. Describe the changes first.");
+  if (unreleasedBody(changelog)) {
+    errors.push(
+      "CHANGELOG.md has entries under Unreleased. Move them into a changeset (bun run changeset).",
+    );
+  }
+  let changesets = [];
+  try {
+    changesets = readChangesets(root);
+  } catch (error) {
+    errors.push(error.message);
+  }
+  if (!changesets.some((c) => c.summary)) {
+    errors.push("There are no changesets to release. Add one with: bun run changeset");
   }
   return errors;
 }

@@ -20,7 +20,7 @@ export default defineDictionary("cart", {
 ```ts
 t("cart.items", { count: 5 }); // en: "5 items"   ru: "5 товаров"
 t("cart.owner", { name: "Ada" }); // "Hello, Ada!"
-t("cart.owner"); // no values: the string is returned unchanged
+t("cart.owner"); // type error: this message needs { name }
 ```
 
 Los mensajes ICU conviven con las cadenas simples y con los [valores de tipo función](./dictionaries.md#values); no cambia nada para los diccionarios existentes. Los mensajes se analizan una sola vez y se guardan en caché.
@@ -56,9 +56,11 @@ import { formatMessage } from "dialexjs";
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```
 
+<a id="types"></a>
+
 ## Tipos
 
-Los nombres de los argumentos **no** se comprueban en tiempo de compilación: las cadenas de los diccionarios tienen tipo `string`, así que TypeScript no puede ver los argumentos que contienen. Las discrepancias entre locales las detecta en su lugar [`dialex check`](../cli/check.md). `t` solo comprueba que una clave de tipo cadena reciba un objeto de valores (o nada), y las claves de tipo función conservan sus propios tipos de parámetros.
+Tras `dx generate`, los argumentos de cada mensaje se comprueban con tipos: `t("cart.items", { count: 5 })` necesita un `count` numérico. Los argumentos `plural`, `selectordinal` y `number` son `number`, `date` y `time` son `Date | number`, `select` es la unión de sus opciones (se siguen admitiendo otros valores) y un `{name}` simple acepta string, number, boolean o `Date`. Los tipos salen del locale por defecto, y [`dialex check`](../cli/check.md) comprueba que los demás locales usen los mismos argumentos. Las cadenas sin argumentos no reciben valores, y las claves de función conservan sus propios tipos de parámetros.
 
 ## Herramientas
 

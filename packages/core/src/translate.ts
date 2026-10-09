@@ -1,4 +1,4 @@
-import type { DictionaryRegistry } from "./index.js";
+import type { DictionaryRegistry, MessageArguments } from "./index.js";
 import { formatMessage, type IcuValues } from "./icu/format.js";
 
 type Leaf = (...args: any[]) => any;
@@ -44,11 +44,16 @@ type LeafOf<P extends string> = [keyof DictionaryRegistry] extends [never]
     : any;
 
 /**
- * Function leaves take their own parameters; string leaves optionally take ICU message values:
- * `t("cart.items", { count: 3 })`.
+ * Function leaves take their own parameters. A string leaf with ICU arguments takes exactly those
+ * values (`t("cart.items", { count: 3 })`, checked once `dialex generate` has written
+ * `MessageArguments`); any other string leaf optionally takes a values object.
  */
 export type TranslationArgs<P extends string> =
-  LeafOf<P> extends (...args: infer A) => any ? A : [values?: IcuValues];
+  LeafOf<P> extends (...args: infer A) => any
+    ? A
+    : P extends keyof MessageArguments
+      ? [values: MessageArguments[P]]
+      : [values?: IcuValues];
 
 export type TranslationResult<P extends string> =
   LeafOf<P> extends (...args: any[]) => infer R ? R : LeafOf<P>;

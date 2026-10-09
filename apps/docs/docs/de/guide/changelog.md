@@ -6,8 +6,6 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
-
 ## [0.4.0] - 2026-10-09
 
 ### Changed
@@ -134,7 +132,6 @@ First release.
 - A VS Code extension with diagnostics, hover, go to definition, completion and quick fixes.
 - Documentation in English, Turkish, Spanish, German and Simplified Chinese.
 
-[Unreleased]: https://github.com/awaiden/dialex/compare/v0.4.0...HEAD
 [0.4.0]: https://github.com/awaiden/dialex/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/awaiden/dialex/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/awaiden/dialex/compare/v0.2.2...v0.2.3

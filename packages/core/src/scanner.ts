@@ -117,6 +117,7 @@ export function renderDts(
   root: string,
   files: string[],
   locales?: string[],
+  messageArguments: Record<string, string> = {},
 ): { path: string; content: string } | undefined {
   if (files.length === 0) return undefined;
 
@@ -141,6 +142,10 @@ export function renderDts(
     locales && locales.length > 0 ? locales.map((l) => `"${l}"`).join(" | ") : "string";
 
   const registry = records.join(",\n    ");
+  const messageEntries = Object.entries(messageArguments)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, type]) => `    ${JSON.stringify(key)}: ${type};`)
+    .join("\n");
   const adapterBlocks = detectAdapters(root)
     .map(
       (adapter) => `
@@ -161,6 +166,7 @@ declare module 'dialexjs' {
     locales: ${localesType};
   }
   export interface DictionaryRegistry extends ${records.join(",\n    ")} {}
+  export interface MessageArguments {${messageEntries ? `\n${messageEntries}\n  ` : ""}}
 }
 ${adapterBlocks}
 `;
@@ -191,9 +197,6 @@ export async function autoScanAndLoadDictionaries(
   const config = resolveDialexConfig(root, inlineConfig);
   const include = config.include || "**/*.content.ts";
   const files = fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
-
-  // Generate .d.ts for TypeScript autocompletion
-  generateDts(root, files, config.locales);
 
   // Dynamically load each dictionary into memory if not already done
   if (!scanned) {

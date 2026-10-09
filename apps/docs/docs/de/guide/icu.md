@@ -20,7 +20,7 @@ export default defineDictionary("cart", {
 ```ts
 t("cart.items", { count: 5 }); // en: "5 items"   ru: "5 товаров"
 t("cart.owner", { name: "Ada" }); // "Hello, Ada!"
-t("cart.owner"); // no values: the string is returned unchanged
+t("cart.owner"); // type error: this message needs { name }
 ```
 
 ICU-Nachrichten funktionieren neben einfachen Strings und [Funktionswerten](./dictionaries.md#values); für bestehende Wörterbücher ändert sich nichts. Nachrichten werden einmal geparst und zwischengespeichert.
@@ -56,9 +56,11 @@ import { formatMessage } from "dialexjs";
 formatMessage("en", "{count, plural, one {# item} other {# items}}", { count: 3 });
 ```
 
+<a id="types"></a>
+
 ## Typen
 
-Argumentnamen werden **nicht** typgeprüft: Wörterbuch-Strings haben den Typ `string`, daher kann TypeScript die Argumente darin nicht sehen. Abweichungen zwischen Locales findet stattdessen [`dialex check`](../cli/check.md). `t` prüft nur, dass ein String-Schlüssel ein Werte-Objekt (oder nichts) erhält; Funktionsschlüssel behalten ihre eigenen Parametertypen.
+Nach `dx generate` werden die Argumente jeder Nachricht typgeprüft: `t("cart.items", { count: 5 })` braucht ein numerisches `count`. Die Argumente `plural`, `selectordinal` und `number` sind `number`, `date` und `time` sind `Date | number`, `select` ist die Vereinigung seiner Optionen (andere Werte bleiben erlaubt), und ein einfaches `{name}` akzeptiert string, number, boolean oder `Date`. Die Typen stammen aus dem Standard-Locale, und [`dialex check`](../cli/check.md) stellt sicher, dass die anderen Locales dieselben Argumente verwenden. Strings ohne Argumente nehmen keine Werte, und Funktionsschlüssel behalten ihre eigenen Parametertypen.
 
 ## Werkzeuge
 

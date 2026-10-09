@@ -17,10 +17,11 @@
     "prepare": "vp config",
     "docs:check-translations": "bun run --cwd apps/docs check-translations",
     "test:scripts": "bun test scripts",
-    "release": "node scripts/release.mjs --preflight && bumpp"
+    "release": "node scripts/release.mjs",
+    "changeset": "changeset"
   },
   "devDependencies": {
-    "bumpp": "^11.1.0",
+    "@changesets/cli": "^3.0.3",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },
