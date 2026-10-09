@@ -27,6 +27,7 @@ dialex lint -c ./dialex.config.ts
 - A dictionary is never referenced.
 - An ICU message uses plain `{placeholders}` but does not parse as ICU, or a plural option is missing for a language (for example `few` in Russian).
 - A string still starts with `[TODO]`, left by `--fix` or a rejected translation.
+- A translation is out of date: its source text changed after it was translated (needs [`dialex.lock.json`](./translate.md#keeping-translations-in-sync)).
 
 Reference and unused-key checks scan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`, skipping `node_modules`, build output, `*.d.ts`, generated files, config files and the dictionaries themselves. They are skipped when there is no source to scan.
 
@@ -38,6 +39,7 @@ Reference and unused-key checks scan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,ast
 | `--json`              | Print machine-readable JSON (`success`, `totalIssues`, `totalWarnings`, `fixed`, `diagnostics`) and nothing else |
 | `--github`            | Also print GitHub Actions annotations (`::error file=...,line=...::message`)                                     |
 | `--fix`               | Insert missing keys before checking                                                                              |
+| `--fail-on-stale`     | Treat translations whose source text changed as errors                                                           |
 | `--src <globs...>`    | Source globs to scan instead of the default                                                                      |
 
 ## --fix

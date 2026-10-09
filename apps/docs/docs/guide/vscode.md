@@ -23,10 +23,10 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 Problems are underlined where they are:
 
-| In                   | Problem                                                                                                                                                                                                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A `.content.ts` file | A locale is missing a key that another locale has, or a configured locale is missing; invalid [ICU](./icu.md); arguments that differ between locales; `[TODO]` placeholders left by `dialex check --fix` |
-| Source code          | `getDictionary("x")` or `t("x.y")` that points at nothing                                                                                                                                                |
+| In                   | Problem                                                                                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A `.content.ts` file | A locale is missing a key that another locale has, or a configured locale is missing; invalid [ICU](./icu.md); arguments that differ between locales; `[TODO]` placeholders left by `dialex check --fix`; translations whose source text changed since they were translated |
+| Source code          | `getDictionary("x")` or `t("x.y")` that points at nothing                                                                                                                                                                                                                   |
 
 Plural categories missing for a language (for example `few` in Russian) are reported as warnings. With `dialex.unusedKeys` on, keys and dictionaries that no source file seems to use are faded out.
 

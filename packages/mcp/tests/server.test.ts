@@ -172,6 +172,29 @@ describe("Dialex MCP Server", () => {
     expect(parsed.items[0].status).toBe("todo");
   });
 
+  it("tool: dialex_missing also lists stale translations when a lock file exists", async () => {
+    const root = createTestProject();
+    fs.writeFileSync(
+      path.join(root, "dialex.lock.json"),
+      JSON.stringify({
+        version: 1,
+        sourceLocale: "en",
+        locales: { tr: { "home.title": "00000000" } },
+      }),
+    );
+    const { client } = await setupClientAndServer(root);
+
+    const res = await client.callTool({ name: "dialex_missing", arguments: { locale: "tr" } });
+    const parsed = JSON.parse((res.content as any)[0].text);
+    const stale = parsed.items.filter((i: any) => i.status === "stale");
+    expect(stale.map((i: any) => i.key)).toEqual(["home.title"]);
+    expect(stale[0]).toMatchObject({
+      locale: "tr",
+      defaultValue: expect.any(String),
+      currentValue: expect.any(String),
+    });
+  });
+
   it("tool: dialex_set_key safe edits and overwrite protection", async () => {
     const root = createTestProject();
     const { client } = await setupClientAndServer(root);

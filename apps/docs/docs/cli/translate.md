@@ -7,6 +7,7 @@ dialex translate --dry-run
 dialex translate
 dialex translate -l tr de
 dialex translate -s en
+dialex translate --stale
 ```
 
 | Option                      | Description                                                              |
@@ -14,6 +15,7 @@ dialex translate -s en
 | `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)      |
 | `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)  |
 | `--dry-run`                 | List what would be translated. Does not call the provider or write files |
+| `--stale`                   | Re-translate strings whose source text changed (see below)               |
 | `-c, --config <path>`       | Custom config path                                                       |
 
 ## Configure a provider
@@ -64,6 +66,21 @@ translate: {
 ## What gets translated
 
 A string is translated when the target locale has no value for it, or its value still starts with `[TODO]` (see [`check --fix`](./check.md#fix)). Existing translations are never overwritten. Function values are not translated. Identical source strings are sent once per locale.
+
+## Keeping translations in sync
+
+`dialex translate` only fills missing strings. To notice when the _source_ text changes afterwards, Dialex keeps a lock file, `dialex.lock.json`, next to your config. It records a short hash of the source text each translation was made from.
+
+```json
+{ "version": 1, "sourceLocale": "en", "locales": { "tr": { "home.title": "a1b2c3d4" } } }
+```
+
+- `dialex translate` and [`dialex import`](./import.md) record what they write.
+- `dialex lock` records the translations you already have (run it once to adopt the lock file). Translations that are already out of date are left alone; `dialex lock --all` accepts them.
+- [`dialex check`](./check.md) warns about every translation whose source text changed since it was recorded, and `--fail-on-stale` makes that an error. Translations without a record, such as hand-written ones, are never reported.
+- `dialex translate --stale` translates the out-of-date strings again. Only these may replace an existing translation.
+
+Commit `dialex.lock.json` so the whole team sees the same state.
 
 ## ICU messages
 

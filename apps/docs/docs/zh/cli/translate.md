@@ -7,6 +7,7 @@ dialex translate --dry-run
 dialex translate
 dialex translate -l tr de
 dialex translate -s en
+dialex translate --stale
 ```
 
 | 选项                        | 说明                                                                |
@@ -14,6 +15,7 @@ dialex translate -s en
 | `-l, --locale <locales...>` | 目标 locale（默认：除源 locale 之外所有已配置的 locale）            |
 | `-s, --source <locale>`     | 源 locale（默认：`translate.sourceLocale`，然后是 `defaultLocale`） |
 | `--dry-run`                 | 列出将要翻译的内容。不会调用提供者，也不会写入文件                  |
+| `--stale`                   | 重新翻译源文本已变化的字符串（见下文）                              |
 | `-c, --config <path>`       | 自定义配置路径                                                      |
 
 ## 配置提供者
@@ -64,6 +66,23 @@ translate: {
 ## 哪些内容会被翻译
 
 当目标 locale 没有某个字符串的值，或其值仍以 `[TODO]` 开头时（参见 [`check --fix`](./check.md#fix)），该字符串就会被翻译。已有的翻译永远不会被覆盖。函数值不会被翻译。相同的源字符串对每个 locale 只发送一次。
+
+<a id="keeping-translations-in-sync"></a>
+
+## 保持翻译最新
+
+`dialex translate` 只会填充缺失的字符串。为了发现之后*源*文本的变化，Dialex 会在配置文件旁保存一个锁文件 `dialex.lock.json`，其中记录每条翻译所依据的源文本的简短哈希。
+
+```json
+{ "version": 1, "sourceLocale": "en", "locales": { "tr": { "home.title": "a1b2c3d4" } } }
+```
+
+- `dialex translate` 和 [`dialex import`](./import.md) 会记录它们写入的内容。
+- `dialex lock` 会记录你已有的翻译（采用锁文件时运行一次）。已经过期的翻译保持不变；`dialex lock --all` 会接受它们。
+- [`dialex check`](./check.md) 会对自记录以来源文本已变化的每条翻译发出警告，`--fail-on-stale` 会把它变成错误。没有记录的翻译（例如手写的）永远不会被报告。
+- `dialex translate --stale` 会重新翻译过期的字符串。只有它们可以替换已有的翻译。
+
+请提交 `dialex.lock.json`，让整个团队看到相同的状态。
 
 ## ICU 消息
 

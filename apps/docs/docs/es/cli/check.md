@@ -27,6 +27,7 @@ dialex lint -c ./dialex.config.ts
 - Un diccionario nunca se referencia.
 - Un mensaje ICU usa `{placeholders}` simples pero no se analiza como ICU, o falta una opción de plural para un idioma (por ejemplo `few` en ruso).
 - Una cadena aún empieza por `[TODO]`, dejado por `--fix` o por una traducción rechazada.
+- Una traducción está desactualizada: su texto de origen cambió después de traducirse (necesita [`dialex.lock.json`](./translate.md#keeping-translations-in-sync)).
 
 Las comprobaciones de referencias y de claves sin usar analizan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`, omitiendo `node_modules`, la salida de compilación, `*.d.ts`, los archivos generados, los archivos de configuración y los propios diccionarios. Se omiten cuando no hay código fuente que analizar.
 
@@ -38,6 +39,7 @@ Las comprobaciones de referencias y de claves sin usar analizan `**/*.{ts,tsx,js
 | `--json`              | Imprime JSON legible por máquinas (`success`, `totalIssues`, `totalWarnings`, `fixed`, `diagnostics`) y nada más |
 | `--github`            | Imprime además anotaciones de GitHub Actions (`::error file=...,line=...::message`)                              |
 | `--fix`               | Inserta las claves que faltan antes de comprobar                                                                 |
+| `--fail-on-stale`     | Trata como errores las traducciones cuyo texto de origen cambió                                                  |
 | `--src <globs...>`    | Globs de código fuente que analizar en lugar de los predeterminados                                              |
 
 ## --fix

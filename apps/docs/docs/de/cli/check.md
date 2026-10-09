@@ -27,6 +27,7 @@ dialex lint -c ./dialex.config.ts
 - Ein Wörterbuch wird nie referenziert.
 - Eine ICU-Nachricht verwendet einfache `{placeholders}`, lässt sich aber nicht als ICU parsen, oder für eine Sprache fehlt eine Plural-Option (zum Beispiel `few` im Russischen).
 - Ein String beginnt noch mit `[TODO]`, hinterlassen von `--fix` oder einer abgelehnten Übersetzung.
+- Eine Übersetzung ist veraltet: Ihr Quelltext hat sich nach der Übersetzung geändert (benötigt [`dialex.lock.json`](./translate.md#keeping-translations-in-sync)).
 
 Die Prüfungen auf Referenzen und ungenutzte Schlüssel durchsuchen `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}` und überspringen `node_modules`, Build-Ausgaben, `*.d.ts`, generierte Dateien, Konfigurationsdateien und die Wörterbücher selbst. Sie entfallen, wenn es keinen Quellcode zum Durchsuchen gibt.
 
@@ -38,6 +39,7 @@ Die Prüfungen auf Referenzen und ungenutzte Schlüssel durchsuchen `**/*.{ts,ts
 | `--json`              | Gibt maschinenlesbares JSON aus (`success`, `totalIssues`, `totalWarnings`, `fixed`, `diagnostics`) und sonst nichts |
 | `--github`            | Gibt zusätzlich GitHub-Actions-Annotationen aus (`::error file=...,line=...::message`)                               |
 | `--fix`               | Fügt vor der Prüfung fehlende Schlüssel ein                                                                          |
+| `--fail-on-stale`     | Behandelt Übersetzungen, deren Quelltext sich geändert hat, als Fehler                                               |
 | `--src <globs...>`    | Quellcode-Globs, die statt der Standardwerte durchsucht werden                                                       |
 
 ## --fix

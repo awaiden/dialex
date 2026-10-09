@@ -27,7 +27,19 @@ dialex check --fix --json
 
 If using the Dialex MCP server:
 
-- Call `dialex_missing({ locale: "tr" })` to get the list of keys with missing or `[TODO]` values.
+- Call `dialex_missing({ locale: "tr" })` to get the list of keys with missing or `[TODO]` values, plus `"stale"` ones: translations whose source text changed after they were translated (needs `dialex.lock.json`).
+
+### Keeping translations current
+
+`dialex translate` writes `dialex.lock.json`, which records the source text behind each translation. After editing a source string:
+
+```bash
+dialex check --json            # stale translations show up as warnings (stale-translation)
+dialex translate --stale       # re-translate only those; hand-written translations are untouched
+dialex lock --all              # or accept them as still correct
+```
+
+Run `dialex lock` once in an existing project to start tracking the translations it already has.
 
 If using CLI / files:
 

@@ -8,6 +8,7 @@ import { runCheck } from "./commands/check.js";
 import { runExport } from "./commands/export.js";
 import { runImport } from "./commands/import.js";
 import { runTranslate } from "./commands/translate.js";
+import { runLock } from "./commands/lock.js";
 import pkg from "../package.json" with { type: "json" };
 
 const program = new Command();
@@ -53,6 +54,7 @@ program
   .option("--json", "Print machine-readable JSON")
   .option("--github", "Print GitHub Actions annotations")
   .option("--fix", "Insert missing keys marked with [TODO]")
+  .option("--fail-on-stale", "Treat translations whose source text changed as errors")
   .option("--src <globs...>", "Source globs to scan for dictionary references")
   .action(async (opts) => {
     await runCheck(opts);
@@ -91,6 +93,10 @@ program
     "Source locale (default: translate.sourceLocale or defaultLocale)",
   )
   .option("--dry-run", "List what would be translated without calling the provider")
+  .option(
+    "--stale",
+    "Also re-translate strings whose source text changed since they were translated",
+  )
   .option("-c, --config <path>", "Custom config path")
   .option("--json", "Print machine-readable JSON")
   .action(async (opts) => {
@@ -102,6 +108,22 @@ program
       } else {
         logger.error(err.message || String(err));
       }
+      process.exit(1);
+    }
+  });
+
+program
+  .command("lock")
+  .description("Record translations as up to date with the current source text (dialex.lock.json)")
+  .option("-s, --source <locale>", "Locale the translations were made from")
+  .option("--all", "Also accept translations that are already out of date")
+  .option("--json", "Print machine-readable JSON")
+  .option("-c, --config <path>", "Custom config path")
+  .action(async (opts) => {
+    try {
+      await runLock(opts);
+    } catch (err: any) {
+      logger.error(err.message || String(err));
       process.exit(1);
     }
   });

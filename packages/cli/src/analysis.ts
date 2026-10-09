@@ -1,3 +1,4 @@
+import { isStale, readLock } from "./utils/lockfile.js";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -33,6 +34,7 @@ export type IssueCode =
   | "missing-key"
   | "invalid-locale"
   | "todo-placeholder"
+  | "stale-translation"
   | "invalid-icu"
   | "icu-args-mismatch"
   | "icu-plural-categories"
@@ -75,6 +77,8 @@ export interface AnalysisOptions {
   ignore?: string[];
   /** Report possibly unused keys and dictionaries. @default true */
   unused?: boolean;
+  /** Report translations whose source text changed since `dialex.lock.json` recorded them. @default true */
+  lock?: boolean;
 }
 
 export interface LeafInfo {
@@ -292,6 +296,7 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
 
   const issues: AnalysisIssue[] = [];
   const dictionaries: AnalyzedDictionary[] = [];
+  const lock = options.lock === false ? undefined : readLock(root);
 
   // 1. Dictionaries: parity, placeholders, ICU
   for (const file of files) {
@@ -367,6 +372,30 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
             range: at(locale, leafPath.split(".")),
             locale,
             path: leafPath.split("."),
+          });
+        }
+      }
+    }
+
+    // Translations made from source text that has changed since (see dialex.lock.json)
+    const sourceLeaves = lock?.sourceLocale ? data.leaves.get(lock.sourceLocale) : undefined;
+    if (lock && sourceLeaves) {
+      for (const locale of data.locales) {
+        if (locale === lock.sourceLocale) continue;
+        for (const [leafPath, leaf] of data.leaves.get(locale)!) {
+          if (leaf.kind !== "string" || leaf.value === undefined) continue;
+          if (leaf.value.startsWith(TODO_PREFIX)) continue;
+          const source = sourceLeaves.get(leafPath);
+          if (source?.kind !== "string" || source.value === undefined) continue;
+          if (!isStale(lock, locale, `${data.name}.${leafPath}`, source.value)) continue;
+          add({
+            level: "warning",
+            code: "stale-translation",
+            message: `Locale "${locale}" key "${leafPath}" is out of date: the "${lock.sourceLocale}" text changed after it was translated`,
+            range: at(locale, leafPath.split(".")),
+            locale,
+            path: leafPath.split("."),
+            sourceLocale: lock.sourceLocale,
           });
         }
       }

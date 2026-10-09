@@ -21,7 +21,9 @@ import {
   generateDictionaries,
   TODO_PREFIX,
   hasPath,
+  isStale,
   listLocales,
+  readLock,
 } from "@dialexjs/cli/api";
 import { DOC_TOPICS } from "./docs.js";
 import pkg from "../package.json" with { type: "json" };
@@ -167,7 +169,7 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
         {
           name: "dialex_missing",
           description:
-            "List all missing keys or keys marked with [TODO] placeholders across locales.",
+            "List missing keys, keys marked with [TODO] placeholders, and stale translations (the source text changed after they were translated, per dialex.lock.json) across locales.",
           inputSchema: {
             type: "object",
             properties: {
@@ -410,12 +412,13 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
             locale: string;
             path: string[];
             key: string;
-            status: "missing" | "todo";
+            status: "missing" | "todo" | "stale";
             currentValue?: string;
             defaultValue?: string;
           }> = [];
 
           const configuredLocales = new Set(project.config.locales || []);
+          const lock = readLock(root);
 
           for (const d of project.dictionaries) {
             const localesInDict = new Set(listLocales(d.df));
@@ -453,6 +456,36 @@ export function createDialexMcpServer(options: { root?: string } = {}) {
                     status: "todo",
                     currentValue: curr.value,
                     defaultValue: defaultMap.get(pathKey),
+                  });
+                }
+              }
+            }
+
+            // Translations whose source text changed since they were translated
+            if (lock?.sourceLocale) {
+              const sourceLeaves = new Map(
+                listLeaves(d.df, lock.sourceLocale).map((l) => [l.path.join("."), l]),
+              );
+              for (const loc of allLocales) {
+                if (loc === lock.sourceLocale) continue;
+                if (parsed.locale && loc !== parsed.locale) continue;
+                for (const leaf of listLeaves(d.df, loc)) {
+                  if (leaf.kind !== "string" || leaf.value === undefined) continue;
+                  if (leaf.value.startsWith(TODO_PREFIX)) continue;
+                  const pathKey = leaf.path.join(".");
+                  const source = sourceLeaves.get(pathKey);
+                  if (source?.kind !== "string" || source.value === undefined) continue;
+                  const key = `${d.name}.${pathKey}`;
+                  if (!isStale(lock, loc, key, source.value)) continue;
+                  missingItems.push({
+                    dictionary: d.name,
+                    file: d.rel,
+                    locale: loc,
+                    path: leaf.path,
+                    key,
+                    status: "stale",
+                    currentValue: leaf.value,
+                    defaultValue: source.value,
                   });
                 }
               }

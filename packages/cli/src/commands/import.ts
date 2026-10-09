@@ -10,6 +10,7 @@ import {
 import { argumentSignature, parseMessage } from "dialexjs/icu";
 import { loadProject } from "../utils/project.js";
 import { logger } from "../utils/logger.js";
+import { lockFor, readLock, record, writeLock } from "../utils/lockfile.js";
 import type { TranslationFormat } from "./export.js";
 
 export interface ImportOptions {
@@ -210,6 +211,12 @@ export async function runImport(options: ImportOptions): Promise<ImportResult> {
   };
   const touched = new Set<string>();
 
+  // With a lock file, imported translations are recorded against the current source text.
+  const lockInUse = readLock(root) !== undefined;
+  const sourceLocale = readLock(root)?.sourceLocale ?? project.config.defaultLocale ?? "en";
+  const { lock } = lockFor(root, sourceLocale);
+  let recorded = 0;
+
   for (const { locale, key, value } of entries) {
     const [name, ...keyPath] = key.split(".");
     const dict = byName.get(name);
@@ -242,8 +249,14 @@ export async function runImport(options: ImportOptions): Promise<ImportResult> {
     } else {
       result[outcome]++;
       touched.add(dict.rel);
+      const sourceText = getString(dict.df, sourceLocale, keyPath);
+      if (lockInUse && locale !== sourceLocale && sourceText !== undefined) {
+        record(lock, locale, key, sourceText);
+        recorded++;
+      }
     }
   }
+  if (recorded > 0) writeLock(root, lock);
 
   for (const dict of project.dictionaries) {
     if (touched.has(dict.rel)) await saveDictionaryFile(dict.df);

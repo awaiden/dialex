@@ -27,6 +27,7 @@ dialex lint -c ./dialex.config.ts
 - 某个词典从未被引用。
 - ICU 消息使用了普通的 `{placeholders}`，但无法解析为 ICU，或者某种语言缺少复数选项（例如俄语的 `few`）。
 - 某个字符串仍然以 `[TODO]` 开头，由 `--fix` 或被拒绝的翻译留下。
+- 某条翻译已过期：其源文本在翻译之后发生了变化（需要 [`dialex.lock.json`](./translate.md#keeping-translations-in-sync)）。
 
 引用检查和未使用键检查会扫描 `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`，并跳过 `node_modules`、构建输出、`*.d.ts`、生成的文件、配置文件以及词典本身。没有可扫描的源代码时，这些检查会被跳过。
 
@@ -38,6 +39,7 @@ dialex lint -c ./dialex.config.ts
 | `--json`              | 输出机器可读的 JSON（`success`、`totalIssues`、`totalWarnings`、`fixed`、`diagnostics`），不输出其他内容 |
 | `--github`            | 同时输出 GitHub Actions 注解（`::error file=...,line=...::message`）                                     |
 | `--fix`               | 检查之前先插入缺失的键                                                                                   |
+| `--fail-on-stale`     | 把源文本已变化的翻译视为错误                                                                             |
 | `--src <globs...>`    | 要扫描的源文件 glob，用于替代默认值                                                                      |
 
 ## --fix

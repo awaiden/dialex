@@ -28,6 +28,8 @@ export interface CheckOptions {
   fix?: boolean;
   /** Globs of source files to scan for dictionary references. */
   src?: string[];
+  /** Report translations whose source text changed since they were translated as errors. */
+  failOnStale?: boolean;
 }
 
 export interface CheckAnnotation {
@@ -222,6 +224,7 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
   const byFile = new Map<string, CheckDiagnostic>();
   const dictionaryFiles = new Set(analysis.files);
   for (const issue of analysis.issues) {
+    if (options.failOnStale && issue.code === "stale-translation") issue.level = "error";
     if (issue.level === "info") continue;
     const rel = path.relative(root, issue.file);
     let diag = byFile.get(rel);

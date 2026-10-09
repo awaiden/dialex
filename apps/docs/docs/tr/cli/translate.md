@@ -7,6 +7,7 @@ dialex translate --dry-run
 dialex translate
 dialex translate -l tr de
 dialex translate -s en
+dialex translate --stale
 ```
 
 | Seçenek                     | Açıklama                                                                             |
@@ -14,6 +15,7 @@ dialex translate -s en
 | `-l, --locale <locales...>` | Hedef yerel ayarlar (varsayılan: kaynak dışındaki tüm yapılandırılmış yerel ayarlar) |
 | `-s, --source <locale>`     | Kaynak yerel ayar (varsayılan: `translate.sourceLocale`, sonra `defaultLocale`)      |
 | `--dry-run`                 | Nelerin çevrileceğini listeler. Sağlayıcıyı çağırmaz ve dosya yazmaz                 |
+| `--stale`                   | Kaynak metni değişen metinleri yeniden çevirir (aşağıya bakın)                       |
 | `-c, --config <path>`       | Özel yapılandırma yolu                                                               |
 
 ## Sağlayıcı yapılandırma
@@ -64,6 +66,23 @@ translate: {
 ## Nelerin çevrildiği
 
 Hedef yerel ayarda bir metin için değer yoksa ya da değeri hâlâ `[TODO]` ile başlıyorsa ([`check --fix`](./check.md#fix) bölümüne bakın) metin çevrilir. Mevcut çevirilerin üzerine asla yazılmaz. Fonksiyon değerleri çevrilmez. Aynı kaynak metinler yerel ayar başına bir kez gönderilir.
+
+<a id="keeping-translations-in-sync"></a>
+
+## Çevirileri güncel tutma
+
+`dialex translate` yalnızca eksik metinleri doldurur. _Kaynak_ metin sonradan değiştiğinde bunu fark etmek için Dialex, yapılandırmanızın yanında `dialex.lock.json` adlı bir kilit dosyası tutar. Her çevirinin yapıldığı kaynak metnin kısa bir özetini (hash) kaydeder.
+
+```json
+{ "version": 1, "sourceLocale": "en", "locales": { "tr": { "home.title": "a1b2c3d4" } } }
+```
+
+- `dialex translate` ve [`dialex import`](./import.md) yazdıklarını kaydeder.
+- `dialex lock` elinizdeki çevirileri kaydeder (kilit dosyasını benimsemek için bir kez çalıştırın). Zaten güncel olmayan çevirilere dokunmaz; `dialex lock --all` bunları kabul eder.
+- [`dialex check`](./check.md), kaydedildiğinden beri kaynak metni değişen her çeviri için uyarı verir; `--fail-on-stale` bunu hataya çevirir. Kaydı olmayan çeviriler (örneğin elle yazılanlar) asla bildirilmez.
+- `dialex translate --stale`, güncel olmayan metinleri yeniden çevirir. Mevcut bir çevirinin yerine yalnızca bunlar geçebilir.
+
+Ekibin tamamı aynı durumu görsün diye `dialex.lock.json` dosyasını commit edin.
 
 ## ICU mesajları
 

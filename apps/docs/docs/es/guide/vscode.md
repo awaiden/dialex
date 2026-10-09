@@ -23,10 +23,10 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 Los problemas se subrayan donde están:
 
-| En                       | Problema                                                                                                                                                                                                    |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Un archivo `.content.ts` | A un locale le falta una clave que otro locale tiene, o falta un locale configurado; [ICU](./icu.md) no válido; argumentos que difieren entre locales; marcadores `[TODO]` dejados por `dialex check --fix` |
-| Código fuente            | `getDictionary("x")` o `t("x.y")` que no apunta a nada                                                                                                                                                      |
+| En                       | Problema                                                                                                                                                                                                                                                                      |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Un archivo `.content.ts` | A un locale le falta una clave que otro locale tiene, o falta un locale configurado; [ICU](./icu.md) no válido; argumentos que difieren entre locales; marcadores `[TODO]` dejados por `dialex check --fix`; traducciones cuyo texto de origen cambió desde que se tradujeron |
+| Código fuente            | `getDictionary("x")` o `t("x.y")` que no apunta a nada                                                                                                                                                                                                                        |
 
 Las categorías de plural que faltan para un idioma (por ejemplo `few` en ruso) se notifican como advertencias. Con `dialex.unusedKeys` activado, las claves y los diccionarios que ningún archivo fuente parece usar se atenúan.
 

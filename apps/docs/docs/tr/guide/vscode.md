@@ -23,10 +23,10 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 Sorunların altı, bulundukları yerde çizilir:
 
-| Nerede                    | Sorun                                                                                                                                                                                                                                              |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Bir `.content.ts` dosyası | Bir yerel ayarda, başka bir yerel ayarda bulunan bir anahtar eksik ya da yapılandırılmış bir yerel ayar eksik; geçersiz [ICU](./icu.md); yerel ayarlar arasında farklı olan argümanlar; `dialex check --fix` ile bırakılan `[TODO]` yer tutucuları |
-| Kaynak kod                | Hiçbir şeye işaret etmeyen `getDictionary("x")` veya `t("x.y")`                                                                                                                                                                                    |
+| Nerede                    | Sorun                                                                                                                                                                                                                                                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bir `.content.ts` dosyası | Bir yerel ayarda, başka bir yerel ayarda bulunan bir anahtar eksik ya da yapılandırılmış bir yerel ayar eksik; geçersiz [ICU](./icu.md); yerel ayarlar arasında farklı olan argümanlar; `dialex check --fix` ile bırakılan `[TODO]` yer tutucuları; kaynak metni çevrildikten sonra değişen çeviriler |
+| Kaynak kod                | Hiçbir şeye işaret etmeyen `getDictionary("x")` veya `t("x.y")`                                                                                                                                                                                                                                       |
 
 Bir dil için eksik çoğul kategorileri (örneğin Rusça'da `few`) uyarı olarak bildirilir. `dialex.unusedKeys` açıkken, hiçbir kaynak dosyanın kullanmadığı görünen anahtarlar ve sözlükler soluk gösterilir.
 

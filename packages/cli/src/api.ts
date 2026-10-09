@@ -21,6 +21,15 @@ export {
 } from "./analysis.js";
 
 export {
+  LOCK_FILE,
+  hashSource,
+  isStale,
+  readLock,
+  writeLock,
+  type Lockfile,
+} from "./utils/lockfile.js";
+
+export {
   TODO_PREFIX,
   copyLeaf,
   dictionaryLocation,

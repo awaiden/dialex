@@ -109,14 +109,15 @@ npm install -D @dialexjs/cli dialexjs
 npm install -g @dialexjs/cli   # or globally
 ```
 
-| Command                              | Alias  | Purpose                                                       |
-| ------------------------------------ | ------ | ------------------------------------------------------------- |
-| [`dialex init`](./init.md)           |        | Scaffold Dialex in a project                                  |
-| [`dialex generate`](./generate.md)   | `gen`  | Compile dictionaries and type declarations                    |
-| [`dialex check`](./check.md)         | `lint` | Verify locale parity and how code uses dictionaries           |
-| [`dialex export`](./export.md)       |        | Export strings as JSON, CSV or XLIFF for translators          |
-| [`dialex import`](./import.md)       |        | Write translated files back into dictionaries                 |
-| [`dialex translate`](./translate.md) |        | Fill missing translations with a machine-translation provider |
+| Command                                                      | Alias  | Purpose                                                       |
+| ------------------------------------------------------------ | ------ | ------------------------------------------------------------- |
+| [`dialex init`](./init.md)                                   |        | Scaffold Dialex in a project                                  |
+| [`dialex generate`](./generate.md)                           | `gen`  | Compile dictionaries and type declarations                    |
+| [`dialex check`](./check.md)                                 | `lint` | Verify locale parity and how code uses dictionaries           |
+| [`dialex export`](./export.md)                               |        | Export strings as JSON, CSV or XLIFF for translators          |
+| [`dialex import`](./import.md)                               |        | Write translated files back into dictionaries                 |
+| [`dialex translate`](./translate.md)                         |        | Fill missing translations with a machine-translation provider |
+| [`dialex lock`](./translate.md#keeping-translations-in-sync) |        | Record translations as up to date with their source           |
 
 A typical workflow: `dialex check --fix` to create placeholders for new keys, then either `dialex translate` or `dialex export` / `dialex import` for human translators, then `dialex check` in CI.
 
@@ -154,6 +155,7 @@ dialex lint -c ./dialex.config.ts
 - A dictionary is never referenced.
 - An ICU message uses plain `{placeholders}` but does not parse as ICU, or a plural option is missing for a language (for example `few` in Russian).
 - A string still starts with `[TODO]`, left by `--fix` or a rejected translation.
+- A translation is out of date: its source text changed after it was translated (needs [`dialex.lock.json`](./translate.md#keeping-translations-in-sync)).
 
 Reference and unused-key checks scan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`, skipping `node_modules`, build output, `*.d.ts`, generated files, config files and the dictionaries themselves. They are skipped when there is no source to scan.
 
@@ -165,6 +167,7 @@ Reference and unused-key checks scan `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,ast
 | `--json`              | Print machine-readable JSON (`success`, `totalIssues`, `totalWarnings`, `fixed`, `diagnostics`) and nothing else |
 | `--github`            | Also print GitHub Actions annotations (`::error file=...,line=...::message`)                                     |
 | `--fix`               | Insert missing keys before checking                                                                              |
+| `--fail-on-stale`     | Treat translations whose source text changed as errors                                                           |
 | `--src <globs...>`    | Source globs to scan instead of the default                                                                      |
 
 ## --fix
@@ -323,6 +326,7 @@ dialex translate --dry-run
 dialex translate
 dialex translate -l tr de
 dialex translate -s en
+dialex translate --stale
 ```
 
 | Option                      | Description                                                              |
@@ -330,6 +334,7 @@ dialex translate -s en
 | `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)      |
 | `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)  |
 | `--dry-run`                 | List what would be translated. Does not call the provider or write files |
+| `--stale`                   | Re-translate strings whose source text changed (see below)               |
 | `-c, --config <path>`       | Custom config path                                                       |
 
 ## Configure a provider
@@ -380,6 +385,21 @@ translate: {
 ## What gets translated
 
 A string is translated when the target locale has no value for it, or its value still starts with `[TODO]` (see [`check --fix`](./check.md#fix)). Existing translations are never overwritten. Function values are not translated. Identical source strings are sent once per locale.
+
+## Keeping translations in sync
+
+`dialex translate` only fills missing strings. To notice when the _source_ text changes afterwards, Dialex keeps a lock file, `dialex.lock.json`, next to your config. It records a short hash of the source text each translation was made from.
+
+```json
+{ "version": 1, "sourceLocale": "en", "locales": { "tr": { "home.title": "a1b2c3d4" } } }
+```
+
+- `dialex translate` and [`dialex import`](./import.md) record what they write.
+- `dialex lock` records the translations you already have (run it once to adopt the lock file). Translations that are already out of date are left alone; `dialex lock --all` accepts them.
+- [`dialex check`](./check.md) warns about every translation whose source text changed since it was recorded, and `--fail-on-stale` makes that an error. Translations without a record, such as hand-written ones, are never reported.
+- `dialex translate --stale` translates the out-of-date strings again. Only these may replace an existing translation.
+
+Commit `dialex.lock.json` so the whole team sees the same state.
 
 ## ICU messages
 
@@ -2111,10 +2131,10 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 Problems are underlined where they are:
 
-| In                   | Problem                                                                                                                                                                                                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A `.content.ts` file | A locale is missing a key that another locale has, or a configured locale is missing; invalid [ICU](./icu.md); arguments that differ between locales; `[TODO]` placeholders left by `dialex check --fix` |
-| Source code          | `getDictionary("x")` or `t("x.y")` that points at nothing                                                                                                                                                |
+| In                   | Problem                                                                                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A `.content.ts` file | A locale is missing a key that another locale has, or a configured locale is missing; invalid [ICU](./icu.md); arguments that differ between locales; `[TODO]` placeholders left by `dialex check --fix`; translations whose source text changed since they were translated |
+| Source code          | `getDictionary("x")` or `t("x.y")` that points at nothing                                                                                                                                                                                                                   |
 
 Plural categories missing for a language (for example `few` in Russian) are reported as warnings. With `dialex.unusedKeys` on, keys and dictionaries that no source file seems to use are faded out.
 

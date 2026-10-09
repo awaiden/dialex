@@ -23,10 +23,10 @@ code --install-extension dialex-vscode-0.1.0.vsix
 
 Probleme werden dort unterstrichen, wo sie auftreten:
 
-| Wo                       | Problem                                                                                                                                                                                                                                             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Eine `.content.ts`-Datei | Einem Locale fehlt ein Schlüssel, den ein anderes Locale hat, oder ein konfiguriertes Locale fehlt; ungültiges [ICU](./icu.md); Argumente, die sich zwischen Locales unterscheiden; `[TODO]`-Platzhalter, die `dialex check --fix` hinterlassen hat |
-| Quellcode                | `getDictionary("x")` oder `t("x.y")`, die ins Leere zeigen                                                                                                                                                                                          |
+| Wo                       | Problem                                                                                                                                                                                                                                                                                                                    |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eine `.content.ts`-Datei | Einem Locale fehlt ein Schlüssel, den ein anderes Locale hat, oder ein konfiguriertes Locale fehlt; ungültiges [ICU](./icu.md); Argumente, die sich zwischen Locales unterscheiden; `[TODO]`-Platzhalter, die `dialex check --fix` hinterlassen hat; Übersetzungen, deren Quelltext sich seit der Übersetzung geändert hat |
+| Quellcode                | `getDictionary("x")` oder `t("x.y")`, die ins Leere zeigen                                                                                                                                                                                                                                                                 |
 
 Für eine Sprache fehlende Plural-Kategorien (zum Beispiel `few` im Russischen) werden als Warnungen gemeldet. Ist `dialex.unusedKeys` aktiv, werden Schlüssel und Wörterbücher ausgegraut, die keine Quelldatei zu verwenden scheint.
 

@@ -27,6 +27,7 @@ dialex lint -c ./dialex.config.ts
 - Bir sözlüğe hiç başvurulmuyordur.
 - Bir ICU mesajı düz `{placeholders}` kullanıyor ama ICU olarak ayrıştırılamıyor ya da bir dil için bir çoğul seçeneği eksik (örneğin Rusça'da `few`).
 - Bir metin hâlâ `[TODO]` ile başlıyor; `--fix` veya reddedilen bir çeviri tarafından bırakılmış.
+- Bir çeviri güncel değil: kaynak metni çevrildikten sonra değişti ([`dialex.lock.json`](./translate.md#keeping-translations-in-sync) gerekir).
 
 Başvuru ve kullanılmayan anahtar denetimleri `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}` dosyalarını tarar; `node_modules`, derleme çıktısı, `*.d.ts`, üretilen dosyalar, yapılandırma dosyaları ve sözlüklerin kendisi atlanır. Taranacak kaynak yoksa bu denetimler atlanır.
 
@@ -38,6 +39,7 @@ Başvuru ve kullanılmayan anahtar denetimleri `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,
 | `--json`              | Makine tarafından okunabilir JSON yazdırır (`success`, `totalIssues`, `totalWarnings`, `fixed`, `diagnostics`) ve başka hiçbir şey yazdırmaz |
 | `--github`            | Ayrıca GitHub Actions ek açıklamalarını (`::error file=...,line=...::message`) yazdırır                                                      |
 | `--fix`               | Denetimden önce eksik anahtarları ekler                                                                                                      |
+| `--fail-on-stale`     | Kaynak metni değişen çevirileri hata sayar                                                                                                   |
 | `--src <globs...>`    | Varsayılan yerine taranacak kaynak glob'ları                                                                                                 |
 
 ## --fix

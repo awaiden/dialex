@@ -11,6 +11,7 @@ import { loadProject, toKey, type ProjectDictionary } from "../utils/project.js"
 import { isIcuStructured } from "dialexjs/icu";
 import { preservesPlaceholders } from "../translate/placeholders.js";
 import { logger } from "../utils/logger.js";
+import { isStale, lockFor, record, writeLock } from "../utils/lockfile.js";
 
 export interface TranslateOptions {
   cwd?: string;
@@ -25,6 +26,11 @@ export interface TranslateOptions {
   provider?: TranslateProvider;
   /** Print machine-readable JSON instead of human output. */
   json?: boolean;
+  /**
+   * Also re-translate strings whose source text changed since they were translated, according to
+   * `dialex.lock.json`. Only these strings may replace an existing translation.
+   */
+  stale?: boolean;
 }
 
 export interface PendingTranslation {
@@ -32,6 +38,8 @@ export interface PendingTranslation {
   locale: string;
   key: string;
   source: string;
+  /** The translation existed but its source text has changed since. */
+  stale?: boolean;
   /** Present after translation. */
   translated?: string;
 }
@@ -70,7 +78,14 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
     (l) => l !== source,
   );
 
-  // 1. Collect strings that are missing or still marked [TODO]
+  const { lock, replaced } = lockFor(root, source);
+  if (replaced && !options.json) {
+    logger.warn(
+      `dialex.lock.json was recorded from another source locale; starting a new one from "${source}".`,
+    );
+  }
+
+  // 1. Collect strings that are missing or still marked [TODO] (and, with --stale, out of date)
   const tasks: Task[] = [];
   for (const dict of project.dictionaries) {
     const sourceLeaves = listLeaves(dict.df, source).filter(
@@ -83,16 +98,23 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
       );
       for (const leaf of sourceLeaves) {
         const current = existing.get(leaf.path.join("\u0000"));
-        const needs =
+        const key = toKey(dict.name, leaf.path);
+        const placeholder =
           !current || (current.kind === "string" && current.value?.startsWith(TODO_PREFIX));
-        if (needs) {
+        const stale =
+          !placeholder &&
+          options.stale === true &&
+          current?.kind === "string" &&
+          isStale(lock, locale, key, leaf.value!);
+        if (placeholder || stale) {
           tasks.push({
             dict,
             path: leaf.path,
             file: dict.rel,
             locale,
-            key: toKey(dict.name, leaf.path),
+            key,
             source: leaf.value!,
+            ...(stale ? { stale: true } : {}),
           });
         }
       }
@@ -126,7 +148,9 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
         `Would translate ${tasks.length} string${tasks.length === 1 ? "" : "s"} from "${source}":`,
       );
       for (const t of tasks) {
-        logger.log(`  ${pc.dim(t.locale)} ${t.key}  ${pc.dim(JSON.stringify(t.source))}`);
+        logger.log(
+          `  ${pc.dim(t.locale)} ${t.key}  ${pc.dim(JSON.stringify(t.source))}${t.stale ? pc.yellow("  (out of date)") : ""}`,
+        );
       }
     }
     return result;
@@ -179,12 +203,14 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
         continue;
       }
       task.translated = translated;
+      record(lock, locale, task.key, task.source);
       result.translated++;
       touched.add(task.dict);
     }
   }
 
   for (const dict of touched) await saveDictionaryFile(dict.df);
+  if (result.translated > 0) writeLock(root, lock);
 
   if (result.rejected.length > 0) {
     result.success = false;

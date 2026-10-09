@@ -7,6 +7,7 @@ dialex translate --dry-run
 dialex translate
 dialex translate -l tr de
 dialex translate -s en
+dialex translate --stale
 ```
 
 | Opción                      | Descripción                                                                           |
@@ -14,6 +15,7 @@ dialex translate -s en
 | `-l, --locale <locales...>` | Locales de destino (por defecto: todos los locales configurados excepto el de origen) |
 | `-s, --source <locale>`     | Locale de origen (por defecto: `translate.sourceLocale`, y después `defaultLocale`)   |
 | `--dry-run`                 | Enumera lo que se traduciría. No llama al proveedor ni escribe archivos               |
+| `--stale`                   | Vuelve a traducir las cadenas cuyo texto de origen cambió (ver abajo)                 |
 | `-c, --config <path>`       | Ruta de configuración personalizada                                                   |
 
 ## Configurar un proveedor
@@ -64,6 +66,23 @@ translate: {
 ## Qué se traduce
 
 Una cadena se traduce cuando el locale de destino no tiene valor para ella, o cuando su valor aún empieza por `[TODO]` (consulta [`check --fix`](./check.md#fix)). Las traducciones existentes nunca se sobrescriben. Los valores de tipo función no se traducen. Las cadenas de origen idénticas se envían una sola vez por locale.
+
+<a id="keeping-translations-in-sync"></a>
+
+## Mantener las traducciones al día
+
+`dialex translate` solo rellena las cadenas que faltan. Para detectar cuándo cambia después el texto _de origen_, Dialex guarda un archivo de bloqueo, `dialex.lock.json`, junto a tu configuración. Registra un hash corto del texto de origen a partir del cual se hizo cada traducción.
+
+```json
+{ "version": 1, "sourceLocale": "en", "locales": { "tr": { "home.title": "a1b2c3d4" } } }
+```
+
+- `dialex translate` y [`dialex import`](./import.md) registran lo que escriben.
+- `dialex lock` registra las traducciones que ya tienes (ejecútalo una vez para adoptar el archivo de bloqueo). Las traducciones que ya están desactualizadas se dejan como están; `dialex lock --all` las acepta.
+- [`dialex check`](./check.md) avisa de cada traducción cuyo texto de origen cambió desde que se registró, y `--fail-on-stale` lo convierte en error. Las traducciones sin registro, como las escritas a mano, nunca se señalan.
+- `dialex translate --stale` vuelve a traducir las cadenas desactualizadas. Solo ellas pueden reemplazar una traducción existente.
+
+Haz commit de `dialex.lock.json` para que todo el equipo vea el mismo estado.
 
 ## Mensajes ICU
 
