@@ -40,6 +40,26 @@ jobs:
 
       # `bun pm pack` rewrites `workspace:*` dependencies to real versions;
       # plain `npm publish` would ship them as-is and break installs.
+      # Tag, package versions and the internal dependencies that `bun pm pack` writes from
+      # bun.lock must all agree, or published packages would depend on an old release.
+      - name: Check release versions
+        run: |
+          node -e '
+            const fs = require("fs");
+            const tag = process.env.GITHUB_REF_NAME.replace(/^v/, "");
+            let bad = [];
+            for (const dir of ["core", "cli", "mcp"]) {
+              const pkg = JSON.parse(fs.readFileSync(`packages/${dir}/package.json`, "utf8"));
+              if (process.env.GITHUB_REF_TYPE === "tag" && pkg.version !== tag) bad.push(`${pkg.name} is ${pkg.version}, tag is ${tag}`);
+            }
+            const lock = fs.readFileSync("bun.lock", "utf8");
+            for (const dir of ["core", "cli", "mcp"]) {
+              const v = JSON.parse(fs.readFileSync(`packages/${dir}/package.json`, "utf8")).version;
+              if (!lock.includes(`"version": "${v}"`)) bad.push(`bun.lock does not record version ${v} (${dir}); regenerate it`);
+            }
+            if (bad.length) { console.error(bad.join("\n")); process.exit(1); }
+          '
+
       - name: Publish Core Package (dialexjs)
         run: |
           cd packages/core
