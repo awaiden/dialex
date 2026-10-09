@@ -23,7 +23,7 @@ add the compare link at the bottom. The release workflow fails if the tag has no
   | `I18nConfig`, `resolveI18nConfig`                                                | `DialexConfig`, `resolveDialexConfig`                                                    |
   | `i18n()` in `dialexjs/hono`, `express`, `koa`, `elysia`, `astro`, `h3`           | `dialex()`                                                                               |
   | `i18nPlugin` (`dialexjs/vite`, `dialexjs/fastify`), `withI18n` (`dialexjs/next`) | `dialexPlugin`, `withDialex`                                                             |
-  | `I18nProvider`, `useI18n`, `createI18n`, `I18nLink`, `I18nContext`               | `DialexProvider`, `useDialex`, `createDialex`, `DialexLink`, `DialexContext`             |
+  | `I18nProvider`, `useI18n`, `createI18n`, `I18nLink`, `I18nContext` (Vue)         | `DialexProvider`, `useDialex`, `createDialex`, `DialexLink`, `DialexContext`             |
   | `I18nModule`, `I18nService`, `I18nInterceptor`, `I18nMiddleware`, `injectI18n`   | `DialexModule`, `DialexService`, `DialexInterceptor`, `DialexMiddleware`, `injectDialex` |
   | `i18nHandle` (`dialexjs/sveltekit`), `resolveI18n` (`dialexjs/web`)              | `dialexHandle`, `resolveDialex`                                                          |
   | `createTestI18n`, `TestI18nProvider` (`dialexjs/testing`)                        | `createTestDialex`, `TestDialexProvider`                                                 |
