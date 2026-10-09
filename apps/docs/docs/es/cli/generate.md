@@ -4,7 +4,7 @@ Compila los diccionarios `.content.ts` en módulos estáticos para una ejecució
 
 Salidas:
 
-- `src/dialex.generated.ts`, que exporta `dictionaries` (el export por defecto, para los adaptadores de servidor), `config` (una copia de tu configuración segura para el cliente) y `dialex` (`{ dictionaries, config }`, que se pasa con spread a `<DialexProvider {...dialex}>` o `createDialex({ ...dialex })`). Con `lazy: true` contiene imports dinámicos y un export `loaders` en su lugar. También exporta `locales` (una tupla de solo lectura, útil para un selector de idioma) y el tipo unión `Locale` correspondiente.
+- `src/dialex.generated.ts`, que exporta `dictionaries` (el export por defecto, para los adaptadores de servidor), `config` (una copia de tu configuración segura para el cliente) y `dialex` (`{ dictionaries, config }`, que se pasa con spread a `<DialexProvider {...dialex}>` o `createDialex({ ...dialex })`). Con `lazy: true` contiene imports dinámicos y un export `loaders` en su lugar. También exporta `locales` (una tupla de solo lectura, útil para un selector de idioma) y el tipo unión `Locale` correspondiente. Con `lazy: "locale"` los diccionarios se dividen además por locale, en una carpeta `dialex.locales/`.
 - `src/dialex-env.d.ts`, la [ampliación del registro de tipos](../guide/type-safety.md).
 
 ```bash

@@ -48,7 +48,7 @@ export const DEFAULT_CONFIG = {
   include: "**/*.content.ts" as string | string[],
   fallbacks: {} as Record<string, string[]>,
   prefixDefault: true,
-  lazy: false,
+  lazy: false as boolean | "locale",
 };
 
 /** The settings `dx generate` writes into `dialex.generated.ts` for the runtime to read. */
@@ -57,11 +57,17 @@ export interface DialexClientConfig {
   locales?: string[];
   fallbacks?: Record<string, string[]>;
   prefixDefault?: boolean;
-  lazy?: boolean;
+  lazy?: boolean | "locale";
 }
 
-/** Loads one dictionary on demand (`() => import("./home.content.js")`). */
-export type DictionaryLoaders = Record<string, () => Promise<any>>;
+/** Loads one dictionary, or one locale of it, on demand (`() => import("./home.content.js")`). */
+export type DictionaryLoader = () => Promise<any>;
+
+/**
+ * Loaders by dictionary name. In `lazy: "locale"` mode a dictionary can instead map each locale to
+ * its own loader, so only the locale in use is downloaded.
+ */
+export type DictionaryLoaders = Record<string, DictionaryLoader | Record<string, DictionaryLoader>>;
 
 /**
  * What the generated `dialex` export holds and providers accept:
@@ -106,11 +112,12 @@ export interface DialexConfig {
    */
   prefixDefault?: boolean;
   /**
-   * Load dictionaries on demand instead of bundling them all up front (Vite only).
-   * Dictionaries are split per file. See the lazy loading guide.
+   * Load dictionaries on demand instead of bundling them all up front. `true` splits per
+   * dictionary file; `"locale"` also splits each dictionary per locale, so only the locale in use
+   * is downloaded. See the lazy loading guide.
    * @default false
    */
-  lazy?: boolean;
+  lazy?: boolean | "locale";
   /**
    * Settings for `dialex translate`. Nothing is sent anywhere unless a provider is configured.
    */

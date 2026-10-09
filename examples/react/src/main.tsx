@@ -1,9 +1,11 @@
+import { DialexProvider } from "dialexjs/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { DialexProvider } from "dialexjs/react";
-import { dialex } from "./dialex.generated";
-import "./index.css";
+
 import App from "./App.tsx";
+
+import "./index.css";
+import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

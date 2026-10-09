@@ -1,4 +1,5 @@
 import { useDialex, useDictionary } from "dialexjs/react";
+
 import HomePage from "./pages/home/page";
 
 function App() {

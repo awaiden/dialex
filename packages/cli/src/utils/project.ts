@@ -1,7 +1,9 @@
 import path from "node:path";
-import fg from "fast-glob";
-import { resolveDialexConfig } from "dialexjs/scanner";
+
 import type { DialexConfig } from "dialexjs";
+import { resolveDialexConfig } from "dialexjs/scanner";
+import fg from "fast-glob";
+
 import { loadDictionaryFile, type DictionaryFile } from "./dictionary-edit.js";
 import { readStaticConfig } from "./static-config.js";
 
@@ -27,7 +29,7 @@ async function loadDictionaries(root: string, config: DialexConfig) {
   const files = fg.sync(include, {
     cwd: root,
     absolute: true,
-    ignore: ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+    ignore: ["**/node_modules/**", "**/dist/**", "**/.next/**", "**/dialex.locales/**"],
   });
 
   const dictionaries: ProjectDictionary[] = [];

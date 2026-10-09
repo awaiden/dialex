@@ -12,8 +12,24 @@ export default defineConfig({
 ```
 
 ::: warning Granularität
-Aufgeteilt wird **pro Wörterbuchdatei**, nicht pro Locale. Jede Datei definiert alle ihre Locales gemeinsam (`defineDictionary("home", { en, tr })`), daher lädt das Laden eines Wörterbuchs alle seine Locales. Eine Aufteilung pro Locale würde erfordern, diese Aufrufe zur Build-Zeit umzuschreiben. Um die Chunks klein zu halten, verwende mehrere kleine Wörterbücher (zum Beispiel eines pro Route) statt eines großen.
+Mit `lazy: true` wird **pro Wörterbuchdatei** geteilt: Jede Datei definiert alle ihre Locales zusammen, daher lädt ein Wörterbuch alle seine Locales. Nutze `lazy: "locale"` (unten), um auch pro Locale zu teilen.
 :::
+
+## Pro Locale
+
+Mit `lazy: "locale"` teilt `dx generate` jedes Wörterbuch zusätzlich pro Locale auf, sodass Besucher nur die Sprache herunterladen, die sie lesen:
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+Die Module pro Locale werden in einen Ordner `dialex.locales/` neben `dialex.generated.ts` geschrieben. Committe sie wie die generierte Datei; [`dialex check`](../cli/check.md) meldet fehlende oder veraltete. Beim Sprachwechsel wird das neue Locale bei Bedarf geladen, und in React bleibt die aktuelle Sprache sichtbar, bis die neue angekommen ist (die Aktualisierung läuft in einer Transition). `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` lädt im Voraus.
+
+Ein Wörterbuch wird nur geteilt, wenn jedes Locale in sich geschlossen ist. Nutzt ein Locale etwas, das an anderer Stelle der Datei definiert ist (ein Import oder ein Helfer), lässt `dx generate` dieses Wörterbuch ganz und nennt den Grund.
 
 ## React
 

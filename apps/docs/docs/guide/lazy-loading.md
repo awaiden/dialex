@@ -12,8 +12,24 @@ export default defineConfig({
 ```
 
 ::: warning Granularity
-Splitting is **per dictionary file**, not per locale. Each file defines all of its locales together (`defineDictionary("home", { en, tr })`), so loading one dictionary loads every locale of it. Per-locale splitting would require rewriting those calls at build time. To keep chunks small, use several small dictionaries (for example one per route) instead of one large one.
+With `lazy: true` splitting is **per dictionary file**: each file defines all of its locales together, so loading one dictionary loads every locale of it. Use `lazy: "locale"` (below) to split per locale as well.
 :::
+
+## Per locale
+
+With `lazy: "locale"`, `dx generate` also splits each dictionary per locale, so a visitor only downloads the language they read:
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+The per-locale modules are written to a `dialex.locales/` folder next to `dialex.generated.ts`. Commit them like the generated file; [`dialex check`](../cli/check.md) reports missing or out-of-date ones. Switching language downloads the new locale on demand, and in React the current language stays on screen until the new one has arrived (the update runs in a transition). `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` fetches ahead of time.
+
+A dictionary is split only when each locale is self-contained. If a locale uses something defined elsewhere in the file (an import or a helper), `dx generate` keeps that dictionary whole and says why.
 
 ## React
 

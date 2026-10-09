@@ -4,17 +4,19 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  startTransition,
   use,
   useState,
   type ReactNode,
 } from "react";
+
+import { createT, type DialexClientConfig, type DialexSource, type Translate } from "./index.js";
 import {
   readPersistedLocale,
   syncDocumentLang,
   writePersistedLocale,
   type PersistMode,
 } from "./persist.js";
-import { createT, type DialexClientConfig, type DialexSource, type Translate } from "./index.js";
 import { getDictionaryStore, readDictionary, type DictionaryStore } from "./store.js";
 
 export { preloadDictionaries } from "./store.js";
@@ -80,10 +82,13 @@ export function DialexProvider({
 
   const setLocale = useCallback(
     (next: string) => {
-      setLocaleState(next);
+      // With lazy dictionaries the new locale may still be downloading. A transition keeps the
+      // current language on screen until it is ready, instead of showing a loading state.
+      if (store.lazy) startTransition(() => setLocaleState(next));
+      else setLocaleState(next);
       writePersistedLocale(persist, storageKey, next);
     },
-    [persist, storageKey],
+    [persist, storageKey, store],
   );
 
   const value = useMemo(() => ({ locale, setLocale, store }), [locale, setLocale, store]);
@@ -107,8 +112,8 @@ type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 /** Suspends until `name` is loaded when dictionaries are lazy. */
-function ensureLoaded(store: DictionaryStore, name: string): void {
-  if (store.lazy && !store.dictionaries[name]) use(store.load(name));
+function ensureLoaded(store: DictionaryStore, name: string, locale: string): void {
+  if (store.lazy && !store.isLoaded(name, locale)) use(store.load(name, locale));
 }
 
 /**
@@ -125,7 +130,7 @@ export function useDialexConfig(): DialexClientConfig {
  */
 export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): T {
   const { locale, store } = useDialex();
-  ensureLoaded(store, name as string);
+  ensureLoaded(store, name as string, locale);
   return readDictionary(store, name as string, locale) as T;
 }
 
@@ -137,7 +142,7 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  */
 export function useT(...dictionaryNames: string[]): Translate {
   const { locale, store } = useDialex();
-  for (const name of dictionaryNames) ensureLoaded(store, name);
+  for (const name of dictionaryNames) ensureLoaded(store, name, locale);
   return useMemo(
     () => createT((name) => readDictionary(store, name, locale), locale),
     [locale, store],

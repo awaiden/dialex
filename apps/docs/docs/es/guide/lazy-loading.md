@@ -12,8 +12,24 @@ export default defineConfig({
 ```
 
 ::: warning Granularidad
-La división es **por archivo de diccionario**, no por locale. Cada archivo define todos sus locales juntos (`defineDictionary("home", { en, tr })`), por lo que cargar un diccionario carga todos sus locales. Dividir por locale requeriría reescribir esas llamadas en tiempo de compilación. Para mantener los chunks pequeños, usa varios diccionarios pequeños (por ejemplo, uno por ruta) en lugar de uno grande.
+Con `lazy: true` la división es **por archivo de diccionario**: cada archivo define todos sus locales juntos, así que cargar un diccionario carga todos sus locales. Usa `lazy: "locale"` (abajo) para dividir también por locale.
 :::
+
+## Por locale
+
+Con `lazy: "locale"`, `dx generate` divide además cada diccionario por locale, de modo que un visitante solo descarga el idioma que lee:
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+Los módulos por locale se escriben en una carpeta `dialex.locales/` junto a `dialex.generated.ts`. Haz commit de ellos como del archivo generado; [`dialex check`](../cli/check.md) avisa de los que faltan o están desactualizados. Cambiar de idioma descarga el nuevo locale bajo demanda y, en React, el idioma actual sigue en pantalla hasta que llega el nuevo (la actualización se ejecuta en una transición). `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` lo descarga por adelantado.
+
+Un diccionario solo se divide cuando cada locale es autocontenido. Si un locale usa algo definido en otra parte del archivo (un import o un helper), `dx generate` mantiene ese diccionario entero y explica por qué.
 
 ## React
 

@@ -4,7 +4,7 @@ Kompiliert `.content.ts`-Wörterbücher zu statischen Modulen für eine Serverau
 
 Ausgaben:
 
-- `src/dialex.generated.ts`, das `dictionaries` exportiert (der Default-Export, für die Server-Adapter), `config` (eine clientsichere Kopie deiner Konfiguration) und `dialex` (`{ dictionaries, config }`, per Spread an `<DialexProvider {...dialex}>` oder `createDialex({ ...dialex })` übergeben). Mit `lazy: true` enthält sie stattdessen dynamische Imports und einen Export `loaders`. Außerdem exportiert sie `locales` (ein schreibgeschütztes Tupel, praktisch für einen Sprachumschalter) und den passenden Union-Typ `Locale`.
+- `src/dialex.generated.ts`, das `dictionaries` exportiert (der Default-Export, für die Server-Adapter), `config` (eine clientsichere Kopie deiner Konfiguration) und `dialex` (`{ dictionaries, config }`, per Spread an `<DialexProvider {...dialex}>` oder `createDialex({ ...dialex })` übergeben). Mit `lazy: true` enthält sie stattdessen dynamische Imports und einen Export `loaders`. Außerdem exportiert sie `locales` (ein schreibgeschütztes Tupel, praktisch für einen Sprachumschalter) und den passenden Union-Typ `Locale`. Mit `lazy: "locale"` werden die Wörterbücher zusätzlich pro Locale in einen Ordner `dialex.locales/` aufgeteilt.
 - `src/dialex-env.d.ts`, die [Erweiterung der Typ-Registry](../guide/type-safety.md).
 
 ```bash

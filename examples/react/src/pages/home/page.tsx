@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useDictionary } from "dialexjs/react";
+import { useState } from "react";
 
 export default function HomePage() {
   // Load multiple dictionaries

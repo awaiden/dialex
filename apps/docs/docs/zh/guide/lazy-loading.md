@@ -12,8 +12,24 @@ export default defineConfig({
 ```
 
 ::: warning 拆分粒度
-拆分是**按词典文件**进行的，而不是按 locale。每个文件会一起定义它的所有 locale（`defineDictionary("home", { en, tr })`），所以加载一个词典就会加载它的全部 locale。按 locale 拆分需要在构建时重写这些调用。要让 chunk 保持较小，请使用多个小词典（例如每个路由一个），而不是一个大词典。
+使用 `lazy: true` 时按**词典文件**拆分：每个文件把它的所有 locale 一起定义，因此加载一个词典会加载它的全部 locale。使用 `lazy: "locale"`（见下文）可同时按 locale 拆分。
 :::
+
+## 按 locale 拆分
+
+设置 `lazy: "locale"` 后，`dx generate` 还会把每个词典按 locale 拆分，访客只下载自己阅读的语言：
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+按 locale 拆分的模块会写入 `dialex.generated.ts` 旁边的 `dialex.locales/` 文件夹。请像生成文件一样提交它们；[`dialex check`](../cli/check.md) 会报告缺失或过期的文件。切换语言时按需下载新的 locale，在 React 中当前语言会一直显示到新语言到达为止（更新在 transition 中运行）。`preloadDictionaries(dialex, { locale: "tr" }, "pricing")` 可以提前下载。
+
+只有当每个 locale 都是自包含的，词典才会被拆分。如果某个 locale 使用了文件中其他位置定义的内容（import 或辅助函数），`dx generate` 会保持该词典完整并说明原因。
 
 ## React
 

@@ -1,5 +1,5 @@
 import type { DialexClientConfig, DialexSource } from "./index.js";
-import { lookupLocale } from "./resolver.js";
+import { lookupLocale, resolveFallbackChain } from "./resolver.js";
 import { normalizeDictionaries } from "./shared.js";
 
 /**
@@ -10,31 +10,73 @@ export interface DictionaryStore {
   config: DialexClientConfig;
   /** True when dictionaries are loaded on demand. */
   lazy: boolean;
-  /** Loaded dictionaries by name. Filled in as lazy loads finish. */
+  /** Loaded dictionaries by name. Filled in as lazy loads finish (locale by locale in `"locale"` mode). */
   dictionaries: Record<string, Record<string, any>>;
-  /** Loads `name` if needed. Resolves to `undefined` when there is no such dictionary. */
-  load(name: string): Promise<Record<string, any> | undefined>;
+  /**
+   * Loads `name` if needed. In `"locale"` mode only the locale `locale` resolves to is loaded
+   * (the requested locale, or the first of its fallbacks that has a loader). Resolves to
+   * `undefined` when there is no such dictionary.
+   */
+  load(name: string, locale?: string): Promise<Record<string, any> | undefined>;
+  /** Whether `name` can be read for `locale` without waiting. */
+  isLoaded(name: string, locale?: string): boolean;
+}
+
+/** The locale a per-locale dictionary is loaded as: the first of the fallback chain that has a loader. */
+function localeToLoad(
+  locales: string[],
+  locale: string | undefined,
+  config: DialexClientConfig,
+): string {
+  const chain = resolveFallbackChain(locale ?? config.defaultLocale, {
+    fallbacks: config.fallbacks,
+    defaultLocale: config.defaultLocale,
+  });
+  return chain.find((candidate) => locales.includes(candidate)) ?? locales[0];
 }
 
 export function createDictionaryStore(source: DialexSource = {}): DictionaryStore {
   const loaders = source.loaders;
+  const config = source.config ?? {};
   const dictionaries = { ...normalizeDictionaries(source.dictionaries) };
   const pending: Record<string, Promise<Record<string, any> | undefined>> = {};
 
+  const loaderFor = (name: string, locale?: string) => {
+    const loader = loaders?.[name];
+    if (!loader) return undefined;
+    if (typeof loader === "function") return { run: loader, locale: undefined };
+    const target = localeToLoad(Object.keys(loader), locale, config);
+    return target === undefined ? undefined : { run: loader[target], locale: target };
+  };
+
   return {
-    config: source.config ?? {},
+    config,
     lazy: !!loaders && Object.keys(loaders).length > 0,
     dictionaries,
-    load(name) {
-      if (dictionaries[name]) return Promise.resolve(dictionaries[name]);
-      const load = loaders?.[name];
-      if (!load) return Promise.resolve(undefined);
-      pending[name] ??= load().then((mod) => {
+    isLoaded(name, locale) {
+      const loader = loaders?.[name];
+      if (!loader || typeof loader === "function") return dictionaries[name] !== undefined;
+      const target = localeToLoad(Object.keys(loader), locale, config);
+      return target !== undefined && dictionaries[name]?.[target] !== undefined;
+    },
+    load(name, locale) {
+      const loader = loaderFor(name, locale);
+      if (!loader) return Promise.resolve(dictionaries[name]);
+      if (loader.locale === undefined ? dictionaries[name] : dictionaries[name]?.[loader.locale]) {
+        return Promise.resolve(dictionaries[name]);
+      }
+      const key = `${name}\0${loader.locale ?? ""}`;
+      pending[key] ??= loader.run().then((mod) => {
         const def = mod?.default ?? mod;
-        dictionaries[name] = def.dictionary;
-        return def.dictionary as Record<string, any>;
+        if (loader.locale === undefined) {
+          dictionaries[name] = def.dictionary;
+        } else {
+          // `def` is the locale's content itself
+          dictionaries[name] = { ...dictionaries[name], [loader.locale]: def };
+        }
+        return dictionaries[name];
       });
-      return pending[name];
+      return pending[key];
     },
   };
 }
@@ -56,10 +98,18 @@ export function getDictionaryStore(source: DialexSource = {}): DictionaryStore {
   return store;
 }
 
-/** Starts loading dictionaries (a no-op unless they are lazy). */
-export function preloadDictionaries(source: DialexSource, ...names: string[]): Promise<void> {
+/**
+ * Starts loading dictionaries (a no-op unless they are lazy). In `lazy: "locale"` mode it loads the
+ * default locale unless you pass `{ locale }` first: `preloadDictionaries(dialex, { locale: "tr" }, "home")`.
+ */
+export function preloadDictionaries(
+  source: DialexSource,
+  ...rest: (string | { locale?: string })[]
+): Promise<void> {
   const store = getDictionaryStore(source);
-  return Promise.all(names.map((name) => store.load(name))).then(() => undefined);
+  const options = typeof rest[0] === "object" ? (rest.shift() as { locale?: string }) : {};
+  const names = rest as string[];
+  return Promise.all(names.map((name) => store.load(name, options.locale))).then(() => undefined);
 }
 
 /**
@@ -73,6 +123,8 @@ export function readDictionary(
   quiet = false,
 ): any {
   const dictionary = store.dictionaries[name];
+  // In `lazy: "locale"` mode another locale may already be loaded; do not show it as a fallback.
+  if (dictionary && store.lazy && !store.isLoaded(name, locale)) return {};
   if (!dictionary) {
     if (!quiet) {
       console.warn(

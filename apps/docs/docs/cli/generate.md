@@ -4,7 +4,7 @@ Compiles `.content.ts` dictionaries into static modules for zero-overhead server
 
 Outputs:
 
-- `src/dialex.generated.ts`, which exports `dictionaries` (the default export, for the server adapters), `config` (a client-safe copy of your config) and `dialex` (`{ dictionaries, config }`, spread into `<DialexProvider {...dialex}>` or `createDialex({ ...dialex })`). With `lazy: true` it holds dynamic imports and a `loaders` export instead. It also exports `locales` (a readonly tuple, handy for a language switcher) and the matching `Locale` union type.
+- `src/dialex.generated.ts`, which exports `dictionaries` (the default export, for the server adapters), `config` (a client-safe copy of your config) and `dialex` (`{ dictionaries, config }`, spread into `<DialexProvider {...dialex}>` or `createDialex({ ...dialex })`). With `lazy: true` it holds dynamic imports and a `loaders` export instead. It also exports `locales` (a readonly tuple, handy for a language switcher) and the matching `Locale` union type. With `lazy: "locale"` the dictionaries are also split per locale, into a `dialex.locales/` folder.
 - `src/dialex-env.d.ts`, the [type registry augmentation](../guide/type-safety.md).
 
 ```bash

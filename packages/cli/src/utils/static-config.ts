@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import { parseModule } from "magicast";
+
 import {
   findProperty,
   isObjectNode,
@@ -20,7 +22,7 @@ export interface StaticConfig {
   include: string | string[];
   fallbacks: Record<string, string[]>;
   prefixDefault: boolean;
-  lazy: boolean;
+  lazy: boolean | "locale";
 }
 
 export interface StaticConfigResult {
@@ -111,7 +113,7 @@ function apply(object: Record<string, unknown>, config: StaticConfig, notes: str
     "an object of string arrays",
   );
   accept("prefixDefault", (v) => typeof v === "boolean", "true or false");
-  accept("lazy", (v) => typeof v === "boolean", "true or false");
+  accept("lazy", (v) => typeof v === "boolean" || v === "locale", 'true, false or "locale"');
 }
 
 /** Reads a config file's source text. Exposed for tests and for unsaved buffers. */

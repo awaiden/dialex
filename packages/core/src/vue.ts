@@ -4,13 +4,14 @@ import {
   inject,
   onServerPrefetch,
   ref,
+  watch,
   type App,
   type ComputedRef,
   type InjectionKey,
   type Ref,
 } from "vue";
-import { createT, type Translate } from "./index.js";
 
+import { createT, type Translate } from "./index.js";
 import type { DialexSource } from "./index.js";
 import { getDictionaryStore, readDictionary, type DictionaryStore } from "./store.js";
 
@@ -78,9 +79,9 @@ export function useDialex(): DialexContext {
 const loadedVersion = ref(0);
 
 /** Starts loading `name` if needed, and makes SSR wait for it. */
-function ensureLoaded(store: DictionaryStore, name: string): void {
-  if (!store.lazy || store.dictionaries[name]) return;
-  const pending = store.load(name).then(() => {
+function ensureLoaded(store: DictionaryStore, name: string, locale: string): void {
+  if (!store.lazy || store.isLoaded(name, locale)) return;
+  const pending = store.load(name, locale).then(() => {
     loadedVersion.value++;
   });
   if (getCurrentInstance()) onServerPrefetch(() => pending);
@@ -101,7 +102,9 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
   name: K,
 ): ComputedRef<T> {
   const { locale, store } = useDialex();
-  ensureLoaded(store, name as string);
+  ensureLoaded(store, name as string, locale.value);
+  // A locale switch may need another download (`lazy: "locale"`)
+  watch(locale, (next) => ensureLoaded(store, name as string, next));
   return computed(() => readLoaded(store, name as string, locale.value) as T);
 }
 
@@ -114,7 +117,10 @@ export function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType
  */
 export function useT(...dictionaryNames: string[]): Translate {
   const { locale, store } = useDialex();
-  for (const name of dictionaryNames) ensureLoaded(store, name);
+  for (const name of dictionaryNames) {
+    ensureLoaded(store, name, locale.value);
+    watch(locale, (next) => ensureLoaded(store, name, next));
+  }
   return ((path: string, ...args: any[]) =>
     (createT((name) => readLoaded(store, name, locale.value), locale.value) as any)(
       path,

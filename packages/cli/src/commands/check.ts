@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+
+import { resolveDialexConfig } from "dialexjs/scanner";
 import fg from "fast-glob";
 import pc from "picocolors";
-import { resolveDialexConfig } from "dialexjs/scanner";
-import { renderGenerated } from "./generate.js";
+
 import { analyzeProject, type AnalysisIssue } from "../analysis.js";
-import { logger } from "../utils/logger.js";
 import {
   TODO_PREFIX,
   copyLeaf,
@@ -15,6 +15,8 @@ import {
   loadDictionaryFile,
   saveDictionaryFile,
 } from "../utils/dictionary-edit.js";
+import { logger } from "../utils/logger.js";
+import { renderGenerated } from "./generate.js";
 
 export interface CheckOptions {
   cwd?: string;
@@ -55,7 +57,12 @@ export interface CheckResult {
   fixed: number;
 }
 
-const DICTIONARY_IGNORE = ["**/node_modules/**", "**/dist/**", "**/.next/**"];
+const DICTIONARY_IGNORE = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/.next/**",
+  "**/dialex.locales/**",
+];
 
 function addIssue(diag: CheckDiagnostic, issue: AnalysisIssue) {
   const level = issue.level === "error" ? "error" : "warning";
@@ -150,8 +157,27 @@ function staleGeneratedFiles(
     [rendered.outputPath, rendered.content],
     [rendered.dtsPath, rendered.dtsContent],
   ];
+  // Per-locale modules belong to the same generation: once the generated file exists they must too
+  if (fs.existsSync(rendered.outputPath)) {
+    for (const extra of rendered.extraFiles) targets.push([extra.path, extra.content]);
+  }
   for (const [file, content] of targets) {
-    if (content === undefined || !fs.existsSync(file)) continue;
+    if (content === undefined) continue;
+    const isExtra = rendered.extraFiles.some((f) => f.path === file);
+    if (!fs.existsSync(file)) {
+      if (!isExtra) continue;
+      if (options.fix) {
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, content, "utf-8");
+        rewritten++;
+      } else {
+        stale.push({
+          file: path.relative(root, file),
+          message: "Missing. Run `dx generate` (or `dx check --fix`).",
+        });
+      }
+      continue;
+    }
     if (normalizeGenerated(fs.readFileSync(file, "utf-8")) === normalizeGenerated(content))
       continue;
     if (options.fix) {

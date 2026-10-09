@@ -12,8 +12,24 @@ export default defineConfig({
 ```
 
 ::: warning Ayrıntı düzeyi
-Bölme yerel ayara göre değil, **sözlük dosyası başına** yapılır. Her dosya tüm yerel ayarlarını birlikte tanımlar (`defineDictionary("home", { en, tr })`), bu yüzden bir sözlüğü yüklemek onun tüm yerel ayarlarını yükler. Yerel ayar başına bölme, bu çağrıların derleme sırasında yeniden yazılmasını gerektirirdi. Parçaları küçük tutmak için tek büyük sözlük yerine birkaç küçük sözlük (örneğin rota başına bir tane) kullanın.
+`lazy: true` ile bölme **sözlük dosyası başınadır**: her dosya tüm dillerini birlikte tanımlar, bu yüzden bir sözlüğü yüklemek onun her dilini yükler. Dile göre de bölmek için `lazy: "locale"` kullanın (aşağıda).
 :::
+
+## Dile göre
+
+`lazy: "locale"` ile `dx generate` her sözlüğü ayrıca dile göre böler; böylece ziyaretçi yalnızca okuduğu dili indirir:
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+Dil başına modüller, `dialex.generated.ts` dosyasının yanındaki `dialex.locales/` klasörüne yazılır. Bunları üretilen dosya gibi commit edin; [`dialex check`](../cli/check.md) eksik veya güncel olmayanları bildirir. Dil değiştirmek yeni dili isteğe bağlı indirir; React'te yeni dil gelene kadar mevcut dil ekranda kalır (güncelleme bir geçiş içinde çalışır). `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` önceden indirir.
+
+Bir sözlük yalnızca her dil kendi içinde bağımsızsa bölünür. Bir dil, dosyanın başka bir yerinde tanımlı bir şeyi (bir import ya da yardımcı işlev) kullanıyorsa `dx generate` o sözlüğü bütün olarak bırakır ve nedenini söyler.
 
 ## React
 

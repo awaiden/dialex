@@ -230,7 +230,7 @@ Compiles `.content.ts` dictionaries into static modules for zero-overhead server
 
 Outputs:
 
-- `src/dialex.generated.ts`, which exports `dictionaries` (the default export, for the server adapters), `config` (a client-safe copy of your config) and `dialex` (`{ dictionaries, config }`, spread into `<DialexProvider {...dialex}>` or `createDialex({ ...dialex })`). With `lazy: true` it holds dynamic imports and a `loaders` export instead. It also exports `locales` (a readonly tuple, handy for a language switcher) and the matching `Locale` union type.
+- `src/dialex.generated.ts`, which exports `dictionaries` (the default export, for the server adapters), `config` (a client-safe copy of your config) and `dialex` (`{ dictionaries, config }`, spread into `<DialexProvider {...dialex}>` or `createDialex({ ...dialex })`). With `lazy: true` it holds dynamic imports and a `loaders` export instead. It also exports `locales` (a readonly tuple, handy for a language switcher) and the matching `Locale` union type. With `lazy: "locale"` the dictionaries are also split per locale, into a `dialex.locales/` folder.
 - `src/dialex-env.d.ts`, the [type registry augmentation](../guide/type-safety.md).
 
 ```bash
@@ -340,9 +340,9 @@ dialex translate --stale
 ## Configure a provider
 
 ```ts
+import { claudeProvider } from "@dialexjs/cli/translate";
 // dialex.config.ts
 import { defineConfig } from "dialexjs";
-import { claudeProvider } from "@dialexjs/cli/translate";
 
 export default defineConfig({
   defaultLocale: "en",
@@ -472,6 +472,7 @@ dialex generate        # writes src/dialex.generated.ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
+
 import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
@@ -586,6 +587,7 @@ For code that does not need Angular, use [`createTestDialex`](../guide/testing.m
 ```ts
 // src/middleware.ts
 import { dialex } from "dialexjs/astro";
+
 import dictionaries from "./dialex.generated.js";
 
 export const onRequest = dialex({
@@ -619,8 +621,9 @@ The middleware reads the request URL, headers, and cookies, so it applies to on-
 # Elysia
 
 ```ts
-import { Elysia } from "elysia";
 import { dialex } from "dialexjs/elysia";
+import { Elysia } from "elysia";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Elysia()
@@ -642,8 +645,9 @@ The plugin is registered globally and derives two values on the request context:
 # Express
 
 ```ts
-import express from "express";
 import { dialex } from "dialexjs/express";
+import express from "express";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
@@ -667,8 +671,9 @@ The middleware adds `req.locale` and `req.getDictionary(name)` (also on `res.loc
 # Fastify
 
 ```ts
-import Fastify from "fastify";
 import { dialexPlugin } from "dialexjs/fastify";
+import Fastify from "fastify";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
@@ -701,6 +706,7 @@ For h3 1.x servers: Nitro 2, and Nuxt server routes and middleware.
 ```ts
 // server/middleware/dialex.ts (Nuxt / Nitro)
 import { dialex } from "dialexjs/h3";
+
 import dictionaries from "~/dialex.generated";
 
 export default dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries });
@@ -732,8 +738,9 @@ Built and tested against h3 `>=1.8 <2`. h3 2.x has a different API and is not su
 # Hono
 
 ```ts
-import { Hono } from "hono";
 import { dialex } from "dialexjs/hono";
+import { Hono } from "hono";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
@@ -757,9 +764,10 @@ The middleware sets `locale` and `getDictionary` as context variables, read thro
 # Koa
 
 ```ts
-import Koa from "koa";
 import Router from "@koa/router";
 import { dialex } from "dialexjs/koa";
+import Koa from "koa";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
@@ -790,6 +798,7 @@ Register `dialex()` before your routes. It adds `ctx.locale` and `ctx.getDiction
 ```ts
 import { Module } from "@nestjs/common";
 import { DialexModule } from "dialexjs/nestjs";
+
 import dictionaries from "./dialex.generated.js";
 
 @Module({
@@ -854,6 +863,7 @@ Next.js needs no config wrapper or plugin. `dx generate` writes `src/dialex.gene
 ```ts
 // src/dialex.ts
 import { createDialexServer } from "dialexjs/server";
+
 import { dialex } from "./dialex.generated";
 
 export const { getDictionary, getT } = createDialexServer(dialex);
@@ -866,6 +876,7 @@ Then render the provider from a client file that imports the generated file itse
 "use client";
 
 import { DialexProvider } from "dialexjs/react";
+
 import { dialex } from "../dialex.generated";
 
 export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {
@@ -977,11 +988,12 @@ export default () => sitemapEntries(["/", "/about"], routing);
 There is no bundler plugin. `dx generate` writes `src/dialex.generated.ts`, which exports `dialex`: your dictionaries and a client-safe copy of your config. Spread it into the provider:
 
 ```tsx
+import { DialexProvider } from "dialexjs/react";
 // src/main.tsx
 import { createRoot } from "react-dom/client";
-import { DialexProvider } from "dialexjs/react";
-import { dialex } from "./dialex.generated";
+
 import App from "./App";
+import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(
   <DialexProvider {...dialex}>
@@ -996,6 +1008,7 @@ Keep the file current with `dx generate --watch` in a second terminal, or instal
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+
 import { dialex } from "./dialex.generated";
 
 function App() {
@@ -1053,6 +1066,7 @@ The provider renders the default locale first, then applies the remembered local
 ```ts
 // src/hooks.server.ts
 import { dialexHandle } from "dialexjs/sveltekit";
+
 import dictionaries from "./dialex.generated.js";
 
 export const handle = dialexHandle({
@@ -1098,11 +1112,12 @@ Put the placeholder in `src/app.html`; it is replaced with the resolved locale o
 Run `dx generate`, then install the plugin with the generated `dialex` export:
 
 ```ts
+import { createDialex } from "dialexjs/vue";
 // src/main.ts
 import { createApp } from "vue";
-import { createDialex } from "dialexjs/vue";
-import { dialex } from "./dialex.generated";
+
 import App from "./App.vue";
+import { dialex } from "./dialex.generated";
 
 createApp(App)
   .use(createDialex({ ...dialex, defaultLocale: "en" }))
@@ -1160,6 +1175,7 @@ The Nuxt module is covered by unit tests of its setup calls only. It has not bee
 
 ```ts
 import { createDialexHandler } from "dialexjs/web";
+
 import dictionaries from "./dialex.generated.js";
 
 export const resolveDialex = createDialexHandler({
@@ -1472,16 +1488,16 @@ export default defineConfig({
 });
 ```
 
-| Option          | Type                          | Default             | Description                                                                                                                               |
-| --------------- | ----------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultLocale` | `string`                      | `"en"`              | Locale used when none can be resolved                                                                                                     |
-| `locales`       | `string[]`                    | —                   | Supported locales; enables locale type narrowing and parity checks. When omitted, `dx generate` uses the locales your dictionaries define |
-| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) for dictionary files                                                                                                              |
-| `configFile`    | `string`                      | —                   | Custom config path                                                                                                                        |
-| `fallbacks`     | `Record<string, string[]>`    | —                   | Explicit [fallback chains](./fallbacks.md) per locale                                                                                     |
-| `prefixDefault` | `boolean`                     | `true`              | Whether the default locale also gets a URL prefix. Read by `DialexLink` and the [routing helpers](./routing.md)                           |
-| `lazy`          | `boolean`                     | `false`             | Load dictionaries on demand (client bundles). See [Lazy Loading](./lazy-loading.md)                                                       |
-| `translate`     | `{ provider, sourceLocale? }` | —                   | Provider for [`dialex translate`](../cli/translate.md)                                                                                    |
+| Option          | Type                          | Default             | Description                                                                                                                                             |
+| --------------- | ----------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultLocale` | `string`                      | `"en"`              | Locale used when none can be resolved                                                                                                                   |
+| `locales`       | `string[]`                    | —                   | Supported locales; enables locale type narrowing and parity checks. When omitted, `dx generate` uses the locales your dictionaries define               |
+| `include`       | `string \| string[]`          | `"**/*.content.ts"` | Glob(s) for dictionary files                                                                                                                            |
+| `configFile`    | `string`                      | —                   | Custom config path                                                                                                                                      |
+| `fallbacks`     | `Record<string, string[]>`    | —                   | Explicit [fallback chains](./fallbacks.md) per locale                                                                                                   |
+| `prefixDefault` | `boolean`                     | `true`              | Whether the default locale also gets a URL prefix. Read by `DialexLink` and the [routing helpers](./routing.md)                                         |
+| `lazy`          | `boolean \| "locale"`         | `false`             | Load dictionaries on demand (client bundles): `true` splits per dictionary, `"locale"` per dictionary and locale. See [Lazy Loading](./lazy-loading.md) |
+| `translate`     | `{ provider, sourceLocale? }` | —                   | Provider for [`dialex translate`](../cli/translate.md)                                                                                                  |
 
 The file is optional: without it every default above applies. `dx generate` copies the settings the runtime needs (not `translate`) into `dialex.generated.ts`, so rerun it after changing the file.
 
@@ -1824,16 +1840,33 @@ export default defineConfig({
 ```
 
 ::: warning Granularity
-Splitting is **per dictionary file**, not per locale. Each file defines all of its locales together (`defineDictionary("home", { en, tr })`), so loading one dictionary loads every locale of it. Per-locale splitting would require rewriting those calls at build time. To keep chunks small, use several small dictionaries (for example one per route) instead of one large one.
+With `lazy: true` splitting is **per dictionary file**: each file defines all of its locales together, so loading one dictionary loads every locale of it. Use `lazy: "locale"` (below) to split per locale as well.
 :::
+
+## Per locale
+
+With `lazy: "locale"`, `dx generate` also splits each dictionary per locale, so a visitor only downloads the language they read:
+
+```ts
+// dialex.config.ts
+export default defineConfig({
+  locales: ["en", "tr"],
+  lazy: "locale",
+});
+```
+
+The per-locale modules are written to a `dialex.locales/` folder next to `dialex.generated.ts`. Commit them like the generated file; [`dialex check`](../cli/check.md) reports missing or out-of-date ones. Switching language downloads the new locale on demand, and in React the current language stays on screen until the new one has arrived (the update runs in a transition). `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` fetches ahead of time.
+
+A dictionary is split only when each locale is self-contained. If a locale uses something defined elsewhere in the file (an import or a helper), `dx generate` keeps that dictionary whole and says why.
 
 ## React
 
 `useDictionary` suspends until the dictionary has loaded, so render it under `<Suspense>`:
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {
@@ -1995,6 +2028,7 @@ A self-contained context with the same `getDictionary` and `t` your app uses:
 
 ```ts
 import { createTestDialex } from "dialexjs/testing";
+
 import home from "../src/home.content";
 
 const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
@@ -2042,6 +2076,7 @@ Components that call `useDictionary`, `useT` or `useDialex` need dictionaries fr
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+
 import { dialex } from "../dialex.generated";
 
 render(
@@ -2059,6 +2094,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+
 import { dialex } from "../dialex.generated";
 
 const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });

@@ -4,7 +4,7 @@
 
 输出：
 
-- `src/dialex.generated.ts`，它导出 `dictionaries`（默认导出，供服务端适配器使用）、`config`（配置中可安全用于客户端的副本）和 `dialex`（`{ dictionaries, config }`，展开传给 `<DialexProvider {...dialex}>` 或 `createDialex({ ...dialex })`）。设置 `lazy: true` 时，它改为包含动态导入和一个 `loaders` 导出。 它还导出 `locales`（只读元组，适合做语言切换器）以及对应的联合类型 `Locale`。
+- `src/dialex.generated.ts`，它导出 `dictionaries`（默认导出，供服务端适配器使用）、`config`（配置中可安全用于客户端的副本）和 `dialex`（`{ dictionaries, config }`，展开传给 `<DialexProvider {...dialex}>` 或 `createDialex({ ...dialex })`）。设置 `lazy: true` 时，它改为包含动态导入和一个 `loaders` 导出。 它还导出 `locales`（只读元组，适合做语言切换器）以及对应的联合类型 `Locale`。 设置 `lazy: "locale"` 时，词典还会按 locale 拆分，并写入 `dialex.locales/` 文件夹。
 - `src/dialex-env.d.ts`，[类型注册表扩展](../guide/type-safety.md)。
 
 ```bash

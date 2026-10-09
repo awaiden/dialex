@@ -1,8 +1,9 @@
-import { isStale, readLock } from "./utils/lockfile.js";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+
 import fg from "fast-glob";
+
 import {
   TODO_PREFIX,
   dictionaryLocation,
@@ -15,6 +16,7 @@ import {
   type SourceRange,
 } from "./utils/dictionary-edit.js";
 import { checkIcu, type LocaleStrings } from "./utils/icu-check.js";
+import { isStale, readLock } from "./utils/lockfile.js";
 
 /**
  * Project analysis shared by `dialex check` and the editor extension.
@@ -108,7 +110,12 @@ export interface AnalysisResult {
   sourceFilesScanned: number;
 }
 
-const DICTIONARY_IGNORE = ["**/node_modules/**", "**/dist/**", "**/.next/**"];
+const DICTIONARY_IGNORE = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/.next/**",
+  "**/dialex.locales/**",
+];
 
 export const DEFAULT_SOURCE_GLOB = "**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}";
 const SOURCE_IGNORE = [

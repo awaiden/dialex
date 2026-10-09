@@ -21,7 +21,7 @@ export default defineConfig({
 | `configFile`    | `string`                      | —                   | Eigener Pfad zur Konfiguration                                                                                                                                            |
 | `fallbacks`     | `Record<string, string[]>`    | —                   | Explizite [Fallback-Ketten](./fallbacks.md) pro Locale                                                                                                                    |
 | `prefixDefault` | `boolean`                     | `true`              | Ob auch das Standard-Locale ein URL-Präfix erhält. Wird von `DialexLink` und den [Routing-Helfern](./routing.md) gelesen                                                  |
-| `lazy`          | `boolean`                     | `false`             | Wörterbücher bei Bedarf laden (Client-Bundles). Siehe [Lazy Loading](./lazy-loading.md)                                                                                   |
+| `lazy`          | `boolean \| "locale"`         | `false`             | Wörterbücher bei Bedarf laden (Client-Bundles): `true` teilt pro Wörterbuch, `"locale"` pro Wörterbuch und Locale. Siehe [Lazy Loading](./lazy-loading.md)                |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | Provider für [`dialex translate`](../cli/translate.md)                                                                                                                    |
 
 Die Datei ist optional: ohne sie gelten alle Standardwerte oben. `dx generate` kopiert die Einstellungen, die die Laufzeit braucht (nicht `translate`), nach `dialex.generated.ts`; führe es nach Änderungen an der Datei also erneut aus.
