@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vite-plus/test";
 import { Hono } from "hono";
+import { describe, expect, it } from "vite-plus/test";
+
 import { dialex } from "../src/hono.js";
 
 describe("Hono integration", () => {

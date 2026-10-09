@@ -5,11 +5,12 @@
 先运行 `dx generate`，再用生成的 `dialex` 导出安装插件：
 
 ```ts
+import { createDialex } from "dialexjs/vue";
 // src/main.ts
 import { createApp } from "vue";
-import { createDialex } from "dialexjs/vue";
-import { dialex } from "./dialex.generated";
+
 import App from "./App.vue";
+import { dialex } from "./dialex.generated";
 
 createApp(App)
   .use(createDialex({ ...dialex, defaultLocale: "en" }))

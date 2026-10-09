@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vite-plus/test";
+
 import { dialex } from "../src/express.js";
 
 describe("Express integration", () => {

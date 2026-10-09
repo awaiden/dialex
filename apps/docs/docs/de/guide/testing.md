@@ -8,6 +8,7 @@ Ein in sich geschlossener Kontext mit denselben `getDictionary` und `t`, die dei
 
 ```ts
 import { createTestDialex } from "dialexjs/testing";
+
 import home from "../src/home.content";
 
 const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
@@ -55,6 +56,7 @@ Komponenten, die `useDictionary`, `useT` oder `useDialex` aufrufen, brauchen Wö
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+
 import { dialex } from "../dialex.generated";
 
 render(
@@ -72,6 +74,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+
 import { dialex } from "../dialex.generated";
 
 const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });

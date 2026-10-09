@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
-import { IcuSyntaxError, parseMessage } from "../src/icu/parse.js";
+
 import { argumentSignature, getArguments, isIcuStructured } from "../src/icu/introspect.js";
+import { IcuSyntaxError, parseMessage } from "../src/icu/parse.js";
 
 const err = (message: string): IcuSyntaxError => {
   try {

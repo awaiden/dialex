@@ -1,5 +1,5 @@
-import type { DictionaryRegistry } from "./react.js";
 import { createT, type DialexSource, type Locales, type Translate } from "./index.js";
+import type { DictionaryRegistry } from "./react.js";
 import { lookupLocale } from "./resolver.js";
 import { createDictionaryStore } from "./store.js";
 

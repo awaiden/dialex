@@ -3,7 +3,9 @@ import http from "node:http";
 import type { AddressInfo } from "node:net";
 import os from "node:os";
 import path from "node:path";
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { geminiProvider } from "../src/translate/gemini.js";

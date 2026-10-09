@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+
+import { argumentSignature, parseMessage } from "dialexjs/icu";
+
 import {
   getString,
   hasPath,
@@ -7,10 +10,9 @@ import {
   saveDictionaryFile,
   setString,
 } from "../utils/dictionary-edit.js";
-import { argumentSignature, parseMessage } from "dialexjs/icu";
-import { loadProject } from "../utils/project.js";
-import { logger } from "../utils/logger.js";
 import { lockFor, readLock, record, writeLock } from "../utils/lockfile.js";
+import { logger } from "../utils/logger.js";
+import { loadProject } from "../utils/project.js";
 import type { TranslationFormat } from "./export.js";
 
 export interface ImportOptions {

@@ -1,5 +1,6 @@
-import express from "express";
 import { dialex } from "dialexjs/express";
+import express from "express";
+
 import dictionaries from "./dialex.generated.js";
 
 const app = express();

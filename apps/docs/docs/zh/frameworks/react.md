@@ -7,11 +7,12 @@
 没有打包器插件。`dx generate` 会写出 `src/dialex.generated.ts`，它导出 `dialex`：你的词典以及配置中可安全用于客户端的副本。用展开语法传给 provider：
 
 ```tsx
+import { DialexProvider } from "dialexjs/react";
 // src/main.tsx
 import { createRoot } from "react-dom/client";
-import { DialexProvider } from "dialexjs/react";
-import { dialex } from "./dialex.generated";
+
 import App from "./App";
+import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(
   <DialexProvider {...dialex}>
@@ -26,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+
 import { dialex } from "./dialex.generated";
 
 function App() {

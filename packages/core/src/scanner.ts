@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+
 import fg from "fast-glob";
 import { loadConfigSync } from "unconfig";
+
 import { DEFAULT_CONFIG, globalDictionaries, type DialexConfig } from "./index.js";
 
 export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {

@@ -7,6 +7,7 @@ Next.js 不需要配置包装器或插件。`dx generate` 会写出 `src/dialex.
 ```ts
 // src/dialex.ts
 import { createDialexServer } from "dialexjs/server";
+
 import { dialex } from "./dialex.generated";
 
 export const { getDictionary, getT } = createDialexServer(dialex);
@@ -19,6 +20,7 @@ export const { getDictionary, getT } = createDialexServer(dialex);
 "use client";
 
 import { DialexProvider } from "dialexjs/react";
+
 import { dialex } from "../dialex.generated";
 
 export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {

@@ -21,9 +21,9 @@ dialex translate --stale
 ## Configure a provider
 
 ```ts
+import { claudeProvider } from "@dialexjs/cli/translate";
 // dialex.config.ts
 import { defineConfig } from "dialexjs";
-import { claudeProvider } from "@dialexjs/cli/translate";
 
 export default defineConfig({
   defaultLocale: "en",

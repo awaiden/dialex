@@ -1,13 +1,15 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { HOME, cleanup, writeProject } from "./helpers.js";
 
 vi.mock("vscode", async () => await import("./fake-vscode.js"));
 
-import * as fake from "./fake-vscode.js";
 import { activate, type DialexApi } from "../src/extension.js";
+import * as fake from "./fake-vscode.js";
 
 const { state } = fake;
 

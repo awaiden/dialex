@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+
 import { afterEach, describe, expect, it } from "vite-plus/test";
-import { parseJsonc, relativeImportExtension } from "../src/utils/tsconfig.js";
+
 import { renderGenerated } from "../src/commands/generate.js";
+import { parseJsonc, relativeImportExtension } from "../src/utils/tsconfig.js";
 
 const dirs: string[] = [];
 afterEach(() => {

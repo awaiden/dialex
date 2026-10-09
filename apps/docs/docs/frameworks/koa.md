@@ -1,9 +1,10 @@
 # Koa
 
 ```ts
-import Koa from "koa";
 import Router from "@koa/router";
 import { dialex } from "dialexjs/koa";
+import Koa from "koa";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();

@@ -1,4 +1,5 @@
 import { createElement, type ReactNode } from "react";
+
 import type { DialexSource } from "../index.js";
 import { DialexProvider } from "../react.js";
 

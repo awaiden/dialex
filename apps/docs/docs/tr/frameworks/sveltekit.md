@@ -5,6 +5,7 @@
 ```ts
 // src/hooks.server.ts
 import { dialexHandle } from "dialexjs/sveltekit";
+
 import dictionaries from "./dialex.generated.js";
 
 export const handle = dialexHandle({

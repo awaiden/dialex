@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server.js";
+
+import type { LocaleResolverOptions } from "../resolver.js";
 import { localizePath, stripLocale, type RoutingOptions } from "../routing.js";
 import { resolveRequestLocale } from "../shared.js";
-import type { LocaleResolverOptions } from "../resolver.js";
 
 export interface DialexMiddlewareOptions
   extends RoutingOptions, Omit<LocaleResolverOptions, "locales" | "defaultLocale" | "usePath"> {

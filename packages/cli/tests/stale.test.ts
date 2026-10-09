@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import type { TranslateProvider } from "dialexjs";
+import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import { runCheck } from "../src/commands/check.js";
 import { runImport } from "../src/commands/import.js";
 import { runLock } from "../src/commands/lock.js";

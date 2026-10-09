@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { readPersistedLocale, syncDocumentLang, writePersistedLocale } from "../src/persist.js";
 
 beforeEach(() => {

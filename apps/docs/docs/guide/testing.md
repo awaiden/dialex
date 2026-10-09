@@ -8,6 +8,7 @@ A self-contained context with the same `getDictionary` and `t` your app uses:
 
 ```ts
 import { createTestDialex } from "dialexjs/testing";
+
 import home from "../src/home.content";
 
 const dialex = createTestDialex({ dictionaries: [home], locale: "tr" });
@@ -55,6 +56,7 @@ Components that call `useDictionary`, `useT` or `useDialex` need dictionaries fr
 ```tsx
 import { render, screen } from "@testing-library/react";
 import { TestDialexProvider } from "dialexjs/testing/react";
+
 import { dialex } from "../dialex.generated";
 
 render(
@@ -72,6 +74,7 @@ expect(screen.getByRole("heading")).toHaveTextContent("Hoş Geldiniz");
 ```ts
 import { mount } from "@vue/test-utils";
 import { createTestDialex } from "dialexjs/testing/vue";
+
 import { dialex } from "../dialex.generated";
 
 const wrapper = mount(Header, { global: { plugins: [createTestDialex("tr", dialex)] } });

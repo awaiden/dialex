@@ -1,16 +1,18 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+
 import type { TranslateProvider } from "dialexjs";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { runCheck } from "../src/commands/check.js";
 import { runImport } from "../src/commands/import.js";
 import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider } from "../src/translate/deepl.js";
 import { preservesPlaceholders } from "../src/translate/placeholders.js";
-import { checkIcu, type LocaleStrings } from "../src/utils/icu-check.js";
 import { getString, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { checkIcu, type LocaleStrings } from "../src/utils/icu-check.js";
 
 const dirs: string[] = [];
 afterEach(() => {

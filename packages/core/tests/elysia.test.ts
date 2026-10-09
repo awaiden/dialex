@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vite-plus/test";
 import { Elysia } from "elysia";
+import { describe, expect, it } from "vite-plus/test";
+
 import { dialex } from "../src/elysia.js";
 
 describe("Elysia integration", () => {

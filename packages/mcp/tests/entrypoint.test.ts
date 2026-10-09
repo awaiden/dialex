@@ -2,7 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+
 import { describe, expect, it } from "vite-plus/test";
+
 import { isEntrypoint } from "../src/index.js";
 
 describe("isEntrypoint", () => {

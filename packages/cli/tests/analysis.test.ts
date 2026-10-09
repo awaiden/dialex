@@ -1,7 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+
 import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import { analyzeProject, scanReferences, type AnalysisIssue } from "../src/analysis.js";
 
 const dirs: string[] = [];

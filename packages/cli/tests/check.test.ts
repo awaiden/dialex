@@ -1,7 +1,9 @@
 import fs from "node:fs";
-import path from "node:path";
 import os from "node:os";
+import path from "node:path";
+
 import { describe, expect, it, afterEach } from "vite-plus/test";
+
 import { runCheck } from "../src/commands/check.js";
 
 describe("CLI check command", () => {

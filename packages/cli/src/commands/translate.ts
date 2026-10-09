@@ -1,5 +1,8 @@
-import pc from "picocolors";
 import type { TranslateProvider } from "dialexjs";
+import { isIcuStructured } from "dialexjs/icu";
+import pc from "picocolors";
+
+import { preservesPlaceholders } from "../translate/placeholders.js";
 import {
   TODO_PREFIX,
   listLeaves,
@@ -7,11 +10,9 @@ import {
   saveDictionaryFile,
   setString,
 } from "../utils/dictionary-edit.js";
-import { loadProject, toKey, type ProjectDictionary } from "../utils/project.js";
-import { isIcuStructured } from "dialexjs/icu";
-import { preservesPlaceholders } from "../translate/placeholders.js";
-import { logger } from "../utils/logger.js";
 import { isStale, lockFor, record, writeLock } from "../utils/lockfile.js";
+import { logger } from "../utils/logger.js";
+import { loadProject, toKey, type ProjectDictionary } from "../utils/project.js";
 
 export interface TranslateOptions {
   cwd?: string;

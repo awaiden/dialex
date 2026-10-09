@@ -11,6 +11,9 @@ import {
   type Provider,
 } from "@nestjs/common";
 import { from, switchMap, type Observable } from "rxjs";
+
+import { globalDictionaries, type DictionaryDefinition, type Locales } from "./index.js";
+import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -19,8 +22,6 @@ import {
   lookupLocale,
   type LocaleResolverOptions,
 } from "./resolver.js";
-import { globalDictionaries, type DictionaryDefinition, type Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 
 export interface DictionaryRegistry {}
 

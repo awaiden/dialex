@@ -20,8 +20,9 @@ La división es **por archivo de diccionario**, no por locale. Cada archivo defi
 `useDictionary` suspende hasta que el diccionario se ha cargado, así que renderízalo dentro de un `<Suspense>`:
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {

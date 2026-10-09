@@ -1,7 +1,8 @@
-import { defaultTheme } from "@vuepress/theme-default";
 import { viteBundler } from "@vuepress/bundler-vite";
 import { searchPlugin } from "@vuepress/plugin-search";
+import { defaultTheme } from "@vuepress/theme-default";
 import { defineUserConfig } from "vuepress";
+
 import { LOCALES, type SiteLocale } from "./locales.js";
 
 /** The pages in each sidebar, in order. The same list serves every language. */

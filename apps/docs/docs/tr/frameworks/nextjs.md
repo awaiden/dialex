@@ -7,6 +7,7 @@ Next.js bir yapılandırma sarmalayıcısına ya da eklentiye ihtiyaç duymaz. `
 ```ts
 // src/dialex.ts
 import { createDialexServer } from "dialexjs/server";
+
 import { dialex } from "./dialex.generated";
 
 export const { getDictionary, getT } = createDialexServer(dialex);
@@ -19,6 +20,7 @@ Ardından provider'ı, üretilen dosyayı kendisi içe aktaran bir istemci dosya
 "use client";
 
 import { DialexProvider } from "dialexjs/react";
+
 import { dialex } from "../dialex.generated";
 
 export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {

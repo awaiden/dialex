@@ -8,6 +8,7 @@ import {
   type EnvironmentProviders,
   type Signal,
 } from "@angular/core";
+
 import { createT, type Translate } from "./index.js";
 import {
   readPersistedLocale,

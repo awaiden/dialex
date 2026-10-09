@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+
 import type { TranslateProvider } from "dialexjs";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider, toDeepLLanguage } from "../src/translate/deepl.js";

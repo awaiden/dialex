@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import fg from "fast-glob";
 
 export interface ProjectRoot {

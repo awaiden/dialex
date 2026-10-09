@@ -1,6 +1,7 @@
 // Pure helpers for scripts/release.mjs. They only read and return text, so they are easy to test.
 import fs from "node:fs";
 import path from "node:path";
+
 import { releaseNotes } from "../release-notes.mjs";
 
 /** Packages that share one version number. */

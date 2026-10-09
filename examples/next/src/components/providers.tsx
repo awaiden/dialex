@@ -1,7 +1,8 @@
 "use client";
 
-import { type ReactNode } from "react";
 import { DialexProvider } from "dialexjs/react";
+import { type ReactNode } from "react";
+
 // Dictionaries hold functions, so they cannot be passed from a Server Component: import them here.
 import { dialex } from "../dialex.generated";
 

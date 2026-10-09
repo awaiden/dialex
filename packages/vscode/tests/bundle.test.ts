@@ -2,7 +2,9 @@ import fs from "node:fs";
 import Module, { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
 import { afterEach, beforeEach, describe, expect, it } from "vite-plus/test";
+
 import * as fake from "./fake-vscode.js";
 import { HOME, cleanup, writeProject } from "./helpers.js";
 

@@ -1,3 +1,4 @@
+import { globalDictionaries, type DictionaryDefinition, type Locales } from "./index.js";
 import {
   lookupLocale,
   parseAcceptLanguage,
@@ -6,7 +7,6 @@ import {
   extractPathLocale,
   type LocaleResolverOptions,
 } from "./resolver.js";
-import { globalDictionaries, type DictionaryDefinition, type Locales } from "./index.js";
 
 export type DictionaryInput =
   | Record<string, Record<string, any>>

@@ -1,8 +1,9 @@
 # Elysia
 
 ```ts
-import { Elysia } from "elysia";
 import { dialex } from "dialexjs/elysia";
+import { Elysia } from "elysia";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Elysia()

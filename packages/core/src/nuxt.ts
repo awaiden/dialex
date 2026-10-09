@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import { addImports, addPluginTemplate, defineNuxtModule } from "@nuxt/kit";
+
 import type { DialexConfig } from "./index.js";
 
 export interface NuxtDialexOptions extends DialexConfig {

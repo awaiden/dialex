@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { dialexHandle } from "../src/sveltekit.js";
 
 describe("SvelteKit integration", () => {

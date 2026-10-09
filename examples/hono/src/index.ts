@@ -1,5 +1,6 @@
-import { Hono } from "hono";
 import { dialex } from "dialexjs/hono";
+import { Hono } from "hono";
+
 import dictionaries from "./dialex.generated.js";
 
 const app = new Hono();

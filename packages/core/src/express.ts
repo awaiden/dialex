@@ -1,4 +1,7 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
+
+import type { DictionaryDefinition, Locales } from "./index.js";
+import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -6,8 +9,6 @@ import {
   extractPathLocale,
   type LocaleResolverOptions,
 } from "./resolver.js";
-import type { DictionaryDefinition, Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
 export interface DictionaryRegistry {}

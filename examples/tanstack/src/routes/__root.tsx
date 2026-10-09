@@ -1,8 +1,10 @@
 import { HeadContent, Scripts, createRootRoute, Outlet } from "@tanstack/react-router";
 import { DialexProvider, useDictionary } from "dialexjs/react";
+
 import { Header } from "../components/Header";
 import { dialex } from "../dialex.generated";
 import { getLocale } from "../server/locale";
+
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({

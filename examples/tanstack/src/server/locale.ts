@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { createDialexHandler } from "dialexjs/web";
+
 import dictionaries from "../dialex.generated";
 
 const resolveDialex = createDialexHandler({

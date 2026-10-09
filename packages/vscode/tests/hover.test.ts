@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import { buildHover, escapeMarkdown } from "../src/hover.js";
 import { HOME, analyze, cleanup } from "./helpers.js";
 

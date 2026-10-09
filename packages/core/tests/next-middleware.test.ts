@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vite-plus/test";
 import { NextRequest } from "next/server.js";
+import { describe, expect, it } from "vite-plus/test";
+
 import { createDialexMiddleware } from "../src/next/middleware.js";
 
 const request = (path: string, headers: Record<string, string> = {}) =>

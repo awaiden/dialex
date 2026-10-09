@@ -4,6 +4,7 @@
 
 ```ts
 import { createDialexHandler } from "dialexjs/web";
+
 import dictionaries from "./dialex.generated.js";
 
 export const resolveDialex = createDialexHandler({

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { date, formatters, list, number, plural, relativeTime } from "../src/format.js";
 
 describe("plural", () => {

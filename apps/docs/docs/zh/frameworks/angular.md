@@ -18,6 +18,7 @@ dialex generate        # writes src/dialex.generated.ts
 // src/app/app.config.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
+
 import dictionaries from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {

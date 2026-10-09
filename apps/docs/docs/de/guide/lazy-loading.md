@@ -20,8 +20,9 @@ Aufgeteilt wird **pro Wörterbuchdatei**, nicht pro Locale. Jede Datei definiert
 `useDictionary` suspendiert, bis das Wörterbuch geladen ist, rendere es daher unter `<Suspense>`:
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {

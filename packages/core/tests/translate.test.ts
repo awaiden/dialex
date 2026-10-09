@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vite-plus/test";
+
 import { createT } from "../src/translate.js";
 
 describe("createT", () => {

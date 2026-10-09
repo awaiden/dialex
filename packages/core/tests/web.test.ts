@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { createDialexHandler } from "../src/web.js";
 
 const dict = {

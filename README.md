@@ -121,6 +121,7 @@ Generate the dictionaries with `dx generate`, then bind them once for server cod
 ```typescript
 // src/dialex.ts
 import { createDialexServer } from "dialexjs/server";
+
 import { dialex } from "./dialex.generated";
 
 export const { getDictionary, getT } = createDialexServer(dialex);
@@ -165,8 +166,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 ### Fastify
 
 ```typescript
-import Fastify from "fastify";
 import { dialexPlugin } from "dialexjs/fastify";
+import Fastify from "fastify";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = Fastify();
@@ -190,9 +192,10 @@ await app.listen({ port: 3000 });
 ### Koa
 
 ```typescript
-import Koa from "koa";
 import Router from "@koa/router";
 import { dialex } from "dialexjs/koa";
+import Koa from "koa";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Koa();
@@ -214,8 +217,9 @@ app.listen(3000);
 ### Hono
 
 ```typescript
-import { Hono } from "hono";
 import { dialex } from "dialexjs/hono";
+import { Hono } from "hono";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = new Hono();
@@ -234,8 +238,9 @@ export default app;
 ### Express
 
 ```typescript
-import express from "express";
 import { dialex } from "dialexjs/express";
+import express from "express";
+
 import dictionaries from "./src/dialex.generated.js";
 
 const app = express();
@@ -256,6 +261,7 @@ app.listen(3000);
 ```typescript
 import { Module, Controller, Get } from "@nestjs/common";
 import { DialexModule, DialexLocale, DialexDictionary } from "dialexjs/nestjs";
+
 import dictionaries from "./src/dialex.generated.js";
 
 @Controller()
@@ -288,6 +294,7 @@ Run `dx generate` (or keep `dx generate --watch` running, or use the VS Code ext
 ```tsx
 // src/main.tsx
 import { DialexProvider } from "dialexjs/react";
+
 import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(

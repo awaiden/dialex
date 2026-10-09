@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { runGenerate } from "./commands/generate.js";
-import { runInit } from "./commands/init.js";
-import { logger } from "./utils/logger.js";
+
+import pkg from "../package.json" with { type: "json" };
 import { runCheck } from "./commands/check.js";
 import { runExport } from "./commands/export.js";
+import { runGenerate } from "./commands/generate.js";
 import { runImport } from "./commands/import.js";
-import { runTranslate } from "./commands/translate.js";
+import { runInit } from "./commands/init.js";
 import { runLock } from "./commands/lock.js";
-import pkg from "../package.json" with { type: "json" };
+import { runTranslate } from "./commands/translate.js";
+import { logger } from "./utils/logger.js";
 
 const program = new Command();
 

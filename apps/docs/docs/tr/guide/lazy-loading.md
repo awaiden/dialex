@@ -20,8 +20,9 @@ Bölme yerel ayara göre değil, **sözlük dosyası başına** yapılır. Her d
 `useDictionary`, sözlük yüklenene kadar askıya alır; bu yüzden onu bir `<Suspense>` altında render edin:
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {

@@ -1,12 +1,5 @@
 import path from "node:path";
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  ListResourcesRequestSchema,
-  ReadResourceRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
-import { z } from "zod";
+
 import {
   analyzeProject,
   readStaticConfig,
@@ -25,8 +18,17 @@ import {
   listLocales,
   readLock,
 } from "@dialexjs/cli/api";
-import { DOC_TOPICS } from "./docs.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
+
 import pkg from "../package.json" with { type: "json" };
+import { DOC_TOPICS } from "./docs.js";
 
 export function createDialexMcpServer(options: { root?: string } = {}) {
   const getRoot = () => path.resolve(options.root || process.cwd());

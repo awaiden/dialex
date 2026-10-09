@@ -5,11 +5,12 @@
 Ejecuta `dx generate` y luego instala el plugin con el export `dialex` generado:
 
 ```ts
+import { createDialex } from "dialexjs/vue";
 // src/main.ts
 import { createApp } from "vue";
-import { createDialex } from "dialexjs/vue";
-import { dialex } from "./dialex.generated";
+
 import App from "./App.vue";
+import { dialex } from "./dialex.generated";
 
 createApp(App)
   .use(createDialex({ ...dialex, defaultLocale: "en" }))

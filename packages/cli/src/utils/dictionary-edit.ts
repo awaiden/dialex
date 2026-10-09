@@ -1,4 +1,5 @@
 import fs from "node:fs";
+
 import { loadFile, writeFile, generateCode, parseExpression, parseModule } from "magicast";
 
 /**

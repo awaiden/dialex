@@ -20,8 +20,9 @@ export default defineConfig({
 `useDictionary` 会挂起，直到词典加载完成，因此请在 `<Suspense>` 下渲染它：
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {

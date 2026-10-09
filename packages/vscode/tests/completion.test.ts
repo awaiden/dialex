@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import { completionContextAt, completionEntries } from "../src/completion.js";
 import { HOME, analyze, cleanup } from "./helpers.js";
 

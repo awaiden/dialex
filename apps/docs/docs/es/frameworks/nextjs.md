@@ -7,6 +7,7 @@ Next.js no necesita un wrapper de configuración ni un plugin. `dx generate` esc
 ```ts
 // src/dialex.ts
 import { createDialexServer } from "dialexjs/server";
+
 import { dialex } from "./dialex.generated";
 
 export const { getDictionary, getT } = createDialexServer(dialex);
@@ -19,6 +20,7 @@ Después renderiza el provider desde un archivo de cliente que importe el propio
 "use client";
 
 import { DialexProvider } from "dialexjs/react";
+
 import { dialex } from "../dialex.generated";
 
 export function Providers({ children, locale }: { children: React.ReactNode; locale: string }) {

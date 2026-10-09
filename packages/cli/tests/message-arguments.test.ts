@@ -1,10 +1,12 @@
-import { describe, expect, it } from "vite-plus/test";
-import { messageArguments, messageType } from "../src/utils/message-arguments.js";
-import { parseDictionaryText } from "../src/utils/dictionary-edit.js";
-import { renderGenerated } from "../src/commands/generate.js";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+
+import { describe, expect, it } from "vite-plus/test";
+
+import { renderGenerated } from "../src/commands/generate.js";
+import { parseDictionaryText } from "../src/utils/dictionary-edit.js";
+import { messageArguments, messageType } from "../src/utils/message-arguments.js";
 
 describe("messageType", () => {
   it("maps plural, selectordinal and number arguments to number", () => {

@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
 import fs from "node:fs";
+
 import {
   analyzeProject,
   generateDictionaries,
@@ -7,6 +7,8 @@ import {
   renderGenerated,
   type AnalysisIssue,
 } from "@dialexjs/cli/api";
+import * as vscode from "vscode";
+
 import { completionContextAt, completionEntries, type CompletionEntry } from "./completion.js";
 import { definitionFor } from "./definition.js";
 import { buildHover } from "./hover.js";

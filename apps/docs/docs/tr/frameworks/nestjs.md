@@ -5,6 +5,7 @@
 ```ts
 import { Module } from "@nestjs/common";
 import { DialexModule } from "dialexjs/nestjs";
+
 import dictionaries from "./dialex.generated.js";
 
 @Module({

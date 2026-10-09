@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useDialex, useDictionary } from "dialexjs/react";
+
 import { locales } from "../dialex.generated";
 
 const languageName = (code: string) =>

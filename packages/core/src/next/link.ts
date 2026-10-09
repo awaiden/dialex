@@ -4,6 +4,7 @@ import * as LinkModule from "next/link.js";
 import type { LinkProps } from "next/link.js";
 import { useParams } from "next/navigation.js";
 import { createElement, type AnchorHTMLAttributes, type ComponentType } from "react";
+
 import { useDialexConfig } from "../react.js";
 import { localizePath } from "../routing.js";
 

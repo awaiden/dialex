@@ -1,4 +1,5 @@
 import { defineEventHandler, getRequestHeader, getRequestURL, setResponseHeader } from "h3";
+
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {

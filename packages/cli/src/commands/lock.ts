@@ -1,10 +1,12 @@
+import fs from "node:fs";
 import path from "node:path";
+
 import pc from "picocolors";
+
 import { TODO_PREFIX, listLeaves, listLocales } from "../utils/dictionary-edit.js";
 import { LOCK_FILE, isStale, lockFor, lockPath, record, writeLock } from "../utils/lockfile.js";
-import { loadProject, toKey } from "../utils/project.js";
 import { logger } from "../utils/logger.js";
-import fs from "node:fs";
+import { loadProject, toKey } from "../utils/project.js";
 
 export interface LockOptions {
   cwd?: string;

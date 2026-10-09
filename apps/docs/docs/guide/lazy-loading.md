@@ -20,8 +20,9 @@ Splitting is **per dictionary file**, not per locale. Each file defines all of i
 `useDictionary` suspends until the dictionary has loaded, so render it under `<Suspense>`:
 
 ```tsx
-import { Suspense } from "react";
 import { useDictionary, useT, preloadDictionaries } from "dialexjs/react";
+import { Suspense } from "react";
+
 import { dialex } from "./dialex.generated";
 
 function Pricing() {

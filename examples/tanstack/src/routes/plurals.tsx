@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useDictionary, useT } from "dialexjs/react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/plurals")({ component: Plurals });
 

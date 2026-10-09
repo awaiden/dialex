@@ -1,4 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vite-plus/test";
+
 import { createT, type TranslationPath } from "../src/index.js";
 
 declare module "../src/index.js" {

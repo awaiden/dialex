@@ -3,6 +3,7 @@
 ```ts
 // src/middleware.ts
 import { dialex } from "dialexjs/astro";
+
 import dictionaries from "./dialex.generated.js";
 
 export const onRequest = dialex({

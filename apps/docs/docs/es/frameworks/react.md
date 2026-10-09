@@ -7,11 +7,12 @@
 No hay ningún plugin del bundler. `dx generate` escribe `src/dialex.generated.ts`, que exporta `dialex`: tus diccionarios y una copia de tu configuración segura para el cliente. Pásalo al provider con spread:
 
 ```tsx
+import { DialexProvider } from "dialexjs/react";
 // src/main.tsx
 import { createRoot } from "react-dom/client";
-import { DialexProvider } from "dialexjs/react";
-import { dialex } from "./dialex.generated";
+
 import App from "./App";
+import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(
   <DialexProvider {...dialex}>
@@ -26,6 +27,7 @@ Mantén el archivo al día con `dx generate --watch` en una segunda terminal, o 
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+
 import { dialex } from "./dialex.generated";
 
 function App() {

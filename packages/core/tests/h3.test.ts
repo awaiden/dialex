@@ -1,5 +1,6 @@
 import { createApp, defineEventHandler, toWebHandler } from "h3";
 import { describe, expect, it } from "vite-plus/test";
+
 import { dialex } from "../src/h3.js";
 
 const dict = {

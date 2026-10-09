@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vite-plus/test";
+
 import { lookupLocale, resolveFallbackChain } from "../src/resolver.js";
 import { createGetDictionary } from "../src/shared.js";
 

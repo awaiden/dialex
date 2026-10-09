@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { dialex } from "../src/astro.js";
 
 describe("Astro integration", () => {

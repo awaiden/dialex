@@ -1,7 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+
 import { afterEach, describe, expect, it } from "vite-plus/test";
+
 import { REGISTRY_ADAPTERS, detectAdapters, generateDts } from "../src/scanner.js";
 
 const dirs: string[] = [];

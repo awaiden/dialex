@@ -2,7 +2,9 @@
 
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
 import { createDialexMcpServer } from "./server.js";
 
 export { createDialexMcpServer } from "./server.js";

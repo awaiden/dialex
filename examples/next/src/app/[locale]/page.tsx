@@ -1,5 +1,5 @@
-import { getDictionary } from "../../dialex";
 import { ClientCounter } from "../../components/client-counter";
+import { getDictionary } from "../../dialex";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

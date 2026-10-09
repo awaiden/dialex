@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { createGetDictionary, normalizeDictionaries, resolveRequestLocale } from "../src/shared.js";
 
 describe("shared adapter helpers", () => {

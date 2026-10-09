@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vite-plus/test";
 import Fastify from "fastify";
+import { describe, expect, it } from "vite-plus/test";
+
 import { dialexPlugin } from "../src/fastify.js";
 
 describe("Fastify integration", () => {

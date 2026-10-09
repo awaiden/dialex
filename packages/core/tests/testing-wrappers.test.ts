@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 import { act, createElement } from "react";
 import { createRoot } from "react-dom/client";
+import { describe, expect, it } from "vite-plus/test";
 import { createSSRApp, defineComponent, h } from "vue";
 import { renderToString } from "vue/server-renderer";
-import { describe, expect, it } from "vite-plus/test";
 
 import * as react from "../src/react.js";
 import { TestDialexProvider } from "../src/testing/react.js";
-import * as vue from "../src/vue.js";
 import { createTestDialex } from "../src/testing/vue.js";
+import * as vue from "../src/vue.js";
 
 const home = { en: { title: "Welcome" }, tr: { title: "Hoş Geldiniz" } };
 const dialex = {

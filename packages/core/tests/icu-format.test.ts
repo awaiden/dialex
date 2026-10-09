@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
+
 import { IcuFormatError, formatMessage } from "../src/icu/format.js";
 import { IcuSyntaxError } from "../src/icu/parse.js";
 

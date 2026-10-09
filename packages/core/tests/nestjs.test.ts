@@ -1,6 +1,7 @@
 import "reflect-metadata";
-import { describe, expect, it } from "vite-plus/test";
 import { lastValueFrom, of, throwError } from "rxjs";
+import { describe, expect, it } from "vite-plus/test";
+
 import { DialexModule, DialexService, DialexInterceptor, DialexMiddleware } from "../src/nestjs.js";
 
 describe("NestJS integration", () => {

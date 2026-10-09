@@ -1,5 +1,6 @@
-import Fastify from "fastify";
 import { dialexPlugin } from "dialexjs/fastify";
+import Fastify from "fastify";
+
 import dictionaries from "./dialex.generated.js";
 
 const app = Fastify({ logger: false });

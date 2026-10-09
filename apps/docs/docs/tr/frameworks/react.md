@@ -7,11 +7,12 @@
 Bir paket yöneticisi eklentisi yoktur. `dx generate`, `dialex` değerini dışa aktaran `src/dialex.generated.ts` dosyasını yazar: sözlükleriniz ve yapılandırmanızın istemci için güvenli bir kopyası. Bunu provider'a yayın:
 
 ```tsx
+import { DialexProvider } from "dialexjs/react";
 // src/main.tsx
 import { createRoot } from "react-dom/client";
-import { DialexProvider } from "dialexjs/react";
-import { dialex } from "./dialex.generated";
+
 import App from "./App";
+import { dialex } from "./dialex.generated";
 
 createRoot(document.getElementById("root")!).render(
   <DialexProvider {...dialex}>
@@ -26,6 +27,7 @@ Dosyayı güncel tutmak için ikinci bir terminalde `dx generate --watch` çalı
 
 ```tsx
 import { DialexProvider, useDialex, useDictionary } from "dialexjs/react";
+
 import { dialex } from "./dialex.generated";
 
 function App() {

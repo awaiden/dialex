@@ -9,7 +9,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+
 import { slugify } from "@mdit-vue/shared";
+
 import { TRANSLATED } from "../docs/.vuepress/locales.ts";
 
 const DOCS = path.resolve(import.meta.dirname, "../docs");

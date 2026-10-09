@@ -1,5 +1,6 @@
 import { dictionaryLocation, locationOf, type SourceRange } from "@dialexjs/cli/api";
 import type { Reference } from "@dialexjs/cli/api";
+
 import { orderedLocales, type ProjectModel } from "./model.js";
 import { resolveReference } from "./references.js";
 

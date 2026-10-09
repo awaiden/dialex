@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { DialexModule, DialexInterceptor } from "dialexjs/nestjs";
+
 import { AppController } from "./app.controller.js";
 import dictionaries from "./dialex.generated.js";
 

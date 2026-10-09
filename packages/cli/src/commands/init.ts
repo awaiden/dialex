@@ -1,13 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import * as p from "@clack/prompts";
-import pc from "picocolors";
 import { parseModule, loadFile, writeFile } from "magicast";
 import { addNuxtModule } from "magicast/helpers";
-import { generateDictionaries } from "./generate.js";
+import pc from "picocolors";
+
 import { detectFramework, type SupportedFramework } from "../utils/detector.js";
 import { logger } from "../utils/logger.js";
 import { addRequiredPackages, installCommand } from "../utils/package-json.js";
+import { generateDictionaries } from "./generate.js";
 
 export interface InitOptions {
   cwd?: string;
