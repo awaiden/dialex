@@ -244,7 +244,7 @@ dialex gen -o src/custom.generated.ts
 
 Run it before building or starting any server-side app, typically via the `dx:generate` script that `init` adds.
 
-Nothing builds this file for you, so keep it current: run `dialex generate --watch` in a second terminal (it reacts to added, edited and removed dictionary files and to config changes), use the Dialex VS Code extension (it regenerates on save), or run `dx generate` before `dev` and `build`. [`dialex check`](./check.md) reports a stale file as an error, and `dialex check --fix` rewrites it. Without a `dialex.config.*` the defaults apply and `locales` come from your dictionaries.
+Nothing builds this file for you, so keep it current: run `dialex generate --watch` in a second terminal (it reacts to added, edited and removed dictionary files and to config changes), use the Dialex VS Code extension (it regenerates on save), or run `dx generate` before `dev` and `build`. [`dialex check`](./check.md) reports a stale file as an error, and `dialex check --fix` rewrites it. Without a `dialex.config.*` the defaults apply and `locales` come from your dictionaries. `check` compares the generated files ignoring formatting (whitespace, quotes, trailing commas), so a formatter such as Prettier, Biome or oxfmt may rewrite them. Adding them to its ignore list avoids noisy diffs.
 
 
 ---
@@ -1306,16 +1306,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 - **Breaking:** the virtual modules (`virtual:dialex-dictionaries`, `virtual:dialex-config`) and the bundler plugins that provided them are gone. Dictionaries and config now come from `dialex.generated.ts`, which `dx generate` writes, so Dialex works with any bundler, `dialexjs/react` loads in plain Node (the cause of the SSR failures on TanStack Start), and tests need no stubs. Keep the file current with `dx generate --watch` in a second terminal, the VS Code extension (regenerates on save), or a script that runs before `dev` and `build`.
 
-  | Before                                                           | After                                                                              |
-  | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-  | `dialexPlugin()` from `dialexjs/vite` in `vite.config.ts`        | Remove it. Run `dx generate`                                                       |
-  | `withDialex(nextConfig)` from `dialexjs/next`                    | Remove it. `dialexjs/next` is gone; `next/middleware` and `next/link` stay         |
-  | `<DialexProvider>`                                               | `<DialexProvider {...dialex}>` with `import { dialex } from "./dialex.generated"`  |
-  | `createDialex({ defaultLocale })` (Vue)                          | `createDialex({ ...dialex, defaultLocale })`                                       |
-  | `getDictionary`, `getT` from `dialexjs/server`                   | `export const { getDictionary, getT } = createDialexServer(dialex)`                |
-  | `preloadDictionaries("pricing")`                                 | `preloadDictionaries(dialex, "pricing")`                                           |
-  | `TestDialexProvider locale="tr"`, `createTestDialex("tr")`       | `<TestDialexProvider {...dialex} locale="tr">`, `createTestDialex("tr", dialex)`   |
-  | Nuxt: `dialex: { defaultLocale, locales }` in `nuxt.config.ts`   | Put them in `dialex.config.ts`; the module reads `dialex.generated.ts`             |
+  | Before                                                         | After                                                                             |
+  | -------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+  | `dialexPlugin()` from `dialexjs/vite` in `vite.config.ts`      | Remove it. Run `dx generate`                                                      |
+  | `withDialex(nextConfig)` from `dialexjs/next`                  | Remove it. `dialexjs/next` is gone; `next/middleware` and `next/link` stay        |
+  | `<DialexProvider>`                                             | `<DialexProvider {...dialex}>` with `import { dialex } from "./dialex.generated"` |
+  | `createDialex({ defaultLocale })` (Vue)                        | `createDialex({ ...dialex, defaultLocale })`                                      |
+  | `getDictionary`, `getT` from `dialexjs/server`                 | `export const { getDictionary, getT } = createDialexServer(dialex)`               |
+  | `preloadDictionaries("pricing")`                               | `preloadDictionaries(dialex, "pricing")`                                          |
+  | `TestDialexProvider locale="tr"`, `createTestDialex("tr")`     | `<TestDialexProvider {...dialex} locale="tr">`, `createTestDialex("tr", dialex)`  |
+  | Nuxt: `dialex: { defaultLocale, locales }` in `nuxt.config.ts` | Put them in `dialex.config.ts`; the module reads `dialex.generated.ts`            |
 
   `vite` is no longer a peer dependency. In Next.js, render the provider from a `"use client"` file that imports the generated file, because dictionaries hold functions that cannot be passed from a Server Component.
 
@@ -1328,7 +1328,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 - `dx generate` works without a `dialex.config.*`: every default applies and `locales` come from your dictionaries. `dx init` creates the config file for every framework.
 - `dialex.generated.ts` also exports `config` (a client-safe copy of your settings, without `translate`), `dialex` (`{ dictionaries, config }`) and, in lazy mode, `loaders`.
-- `dx check` reports a generated file that is out of date, and `dx check --fix` rewrites it.
+- `dx check` reports a generated file that is out of date, and `dx check --fix` rewrites it. The comparison ignores formatting, so a formatter may rewrite the generated files.
 - VS Code: `dialex.autoGenerate` (on by default) regenerates the generated files when a dictionary or config file changes, in projects that already have one, without running your config. New command **Dialex: Regenerate dialex.generated.ts**.
 - `createDialexServer(dialex)` in `dialexjs/server`, `useDialexConfig()` in `dialexjs/react`, and `DEFAULT_CONFIG`.
 - `examples/tanstack`: a TanStack Start (React, SSR) app with server-side locale detection, ICU plurals and a language switch.

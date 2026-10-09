@@ -21,4 +21,4 @@ dialex gen -o src/custom.generated.ts
 
 在构建或启动任何服务端应用之前运行它，通常通过 `init` 添加的 `dx:generate` 脚本来运行。
 
-没有任何东西会替你构建这个文件，所以请保持它最新：在第二个终端运行 `dialex generate --watch`（它会响应词典文件的新增、编辑和删除以及配置变更），使用 Dialex 的 VS Code 扩展（保存时重新生成），或在 `dev` 和 `build` 之前运行 `dx generate`。[`dialex check`](./check.md) 会把过期文件报告为错误，`dialex check --fix` 会重写它。没有 `dialex.config.*` 时使用默认值，`locales` 取自你的词典。
+没有任何东西会替你构建这个文件，所以请保持它最新：在第二个终端运行 `dialex generate --watch`（它会响应词典文件的新增、编辑和删除以及配置变更），使用 Dialex 的 VS Code 扩展（保存时重新生成），或在 `dev` 和 `build` 之前运行 `dx generate`。[`dialex check`](./check.md) 会把过期文件报告为错误，`dialex check --fix` 会重写它。没有 `dialex.config.*` 时使用默认值，`locales` 取自你的词典。 `check` 在比较生成文件时会忽略格式（空白、引号、尾随逗号），因此 Prettier、Biome 或 oxfmt 等格式化工具可以改写它们。把它们加入格式化工具的忽略列表可以避免嘈杂的 diff。

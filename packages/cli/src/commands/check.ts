@@ -115,6 +115,19 @@ function escapeAnnotation(value: string): string {
 }
 
 /**
+ * What a formatter (Prettier, Biome, oxfmt) can change without changing the code: whitespace,
+ * quote style, quoted object keys and trailing commas. Comparing this form keeps `check` quiet
+ * when your pre-commit hook formats the generated files.
+ */
+export function normalizeGenerated(text: string): string {
+  return text
+    .replace(/'/g, '"')
+    .replace(/"([A-Za-z_$][\w$]*)"\s*:/g, "$1:")
+    .replace(/\s+/g, "")
+    .replace(/,(?=[\]})])/g, "");
+}
+
+/**
  * Generated files that exist but no longer match the dictionaries and config. Nothing builds them
  * for you any more, so a stale `dialex.generated.ts` would otherwise fail silently at runtime.
  * With `fix` they are rewritten.
@@ -137,7 +150,8 @@ function staleGeneratedFiles(
   ];
   for (const [file, content] of targets) {
     if (content === undefined || !fs.existsSync(file)) continue;
-    if (fs.readFileSync(file, "utf-8") === content) continue;
+    if (normalizeGenerated(fs.readFileSync(file, "utf-8")) === normalizeGenerated(content))
+      continue;
     if (options.fix) {
       fs.writeFileSync(file, content, "utf-8");
       rewritten++;

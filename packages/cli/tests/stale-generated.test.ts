@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vite-plus/test";
-import { runCheck } from "../src/commands/check.js";
+import { normalizeGenerated, runCheck } from "../src/commands/check.js";
 import { generateDictionaries, renderGenerated } from "../src/commands/generate.js";
 
 const dirs: string[] = [];
@@ -188,5 +188,35 @@ describe("dx generate --watch", () => {
     } finally {
       await watcher.close();
     }
+  });
+});
+
+describe("dx check and formatters", () => {
+  it("accepts generated files a formatter has rewritten, but still catches real changes", async () => {
+    const dir = project({ "src/home.content.ts": home() });
+    generateDictionaries(dir);
+    const file = path.join(dir, "src/dialex.generated.ts");
+
+    // What Prettier/oxfmt do: unquote simple keys, reflow, add trailing commas, change quotes.
+    const raw = fs.readFileSync(file, "utf-8");
+    const formatted = raw
+      .replace(/"(\w+)":/g, "$1:")
+      .replace(/locales:\s*\[[^\]]*\]/, 'locales: ["en", "tr"]')
+      .replace(/lazy: false\n/, "lazy: false,\n")
+      .replace(/import (\w+) from "([^"]+)";/g, "import $1 from '$2';");
+    expect(formatted).not.toBe(raw);
+    fs.writeFileSync(file, formatted);
+    expect((await check(dir)).success).toBe(true);
+
+    // A real change (another dictionary) is still reported.
+    fs.writeFileSync(path.join(dir, "src/nav.content.ts"), home().replace('"home"', '"nav"'));
+    expect((await check(dir)).success).toBe(false);
+  });
+
+  it("normalizes quotes, quoted keys, whitespace and trailing commas only", () => {
+    expect(normalizeGenerated(`const a = { "b": [1, 2,], c: 'x' };`)).toBe(
+      normalizeGenerated(`const a = {\n  b: [1, 2],\n  c: "x",\n};`),
+    );
+    expect(normalizeGenerated(`const a = 1;`)).not.toBe(normalizeGenerated(`const a = 2;`));
   });
 });
