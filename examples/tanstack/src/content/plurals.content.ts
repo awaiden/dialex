@@ -10,8 +10,8 @@ export default defineDictionary("plurals", {
   },
   tr: {
     title: "ICU mesajları",
-    items: "{count, plural, =0 {Öğe yok} other {# öğe}}",
-    place: "{n}. sıra",
+    items: "{count, plural, =0 {Öğe yok} one {# öğe} other {# öğe}}",
+    place: "{n, selectordinal, other {#.}} sıra",
     more: "Artır",
     less: "Azalt",
   },

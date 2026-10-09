@@ -6,7 +6,7 @@
   "scripts": {
     "dx:generate": "dx generate",
     "dev": "dx generate && vp dev --port 3000",
-    "build": "dx generate && vp build && tsc --noEmit",
+    "build": "dx generate && dx check && vp build && tsc --noEmit",
     "preview": "vp preview"
   },
   "dependencies": {
