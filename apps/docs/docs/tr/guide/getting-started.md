@@ -37,7 +37,7 @@ Ya da etkileşimsiz olarak:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-Bu komut `dialex.config.ts` dosyasını, başlangıç sözlüğü olan `src/home.content.ts` dosyasını oluşturur ve `package.json` dosyanıza bir `dx:generate` betiği (`dialex generate`) ekler. Bkz. [`dialex init`](../cli/init.md).
+Bu komut `dialex.config.ts` dosyasını, başlangıç sözlüğü olan `src/home.content.ts` dosyasını oluşturur `dialexjs` ile `@dialexjs/cli` paketlerini `package.json` dosyanıza ekler ve bir `dx:generate` betiği (`dx generate`) ekler. Bkz. [`dialex init`](../cli/init.md).
 
 ## Sözlük tanımlama
 

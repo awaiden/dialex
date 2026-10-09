@@ -26,7 +26,7 @@
 
 | 类型                                        | 说明                                                                                                   |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `I18nConfig`                                | `defaultLocale`、`locales`、`include`、`configFile`、`fallbacks`、`prefixDefault`、`lazy`、`translate` |
+| `DialexConfig`                              | `defaultLocale`、`locales`、`include`、`configFile`、`fallbacks`、`prefixDefault`、`lazy`、`translate` |
 | `Translate`、`TranslationPath`              | `t` 及其有效路径的类型                                                                                 |
 | `Register`                                  | 由生成的声明扩展（`locales`）                                                                          |
 | `Locales`                                   | 已配置 locale 的联合类型，或 `string`                                                                  |

@@ -26,7 +26,7 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 | Tip                                         | Açıklama                                                                                               |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `I18nConfig`                                | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
+| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
 | `Translate`, `TranslationPath`              | `t` işlevinin tipleri ve geçerli yolları                                                               |
 | `Register`                                  | Üretilen bildirimlerle genişletilir (`locales`)                                                        |
 | `Locales`                                   | Yapılandırılmış yerel ayarların birleşimi veya `string`                                                |

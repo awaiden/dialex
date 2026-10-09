@@ -2,13 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import { loadConfigSync } from "unconfig";
-import type { I18nConfig } from "./index.js";
+import type { DialexConfig } from "./index.js";
 import { generateDts } from "./scanner.js";
 
-function resolveI18nConfig(root: string, inlineConfig: I18nConfig = {}): I18nConfig {
-  let loadedConfig: I18nConfig = {};
+function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
+  let loadedConfig: DialexConfig = {};
   try {
-    const result = loadConfigSync<I18nConfig>({
+    const result = loadConfigSync<DialexConfig>({
       sources: [
         {
           files: "dialex.config",
@@ -38,7 +38,7 @@ function resolveI18nConfig(root: string, inlineConfig: I18nConfig = {}): I18nCon
   };
 }
 
-export function syncI18nFiles(root: string, config: I18nConfig) {
+export function syncI18nFiles(root: string, config: DialexConfig) {
   const include = config.include || "**/*.content.ts";
   const files = fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
 
@@ -127,10 +127,10 @@ export default dictionaries;
  * Next.js plugin wrapper for dialex.
  * Compatible with Next.js App Router & Pages Router (Webpack & Turbopack).
  */
-export function withI18n(nextConfig: any = {}, inlineConfig: I18nConfig = {}) {
+export function withI18n(nextConfig: any = {}, inlineConfig: DialexConfig = {}) {
   const applyConfig = (baseConfig: any) => {
     const root = process.cwd();
-    const config = resolveI18nConfig(root, inlineConfig);
+    const config = resolveDialexConfig(root, inlineConfig);
     const { dictFilePath, configFilePath } = syncI18nFiles(root, config);
 
     return {

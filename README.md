@@ -71,7 +71,7 @@ Or run headlessly in automated setups:
 bun x dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-This generates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds the `"dx:generate": "dx generate"` script to your `package.json`.
+This generates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, adds `dialexjs` and `@dialexjs/cli` to your `package.json`, and adds the `"dx:generate": "dx generate"` script (then run your package manager's install).
 
 ---
 

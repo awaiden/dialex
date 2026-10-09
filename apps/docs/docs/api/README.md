@@ -26,7 +26,7 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 
 | Type                                        | Description                                                                                            |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `I18nConfig`                                | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
+| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
 | `Translate`, `TranslationPath`              | Types of `t` and its valid paths                                                                       |
 | `Register`                                  | Augmented by generated declarations (`locales`)                                                        |
 | `Locales`                                   | Union of configured locales, or `string`                                                               |

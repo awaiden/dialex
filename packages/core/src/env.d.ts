@@ -8,7 +8,7 @@ declare module "virtual:dialex-dictionaries" {
 }
 
 declare module "virtual:dialex-config" {
-  import type { I18nConfig } from "./index.js";
-  const config: I18nConfig;
+  import type { DialexConfig } from "./index.js";
+  const config: DialexConfig;
   export default config;
 }

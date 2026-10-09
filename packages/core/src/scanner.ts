@@ -3,10 +3,10 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import fg from "fast-glob";
 import { loadConfigSync } from "unconfig";
-import { globalDictionaries, type I18nConfig } from "./index.js";
+import { globalDictionaries, type DialexConfig } from "./index.js";
 
-export function resolveI18nConfig(root: string, inlineConfig: I18nConfig = {}): I18nConfig {
-  let loadedConfig: I18nConfig = {};
+export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
+  let loadedConfig: DialexConfig = {};
   try {
     const sources: any[] = [];
     if (inlineConfig.configFile) {
@@ -23,7 +23,7 @@ export function resolveI18nConfig(root: string, inlineConfig: I18nConfig = {}): 
       },
     );
 
-    const result = loadConfigSync<I18nConfig>({
+    const result = loadConfigSync<DialexConfig>({
       sources,
       merge: false,
       defaults: {},
@@ -174,9 +174,9 @@ let scanned = false;
  */
 export async function autoScanAndLoadDictionaries(
   root: string = process.cwd(),
-  inlineConfig: I18nConfig = {},
+  inlineConfig: DialexConfig = {},
 ): Promise<Record<string, Record<string, any>>> {
-  const config = resolveI18nConfig(root, inlineConfig);
+  const config = resolveDialexConfig(root, inlineConfig);
   const include = config.include || "**/*.content.ts";
   const files = fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
 

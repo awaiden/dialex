@@ -37,7 +37,7 @@ Or headless:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, and adds an `dx:generate` script (`dialex generate`) to your `package.json`. See [`dialex init`](../cli/init.md).
+This creates `dialex.config.ts`, a starter dictionary `src/home.content.ts`, adds `dialexjs` and `@dialexjs/cli` to your `package.json`, and adds a `dx:generate` script (`dx generate`). See [`dialex init`](../cli/init.md).
 
 ## Define a dictionary
 

@@ -49,6 +49,9 @@ describe("CLI init command", () => {
 
     const pkg = JSON.parse(fs.readFileSync(path.join(tempDir, "package.json"), "utf-8"));
     expect(pkg.scripts["dx:generate"]).toBe("dx generate");
+    expect(pkg.dependencies.dialexjs).toMatch(/^\^\d+\.\d+\.\d+/);
+    expect(pkg.dependencies.fastify).toBe("^5.0.0");
+    expect(pkg.devDependencies["@dialexjs/cli"]).toBe(pkg.dependencies.dialexjs);
 
     expect(fs.existsSync(path.join(tempDir, ".agents/skills/dialex/SKILL.md"))).toBe(true);
     expect(fs.existsSync(path.join(tempDir, ".mcp.json"))).toBe(true);
@@ -138,6 +141,28 @@ export default defineConfig({
     const config = fs.readFileSync(path.join(dir, "nuxt.config.ts"), "utf-8");
     expect(config).toContain("dialexjs/nuxt");
     expect(config).toContain("defaultLocale");
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("keeps packages the project already lists as they are, and sorts the object it adds to", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-pkgs-test-"));
+    fs.mkdirSync(path.join(dir, "src"), { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "package.json"),
+      JSON.stringify({
+        name: "x",
+        dependencies: { zod: "^4.0.0", hono: "^4.0.0", dialexjs: "0.1.0" },
+        devDependencies: { typescript: "^5.0.0" },
+      }),
+      "utf-8",
+    );
+
+    await runInit({ cwd: dir, defaultLocale: "en", locales: "en", yes: true, noAi: true });
+
+    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
+    expect(pkg.dependencies.dialexjs).toBe("0.1.0");
+    expect(Object.keys(pkg.dependencies)).toEqual(["zod", "hono", "dialexjs"]); // untouched
+    expect(Object.keys(pkg.devDependencies)).toEqual(["@dialexjs/cli", "typescript"]);
     fs.rmSync(dir, { recursive: true, force: true });
   });
 });

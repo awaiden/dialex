@@ -7,6 +7,7 @@ import { addNuxtModule, addVitePlugin } from "magicast/helpers";
 import { generateDictionaries } from "./generate.js";
 import { detectFramework, type SupportedFramework } from "../utils/detector.js";
 import { logger } from "../utils/logger.js";
+import { addRequiredPackages, installCommand } from "../utils/package-json.js";
 
 export interface InitOptions {
   cwd?: string;
@@ -273,20 +274,29 @@ ${dictRecords}
   generateDictionaries(root);
   logger.success("Generated types and standalone dictionary registry!");
 
-  // 5. Update package.json scripts
+  // 5. Update package.json: required packages and the generate script
   const pkgPath = path.join(root, "package.json");
   if (fs.existsSync(pkgPath)) {
     try {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+      const added = addRequiredPackages(pkg);
       pkg.scripts = pkg.scripts || {};
-      if (!pkg.scripts["dx:generate"]) {
-        pkg.scripts["dx:generate"] = "dx generate";
+      const addScript = !pkg.scripts["dx:generate"];
+      if (addScript) pkg.scripts["dx:generate"] = "dx generate";
+
+      if (added.length > 0 || addScript) {
         fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
-        logger.success('Added "dx:generate" script to package.json');
       }
+      if (added.length > 0) {
+        logger.success(`Added ${added.join(" and ")} to package.json`);
+        logger.info(`Run ${pc.bold(installCommand(root))} to install them.`);
+      }
+      if (addScript) logger.success('Added "dx:generate" script to package.json');
     } catch {
-      // Ignore JSON parse errors
+      logger.warn("Could not update package.json; add dialexjs and @dialexjs/cli manually.");
     }
+  } else {
+    logger.warn("No package.json found; install dialexjs and @dialexjs/cli in your project.");
   }
 
   // 6. AI Agent Integration (.agents/skills, .mcp.json, AGENTS.md)

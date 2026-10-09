@@ -37,7 +37,7 @@ dialex init
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-这会创建 `dialex.config.ts` 和初始词典 `src/home.content.ts`，并在 `package.json` 中添加 `dx:generate` 脚本（`dialex generate`）。参见 [`dialex init`](../cli/init.md)。
+这会创建 `dialex.config.ts` 和初始词典 `src/home.content.ts`，并把 `dialexjs` 和 `@dialexjs/cli` 添加到 `package.json`，同时添加 `dx:generate` 脚本（`dx generate`）。参见 [`dialex init`](../cli/init.md)。
 
 ## 定义词典
 

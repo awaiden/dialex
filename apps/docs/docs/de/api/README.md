@@ -26,7 +26,7 @@ Erzeugt ein typisiertes `t("dictionary.key.path", ...args)`. Siehe [Schlüsselpf
 
 | Typ                                         | Beschreibung                                                                                           |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `I18nConfig`                                | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
+| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
 | `Translate`, `TranslationPath`              | Typen von `t` und seinen gültigen Pfaden                                                               |
 | `Register`                                  | Wird durch generierte Deklarationen erweitert (`locales`)                                              |
 | `Locales`                                   | Union der konfigurierten Locales oder `string`                                                         |

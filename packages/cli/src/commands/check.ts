@@ -1,7 +1,7 @@
 import path from "node:path";
 import fg from "fast-glob";
 import pc from "picocolors";
-import { resolveI18nConfig } from "dialexjs/scanner";
+import { resolveDialexConfig } from "dialexjs/scanner";
 import { analyzeProject, type AnalysisIssue } from "../analysis.js";
 import { logger } from "../utils/logger.js";
 import {
@@ -116,7 +116,7 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
   const root = options.cwd || process.cwd();
   const quiet = options.json === true;
   const inlineConfig = options.config ? { configFile: options.config } : {};
-  const config = resolveI18nConfig(root, inlineConfig);
+  const config = resolveDialexConfig(root, inlineConfig);
   const include = config.include || "**/*.content.ts";
   const configuredLocales = config.locales || [];
   const defaultLocale = config.defaultLocale || "en";

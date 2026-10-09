@@ -1,8 +1,8 @@
 import { addImports, addPluginTemplate, addVitePlugin, defineNuxtModule } from "@nuxt/kit";
 import { i18nPlugin } from "./vite.js";
-import type { I18nConfig } from "./index.js";
+import type { DialexConfig } from "./index.js";
 
-export interface NuxtI18nOptions extends I18nConfig {
+export interface NuxtI18nOptions extends DialexConfig {
   /**
    * Cookie used to persist the selected locale.
    * @default "locale"

@@ -1,7 +1,7 @@
 import path from "node:path";
 import fg from "fast-glob";
-import { resolveI18nConfig } from "dialexjs/scanner";
-import type { I18nConfig } from "dialexjs";
+import { resolveDialexConfig } from "dialexjs/scanner";
+import type { DialexConfig } from "dialexjs";
 import { loadDictionaryFile, type DictionaryFile } from "./dictionary-edit.js";
 import { readStaticConfig } from "./static-config.js";
 
@@ -14,7 +14,7 @@ export interface ProjectDictionary {
 
 export interface Project {
   root: string;
-  config: I18nConfig;
+  config: DialexConfig;
   dictionaries: ProjectDictionary[];
   /** Dictionary files that could not be parsed into an editable shape. */
   unsupported: string[];
@@ -22,7 +22,7 @@ export interface Project {
   notes: string[];
 }
 
-async function loadDictionaries(root: string, config: I18nConfig) {
+async function loadDictionaries(root: string, config: DialexConfig) {
   const include = config.include || "**/*.content.ts";
   const files = fg.sync(include, {
     cwd: root,
@@ -52,7 +52,7 @@ async function loadDictionaries(root: string, config: I18nConfig) {
  * every dictionary file for AST-level reading and editing.
  */
 export async function loadProject(root: string, configFile?: string): Promise<Project> {
-  const config = resolveI18nConfig(root, configFile ? { configFile } : {});
+  const config = resolveDialexConfig(root, configFile ? { configFile } : {});
   return { root, config, notes: [], ...(await loadDictionaries(root, config)) };
 }
 

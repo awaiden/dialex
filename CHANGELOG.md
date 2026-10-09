@@ -12,6 +12,14 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 
 ## [Unreleased]
 
+### Added
+
+- `dialex init` adds `dialexjs` and `@dialexjs/cli` to `package.json` (at the CLI's own version; packages you already list are left alone) and tells you which install command to run.
+
+### Changed
+
+- The config type is now `DialexConfig`. `I18nConfig` still works as a deprecated alias. `resolveI18nConfig` in `dialexjs/scanner` is now `resolveDialexConfig`.
+
 ## [0.2.3] - 2026-10-09
 
 ### Changed

@@ -26,7 +26,7 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 | Tipo                                        | Descripción                                                                                            |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `I18nConfig`                                | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
+| `DialexConfig`                              | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate` |
 | `Translate`, `TranslationPath`              | Tipos de `t` y de sus rutas válidas                                                                    |
 | `Register`                                  | Ampliado por las declaraciones generadas (`locales`)                                                   |
 | `Locales`                                   | Unión de los locales configurados, o `string`                                                          |

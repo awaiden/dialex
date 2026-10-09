@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import chokidar from "chokidar";
-import { resolveI18nConfig, generateDts } from "dialexjs/scanner";
+import { resolveDialexConfig, generateDts } from "dialexjs/scanner";
 import { logger } from "../utils/logger.js";
 
 export interface GenerateOptions {
@@ -22,7 +22,7 @@ export function generateDictionaries(
   dtsPath: string;
 } {
   const inlineConfig = options.config ? { configFile: options.config } : {};
-  const config = resolveI18nConfig(root, inlineConfig);
+  const config = resolveDialexConfig(root, inlineConfig);
   const include = config.include || "**/*.content.ts";
 
   const files = fg.sync(include, {
@@ -140,7 +140,7 @@ export async function runGenerate(options: GenerateOptions = {}) {
   if (options.watch) {
     logger.info("Watching for dictionary changes (-w, --watch)...");
     const inlineConfig = options.config ? { configFile: options.config } : {};
-    const config = resolveI18nConfig(root, inlineConfig);
+    const config = resolveDialexConfig(root, inlineConfig);
     const pattern = config.include || "**/*.content.ts";
 
     const watcher = chokidar.watch(pattern, {

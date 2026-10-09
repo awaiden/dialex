@@ -2,7 +2,7 @@ import fs from "node:fs";
 import type { Plugin, ResolvedConfig } from "vite";
 import { loadConfig } from "unconfig";
 import fg from "fast-glob";
-import type { I18nConfig } from "./index.js";
+import type { DialexConfig } from "./index.js";
 import { generateDts } from "./scanner.js";
 
 function findDictionaryFiles(root: string, include: string | string[]): string[] {
@@ -109,15 +109,15 @@ const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID;
 const VIRTUAL_CONFIG_ID = "virtual:dialex-config";
 const RESOLVED_VIRTUAL_CONFIG_ID = "\0" + VIRTUAL_CONFIG_ID;
 
-export function i18nPlugin(inlineConfig: I18nConfig = {}): Plugin {
-  let resolvedConfig: I18nConfig = {};
+export function i18nPlugin(inlineConfig: DialexConfig = {}): Plugin {
+  let resolvedConfig: DialexConfig = {};
   let viteConfig: ResolvedConfig;
 
   return {
     name: "vite-plugin-dialex",
     async configResolved(config) {
       viteConfig = config;
-      const { config: loadedConfig } = await loadConfig<I18nConfig>({
+      const { config: loadedConfig } = await loadConfig<DialexConfig>({
         sources: [
           {
             files: "dialex.config",

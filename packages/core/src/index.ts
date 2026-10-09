@@ -38,7 +38,7 @@ export interface TranslateConfig {
   sourceLocale?: string;
 }
 
-export interface I18nConfig {
+export interface DialexConfig {
   /**
    * The default locale to use.
    * @default 'en'
@@ -80,7 +80,10 @@ export interface I18nConfig {
   translate?: TranslateConfig;
 }
 
-export function defineConfig(config: I18nConfig): I18nConfig {
+/** @deprecated Renamed to {@link DialexConfig}. */
+export type I18nConfig = DialexConfig;
+
+export function defineConfig(config: DialexConfig): DialexConfig {
   return config;
 }
 

@@ -37,7 +37,7 @@ Oder ohne Rückfragen:
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-Das erzeugt `dialex.config.ts` und ein Start-Wörterbuch `src/home.content.ts` und fügt deiner `package.json` ein Skript `dx:generate` (`dialex generate`) hinzu. Siehe [`dialex init`](../cli/init.md).
+Das erzeugt `dialex.config.ts` und ein Start-Wörterbuch `src/home.content.ts` fügt `dialexjs` und `@dialexjs/cli` zu deiner `package.json` hinzu und ergänzt ein Skript `dx:generate` (`dx generate`). Siehe [`dialex init`](../cli/init.md).
 
 ## Ein Wörterbuch definieren
 
