@@ -12,6 +12,8 @@ add the compare link at the bottom. The release workflow fails if the tag has no
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-10-09
+
 ### Changed
 
 - `dialex init --ai` writes the skill to `.agents/skills/dialex/SKILL.md`, the agent-neutral location, instead of `.claude/skills/`. Tools that only read `.claude/skills` (Claude Code) need a copy or symlink there; `npx skills add` can install it for them.
@@ -73,7 +75,8 @@ First release.
 - A VS Code extension with diagnostics, hover, go to definition, completion and quick fixes.
 - Documentation in English, Turkish, Spanish, German and Simplified Chinese.
 
-[Unreleased]: https://github.com/awaiden/dialex/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/awaiden/dialex/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/awaiden/dialex/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/awaiden/dialex/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/awaiden/dialex/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/awaiden/dialex/compare/v0.1.0...v0.2.0
