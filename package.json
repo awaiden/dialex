@@ -17,7 +17,7 @@
     "prepare": "vp config",
     "docs:check-translations": "bun run --cwd apps/docs check-translations",
     "changeset": "changeset",
-    "changeset:version": "changeset version && rm -f bun.lock && bun install"
+    "changeset:version": "changeset version && node scripts/sync-vscode-version.mjs && rm -f bun.lock && bun install"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",

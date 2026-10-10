@@ -2,7 +2,7 @@
 
 `dialexjs`, `@dialexjs/cli` and `@dialexjs/mcp` share one version and are released with
 [Changesets](https://github.com/changesets/changesets). There is no release script: a GitHub Action
-does the versioning and publishing. (The VS Code extension is private and versioned by hand.)
+does the versioning and publishing. (The private VS Code extension is kept on the same version by `scripts/sync-vscode-version.mjs`.)
 
 ## Describing a change
 
