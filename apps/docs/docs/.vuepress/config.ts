@@ -20,6 +20,7 @@ const PAGES = {
     "lazy-loading",
     "testing",
     "vscode",
+    "zed",
     "ai",
     "configuration",
     "changelog",

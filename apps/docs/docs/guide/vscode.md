@@ -2,6 +2,8 @@
 
 The Dialex extension adds editor support for translations: diagnostics, hover, go to definition, completion and quick fixes. It lives in `packages/vscode` of the repository.
 
+Using another editor? See [Zed and other editors](./zed.md) for the language server.
+
 ::: warning Status
 The extension builds, packages into a `.vsix`, and its logic is covered by tests that run against a stand-in for the VS Code API. It has **not been tried in a real VS Code window yet**, and it ships as a `.vsix` on every [GitHub Release](https://github.com/awaiden/dialex/releases/latest), not on the Marketplace. Follow [Try it out](#try-it-out) to run it yourself, and report anything that looks wrong.
 :::

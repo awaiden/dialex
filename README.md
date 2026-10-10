@@ -402,6 +402,10 @@ Check out runnable projects in [`examples/`](./examples):
 
 ---
 
+## 🧭 Other editors (Zed, Neovim, Helix)
+
+`@dialexjs/language-server` speaks the Language Server Protocol and gives any LSP client the same diagnostics, hover, go to definition, completion and quick fixes. `packages/zed` is a Zed extension that finds and starts it. See `apps/docs` (Zed and other editors).
+
 ## 🧪 Testing & Validation
 
 Test your own code with `dialexjs/testing` (`createTestDialex`, `mockRequest`, `TestDialexProvider`); see the docs.

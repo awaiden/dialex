@@ -2,6 +2,8 @@
 
 Dialex 扩展为翻译提供编辑器支持：诊断、悬停提示、转到定义、自动补全和快速修复。它位于仓库的 `packages/vscode` 中。
 
+使用其他编辑器？语言服务器请见 [Zed 与其他编辑器](./zed.md)。
+
 ::: warning 状态
 该扩展可以构建、打包成 `.vsix`，其逻辑由针对 VS Code API 替身运行的测试覆盖。它**尚未在真实的 VS Code 窗口中试用过**，也没有发布到 Marketplace，而是在每个 [GitHub Release](https://github.com/awaiden/dialex/releases/latest) 中以 `.vsix` 形式提供。请按照[试一试](#try-it-out)自行运行，并反馈任何看起来不对的地方。
 :::

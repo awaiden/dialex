@@ -2,6 +2,8 @@
 
 Dialex eklentisi çeviriler için editör desteği ekler: tanılamalar, üzerine gelince bilgi gösterme (hover), tanıma gitme, otomatik tamamlama ve hızlı düzeltmeler. Deponun `packages/vscode` klasöründe yer alır.
 
+Başka bir editör mü kullanıyorsunuz? Dil sunucusu için [Zed ve diğer editörler](./zed.md) sayfasına bakın.
+
 ::: warning Durum
 Eklenti derlenir, bir `.vsix` olarak paketlenir ve mantığı VS Code API'sinin yerine geçen bir taklit üzerinde çalışan testlerle kapsanır. **Henüz gerçek bir VS Code penceresinde denenmemiştir** ve Marketplace'te değil, her [GitHub sürümünde](https://github.com/awaiden/dialex/releases/latest) `.vsix` olarak sunulur. Kendiniz çalıştırmak için [Deneyin](#try-it-out) bölümünü izleyin ve yanlış görünen her şeyi bildirin.
 :::

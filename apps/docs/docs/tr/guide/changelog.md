@@ -6,6 +6,18 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.7.0
+
+### Minor Changes
+
+- 5d7f143: The scanners (`dx generate`, `dx check`, the watcher, the analysis API and the VS Code extension) now respect `.gitignore`: files in ignored folders are no longer picked up as dictionaries or sources. Monorepo packages inherit the repository's `.gitignore`, and nested `.gitignore` files apply to their folder.
+
+  New config option `exclude` (globs relative to the project) for anything else. All scanners now share one list of built-in ignores (`node_modules`, `dist`, `.next`, `dialex.locales`, and for sources `.nuxt`, `.output`, `.svelte-kit`, `.astro`, `coverage`, `*.d.ts`, generated and config files), so they no longer disagree.
+
+### Patch Changes
+
+- 3909e30: Fix the VS Code extension: the `.vsix` shipped without the `jiti` and runtime chunks that `extension.cjs` loads, so the extension failed to activate and its commands were "not found". Existing installs need the new `.vsix` from the GitHub Release.
+
 ## 0.6.0
 
 ### Minor Changes

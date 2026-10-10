@@ -2,6 +2,8 @@
 
 La extensión de Dialex añade compatibilidad del editor para las traducciones: diagnósticos, información al pasar el cursor (hover), ir a la definición, autocompletado y correcciones rápidas. Está en `packages/vscode` del repositorio.
 
+¿Usas otro editor? Consulta [Zed y otros editores](./zed.md) para el servidor de lenguaje.
+
 ::: warning Estado
 La extensión se compila, se empaqueta en un `.vsix` y su lógica está cubierta por pruebas que se ejecutan contra un sustituto de la API de VS Code. **Todavía no se ha probado en una ventana real de VS Code** y se distribuye como `.vsix` en cada [GitHub Release](https://github.com/awaiden/dialex/releases/latest), no en el Marketplace. Sigue [Pruébala](#try-it-out) para ejecutarla tú mismo e informa de cualquier cosa que parezca incorrecta.
 :::

@@ -43,6 +43,7 @@
 - [Testing](/guide/testing.html): Testing documentation and reference.
 - [Type Safety](/guide/type-safety.html): Type Safety documentation and reference.
 - [VS Code Extension](/guide/vscode.html): VS Code Extension documentation and reference.
+- [Zed and other editors](/guide/zed.html): Zed and other editors documentation and reference.
 
 ## Tools & AI
 
