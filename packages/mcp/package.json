@@ -34,8 +34,8 @@
   },
   "dependencies": {
     "@dialexjs/cli": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.6.1",
-    "zod": "^3.24.2"
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
