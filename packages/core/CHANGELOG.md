@@ -1,5 +1,12 @@
 # dialexjs
 
+## 0.5.1
+
+### Patch Changes
+
+- 9b108bb: `@dialexjs/mcp` now uses zod 4 and the current MCP SDK (1.32).
+- d1dcad5: Tested with Next.js 16. Next.js 16 calls the `middleware.ts` file `proxy.ts`; `createDialexMiddleware` works in either.
+
 ## 0.5.0
 
 ### Minor Changes

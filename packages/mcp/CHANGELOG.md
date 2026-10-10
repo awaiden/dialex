@@ -1,5 +1,12 @@
 # @dialexjs/mcp
 
+## 0.5.1
+
+### Patch Changes
+
+- 9b108bb: `@dialexjs/mcp` now uses zod 4 and the current MCP SDK (1.32).
+- @dialexjs/cli@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes
