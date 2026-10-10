@@ -72,7 +72,7 @@ jobs:
         run: |
           set -euo pipefail
           published=""
-          for dir in core cli mcp; do
+          for dir in core cli mcp language-server; do
             name=$(node -p "require('./packages/$dir/package.json').name")
             version=$(node -p "require('./packages/$dir/package.json').version")
             # npm refuses to run inside the repo (devEngines wants bun), so ask from outside it

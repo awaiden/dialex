@@ -1,0 +1,56 @@
+{
+  "name": "@dialexjs/language-server",
+  "version": "0.7.0",
+  "description": "Language server (LSP) for Dialex translations: diagnostics, hover, go to definition, completion and quick fixes",
+  "keywords": [
+    "dialex",
+    "i18n",
+    "language-server",
+    "lsp",
+    "zed"
+  ],
+  "homepage": "https://github.com/awaiden/dialex#readme",
+  "bugs": {
+    "url": "https://github.com/awaiden/dialex/issues"
+  },
+  "license": "MIT",
+  "author": "awaiden",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaiden/dialex.git",
+    "directory": "packages/language-server"
+  },
+  "bin": {
+    "dialex-language-server": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./features": "./dist/features.mjs",
+    "./server": "./dist/server.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "test": "vp test",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2",
+    "vite-plus": "catalog:",
+    "vscode-jsonrpc": "^8.2.0"
+  }
+}

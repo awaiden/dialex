@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { discoverProjects } from "../src/projects.js";
+import { discoverProjects } from "../src/features/projects.js";
 import { cleanup, writeProject } from "./helpers.js";
 
 afterEach(cleanup);

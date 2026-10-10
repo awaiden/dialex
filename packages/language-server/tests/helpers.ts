@@ -3,7 +3,8 @@ import os from "node:os";
 import path from "node:path";
 
 import { analyzeProject, type AnalysisIssue } from "@dialexjs/cli/api";
-import { buildModel, type ProjectModel } from "@dialexjs/language-server/features";
+
+import { buildModel, type ProjectModel } from "../src/features/model.js";
 
 export const HOME = `import { defineDictionary } from "dialexjs";
 

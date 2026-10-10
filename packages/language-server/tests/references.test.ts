@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { buildModel } from "../src/model.js";
-import { classifyPath, findReferenceAt, resolveReference } from "../src/references.js";
+import { buildModel } from "../src/features/model.js";
+import { classifyPath, findReferenceAt, resolveReference } from "../src/features/references.js";
 import { HOME, analyze, cleanup } from "./helpers.js";
 
 afterEach(cleanup);

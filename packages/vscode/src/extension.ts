@@ -9,15 +9,23 @@ import {
   renderGenerated,
   type AnalysisIssue,
 } from "@dialexjs/cli/api";
+import {
+  addMissingKeys,
+  addUnknownKey,
+  buildHover,
+  buildModel,
+  completionContextAt,
+  completionEntries,
+  definitionFor,
+  discoverProjects,
+  findReferenceAt,
+  modelForFile,
+  type CompletionEntry,
+  type MissingKey,
+  type ProjectModel,
+  type ProjectRoot,
+} from "@dialexjs/language-server/features";
 import * as vscode from "vscode";
-
-import { completionContextAt, completionEntries, type CompletionEntry } from "./completion.js";
-import { definitionFor } from "./definition.js";
-import { buildHover } from "./hover.js";
-import { buildModel, modelForFile, type ProjectModel } from "./model.js";
-import { discoverProjects, type ProjectRoot } from "./projects.js";
-import { addMissingKeys, addUnknownKey, type MissingKey } from "./quickfix.js";
-import { findReferenceAt } from "./references.js";
 
 /** Source languages where `t("...")` and `getDictionary("...")` are recognised. */
 const SOURCE_LANGUAGES = [
