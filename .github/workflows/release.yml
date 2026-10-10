@@ -97,7 +97,7 @@ jobs:
           echo "published=$published" >> "$GITHUB_OUTPUT"
 
       # The tag always follows packages/core/package.json: whenever nothing is left to version and
-      # the tag for that version is missing, it is created and a GitHub Release is made.
+      # the tag or the GitHub Release for that version is missing, it is created.
       - name: Tag and GitHub Release
         if: steps.changesets.outputs.hasChangesets == 'false'
         env:
@@ -108,15 +108,17 @@ jobs:
           tag="v$version"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
-            echo "$tag already exists"
+          if ! git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            git tag -a "$tag" -m "$tag"
+            git push origin "$tag"
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "$tag already has a GitHub Release"
             exit 0
           fi
-          git tag -a "$tag" -m "$tag"
-          git push origin "$tag"
           # The editor extension ships as a release asset (it is not published to a marketplace).
           bun run --cwd packages/vscode build
-          (cd packages/vscode && npx vsce package "$version" --no-dependencies --no-update-package-json)
+          bun run --cwd packages/vscode package "$version" --no-update-package-json
           vsix=$(ls packages/vscode/*.vsix | head -1)
           notes=$(awk -v v="$version" '$0 == "## " v { found = 1; next } /^## / { found = 0 } found' packages/core/CHANGELOG.md)
           if [ -n "$notes" ]; then
