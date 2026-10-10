@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import Module, { createRequire } from "node:module";
 import path from "node:path";
@@ -8,10 +9,9 @@ import { afterEach, beforeEach, describe, expect, it } from "vite-plus/test";
 import * as fake from "./fake-vscode.js";
 import { HOME, cleanup, writeProject } from "./helpers.js";
 
-const bundlePath = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../dist/extension.cjs",
-);
+const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+// DIALEX_BUNDLE points at an extension.cjs unpacked from a .vsix, to test what actually ships.
+const bundlePath = process.env.DIALEX_BUNDLE ?? path.join(packageRoot, "dist/extension.cjs");
 
 /**
  * Runs the *built* bundle (what ships in the .vsix) against the fake `vscode`, in plain Node
@@ -59,4 +59,54 @@ describe.skipIf(!fs.existsSync(bundlePath))("built extension bundle", () => {
     expect(messages).toContain('Unknown dictionary "nope"');
     expect(fake.state.output.join("\n")).not.toMatch(/analysis failed/);
   });
+
+  it("regenerates dialex.generated.ts when a dictionary file is created", async () => {
+    const bundle = createRequire(import.meta.url)(
+      bundlePath,
+    ) as typeof import("../src/extension.js");
+
+    const dir = writeProject({
+      "dialex.config.ts": `export default { defaultLocale: "en", locales: ["en", "tr"] };\n`,
+      "src/home.content.ts": HOME,
+      "src/dialex.generated.ts": "// stale\n",
+    });
+    fake.state.folders = [{ uri: fake.Uri.file(dir) }];
+
+    const api = bundle.activate({ subscriptions: [] } as any);
+    await api.refresh();
+
+    fs.writeFileSync(
+      path.join(dir, "src/extra.content.ts"),
+      `export default { name: "extra", dictionary: { en: { a: "x" }, tr: { a: "y" } } };\n`,
+    );
+    fake.state.watchers[0].fire.create();
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    const generated = fs.readFileSync(path.join(dir, "src/dialex.generated.ts"), "utf-8");
+    expect(generated).toContain("extra.content");
+  });
 });
+
+describe.skipIf(!fs.existsSync(path.join(packageRoot, "dist/extension.cjs")))(
+  "the packaged .vsix",
+  () => {
+    it("contains every file of dist, because the bundle requires its chunks at load time", () => {
+      const vsce = path.join(packageRoot, "node_modules/.bin/vsce");
+      const listed = execFileSync(vsce, ["ls", "--no-dependencies"], {
+        cwd: packageRoot,
+        encoding: "utf8",
+      })
+        .split("\n")
+        .map((line) => line.trim().replace(/\\/g, "/"))
+        .filter(Boolean);
+
+      const dist = fs
+        .readdirSync(path.join(packageRoot, "dist"))
+        .filter((name) => name.endsWith(".cjs"))
+        .map((name) => `dist/${name}`);
+
+      expect(dist.length).toBeGreaterThan(0);
+      for (const file of dist) expect(listed).toContain(file);
+    });
+  },
+);

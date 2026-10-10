@@ -1,5 +1,5 @@
 **
-!dist/extension.cjs
+!dist/**
 !package.json
 !README.md
 !LICENSE
