@@ -57,9 +57,9 @@ jobs:
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: bun run ready
 
-      # `bun pm pack` writes the versions of workspace dependencies from bun.lock, which keeps the
-      # old ones after a bump. Rebuilding the lock first, and checking the tarball, is what stops
-      # a package from depending on a stale release (0.2.0 did).
+      # `bun pm pack` writes the versions of workspace dependencies from bun.lock. The Version PR
+      # rebuilds the lock (`changeset:version`), and checking each tarball is what stops a package
+      # from depending on a stale release (0.2.0 did).
       - name: Publish what is not on npm yet
         id: publish
         if: steps.changesets.outputs.hasChangesets == 'false'
@@ -67,7 +67,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set -euo pipefail
-          rm -f bun.lock && bun install
           published=""
           for dir in core cli mcp; do
             name=$(node -p "require('./packages/$dir/package.json').name")
