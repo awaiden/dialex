@@ -1,5 +1,12 @@
 # @dialexjs/language-server
 
+## 0.7.2
+
+### Patch Changes
+
+- 0800399: Editor features follow a dictionary held in a variable: after `const s = useDictionary("showcase")`, hover, go to definition and completion work on `s.nav.features` and `s.`, in the language server and the VS Code extension.
+- @dialexjs/cli@0.7.2
+
 ## 0.7.1
 
 ### Patch Changes
