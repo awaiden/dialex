@@ -54,5 +54,7 @@ cd packages/zed
 cargo build --release --target wasm32-wasip2   # checks that it compiles
 ```
 
-Then in Zed run **zed: install dev extension** and pick this folder. `zed: open log` (or
+To install it into your local Zed without the dialog, run `bun run zed:install` from the repository
+root (it builds the extension and copies it to Zed's `extensions/installed/dialex`), then restart
+Zed. Or, in Zed, run **zed: install dev extension** and pick this folder. `zed: open log` (or
 `zed --foreground`) shows the server's output.

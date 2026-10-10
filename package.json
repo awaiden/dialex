@@ -17,6 +17,7 @@
     "prepare": "vp config",
     "docs:check-translations": "bun run --cwd apps/docs check-translations",
     "changeset": "changeset",
+    "zed:install": "node scripts/install-zed-extension.mjs",
     "vscode:install": "rm -rf .vscode-install && gh release download --pattern '*.vsix' --dir .vscode-install --clobber && code --install-extension .vscode-install/*.vsix --force && rm -rf .vscode-install",
     "changeset:version": "changeset version && rm -f bun.lock && bun install"
   },
