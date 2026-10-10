@@ -41,6 +41,7 @@
     "commander": "^15.0.0",
     "dialexjs": "workspace:*",
     "fast-glob": "^3.3.3",
+    "ignore": "^7.0.12",
     "magicast": "^0.5.5",
     "picocolors": "^1.1.1",
     "unconfig": "^7.5.0"

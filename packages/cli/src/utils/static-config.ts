@@ -20,6 +20,7 @@ export interface StaticConfig {
   defaultLocale: string;
   locales: string[];
   include: string | string[];
+  exclude: string[];
   fallbacks: Record<string, string[]>;
   prefixDefault: boolean;
   lazy: boolean | "locale";
@@ -40,6 +41,7 @@ export const DEFAULT_STATIC_CONFIG: StaticConfig = {
   defaultLocale: "en",
   locales: [],
   include: "**/*.content.ts",
+  exclude: [],
   fallbacks: {},
   prefixDefault: true,
   lazy: false,
@@ -106,6 +108,7 @@ function apply(object: Record<string, unknown>, config: StaticConfig, notes: str
     (v) => typeof v === "string" || isStringArray(v),
     "a string or array of strings",
   );
+  accept("exclude", isStringArray, "an array of string literals");
   accept(
     "fallbacks",
     (v) =>
@@ -142,6 +145,7 @@ export function parseStaticConfig(text: string, file = "dialex.config.ts"): Stat
         "defaultLocale",
         "locales",
         "include",
+        "exclude",
         "fallbacks",
         "prefixDefault",
         "lazy",

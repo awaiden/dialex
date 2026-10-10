@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import fg from "fast-glob";
+import { scanFiles } from "@dialexjs/cli/api";
 
 export interface ProjectRoot {
   root: string;
@@ -9,7 +9,8 @@ export interface ProjectRoot {
   ignore: string[];
 }
 
-const IGNORE = ["**/node_modules/**", "**/dist/**", "**/.git/**", "**/.next/**", "**/.nuxt/**"];
+// On top of the CLI's built-in list and the project's `.gitignore` files.
+const IGNORE = ["**/.git/**", "**/.nuxt/**"];
 
 /** The nearest folder at or above `dir` (but inside `folder`) that has a package.json. */
 function packageRoot(folder: string, dir: string): string {
@@ -30,16 +31,14 @@ function packageRoot(folder: string, dir: string): string {
  * - A project excludes the projects nested inside it, so one dictionary is never reported twice.
  */
 export function discoverProjects(folder: string): ProjectRoot[] {
-  const configs = fg.sync(["**/dialex.config.*", "**/i18n.config.*"], {
-    cwd: folder,
-    absolute: true,
+  const configs = scanFiles(folder, ["**/dialex.config.*", "**/i18n.config.*"], {
     ignore: IGNORE,
   });
   const configured = [...new Set(configs.map((f) => path.dirname(f)))];
   const roots = new Set(configured);
 
   // Judge coverage against the configured projects only; a fallback root must not hide others.
-  const dictionaries = fg.sync("**/*.content.ts", { cwd: folder, absolute: true, ignore: IGNORE });
+  const dictionaries = scanFiles(folder, "**/*.content.ts", { ignore: IGNORE });
   for (const file of dictionaries) {
     if (!configured.some((root) => file.startsWith(root + path.sep))) {
       roots.add(packageRoot(folder, path.dirname(file)));

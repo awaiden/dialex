@@ -2,8 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import fg from "fast-glob";
-
 import {
   TODO_PREFIX,
   dictionaryLocation,
@@ -15,6 +13,7 @@ import {
   type DictionaryFile,
   type SourceRange,
 } from "./utils/dictionary-edit.js";
+import { scanFiles } from "./utils/files.js";
 import { checkIcu, type LocaleStrings } from "./utils/icu-check.js";
 import { isStale, readLock } from "./utils/lockfile.js";
 
@@ -66,6 +65,7 @@ export interface AnalysisConfig {
   defaultLocale?: string;
   locales?: string[];
   include?: string | string[];
+  exclude?: string[];
 }
 
 export interface AnalysisOptions {
@@ -110,27 +110,7 @@ export interface AnalysisResult {
   sourceFilesScanned: number;
 }
 
-const DICTIONARY_IGNORE = [
-  "**/node_modules/**",
-  "**/dist/**",
-  "**/.next/**",
-  "**/dialex.locales/**",
-];
-
 export const DEFAULT_SOURCE_GLOB = "**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}";
-const SOURCE_IGNORE = [
-  ...DICTIONARY_IGNORE,
-  "**/.nuxt/**",
-  "**/.output/**",
-  "**/.svelte-kit/**",
-  "**/.astro/**",
-  "**/coverage/**",
-  "**/graphify-out/**",
-  "**/*.d.ts",
-  "**/dialex.generated.*",
-  "**/dialex.config.*",
-  "**/i18n.config.*",
-];
 
 /** `getDictionary("x")`, `useDictionary("x")`, `@DialexDictionary("x")` */
 const DICTIONARY_CALL =
@@ -295,11 +275,7 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
   const defaultLocale = config.defaultLocale || "en";
   const extraIgnore = options.ignore ?? [];
 
-  const files = fg.sync(include, {
-    cwd: root,
-    absolute: true,
-    ignore: [...DICTIONARY_IGNORE, ...extraIgnore],
-  });
+  const files = scanFiles(root, include, { exclude: config.exclude, ignore: extraIgnore });
 
   const issues: AnalysisIssue[] = [];
   const dictionaries: AnalyzedDictionary[] = [];
@@ -437,13 +413,11 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
   const sourceFiles =
     sourceGlobs.length === 0
       ? []
-      : fg
-          .sync(sourceGlobs, {
-            cwd: root,
-            absolute: true,
-            ignore: [...SOURCE_IGNORE, ...extraIgnore],
-          })
-          .filter((f) => !dictionaryFiles.has(f));
+      : scanFiles(root, sourceGlobs, {
+          kind: "source",
+          exclude: config.exclude,
+          ignore: extraIgnore,
+        }).filter((f) => !dictionaryFiles.has(f));
 
   if (sourceFiles.length > 0) {
     const tokens = new Set<string>();

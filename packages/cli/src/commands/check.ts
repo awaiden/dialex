@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import fg from "fast-glob";
 import pc from "picocolors";
 
 import { analyzeProject, type AnalysisIssue } from "../analysis.js";
@@ -14,6 +13,7 @@ import {
   loadDictionaryFile,
   saveDictionaryFile,
 } from "../utils/dictionary-edit.js";
+import { scanFiles } from "../utils/files.js";
 import { logger } from "../utils/logger.js";
 import { resolveDialexConfig } from "../utils/scanner.js";
 import { renderGenerated } from "./generate.js";
@@ -56,13 +56,6 @@ export interface CheckResult {
   /** Number of missing keys inserted by `--fix`, plus generated files it rewrote. */
   fixed: number;
 }
-
-const DICTIONARY_IGNORE = [
-  "**/node_modules/**",
-  "**/dist/**",
-  "**/.next/**",
-  "**/dialex.locales/**",
-];
 
 function addIssue(diag: CheckDiagnostic, issue: AnalysisIssue) {
   const level = issue.level === "error" ? "error" : "warning";
@@ -203,7 +196,7 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
   const configuredLocales = config.locales || [];
   const defaultLocale = config.defaultLocale || "en";
 
-  const files = fg.sync(include, { cwd: root, absolute: true, ignore: DICTIONARY_IGNORE });
+  const files = scanFiles(root, include, { exclude: config.exclude });
 
   if (files.length === 0) {
     if (!quiet) {

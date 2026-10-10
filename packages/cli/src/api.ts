@@ -21,6 +21,14 @@ export {
 } from "./analysis.js";
 
 export {
+  BUILTIN_IGNORE,
+  SOURCE_BUILTIN_IGNORE,
+  createGitignoreFilter,
+  scanFiles,
+  type ScanOptions,
+} from "./utils/files.js";
+
+export {
   LOCK_FILE,
   hashSource,
   isStale,

@@ -44,6 +44,25 @@ export default defineDictionary({
     expect(generatedContent).toContain('import dict_0 from "./auth.content.js"');
   });
 
+  it("leaves out dictionaries in git-ignored folders and in `exclude`", () => {
+    const dictionary = (name: string) =>
+      `export default { name: "${name}", dictionary: { en: { a: "x" }, tr: { a: "y" } } };\n`;
+    for (const rel of ["src/kept", "build/out", "legacy/old"]) {
+      fs.mkdirSync(path.join(tempDir, rel), { recursive: true });
+      fs.writeFileSync(path.join(tempDir, rel, "x.content.ts"), dictionary(path.basename(rel)));
+    }
+    fs.writeFileSync(path.join(tempDir, ".gitignore"), "build/\n");
+    fs.writeFileSync(
+      path.join(tempDir, "dialex.config.ts"),
+      `export default { defaultLocale: "en", locales: ["en", "tr"], exclude: ["legacy/**"] };\n`,
+    );
+
+    const result = generateDictionaries(tempDir, { static: true });
+    const names = result.files.map((f) => path.relative(tempDir, f).split(path.sep).join("/"));
+
+    expect(names).toEqual(["src/kept/x.content.ts"]);
+  });
+
   it("supports json option in runGenerate", async () => {
     const contentCode = `
 import { defineDictionary } from "dialexjs";

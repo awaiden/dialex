@@ -3,9 +3,9 @@ import path from "node:path";
 
 import chokidar from "chokidar";
 import { DEFAULT_CONFIG } from "dialexjs";
-import fg from "fast-glob";
 
 import { listLocales, parseDictionaryText } from "../utils/dictionary-edit.js";
+import { createGitignoreFilter, scanFiles } from "../utils/files.js";
 import { logger } from "../utils/logger.js";
 import { messageArguments } from "../utils/message-arguments.js";
 import { resolveDialexConfig, renderDts } from "../utils/scanner.js";
@@ -25,13 +25,6 @@ export interface GenerateOptions {
    */
   static?: boolean;
 }
-
-const DICTIONARY_IGNORE = [
-  "**/node_modules/**",
-  "**/dist/**",
-  "**/.next/**",
-  "**/dialex.locales/**",
-];
 
 export interface RenderedGenerate {
   /** Absolute paths of the dictionary files, sorted. */
@@ -67,7 +60,7 @@ export function renderGenerated(root: string, options: GenerateOptions = {}): Re
   const config = options.static ? staticRead.config : resolveDialexConfig(root, inlineConfig);
   const include = config.include || DEFAULT_CONFIG.include;
 
-  const found = fg.sync(include, { cwd: root, absolute: true, ignore: DICTIONARY_IGNORE }).sort();
+  const found = scanFiles(root, include, { exclude: config.exclude }).sort();
 
   const srcDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
   const outputPath = options.output
@@ -351,9 +344,10 @@ export function startGenerateWatcher(
     }, delay);
   };
 
+  const gitIgnored = createGitignoreFilter(root);
   const watcher = chokidar.watch(root, {
     ignoreInitial: true,
-    ignored: (file: string) => WATCH_IGNORED.test(file),
+    ignored: (file: string) => WATCH_IGNORED.test(file) || gitIgnored(path.resolve(root, file)),
   });
 
   watcher.on("all", (event, filePath) => {

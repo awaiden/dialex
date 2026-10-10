@@ -97,6 +97,11 @@ export interface DialexConfig {
    */
   include?: string | string[];
   /**
+   * Globs, relative to the project, that are never scanned for dictionaries or sources, on top of
+   * `node_modules`, build output and everything `.gitignore` ignores.
+   */
+  exclude?: string[];
+  /**
    * Custom path to configuration file.
    */
   configFile?: string;
