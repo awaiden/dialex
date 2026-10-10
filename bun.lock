@@ -163,7 +163,7 @@
     },
     "packages/cli": {
       "name": "@dialexjs/cli",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "bin": {
         "dialex": "./dist/index.mjs",
         "dx": "./dist/index.mjs",
@@ -186,7 +186,7 @@
     },
     "packages/core": {
       "name": "dialexjs",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "dependencies": {
         "fast-glob": "^3.3.3",
         "unconfig": "^7.5.0",
@@ -260,7 +260,7 @@
     },
     "packages/mcp": {
       "name": "@dialexjs/mcp",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "bin": {
         "dialex-mcp": "./dist/index.mjs",
       },
