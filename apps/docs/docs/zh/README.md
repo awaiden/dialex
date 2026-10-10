@@ -1,5 +1,7 @@
 ---
 home: true
+heroImage: /logo.svg
+heroAlt: Dialex
 title: Dialex
 heroText: Dialex
 tagline: 面向全栈的类型安全、零运行时开销的国际化方案。

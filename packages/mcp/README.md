@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/awaiden/dialex/main/assets/logo.png" alt="Dialex" width="96" height="96" />
+</p>
+
 # @dialexjs/mcp
 
 Model Context Protocol (MCP) server for Dialex internationalization.

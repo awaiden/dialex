@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/awaiden/dialex/main/assets/logo.png" alt="Dialex" width="96" height="96" />
+</p>
+
 # Dialex for VS Code
 
 Editor support for [Dialex](https://github.com/awaiden/dialex) translations.

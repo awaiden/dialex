@@ -1,5 +1,7 @@
 ---
 home: true
+heroImage: /logo.svg
+heroAlt: Dialex
 title: Dialex
 heroText: Dialex
 tagline: Tam yığın için tip güvenli, çalışma zamanı yükü olmayan uluslararasılaştırma.

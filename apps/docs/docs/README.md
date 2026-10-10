@@ -1,5 +1,7 @@
 ---
 home: true
+heroImage: /logo.svg
+heroAlt: Dialex
 title: Dialex
 heroText: Dialex
 tagline: Type-safe, zero-runtime-overhead internationalization for the full stack.

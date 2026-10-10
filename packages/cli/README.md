@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/awaiden/dialex/main/assets/logo.png" alt="Dialex" width="96" height="96" />
+</p>
+
 # @dialexjs/cli
 
 > High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking).

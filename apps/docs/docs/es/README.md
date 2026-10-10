@@ -1,5 +1,7 @@
 ---
 home: true
+heroImage: /logo.svg
+heroAlt: Dialex
 title: Dialex
 heroText: Dialex
 tagline: Internacionalización con tipos seguros y sin sobrecarga en tiempo de ejecución para todo el stack.

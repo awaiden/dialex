@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="Dialex" width="96" height="96" />
+</p>
+
 # 🌍 Dialex
 
 > **Next-Generation, Type-Safe Internationalization (i18n) Framework**  

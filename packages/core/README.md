@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/awaiden/dialex/main/assets/logo.png" alt="Dialex" width="96" height="96" />
+</p>
+
 # dialex
 
 > Type-safe, zero-boilerplate internationalization (i18n) framework for React, Next.js, Hono, Express, Fastify, Koa, NestJS, Elysia, SvelteKit, Astro, Vue / Nuxt, and Vite.

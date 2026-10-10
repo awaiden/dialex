@@ -84,6 +84,7 @@
     "workspaceContains:**/dialex.config.*",
     "workspaceContains:**/i18n.config.*"
   ],
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.90.0"
   },

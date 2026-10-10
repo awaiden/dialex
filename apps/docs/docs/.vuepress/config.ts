@@ -78,6 +78,11 @@ export default defineUserConfig({
   // GitHub Pages serves project sites under /<repo>/; set DOCS_BASE for that case.
   base: (process.env.DOCS_BASE as `/${string}/` | undefined) ?? "/",
   title: "Dialex",
+  head: [
+    ["link", { rel: "icon", type: "image/svg+xml", href: "/logo.svg" }],
+    ["meta", { property: "og:image", content: "https://dialex.awaiden.com/social-preview.png" }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+  ],
   bundler: viteBundler(),
   locales: Object.fromEntries(
     locales.map((l) => [l.prefix, { lang: l.lang, title: "Dialex", description: l.description }]),
@@ -91,6 +96,7 @@ export default defineUserConfig({
     }),
   ],
   theme: defaultTheme({
+    logo: "/logo.svg",
     repo: "awaiden/dialex",
     docsDir: "apps/docs/docs",
     locales: Object.fromEntries(

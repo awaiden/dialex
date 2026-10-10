@@ -6,6 +6,12 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.5.2
+
+### Patch Changes
+
+- d5d3669: Add `localeFromPath` and `isLocale` to `dialexjs/routing`.
+
 ## 0.5.1
 
 ### Patch Changes
