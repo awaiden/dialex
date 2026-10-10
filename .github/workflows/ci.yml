@@ -33,3 +33,29 @@ jobs:
 
       - name: Verify Monorepo (Format, Lint, Tests, Builds)
         run: bun run ready
+
+      - name: Smoke test the packed packages
+        run: node scripts/smoke-pack.mjs
+
+  changeset:
+    name: Changeset present
+    # A pull request that changes a published package needs a changeset (bun run changeset).
+    # The Version Packages pull request consumes them, so it is exempt.
+    if: github.event_name == 'pull_request' && github.head_ref != 'changeset-release/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for a changeset
+        run: bunx changeset status --since=origin/${{ github.base_ref }}

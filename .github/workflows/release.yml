@@ -57,6 +57,10 @@ jobs:
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: bun run ready
 
+      - name: Smoke test the packed packages
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: node scripts/smoke-pack.mjs
+
       # `bun pm pack` writes the versions of workspace dependencies from bun.lock. The Version PR
       # rebuilds the lock (`changeset:version`), and checking each tarball is what stops a package
       # from depending on a stale release (0.2.0 did).
