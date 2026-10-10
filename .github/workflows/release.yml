@@ -116,7 +116,7 @@ jobs:
           git push origin "$tag"
           # The editor extension ships as a release asset (it is not published to a marketplace).
           bun run --cwd packages/vscode build
-          bun run --cwd packages/vscode package
+          (cd packages/vscode && npx vsce package "$version" --no-dependencies --no-update-package-json)
           vsix=$(ls packages/vscode/*.vsix | head -1)
           notes=$(awk -v v="$version" '$0 == "## " v { found = 1; next } /^## / { found = 0 } found' packages/core/CHANGELOG.md)
           if [ -n "$notes" ]; then
