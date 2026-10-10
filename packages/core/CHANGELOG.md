@@ -1,5 +1,11 @@
 # dialexjs
 
+## 0.5.2
+
+### Patch Changes
+
+- d5d3669: Add `localeFromPath` and `isLocale` to `dialexjs/routing`.
+
 ## 0.5.1
 
 ### Patch Changes
