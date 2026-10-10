@@ -94,6 +94,21 @@ export async function runInit(options: InitOptions = {}) {
         label: "Nuxt",
         hint: detected.framework === "nuxt" ? "detected" : undefined,
       },
+      {
+        value: "svelte",
+        label: "Svelte / Vite",
+        hint: detected.framework === "svelte" ? "detected" : undefined,
+      },
+      {
+        value: "solid",
+        label: "Solid / Vite",
+        hint: detected.framework === "solid" ? "detected" : undefined,
+      },
+      {
+        value: "react-router",
+        label: "React Router",
+        hint: detected.framework === "react-router" ? "detected" : undefined,
+      },
     ];
 
     const selectedFramework = await p.select({
@@ -163,6 +178,9 @@ export async function runInit(options: InitOptions = {}) {
       : path.join(root, "dialex.config.ts");
   const configFileName = path.basename(configPath);
 
+  // React Router keeps its source in app/, so the generated file goes there
+  const generatedOutput = framework === "react-router" ? "app/dialex.generated.ts" : undefined;
+
   try {
     if (fs.existsSync(configPath)) {
       const mod = await loadFile(configPath);
@@ -170,6 +188,7 @@ export async function runInit(options: InitOptions = {}) {
         if (mod.exports.default.$args && mod.exports.default.$args[0]) {
           mod.exports.default.$args[0].defaultLocale = defaultLocale;
           mod.exports.default.$args[0].locales = localeList;
+          if (generatedOutput) mod.exports.default.$args[0].output = generatedOutput;
         }
         await writeFile(mod, configPath);
         logger.success(`Updated ${pc.bold(configFileName)} via Magicast`);
@@ -181,6 +200,7 @@ export default defineConfig({});
 `);
       mod.exports.default.$args[0].defaultLocale = defaultLocale;
       mod.exports.default.$args[0].locales = localeList;
+      if (generatedOutput) mod.exports.default.$args[0].output = generatedOutput;
       await writeFile(mod, configPath);
       logger.success(`Created ${pc.bold(configFileName)} via Magicast`);
     }
@@ -191,7 +211,9 @@ export default defineConfig({});
 
 export default defineConfig({
   defaultLocale: "${defaultLocale}",
-  locales: [${localeList.map((l) => `"${l}"`).join(", ")}],
+  locales: [${localeList.map((l) => `"${l}"`).join(", ")}],${
+    generatedOutput ? `\n  output: "${generatedOutput}",` : ""
+  }
 });
 `;
     fs.writeFileSync(configPath, fallback, "utf-8");
@@ -217,7 +239,12 @@ export default defineConfig({
   }
 
   // 3. Create starter dictionary in src/ (or root)
-  const targetDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
+  const targetDir =
+    framework === "react-router" && fs.existsSync(path.join(root, "app"))
+      ? path.join(root, "app")
+      : fs.existsSync(path.join(root, "src"))
+        ? path.join(root, "src")
+        : root;
   const dictPath = path.join(targetDir, "home.content.ts");
   if (!fs.existsSync(dictPath)) {
     const dictRecords = localeList
@@ -353,11 +380,11 @@ This project uses [Dialex](https://github.com/awaiden/dialex) for type-safe inte
     case "hono":
       logger.log(`
 import { Hono } from "hono";
-import { dialex } from "dialexjs/hono";
-import dictionaries from "./src/dialex.generated.js";
+import { dialexHono } from "dialexjs/hono";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", dialex({ dictionaries }));
+app.use("*", dialexHono({ ...dialex }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");
@@ -369,10 +396,10 @@ app.get("/", (c) => {
       logger.log(`
 import Fastify from "fastify";
 import { dialexPlugin } from "dialexjs/fastify";
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = Fastify();
-await app.register(dialexPlugin, { dictionaries });
+await app.register(dialexPlugin, { ...dialex });
 
 app.get("/", (req) => {
   const dict = req.getDictionary("home");
@@ -383,11 +410,11 @@ app.get("/", (req) => {
     case "express":
       logger.log(`
 import express from "express";
-import { dialex } from "dialexjs/express";
-import dictionaries from "./src/dialex.generated.js";
+import { dialexExpress } from "dialexjs/express";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = express();
-app.use(dialex({ dictionaries }));
+app.use(dialexExpress({ ...dialex }));
 
 app.get("/", (req, res) => {
   const dict = req.getDictionary("home");
@@ -398,11 +425,11 @@ app.get("/", (req, res) => {
     case "koa":
       logger.log(`
 import Koa from "koa";
-import { dialex } from "dialexjs/koa";
-import dictionaries from "./src/dialex.generated.js";
+import { dialexKoa } from "dialexjs/koa";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Koa();
-app.use(dialex({ dictionaries }));
+app.use(dialexKoa({ ...dialex }));
 
 app.use((ctx) => {
   const dict = ctx.getDictionary("home");
@@ -414,10 +441,10 @@ app.use((ctx) => {
       logger.log(`
 import { Module } from "@nestjs/common";
 import { DialexModule } from "dialexjs/nestjs";
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 @Module({
-  imports: [DialexModule.forRoot({ dictionaries })],
+  imports: [DialexModule.forRoot({ ...dialex })],
 })
 export class AppModule {}
 `);
@@ -466,11 +493,11 @@ createRoot(document.getElementById("root")!).render(
     case "elysia":
       logger.log(`
 import { Elysia } from "elysia";
-import { dialex } from "dialexjs/elysia";
-import dictionaries from "./src/dialex.generated.js";
+import { dialexElysia } from "dialexjs/elysia";
+import { dialex } from "./src/dialex.generated.js";
 
 new Elysia()
-  .use(dialex({ dictionaries }))
+  .use(dialexElysia({ ...dialex }))
   .get("/", ({ getDictionary }) => ({ title: getDictionary("home").title }))
   .listen(3000);
 `);
@@ -479,9 +506,9 @@ new Elysia()
       logger.log(`
 // src/hooks.server.ts
 import { dialexHandle } from "dialexjs/sveltekit";
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const handle = dialexHandle({ dictionaries });
+export const handle = dialexHandle({ ...dialex });
 
 // src/app.html: <html lang="%dialex.lang%">
 // In load functions: locals.getDictionary("home")
@@ -490,10 +517,10 @@ export const handle = dialexHandle({ dictionaries });
     case "astro":
       logger.log(`
 // src/middleware.ts
-import { dialex } from "dialexjs/astro";
-import dictionaries from "./dialex.generated.js";
+import { dialexAstro } from "dialexjs/astro";
+import { dialex } from "./dialex.generated.js";
 
-export const onRequest = dialex({ dictionaries });
+export const onRequest = dialexAstro({ ...dialex });
 
 // In pages: Astro.locals.getDictionary("home")
 `);
@@ -509,6 +536,70 @@ import App from "./App.vue";
 createApp(App).use(createDialex({ ...dialex })).mount("#app");
 
 // In components: const dict = useDictionary("home")
+`);
+      break;
+    case "svelte":
+      logger.log(`
+<!-- src/App.svelte -->
+<script lang="ts">
+  import { provideDialex, useDictionary } from "dialexjs/svelte";
+  import { dialex } from "./dialex.generated";
+
+  const { locale, setLocale } = provideDialex({ ...dialex });
+  const home = useDictionary("home");
+</script>
+
+<h1>{$home.title}</h1>
+<button onclick={() => setLocale("tr")}>TR</button>
+`);
+      break;
+    case "solid":
+      logger.log(`
+// src/index.tsx
+import { render } from "solid-js/web";
+import { DialexProvider } from "dialexjs/solid";
+import { dialex } from "./dialex.generated";
+import App from "./App";
+
+render(
+  () => (
+    <DialexProvider {...dialex}>
+      <App />
+    </DialexProvider>
+  ),
+  document.getElementById("root")!,
+);
+
+// In components: const home = useDictionary("home"); then {home().title}
+`);
+      break;
+    case "react-router":
+      logger.log(`
+// app/dialex.server.ts
+import { createDialexHandler } from "dialexjs/web";
+import { dialex } from "./dialex.generated";
+
+export const resolveDialex = createDialexHandler({ ...dialex });
+
+// app/root.tsx
+import { DialexProvider } from "dialexjs/react";
+import { useLoaderData } from "react-router";
+import { dialex } from "./dialex.generated";
+import { resolveDialex } from "./dialex.server";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const { locale } = await resolveDialex(request);
+  return { locale };
+}
+
+export default function App() {
+  const { locale } = useLoaderData<typeof loader>();
+  return (
+    <DialexProvider {...dialex} initialLocale={locale}>
+      <Outlet />
+    </DialexProvider>
+  );
+}
 `);
       break;
     case "nuxt":

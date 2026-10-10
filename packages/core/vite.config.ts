@@ -13,6 +13,8 @@ export default defineConfig({
       "src/nestjs.ts",
       "src/elysia.ts",
       "src/sveltekit.ts",
+      "src/svelte.ts",
+      "src/solid.ts",
       "src/astro.ts",
       "src/vue.ts",
       "src/nuxt.ts",

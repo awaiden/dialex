@@ -63,8 +63,9 @@ export function renderGenerated(root: string, options: GenerateOptions = {}): Re
   const found = scanFiles(root, include, { exclude: config.exclude }).sort();
 
   const srcDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
-  const outputPath = options.output
-    ? path.resolve(root, options.output)
+  const outputOption = options.output ?? config.output;
+  const outputPath = outputOption
+    ? path.resolve(root, outputOption)
     : path.join(srcDir, "dialex.generated.ts");
   const outputDir = path.dirname(outputPath);
   // A broad `include` (like `src/**/*.ts`) would otherwise match the files generated here
@@ -192,12 +193,18 @@ export default dictionaries;
 `;
   }
 
-  const dts = renderDts(root, files, locales, messageArguments(parsed, clientConfig.defaultLocale));
+  const dts = renderDts(
+    root,
+    files,
+    locales,
+    messageArguments(parsed, clientConfig.defaultLocale),
+    outputOption ? outputDir : undefined,
+  );
   return {
     files,
     outputPath,
     content,
-    dtsPath: dts?.path ?? path.join(srcDir, "dialex-env.d.ts"),
+    dtsPath: dts?.path ?? path.join(outputOption ? outputDir : srcDir, "dialex-env.d.ts"),
     dtsContent: dts?.content,
     configFile: staticRead.file,
     extraFiles,

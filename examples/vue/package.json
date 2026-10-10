@@ -1,0 +1,28 @@
+{
+  "name": "example-vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dx generate && vp dev",
+    "build": "dx generate && vue-tsc -b && vp build",
+    "preview": "vp preview",
+    "lint": "oxlint",
+    "dx:generate": "dx generate"
+  },
+  "dependencies": {
+    "dialexjs": "workspace:*",
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vue-tsc": "^3.3.11"
+  }
+}

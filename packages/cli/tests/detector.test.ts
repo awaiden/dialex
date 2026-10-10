@@ -30,6 +30,21 @@ describe("Framework detector", () => {
     expect(result.confidence).toBe("high");
   });
 
+  it.each([
+    ["svelte", { svelte: "^5.0.0", vite: "^8.0.0" }],
+    ["solid", { "solid-js": "^1.9.0", vite: "^8.0.0" }],
+    ["react-router", { "@react-router/dev": "^8.0.0", react: "^19.0.0", vite: "^8.0.0" }],
+    ["sveltekit", { "@sveltejs/kit": "^2.0.0", svelte: "^5.0.0" }],
+    ["vue", { vue: "^3.5.0", vite: "^8.0.0" }],
+  ])("detects %s from dependencies", (framework, dependencies) => {
+    fs.writeFileSync(
+      path.join(tempDir, "package.json"),
+      JSON.stringify({ devDependencies: dependencies }),
+      "utf-8",
+    );
+    expect(detectFramework(tempDir).framework).toBe(framework);
+  });
+
   it("detects NestJS from @nestjs/core", () => {
     const pkg = { dependencies: { "@nestjs/core": "^11.0.0" } };
     fs.writeFileSync(path.join(tempDir, "package.json"), JSON.stringify(pkg), "utf-8");

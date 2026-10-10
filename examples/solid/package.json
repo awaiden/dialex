@@ -1,0 +1,26 @@
+{
+  "name": "example-solid",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dx generate && vp dev",
+    "build": "dx generate && tsc -b && vp build",
+    "preview": "vp preview",
+    "lint": "oxlint",
+    "dx:generate": "dx generate"
+  },
+  "dependencies": {
+    "dialexjs": "workspace:*",
+    "solid-js": "^1.9.15"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "catalog:",
+    "vite-plugin-solid": "^2.11.14",
+    "vite-plus": "catalog:"
+  }
+}

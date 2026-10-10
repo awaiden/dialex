@@ -34,6 +34,8 @@
     "./react": "./dist/react.mjs",
     "./routing": "./dist/routing.mjs",
     "./server": "./dist/server.mjs",
+    "./solid": "./dist/solid.mjs",
+    "./svelte": "./dist/svelte.mjs",
     "./sveltekit": "./dist/sveltekit.mjs",
     "./testing": "./dist/testing/index.mjs",
     "./testing/react": "./dist/testing/react.mjs",
@@ -79,6 +81,8 @@
     "react-dom": "^19.3.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
+    "solid-js": "^1.9.15",
+    "svelte": "^5.57.0",
     "typescript": "^7.0.2",
     "vite": "catalog:",
     "vite-plus": "catalog:",
@@ -100,6 +104,8 @@
     "next": ">=13.0.0",
     "react": "^19.3.0",
     "rxjs": ">=7.0.0",
+    "solid-js": "^1.8.0",
+    "svelte": "^4.0.0 || ^5.0.0",
     "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
@@ -140,6 +146,12 @@
       "optional": true
     },
     "rxjs": {
+      "optional": true
+    },
+    "solid-js": {
+      "optional": true
+    },
+    "svelte": {
       "optional": true
     },
     "vue": {

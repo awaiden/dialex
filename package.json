@@ -9,8 +9,9 @@
   ],
   "type": "module",
   "scripts": {
+    "typegen:examples": "bun run --cwd examples/react-router typegen",
     "build:packages": "vp run --filter './packages/*' build && bun install --frozen-lockfile",
-    "ready": "bun run build:packages && vp check && vp run -r test && vp run -r build",
+    "ready": "bun run build:packages && bun run typegen:examples && vp check && vp run -r test && vp run -r build",
     "dev": "vp run -r dev",
     "docs:dev": "bun run --cwd apps/docs dev",
     "docs:build": "bun run --cwd apps/docs build",

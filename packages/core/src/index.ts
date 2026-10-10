@@ -97,6 +97,12 @@ export interface DialexConfig {
    */
   include?: string | string[];
   /**
+   * Where `dialex generate` writes `dialex.generated.ts`, relative to the project. The type
+   * declarations (`dialex-env.d.ts`) are written next to it. Defaults to `src/` when the project
+   * has one, otherwise the project root. Useful for frameworks whose source folder is `app/`.
+   */
+  output?: string;
+  /**
    * Globs, relative to the project, that are never scanned for dictionaries or sources, on top of
    * `node_modules`, build output and everything `.gitignore` ignores.
    */

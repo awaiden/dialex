@@ -63,6 +63,26 @@ export default defineDictionary({
     expect(names).toEqual(["src/kept/x.content.ts"]);
   });
 
+  it("writes the generated files where `output` in the config says", () => {
+    fs.mkdirSync(path.join(tempDir, "app"), { recursive: true });
+    fs.writeFileSync(
+      path.join(tempDir, "app/home.content.ts"),
+      `export default { name: "home", dictionary: { en: { a: "x" }, tr: { a: "y" } } };\n`,
+    );
+    fs.writeFileSync(
+      path.join(tempDir, "dialex.config.ts"),
+      `export default { defaultLocale: "en", locales: ["en", "tr"], output: "app/dialex.generated.ts" };\n`,
+    );
+
+    const result = generateDictionaries(tempDir, { static: true });
+
+    expect(path.relative(tempDir, result.outputPath)).toBe("app/dialex.generated.ts");
+    expect(path.relative(tempDir, result.dtsPath)).toBe("app/dialex-env.d.ts");
+    expect(fs.readFileSync(result.outputPath, "utf-8")).toContain('from "./home.content');
+    // the generated file is not picked up as a dictionary on the next run
+    expect(generateDictionaries(tempDir, { static: true }).files).toHaveLength(1);
+  });
+
   it("supports json option in runGenerate", async () => {
     const contentCode = `
 import { defineDictionary } from "dialexjs";

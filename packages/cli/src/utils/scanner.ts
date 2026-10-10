@@ -58,6 +58,8 @@ export const REGISTRY_ADAPTERS = [
   "web",
   "h3",
   "angular",
+  "svelte",
+  "solid",
 ] as const;
 
 /** Dependencies that tell which `dialexjs/*` entry points a project can import. */
@@ -79,6 +81,8 @@ const ADAPTER_DEPENDENCIES: Record<string, string[]> = {
   h3: ["h3"],
   nitropack: ["h3"],
   "@angular/core": ["angular"],
+  svelte: ["svelte"],
+  "solid-js": ["solid"],
   // Frameworks that hand you a standard `Request`, served by `dialexjs/web`.
   "react-router": ["web"],
   "react-router-dom": ["web"],
@@ -117,10 +121,13 @@ export function renderDts(
   files: string[],
   locales?: string[],
   messageArguments: Record<string, string> = {},
+  /** Where to write `dialex-env.d.ts`. Defaults to `src/` when it exists, otherwise `root`. */
+  directory?: string,
 ): { path: string; content: string } | undefined {
   if (files.length === 0) return undefined;
 
-  const dtsDir = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
+  const dtsDir =
+    directory ?? (fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root);
   const imports: string[] = [];
   const records: string[] = [];
 

@@ -54,6 +54,12 @@ describe("generateDts adapters", () => {
     ]);
   });
 
+  it("maps Svelte and Solid to their own entry points", () => {
+    expect(detectAdapters(project({ svelte: "^5.0.0" }).dir)).toEqual(["svelte"]);
+    expect(detectAdapters(project({ "solid-js": "^1.9.0" }).dir)).toEqual(["solid"]);
+    expect(REGISTRY_ADAPTERS).toEqual(expect.arrayContaining(["svelte", "solid"]));
+  });
+
   it("falls back to every adapter when nothing is recognised or there is no package.json", () => {
     expect(detectAdapters(project({ lodash: "^4.0.0" }).dir)).toEqual([...REGISTRY_ADAPTERS]);
     expect(detectAdapters(project().dir)).toEqual([...REGISTRY_ADAPTERS]);

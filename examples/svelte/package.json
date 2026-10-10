@@ -1,0 +1,29 @@
+{
+  "name": "example-svelte",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dx generate && vp dev",
+    "build": "dx generate && vp build",
+    "preview": "vp preview",
+    "check": "dx generate && svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "lint": "oxlint",
+    "dx:generate": "dx generate"
+  },
+  "dependencies": {
+    "dialexjs": "workspace:*"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "svelte": "^5.57.0",
+    "svelte-check": "^4.7.6",
+    "typescript": "~6.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

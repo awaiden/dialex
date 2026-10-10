@@ -13,7 +13,10 @@ export type SupportedFramework =
   | "sveltekit"
   | "astro"
   | "vue"
-  | "nuxt";
+  | "nuxt"
+  | "svelte"
+  | "solid"
+  | "react-router";
 
 export interface DetectedFramework {
   framework: SupportedFramework;
@@ -105,6 +108,27 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (hono)",
         };
       }
+      if ("@react-router/dev" in allDeps) {
+        return {
+          framework: "react-router",
+          confidence: "high",
+          matchedRule: "package.json dependencies (@react-router/dev)",
+        };
+      }
+      if ("solid-js" in allDeps) {
+        return {
+          framework: "solid",
+          confidence: "high",
+          matchedRule: "package.json dependencies (solid-js)",
+        };
+      }
+      if ("svelte" in allDeps) {
+        return {
+          framework: "svelte",
+          confidence: "high",
+          matchedRule: "package.json dependencies (svelte)",
+        };
+      }
       if ("vue" in allDeps && !("react" in allDeps)) {
         return {
           framework: "vue",
@@ -141,6 +165,7 @@ export function detectFramework(root: string): DetectedFramework {
     ["nuxt", "nuxt.config"],
     ["sveltekit", "svelte.config"],
     ["astro", "astro.config"],
+    ["react-router", "react-router.config"],
   ];
   for (const [framework, base] of configRules) {
     if (["js", "mjs", "ts"].some((ext) => fs.existsSync(path.join(root, `${base}.${ext}`)))) {
