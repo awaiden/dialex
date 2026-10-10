@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/mcp",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Model Context Protocol (MCP) server for Dialex internationalization",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
