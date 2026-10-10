@@ -4,8 +4,15 @@
   "schedule": ["before 6am on monday"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
-  "lockFileMaintenance": { "enabled": true },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
+    {
+      "description": "Peer ranges say which framework versions Dialex supports; widening or raising them is a manual decision",
+      "matchDepTypes": ["peerDependencies"],
+      "enabled": false
+    },
     {
       "description": "Group non-major updates into one weekly pull request",
       "matchUpdateTypes": ["minor", "patch"],
