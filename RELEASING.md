@@ -46,3 +46,7 @@ The docs changelog page is built from `packages/core/CHANGELOG.md` (newer releas
 - The repository setting **Settings, Actions, General, "Allow GitHub Actions to create and approve
   pull requests"** must be on, or the Version Packages PR cannot be opened.
 - `NPM_TOKEN` must be an Actions secret.
+
+## Updating your own VS Code
+
+After a release, `bun run vscode:install` downloads the latest `.vsix` from the GitHub Release and installs it into the local VS Code (`code --install-extension --force`). Reload the window afterwards.

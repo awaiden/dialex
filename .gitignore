@@ -48,3 +48,4 @@ apps/docs/docs/.vuepress/dist
 graphify-out
 # VS Code extension packages
 *.vsix
+.vscode-install/
