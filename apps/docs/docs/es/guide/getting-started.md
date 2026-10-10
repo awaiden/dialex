@@ -2,6 +2,10 @@
 
 Dialex es un framework de i18n construido en torno a diccionarios definidos en TypeScript. Un paso de compilación los convierte en un registro estático y en declaraciones de tipos, de modo que las búsquedas en tiempo de ejecución son simples accesos a objetos.
 
+::: warning Antes de 1.0
+Dialex está por debajo de 1.0, así que la API aún puede cambiar entre versiones menores. Los cambios incompatibles se indican en el [registro de cambios](./changelog.md) y salen en una versión menor; las versiones de parche siguen siendo compatibles. Fija la versión menor (`~0.5.0`) si necesitas una superficie estable.
+:::
+
 ## Paquetes
 
 | Paquete         | Propósito                                                                                     |

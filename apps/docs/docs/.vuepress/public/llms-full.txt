@@ -1334,6 +1334,38 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.5.1
+
+### Patch Changes
+
+- 9b108bb: `@dialexjs/mcp` now uses zod 4 and the current MCP SDK (1.32).
+- d1dcad5: Tested with Next.js 16. Next.js 16 calls the `middleware.ts` file `proxy.ts`; `createDialexMiddleware` works in either.
+
+## 0.5.0
+
+### Minor Changes
+
+- 4050d36: `lazy: "locale"` splits dictionaries per locale, so a visitor only downloads the language they read. `dx generate` writes one module per dictionary and locale into a `dialex.locales/` folder next to `dialex.generated.ts`, and `loaders` points at them. In a real Vite build the main bundle holds neither language, and a Turkish page fetched only the `.tr` chunks until the visitor switched to English, which then fetched the `.en` ones.
+
+  - Switching language downloads the new locale on demand. In React the current language stays on screen until the new one has arrived (the update runs in a transition); in Vue the dictionary is empty until it loads, and server-side rendering waits for it.
+  - `preloadDictionaries(dialex, { locale: "tr" }, "pricing")` fetches a locale ahead of time.
+  - A dictionary is split only when each locale is self-contained. If a locale uses something defined elsewhere in its file (an import or a helper), the dictionary is loaded whole and `dx generate` says why.
+  - `dx check` reports missing or out-of-date per-locale modules, and `--fix` rewrites them. `lazy: true` is unchanged.
+  - `dx generate` no longer treats its own output (`dialex.generated.ts`, `*.d.ts`) as dictionaries when `include` is broad, such as `src/**/*.ts`.
+
+- b39c7f6: Stale translations are detected. `dx translate` now writes `dialex.lock.json`, which records a short hash of the source text behind each translation, so a later edit of the source no longer leaves the other languages silently out of date.
+
+  - `dx check` warns about each translation whose source text changed since it was recorded (`stale-translation`), and `--fail-on-stale` makes it an error. The VS Code extension shows the same warning. Translations without a record (hand-written ones) are never reported.
+  - `dx translate --stale` translates the out-of-date strings again; only these may replace an existing translation.
+  - `dx lock` records the translations you already have, so existing projects can adopt the lock file (`--all` also accepts out-of-date ones). `dx import` records what it imports once a lock file exists.
+  - MCP: `dialex_missing` also lists `stale` translations.
+
+- 5235a9f: `t()` checks ICU arguments. `dx generate` writes `MessageArguments` into `dialex-env.d.ts` (read from each dictionary's default locale), so `t("cart.items", { count })` fails to compile when `count` is missing, misspelled or not a number. `plural`, `selectordinal` and `number` are `number`, `date` and `time` are `Date | number`, `select` is the union of its options, and a plain `{name}` takes a string, number, boolean or `Date`.
+
+  A message that has ICU arguments can no longer be called without values (`t("cart.owner")` was allowed and returned the raw string). Pass the values, or remove the braces if they were literal.
+
+  Adapters that scan the project at runtime (no `dictionaries` passed) no longer write `dialex-env.d.ts`; it was a second writer that could undo the generated file. Run `dx generate`.
+
 ## [0.4.0] - 2026-10-09
 
 ### Changed
@@ -1641,6 +1673,10 @@ The helpers take the locale as an explicit argument because each locale's conten
 # Getting Started
 
 Dialex is an i18n framework built around dictionaries defined in TypeScript. A compile step turns them into a static registry and type declarations, so runtime lookups are plain object access.
+
+::: warning Pre-1.0
+Dialex is below 1.0, so the API can still change between minor versions. Breaking changes are called out in the [changelog](./changelog.md) and ship in a minor release; patch releases stay compatible. Pin the minor version (`~0.5.0`) if you need a stable surface.
+:::
 
 ## Packages
 
@@ -1994,6 +2030,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 ## `stripLocale(path, locales)`
 
 Removes a leading locale segment and tells you which one it was. Only exact, case-insensitive matches count, so `/english/about` is left alone.
+
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath` returns the locale a path is under, or `defaultLocale` when it has no prefix. `isLocale` checks a string (for example a route param) against your supported locales.
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
 
 ## hreflang and sitemaps
 

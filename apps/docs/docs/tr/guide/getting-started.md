@@ -2,6 +2,10 @@
 
 Dialex, TypeScript ile tanımlanan sözlükler etrafında kurulmuş bir i18n çerçevesidir. Bir derleme adımı bu sözlükleri statik bir kayıt defterine ve tip bildirimlerine dönüştürür; böylece çalışma zamanındaki aramalar sıradan nesne erişiminden ibaret kalır.
 
+::: warning 1.0 öncesi
+Dialex 1.0 sürümünün altındadır; bu yüzden API minor sürümler arasında değişebilir. Uyumsuz değişiklikler [değişiklik günlüğünde](./changelog.md) belirtilir ve minor sürümle gelir; patch sürümleri uyumlu kalır. Kararlı bir yüzey gerekiyorsa minor sürümü sabitleyin (`~0.5.0`).
+:::
+
 ## Paketler
 
 | Paket           | Amaç                                                                                   |

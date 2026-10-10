@@ -34,6 +34,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 
 移除开头的 locale 段，并告诉你它是哪一个。只有完全匹配（不区分大小写）才算，因此 `/english/about` 不会被改动。
 
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath` 返回路径所属的语言；没有前缀时返回 `defaultLocale`。`isLocale` 用于对照你支持的语言检查一个字符串（例如路由参数）。
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
+
 ## hreflang 与站点地图
 
 ```ts

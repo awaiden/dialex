@@ -34,6 +34,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 
 Elimina el segmento de locale inicial y te indica cuál era. Solo cuentan las coincidencias exactas, sin distinguir mayúsculas de minúsculas, por lo que `/english/about` se deja intacto.
 
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath` devuelve el idioma bajo el que está una ruta, o `defaultLocale` cuando no tiene prefijo. `isLocale` comprueba una cadena (por ejemplo, un parámetro de ruta) frente a tus idiomas admitidos.
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
+
 ## hreflang y sitemaps
 
 ```ts

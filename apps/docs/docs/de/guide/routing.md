@@ -34,6 +34,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 
 Entfernt ein führendes Locale-Segment und teilt dir mit, welches es war. Es zählen nur exakte Übereinstimmungen ohne Beachtung der Groß- und Kleinschreibung, daher bleibt `/english/about` unangetastet.
 
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath` gibt die Sprache zurück, unter der ein Pfad liegt, oder `defaultLocale`, wenn er kein Präfix hat. `isLocale` prüft eine Zeichenfolge (etwa einen Routenparameter) gegen deine unterstützten Sprachen.
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
+
 ## hreflang und Sitemaps
 
 ```ts

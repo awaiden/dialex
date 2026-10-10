@@ -8,6 +8,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
+> **Status: pre-1.0.** The API can still change between minor versions. Breaking changes are listed in the [changelog](./CHANGELOG.md) and ship in a minor release; patch releases stay compatible. Pin the minor version (`~0.5.0`) if you need a stable surface.
+
 ---
 
 ## 🚀 Why Dialex?

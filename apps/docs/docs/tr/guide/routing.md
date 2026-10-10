@@ -34,6 +34,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 
 Baştaki yerel ayar segmentini kaldırır ve hangisi olduğunu söyler. Yalnızca tam ve büyük/küçük harfe duyarsız eşleşmeler sayılır; bu yüzden `/english/about` olduğu gibi bırakılır.
 
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath`, bir yolun hangi dilin altında olduğunu döndürür; ön ek yoksa `defaultLocale` döner. `isLocale` ise bir dizeyi (örneğin bir rota parametresini) desteklenen dillerinize karşı denetler.
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
+
 ## hreflang ve site haritaları
 
 ```ts

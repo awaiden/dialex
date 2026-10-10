@@ -17,6 +17,12 @@ packages the change touches. Pick a bump (`patch` or `minor`; while the version 
 changes are `minor`) and write the note in Markdown: several paragraphs, a table or a migration guide
 all work. The file lands in `.changeset/`.
 
+## Versioning policy
+
+Below 1.0 the API is not considered stable (it says so in the README and the docs). A breaking
+change is a `minor` bump, never a `patch`; patch releases stay compatible. Describe what breaks and
+how to migrate in the changeset, because that text becomes the release notes.
+
 ## Releasing
 
 1. Merge changes (with their changesets) into `main`. The Release workflow opens or updates a
