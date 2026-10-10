@@ -10,3 +10,5 @@ Two new framework entry points and CLI support for four more frameworks.
 - `dialex init` and the type registry detect Svelte, Solid and React Router (framework mode), and `dialex-env.d.ts` augments `dialexjs/svelte` and `dialexjs/solid`.
 - New config option `output`: where `dialex generate` writes `dialex.generated.ts` (the type declarations go next to it). React Router apps keep their source in `app/`.
 - New examples: `examples/vue`, `examples/svelte`, `examples/solid` and `examples/react-router`.
+
+Documentation: new pages for Svelte, Solid and React Router, a Best practices guide, and Best practices and Troubleshooting sections on every framework page, in five languages.

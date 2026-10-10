@@ -116,3 +116,15 @@ TestBed.configureTestingModule({
 ```
 
 对于不需要 Angular 的代码，请使用 [`createTestDialex`](../guide/testing.md)。
+
+## 最佳实践
+
+- 在 `app.config.ts` 中用 `provideDialex({ ...dialex })` 配置一次 Dialex，并在组件中用 `injectDictionary` 和 `injectT` 读取。它们返回 signal，所以模板会自动更新。
+- 使用 Angular SSR 时，把 `initialLocale` 作为读取请求的函数传入，使服务端和浏览器以同一种语言启动。
+- 用 `injectDialex()` 中的 `setLocale` 切换 locale，其余交给 signal；这里有意不提供 `| t` 管道，因为纯管道不会跟随 locale 变化。
+
+## 故障排除
+
+- **`NG0203: inject() must be called from an injection context`**：在构造函数、字段初始化器或 `runInInjectionContext` 之外调用了 `injectDictionary` 或 `injectT`。
+- **模板中的文本不更新**：signal 只在类体中读取了一次。请在模板中调用（`dict().title`）或放在 `computed` 中。
+- **`[dialex] Dictionary "x" not found`**：该词典不在 `dialex.generated.ts` 中。运行 `dx generate`，并检查 `dialex.config.ts` 中的 `include` 是否匹配该文件。

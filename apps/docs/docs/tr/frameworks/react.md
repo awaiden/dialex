@@ -72,3 +72,15 @@ export default () => (
 Provider önce varsayılan yerel ayarı render eder, ardından mount sonrasında hatırlanan yerel ayarı uygular (yalnızca yapılandırılmış `locales` arasındaysa). Bu, ilk istemci render'ını sunucuda render edilen işaretlemeyle aynı tutar; bedeli, geri dönen ziyaretçiler için fazladan bir render'dır. Bundan kaçınmak için çerezi sunucuda okuyun ve `initialLocale` olarak verin. `<html lang>`, etkin yerel ayarla eşitlenmiş tutulur.
 
 `useT(...dictionaryNames)` bir [`t` fonksiyonu](../guide/key-paths.md) döndürür. [Tembel yükleme](../guide/lazy-loading.md) ile `useDictionary`, sözlüğü yüklenene kadar askıya alır.
+
+## En iyi uygulamalar
+
+- Kökte tek bir `DialexProvider` oluşturun. İç içe sağlayıcılar bağımsız yerel ayarlar başlatır, bu nadiren istenir.
+- Sunucu tarafı oluşturmada (Next.js istemci bileşenleri, React Router, TanStack Start) `initialLocale` değerini istekten geçirin. Bu olmadan sağlayıcı önce varsayılan yerel ayarı gösterir ve hatırlananı bağlandıktan sonra uygular.
+- Tembel yüklemede, sözlük okuyan ağaç kısmını `<Suspense>` ile sarın: `useDictionary` sözlüğü gelene kadar askıya alınır ve `setLocale` bir geçiş kullanır; böylece bu sırada eski dil görünür kalır.
+
+## Sorun giderme
+
+- **`useDialex must be used within a DialexProvider`**: bileşen sağlayıcının dışında, örneğin bir portal kökünde veya bir testte oluşturuluyor. Sarın veya [test sarmalayıcısını](../guide/testing.md) kullanın.
+- **Metin hakkında bir hidrasyon uyarısı**: sunucu bir yerel ayarı oluşturdu, istemcinin ilk oluşturması başkasını kullandı. Sunucunun yerel ayarını `initialLocale` olarak geçirin.
+- **`getDictionary` `any` döndürüyor**: tip kayıt defteri eksik. `dx generate` çalıştırın ve `dialex-env.d.ts` dosyasının `tsconfig` içine dahil olduğundan emin olun.

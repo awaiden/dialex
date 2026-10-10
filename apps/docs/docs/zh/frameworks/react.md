@@ -72,3 +72,15 @@ export default () => (
 Provider 先渲染默认 locale，然后在挂载后应用已记住的 locale（仅当它属于已配置的 `locales`）。这样首次客户端渲染与服务端渲染的标记完全一致，代价是回访用户会多一次渲染。要避免这一点，请在服务端读取 Cookie，并将其作为 `initialLocale` 传入。`<html lang>` 会与当前 locale 保持同步。
 
 `useT(...dictionaryNames)` 返回一个 [`t` 函数](../guide/key-paths.md)。启用[懒加载](../guide/lazy-loading.md)后，`useDictionary` 会挂起，直到它的词典加载完成。
+
+## 最佳实践
+
+- 在根部只渲染一个 `DialexProvider`。嵌套的 provider 会开启彼此独立的 locale，这通常不是你想要的。
+- 使用服务端渲染（Next.js 客户端组件、React Router、TanStack Start）时，从请求中传入 `initialLocale`。否则 provider 会先显示默认 locale，挂载后再应用记住的 locale。
+- 使用懒加载时，用 `<Suspense>` 包裹读取词典的那部分树：`useDictionary` 会在词典到达前挂起，`setLocale` 使用 transition，因此期间旧语言仍然可见。
+
+## 故障排除
+
+- **`useDialex must be used within a DialexProvider`**：组件渲染在 provider 之外，例如 portal 根节点或测试中。请包裹它，或使用[测试包装器](../guide/testing.md)。
+- **关于文本的水合警告**：服务端渲染了一种 locale，客户端首次渲染使用了另一种。请把服务端的 locale 作为 `initialLocale` 传入。
+- **`getDictionary` 返回 `any`**：缺少类型注册表。运行 `dx generate`，并确认 `dialex-env.d.ts` 已被 `tsconfig` 包含。

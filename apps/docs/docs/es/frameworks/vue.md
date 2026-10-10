@@ -56,3 +56,15 @@ El módulo instala el plugin de Vue con los diccionarios de `dialex.generated.ts
 ::: warning
 El módulo de Nuxt solo está cubierto por pruebas unitarias de sus llamadas de configuración. Todavía no se ha ejecutado dentro de una aplicación Nuxt completa.
 :::
+
+## Buenas prácticas
+
+- Recuerda la elección tú mismo en Vue simple: `createDialex` no tiene persistencia, así que pasa `onLocaleChange` para escribir una cookie o `localStorage` y léela de vuelta como `defaultLocale`.
+- En `<script setup>`, `useDictionary` devuelve una ref computada: lee `dict.value.title` en el script y `dict.title` en la plantilla, donde Vue la desenvuelve.
+- Con Nuxt, deja que el módulo `dialexjs/nuxt` instale el plugin y gestione la cookie; no añadas además `createDialex` tú mismo.
+
+## Solución de problemas
+
+- **`dict.title` es undefined en el script**: `useDictionary` devuelve una ref. Usa `dict.value.title`.
+- **`useDialex requires the plugin from createDialex() to be installed`**: falta `app.use(createDialex({ ...dialex }))` o se ejecuta después de crear el componente.
+- **Las importaciones `.vue` fallan la comprobación de tipos fuera del editor**: añade `src/env.d.ts` con un shim `declare module "*.vue"`, o comprueba los tipos con `vue-tsc`.

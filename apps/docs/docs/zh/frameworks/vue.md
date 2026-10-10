@@ -56,3 +56,15 @@ export default defineNuxtConfig({
 ::: warning
 Nuxt 模块目前只有针对其 setup 调用的单元测试。它尚未在完整的 Nuxt 应用中运行过。
 :::
+
+## 最佳实践
+
+- 在纯 Vue 中自行记住选择：`createDialex` 不提供持久化，所以传入 `onLocaleChange` 来写入 cookie 或 `localStorage`，并在启动时作为 `defaultLocale` 读回。
+- 在 `<script setup>` 中，`useDictionary` 返回一个计算属性 ref：在脚本里读取 `dict.value.title`，在模板里读取 `dict.title`（Vue 会自动解包）。
+- 使用 Nuxt 时，让 `dialexjs/nuxt` 模块安装插件并管理 cookie；不要再自己添加 `createDialex`。
+
+## 故障排除
+
+- **`dict.title` 在脚本中是 undefined**：`useDictionary` 返回的是 ref。请使用 `dict.value.title`。
+- **`useDialex requires the plugin from createDialex() to be installed`**：缺少 `app.use(createDialex({ ...dialex }))`，或者它在组件创建之后才运行。
+- **`.vue` 导入在编辑器之外的类型检查中失败**：添加带有 `declare module "*.vue"` 声明的 `src/env.d.ts`，或使用 `vue-tsc` 进行类型检查。

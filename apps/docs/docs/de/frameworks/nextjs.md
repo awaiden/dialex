@@ -119,3 +119,15 @@ export const generateMetadata = () => ({
 // app/sitemap.ts
 export default () => sitemapEntries(["/", "/about"], routing);
 ```
+
+## Bewährte Vorgehensweisen
+
+- Nutze die Middleware für das Locale-Präfix, Server-Komponenten mit `createDialexServer` für Text und `DialexProvider` nur um Client-Komponenten, die es brauchen, mit `initialLocale` aus der Route.
+- Exportiere `generateStaticParams` mit deinen `locales`, damit jede Sprache vorgerendert wird, und setze `<html lang={locale}>` im Wurzel-`[locale]/layout.tsx`.
+- Halte Server-Komponenten frei vom Provider. Das Importieren von `dialex.generated.ts` in eine Client-Komponente sendet jedes Wörterbuch an den Browser, aktiviere daher [Lazy Loading](../guide/lazy-loading.md), wenn das groß wird.
+
+## Fehlerbehebung
+
+- **Eine Weiterleitungsschleife bei jeder Anfrage**: Der `matcher` der Middleware enthält Pfade, die sie erneut weiterleitet (statische Dateien, `/api`). Nutze den Matcher dieser Seite, der `_next`, `api` und Dateien mit Endung auslässt.
+- **Eine Server-Komponente zeigt die Standardsprache**: Das Locale wurde nicht übergeben. Lies `params` in der Seite und gib es an `getDictionary(name, locale)` weiter.
+- **`[dialex] Dictionary "x" not found`**: Das Wörterbuch ist nicht in `dialex.generated.ts`. Führe `dx generate` aus und prüfe, ob `include` in `dialex.config.ts` zur Datei passt.

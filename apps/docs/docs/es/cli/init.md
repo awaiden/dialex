@@ -12,9 +12,9 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| Opción                          | Descripción                                                                                                    |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next` o `react` |
-| `-d, --default-locale <locale>` | Locale por defecto, p. ej. `en`                                                                                |
-| `-l, --locales <locales>`       | Locales separados por comas, p. ej. `en,tr`                                                                    |
-| `-y, --yes`                     | Omite las preguntas y usa los valores por defecto                                                              |
+| Opción                          | Descripción                                                                                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `react-router` o `react` |
+| `-d, --default-locale <locale>` | Locale por defecto, p. ej. `en`                                                                                                                   |
+| `-l, --locales <locales>`       | Locales separados por comas, p. ej. `en,tr`                                                                                                       |
+| `-y, --yes`                     | Omite las preguntas y usa los valores por defecto                                                                                                 |

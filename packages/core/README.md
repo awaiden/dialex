@@ -148,14 +148,15 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
 ## 🧩 Entry Points
 
-| Import                                                                                              | Purpose                                                                                       |
-| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `dialexjs`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT` |
-| `dialexjs/react`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/angular`                               | Providers, `useDictionary`, `useT`, Nuxt module                                               |
-| `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server`                                 | Next.js middleware and link, server helpers                                                   |
-| `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                   |
-| `dialexjs/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                   |
-| `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                                | Test helpers                                                                                  |
+| Import                                                                                              | Purpose                                                                                        |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `dialexjs`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT`  |
+| `dialexjs/react`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/angular`                               | Providers, `useDictionary`, `useT`, Nuxt module                                                |
+| `dialexjs/svelte`, `dialexjs/solid`                                                                 | Svelte stores and Solid accessors: `provideDialex` / `DialexProvider`, `useDictionary`, `useT` |
+| `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server`                                 | Next.js middleware and link, server helpers                                                    |
+| `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                    |
+| `dialexjs/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                    |
+| `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                                | Test helpers                                                                                   |
 
 See the documentation site (`apps/docs`) for guides and the API reference.
 

@@ -12,9 +12,9 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| 选项                            | 说明                                                                                                            |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`、`express`、`fastify`、`koa`、`nestjs`、`elysia`、`sveltekit`、`astro`、`vue`、`nuxt`、`next` 或 `react` |
-| `-d, --default-locale <locale>` | 默认 locale，例如 `en`                                                                                          |
-| `-l, --locales <locales>`       | 以逗号分隔的 locale，例如 `en,tr`                                                                               |
-| `-y, --yes`                     | 跳过提示并使用默认值                                                                                            |
+| 选项                            | 说明                                                                                                                                               |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`、`express`、`fastify`、`koa`、`nestjs`、`elysia`、`sveltekit`、`astro`、`vue`、`nuxt`、`next`、`svelte`、`solid`、`react-router` 或 `react` |
+| `-d, --default-locale <locale>` | 默认 locale，例如 `en`                                                                                                                             |
+| `-l, --locales <locales>`       | 以逗号分隔的 locale，例如 `en,tr`                                                                                                                  |
+| `-y, --yes`                     | 跳过提示并使用默认值                                                                                                                               |

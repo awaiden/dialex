@@ -116,3 +116,15 @@ TestBed.configureTestingModule({
 ```
 
 Angular gerektirmeyen kod için [`createTestDialex`](../guide/testing.md) kullanın.
+
+## En iyi uygulamalar
+
+- Dialex'i `app.config.ts` içinde `provideDialex({ ...dialex })` ile bir kez yapılandırın ve bileşenlerde `injectDictionary` ve `injectT` ile okuyun. Signal döndürürler; şablonlar kendiliğinden güncellenir.
+- Angular SSR ile `initialLocale` değerini isteği okuyan bir fonksiyon olarak geçirin; böylece sunucu ve tarayıcı aynı dilde başlar.
+- Yerel ayarı `injectDialex()` içindeki `setLocale` ile değiştirin ve gerisini signal'lere bırakın; kasıtlı olarak `| t` boru hattı yoktur, çünkü saf bir boru hattı yerel ayarı izlemezdi.
+
+## Sorun giderme
+
+- **`NG0203: inject() must be called from an injection context`**: `injectDictionary` veya `injectT` bir yapıcı, alan başlatıcı veya `runInInjectionContext` dışında çağrıldı.
+- **Metin şablonda güncellenmiyor**: signal sınıf gövdesinde bir kez okundu. Şablonda (`dict().title`) veya bir `computed` içinde çağırın.
+- **`[dialex] Dictionary "x" not found`**: sözlük `dialex.generated.ts` içinde değil. `dx generate` çalıştırın ve `dialex.config.ts` içindeki `include` değerinin dosyayla eşleştiğini kontrol edin.

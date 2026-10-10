@@ -53,3 +53,15 @@ export default {
   },
 };
 ```
+
+## En iyi uygulamalar
+
+- `dialex.generated.ts` içindeki `{ ...dialex }` değerini adaptöre geçirin. Sözlükleri ve yerel ayar yapılandırmasını taşır; böylece `defaultLocale`, `locales` ve `fallbacks` yalnızca bir kez, `dialex.config.ts` içinde yazılır.
+- İşleyiciyi modül düzeyinde bir kez oluşturun ve her istek için çağırın; istek başına oluşturmak kurulum işini tekrarlar.
+- `Content-Language` ayarlansın diye yanıtları `applyHeaders` üzerinden döndürün; yönlendirmeler dahil. React Router'ın bu işleyici üzerine kurulu kendi [kılavuzu](./react-router.md) vardır.
+
+## Sorun giderme
+
+- **Bir worker'da yerel ayar hep varsayılan**: geçirdiğiniz `Request` özgün başlıkları taşımıyor. Yeniden oluşturulmuş değil, gelen isteği geçirin.
+- **`Cannot modify immutable headers`**: yanıt `fetch()` veya `Response.redirect()` kaynaklı. `applyHeaders` bu tür yanıtları kopyalar, bu yüzden dönüş değerini kullanın.
+- **`[dialex] Dictionary "x" not found`**: sözlük `dialex.generated.ts` içinde değil. `dx generate` çalıştırın ve `dialex.config.ts` içindeki `include` değerinin dosyayla eşleştiğini kontrol edin.

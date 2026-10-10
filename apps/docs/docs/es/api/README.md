@@ -50,6 +50,14 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 `createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries` y el módulo de Nuxt. Consulta [Vue / Nuxt](../frameworks/vue.md).
 
+## `dialexjs/svelte`
+
+`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. Consulta [Svelte](../frameworks/svelte.md).
+
+## `dialexjs/solid`
+
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [Solid](../frameworks/solid.md).
+
 ## Adaptadores de servidor
 
 `dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` y compañía), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Las opciones compartidas están en [Detección de locale](../guide/locale-detection.md#options).

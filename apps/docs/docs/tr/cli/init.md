@@ -12,9 +12,9 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| Seçenek                         | Açıklama                                                                                                          |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next` veya `react` |
-| `-d, --default-locale <locale>` | Varsayılan yerel ayar, örn. `en`                                                                                  |
-| `-l, --locales <locales>`       | Virgülle ayrılmış yerel ayarlar, örn. `en,tr`                                                                     |
-| `-y, --yes`                     | Soruları atlar ve varsayılanları kullanır                                                                         |
+| Seçenek                         | Açıklama                                                                                                                                             |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `react-router` veya `react` |
+| `-d, --default-locale <locale>` | Varsayılan yerel ayar, örn. `en`                                                                                                                     |
+| `-l, --locales <locales>`       | Virgülle ayrılmış yerel ayarlar, örn. `en,tr`                                                                                                        |
+| `-y, --yes`                     | Soruları atlar ve varsayılanları kullanır                                                                                                            |

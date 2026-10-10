@@ -70,3 +70,15 @@ export default () => (
 The provider renders the default locale first, then applies the remembered locale after mount (only if it is one of the configured `locales`). This keeps the first client render identical to server-rendered markup, at the cost of one extra render for returning visitors. To avoid it, read the cookie on the server and pass it as `initialLocale`. `<html lang>` is kept in sync with the active locale.
 
 `useT(...dictionaryNames)` returns a [`t` function](../guide/key-paths.md). With [lazy loading](../guide/lazy-loading.md), `useDictionary` suspends until its dictionary has loaded.
+
+## Best practices
+
+- Render one `DialexProvider` at the root. Nested providers start independent locales, which is rarely what you want.
+- With server rendering (Next.js client components, React Router, TanStack Start), pass `initialLocale` from the request. Without it the provider shows the default locale first and applies the remembered one after mount.
+- With lazy loading, wrap the part of the tree that reads dictionaries in `<Suspense>`: `useDictionary` suspends until its dictionary has arrived, and `setLocale` uses a transition so the old language stays visible meanwhile.
+
+## Troubleshooting
+
+- **`useDialex must be used within a DialexProvider`**: the component is rendered outside the provider, for example in a portal root or a test. Wrap it, or use the [testing wrapper](../guide/testing.md).
+- **A hydration warning about text**: the server rendered one locale and the client's first render used another. Pass the server's locale as `initialLocale`.
+- **`getDictionary` returns `any`**: the type registry is missing. Run `dx generate` and make sure `dialex-env.d.ts` is included by your `tsconfig`.

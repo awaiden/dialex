@@ -56,3 +56,15 @@ Modül, Vue eklentisini `dialex.generated.ts` içindeki sözlüklerle kurar (kay
 ::: warning
 Nuxt modülü yalnızca kurulum çağrılarını kapsayan birim testleriyle test edilmiştir. Henüz tam bir Nuxt uygulaması içinde çalıştırılmamıştır.
 :::
+
+## En iyi uygulamalar
+
+- Düz Vue'da seçimi kendiniz saklayın: `createDialex` kalıcılık sunmaz; bir çerez veya `localStorage` yazmak için `onLocaleChange` geçirin ve `defaultLocale` olarak geri okuyun.
+- `<script setup>` içinde `useDictionary` hesaplanmış bir ref döndürür: script kodunda `dict.value.title`, şablonda ise Vue'nun açtığı `dict.title` okuyun.
+- Nuxt ile eklentiyi kurma ve çerezi yönetme işini `dialexjs/nuxt` modülüne bırakın; ayrıca kendiniz `createDialex` eklemeyin.
+
+## Sorun giderme
+
+- **`dict.title` script kodunda tanımsız**: `useDictionary` bir ref döndürür. `dict.value.title` kullanın.
+- **`useDialex requires the plugin from createDialex() to be installed`**: `app.use(createDialex({ ...dialex }))` eksik veya bileşen oluşturulduktan sonra çalışıyor.
+- **`.vue` içe aktarımları editör dışında tip denetiminden geçmiyor**: `declare module "*.vue"` gölgesi içeren `src/env.d.ts` ekleyin veya tipleri `vue-tsc` ile denetleyin.

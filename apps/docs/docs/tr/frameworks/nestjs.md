@@ -55,3 +55,15 @@ export class AppController {
 | `DIALEX_OPTIONS`                        | Modül seçenekleri için enjeksiyon belirteci                                                         |
 
 `DialexLocale` ve `DialexDictionary`, interceptor'ın veya middleware'in isteğe eklediği değerleri okur; bu yüzden bunlardan birinin uygulandığından emin olun. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.
+
+## En iyi uygulamalar
+
+- `DialexModule.forRoot({ ...dialex })` değerini kök modülde bir kez içe aktarın. Varsayılan olarak globaldir; özellik modülleri onu yeniden içe aktarmaz.
+- `req` okumak yerine yerel ayarı ve sözlükleri `@DialexLocale()` ve `@DialexDictionary("home")` ile parametre olarak alın; bu denetleyicileri test etmeyi kolaylaştırır.
+- `DialexInterceptor` değerini tüm uygulama için `APP_INTERCEPTOR` ile kaydedin veya guard'lardan önce yerel ayara ihtiyaç duyduğunuzda `configure()` içinde `DialexMiddleware` uygulayın.
+
+## Sorun giderme
+
+- **`Nest can't resolve dependencies of ... (DialexService)`**: `DialexModule.forRoot(...)` modül grafında içe aktarılmamış veya `isGlobal` kapatılmış.
+- **`req.getDictionary` tanımsız**: ne `DialexInterceptor` ne de `DialexMiddleware` kayıtlı. Dekoratörler ve `DialexService` bunlarsız çalışır, istek özellikleri çalışmaz.
+- **`[dialex] Dictionary "x" not found`**: sözlük `dialex.generated.ts` içinde değil. `dx generate` çalıştırın ve `dialex.config.ts` içindeki `include` değerinin dosyayla eşleştiğini kontrol edin.

@@ -12,9 +12,9 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| Option                          | Beschreibung                                                                                                      |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next` oder `react` |
-| `-d, --default-locale <locale>` | Standard-Locale, z. B. `en`                                                                                       |
-| `-l, --locales <locales>`       | Kommagetrennte Locales, z. B. `en,tr`                                                                             |
-| `-y, --yes`                     | Überspringt die Rückfragen und verwendet die Standardwerte                                                        |
+| Option                          | Beschreibung                                                                                                                                         |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `react-router` oder `react` |
+| `-d, --default-locale <locale>` | Standard-Locale, z. B. `en`                                                                                                                          |
+| `-l, --locales <locales>`       | Kommagetrennte Locales, z. B. `en,tr`                                                                                                                |
+| `-y, --yes`                     | Überspringt die Rückfragen und verwendet die Standardwerte                                                                                           |

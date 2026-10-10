@@ -12,9 +12,9 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| Option                          | Description                                                                                                      |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, or `react` |
-| `-d, --default-locale <locale>` | Default locale, e.g. `en`                                                                                        |
-| `-l, --locales <locales>`       | Comma-separated locales, e.g. `en,tr`                                                                            |
-| `-y, --yes`                     | Skip prompts and use defaults                                                                                    |
+| Option                          | Description                                                                                                                                         |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `react-router`, or `react` |
+| `-d, --default-locale <locale>` | Default locale, e.g. `en`                                                                                                                           |
+| `-l, --locales <locales>`       | Comma-separated locales, e.g. `en,tr`                                                                                                               |
+| `-y, --yes`                     | Skip prompts and use defaults                                                                                                                       |

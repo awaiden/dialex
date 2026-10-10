@@ -50,6 +50,14 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 `createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries` ve Nuxt modülü. Bkz. [Vue / Nuxt](../frameworks/vue.md).
 
+## `dialexjs/svelte`
+
+`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. Bkz. [Svelte](../frameworks/svelte.md).
+
+## `dialexjs/solid`
+
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [Solid](../frameworks/solid.md).
+
 ## Sunucu adaptörleri
 
 `dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` ve ilgili parçalar), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.

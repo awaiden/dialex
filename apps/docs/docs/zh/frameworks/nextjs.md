@@ -119,3 +119,15 @@ export const generateMetadata = () => ({
 // app/sitemap.ts
 export default () => sitemapEntries(["/", "/about"], routing);
 ```
+
+## 最佳实践
+
+- 用中间件处理 locale 前缀，用 `createDialexServer` 的服务端组件输出文本，仅在需要它的客户端组件外层使用 `DialexProvider`，并从路由取得 `initialLocale`。
+- 用你的 `locales` 导出 `generateStaticParams`，让每种语言都被预渲染，并在根 `[locale]/layout.tsx` 中设置 `<html lang={locale}>`。
+- 让服务端组件不依赖 provider。在客户端组件中导入 `dialex.generated.ts` 会把所有词典发送到浏览器，所以当它变大时请启用[懒加载](../guide/lazy-loading.md)。
+
+## 故障排除
+
+- **每个请求都出现重定向循环**：中间件的 `matcher` 包含了它又会再次重定向的路径（静态文件、`/api`）。请使用本页的 matcher，它会跳过 `_next`、`api` 和带扩展名的文件。
+- **服务端组件显示默认语言**：没有传入 locale。请在页面中读取 `params`，并把它传给 `getDictionary(name, locale)`。
+- **`[dialex] Dictionary "x" not found`**：该词典不在 `dialex.generated.ts` 中。运行 `dx generate`，并检查 `dialex.config.ts` 中的 `include` 是否匹配该文件。

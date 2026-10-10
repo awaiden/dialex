@@ -119,3 +119,15 @@ export const generateMetadata = () => ({
 // app/sitemap.ts
 export default () => sitemapEntries(["/", "/about"], routing);
 ```
+
+## En iyi uygulamalar
+
+- Yerel ayar öneki için ara katmanı, metin için `createDialexServer` ile sunucu bileşenlerini ve `DialexProvider` değerini yalnızca ona ihtiyaç duyan istemci bileşenlerinin çevresinde, rotadan alınan `initialLocale` ile kullanın.
+- Her dil önceden oluşturulsun diye `locales` ile `generateStaticParams` dışa aktarın ve kök `[locale]/layout.tsx` içinde `<html lang={locale}>` ayarlayın.
+- Sunucu bileşenlerini sağlayıcıdan uzak tutun. `dialex.generated.ts` dosyasını bir istemci bileşenine aktarmak her sözlüğü tarayıcıya gönderir; bu büyüdüğünde [tembel yüklemeyi](../guide/lazy-loading.md) etkinleştirin.
+
+## Sorun giderme
+
+- **Her istekte yönlendirme döngüsü**: ara katmanın `matcher` değeri tekrar yönlendirdiği yolları (statik dosyalar, `/api`) içeriyor. `_next`, `api` ve uzantılı dosyaları atlayan bu sayfadaki matcher'ı kullanın.
+- **Bir sunucu bileşeni varsayılan dili gösteriyor**: yerel ayar geçirilmedi. Sayfada `params` değerini okuyun ve `getDictionary(name, locale)` işlevine verin.
+- **`[dialex] Dictionary "x" not found`**: sözlük `dialex.generated.ts` içinde değil. `dx generate` çalıştırın ve `dialex.config.ts` içindeki `include` değerinin dosyayla eşleştiğini kontrol edin.

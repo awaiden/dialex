@@ -53,3 +53,15 @@ export default {
   },
 };
 ```
+
+## 最佳实践
+
+- 把 `dialex.generated.ts` 中的 `{ ...dialex }` 传给适配器。它同时带有词典和 locale 配置，因此 `defaultLocale`、`locales` 和 `fallbacks` 只需在 `dialex.config.ts` 中写一次。
+- 在模块级别只创建一次处理器，并为每个请求调用它；为每个请求都创建一次会重复做准备工作。
+- 通过 `applyHeaders` 返回响应，使 `Content-Language` 被设置，重定向也不例外。React Router 有基于该处理器的专门[指南](./react-router.md)。
+
+## 故障排除
+
+- **在 worker 中 locale 始终是默认值**：你传入的 `Request` 没有携带原始请求头。请传入收到的请求，而不是重新构造的请求。
+- **`Cannot modify immutable headers`**：响应来自 `fetch()` 或 `Response.redirect()`。`applyHeaders` 会复制这类响应，所以请使用它的返回值。
+- **`[dialex] Dictionary "x" not found`**：该词典不在 `dialex.generated.ts` 中。运行 `dx generate`，并检查 `dialex.config.ts` 中的 `include` 是否匹配该文件。

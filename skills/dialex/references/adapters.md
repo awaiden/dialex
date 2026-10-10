@@ -85,3 +85,34 @@ app.get("/", (req) => {
   return { title: dict.title };
 });
 ```
+
+## Svelte (Vite)
+
+```svelte
+<script lang="ts">
+  import { provideDialex, useDictionary } from "dialexjs/svelte";
+  import { dialex } from "./dialex.generated";
+
+  provideDialex({ ...dialex });
+  const home = useDictionary("home");
+</script>
+
+<h1>{$home.title}</h1>
+```
+
+## Solid
+
+```tsx
+import { DialexProvider, useDictionary } from "dialexjs/solid";
+
+import { dialex } from "./dialex.generated";
+
+// <DialexProvider {...dialex}><App /></DialexProvider>
+const home = useDictionary("home"); // an accessor: home().title
+```
+
+## React Router (framework mode)
+
+Resolve the locale in the root loader with `createDialexHandler({ ...dialex })` from
+`dialexjs/web`, return it, and render `<DialexProvider {...dialex} initialLocale={locale}>`.
+Set `output: "app/dialex.generated.ts"` in `dialex.config.ts` because the source folder is `app/`.

@@ -36,7 +36,7 @@ program
   .description("Initialize Dialex in the current project")
   .option(
     "-f, --framework <framework>",
-    "Target framework (hono, express, fastify, koa, nestjs, next, react)",
+    "Target framework (hono, express, fastify, koa, nestjs, elysia, sveltekit, astro, vue, nuxt, next, react, react-router, svelte, solid)",
   )
   .option("-d, --default-locale <locale>", "Default locale (e.g. en)")
   .option("-l, --locales <locales>", "Comma-separated supported locales (e.g. en,tr)")

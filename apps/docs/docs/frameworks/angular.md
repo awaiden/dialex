@@ -116,3 +116,15 @@ TestBed.configureTestingModule({
 ```
 
 For code that does not need Angular, use [`createTestDialex`](../guide/testing.md).
+
+## Best practices
+
+- Configure Dialex once with `provideDialex({ ...dialex })` in `app.config.ts`, and read it with `injectDictionary` and `injectT` in components. They return signals, so templates update on their own.
+- With Angular SSR pass `initialLocale` as a function that reads the request, so the server and the browser start in the same language.
+- Switch the locale with `setLocale` from `injectDialex()` and let the signals do the rest; there is no `| t` pipe on purpose, because a pure pipe would not follow the locale.
+
+## Troubleshooting
+
+- **`NG0203: inject() must be called from an injection context`**: `injectDictionary` or `injectT` was called outside a constructor, field initializer or `runInInjectionContext`.
+- **Text does not update in a template**: the signal was read once in the class body. Call it in the template (`dict().title`) or in a `computed`.
+- **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.

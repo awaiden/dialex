@@ -24,11 +24,15 @@
 - [Koa](/frameworks/koa.html): Koa documentation and reference.
 - [NestJS](/frameworks/nestjs.html): NestJS documentation and reference.
 - [Next.js](/frameworks/nextjs.html): Next.js documentation and reference.
+- [React Router](/frameworks/react-router.html): React Router documentation and reference.
 - [React / Vite](/frameworks/react.html): React / Vite documentation and reference.
+- [Solid](/frameworks/solid.html): Solid documentation and reference.
+- [Svelte](/frameworks/svelte.html): Svelte documentation and reference.
 - [SvelteKit](/frameworks/sveltekit.html): SvelteKit documentation and reference.
 - [Vue / Nuxt](/frameworks/vue.html): Vue / Nuxt documentation and reference.
 - [Fetch API (Request)](/frameworks/web.html): Fetch API (Request) documentation and reference.
 - [AI Assistants & MCP](/guide/ai.html): AI Assistants & MCP documentation and reference.
+- [Best practices](/guide/best-practices.html): Best practices documentation and reference.
 - [Changelog](/guide/changelog.html): Changelog documentation and reference.
 - [Configuration](/guide/configuration.html): Configuration documentation and reference.
 - [Dictionaries](/guide/dictionaries.html): Dictionaries documentation and reference.

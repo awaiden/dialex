@@ -53,3 +53,15 @@ export default {
   },
 };
 ```
+
+## Best practices
+
+- Pass `{ ...dialex }` from `dialex.generated.ts` to the adapter. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.
+- Create the handler once at module level and call it for every request; creating it per request repeats the setup work.
+- Return responses through `applyHeaders` so `Content-Language` is set, including for redirects. React Router has its own [guide](./react-router.md) built on this handler.
+
+## Troubleshooting
+
+- **The locale is always the default in a worker**: the `Request` you pass does not carry the original headers. Pass the incoming request, not a rebuilt one.
+- **`Cannot modify immutable headers`**: the response came from `fetch()` or `Response.redirect()`. `applyHeaders` copies such responses, so use its return value.
+- **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.

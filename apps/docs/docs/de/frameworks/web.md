@@ -53,3 +53,15 @@ export default {
   },
 };
 ```
+
+## Bewährte Vorgehensweisen
+
+- Übergib `{ ...dialex }` aus `dialex.generated.ts` an den Adapter. Es enthält die Wörterbücher und die Locale-Konfiguration, sodass `defaultLocale`, `locales` und `fallbacks` nur einmal in `dialex.config.ts` stehen.
+- Erzeuge den Handler einmal auf Modulebene und rufe ihn für jede Anfrage auf; ihn pro Anfrage zu erzeugen wiederholt die Einrichtungsarbeit.
+- Gib Antworten über `applyHeaders` zurück, damit `Content-Language` gesetzt ist, auch bei Weiterleitungen. React Router hat eine eigene [Anleitung](./react-router.md), die auf diesem Handler aufbaut.
+
+## Fehlerbehebung
+
+- **Das Locale ist in einem Worker immer der Standard**: Der übergebene `Request` trägt nicht die ursprünglichen Header. Übergib die eingehende Anfrage, keine neu gebaute.
+- **`Cannot modify immutable headers`**: Die Antwort stammt von `fetch()` oder `Response.redirect()`. `applyHeaders` kopiert solche Antworten, verwende also seinen Rückgabewert.
+- **`[dialex] Dictionary "x" not found`**: Das Wörterbuch ist nicht in `dialex.generated.ts`. Führe `dx generate` aus und prüfe, ob `include` in `dialex.config.ts` zur Datei passt.

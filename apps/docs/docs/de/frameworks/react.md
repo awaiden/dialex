@@ -72,3 +72,15 @@ export default () => (
 Der Provider rendert zuerst das Standard-Locale und wendet das gespeicherte Locale nach dem Mounten an (nur wenn es eines der konfigurierten `locales` ist). So bleibt das erste Client-Rendering identisch mit dem serverseitig gerenderten Markup, auf Kosten eines zusätzlichen Renderings für wiederkehrende Besucher. Um das zu vermeiden, lies den Cookie auf dem Server und übergib ihn als `initialLocale`. `<html lang>` wird mit dem aktiven Locale synchron gehalten.
 
 `useT(...dictionaryNames)` liefert eine [`t`-Funktion](../guide/key-paths.md). Mit [Lazy Loading](../guide/lazy-loading.md) suspendiert `useDictionary`, bis sein Wörterbuch geladen ist.
+
+## Bewährte Vorgehensweisen
+
+- Rendere einen `DialexProvider` an der Wurzel. Verschachtelte Provider starten unabhängige Locales, was selten gewünscht ist.
+- Übergib bei serverseitigem Rendering (Next.js-Client-Komponenten, React Router, TanStack Start) `initialLocale` aus der Anfrage. Ohne es zeigt der Provider zuerst das Standard-Locale und wendet das gemerkte nach dem Mounten an.
+- Umschließe bei Lazy Loading den Teil des Baums, der Wörterbücher liest, mit `<Suspense>`: `useDictionary` suspendiert, bis sein Wörterbuch eingetroffen ist, und `setLocale` nutzt eine Transition, damit währenddessen die alte Sprache sichtbar bleibt.
+
+## Fehlerbehebung
+
+- **`useDialex must be used within a DialexProvider`**: Die Komponente wird außerhalb des Providers gerendert, etwa in einer Portal-Wurzel oder einem Test. Umschließe sie oder nutze den [Test-Wrapper](../guide/testing.md).
+- **Eine Hydration-Warnung zu Text**: Der Server hat ein Locale gerendert, und das erste Client-Rendering nutzte ein anderes. Übergib das Locale des Servers als `initialLocale`.
+- **`getDictionary` liefert `any`**: Die Typregistry fehlt. Führe `dx generate` aus und stelle sicher, dass `dialex-env.d.ts` in deiner `tsconfig` enthalten ist.

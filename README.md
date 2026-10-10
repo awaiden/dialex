@@ -284,9 +284,9 @@ export class AppModule {}
 
 ---
 
-### Elysia, SvelteKit, Astro, Vue / Nuxt, Angular
+### Elysia, SvelteKit, Astro, Vue / Nuxt, Svelte, Solid, React Router, Angular
 
-Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/astro`, `dialexjs/vue`, `dialexjs/nuxt` and `dialexjs/angular`. See the docs site (`apps/docs`) for setup.
+Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/astro`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/svelte`, `dialexjs/solid` and `dialexjs/angular`. React Router uses `dialexjs/web` with `dialexjs/react`. Every framework has a detailed page, with best practices and troubleshooting, on the docs site (`apps/docs`).
 
 ---
 
@@ -393,6 +393,10 @@ Check out runnable projects in [`examples/`](./examples):
 - [`examples/express`](./examples/express): Express 5 server
 - [`examples/nestjs`](./examples/nestjs): Enterprise NestJS application with interceptors & decorators
 - [`examples/react`](./examples/react): Vite + React 19 Client SPA
+- [`examples/react-router`](./examples/react-router): React Router 8 (framework mode, SSR) with locale detection in the root loader
+- [`examples/vue`](./examples/vue): Vite + Vue 3 SPA with `createDialex`
+- [`examples/svelte`](./examples/svelte): Vite + Svelte 5 SPA with `dialexjs/svelte`
+- [`examples/solid`](./examples/solid): Vite + SolidJS SPA with `dialexjs/solid`
 
 ---
 

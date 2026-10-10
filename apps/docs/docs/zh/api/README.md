@@ -50,6 +50,14 @@
 
 `createDialex`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries` 以及 Nuxt 模块。参见 [Vue / Nuxt](../frameworks/vue.md)。
 
+## `dialexjs/svelte`
+
+`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. 参见 [Svelte](../frameworks/svelte.md)。
+
+## `dialexjs/solid`
+
+`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [Solid](../frameworks/solid.md)。
+
 ## 服务端适配器
 
 `dialexjs/express`（`dialex`）、`dialexjs/fastify`（`dialexPlugin`）、`dialexjs/koa`（`dialex`）、`dialexjs/hono`（`dialex`）、`dialexjs/nestjs`（`DialexModule` 及相关项）、`dialexjs/elysia`（`dialex`）、`dialexjs/sveltekit`（`dialexHandle`）、`dialexjs/astro`（`dialex`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。

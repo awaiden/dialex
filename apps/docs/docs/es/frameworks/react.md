@@ -72,3 +72,15 @@ export default () => (
 El provider renderiza primero el locale por defecto y después aplica el locale recordado tras el montaje (solo si es uno de los `locales` configurados). Así el primer renderizado del cliente es idéntico al marcado renderizado en el servidor, a costa de un renderizado extra para los visitantes recurrentes. Para evitarlo, lee la cookie en el servidor y pásala como `initialLocale`. `<html lang>` se mantiene sincronizado con el locale activo.
 
 `useT(...dictionaryNames)` devuelve una [función `t`](../guide/key-paths.md). Con la [carga diferida](../guide/lazy-loading.md), `useDictionary` suspende hasta que su diccionario se ha cargado.
+
+## Buenas prácticas
+
+- Renderiza un único `DialexProvider` en la raíz. Los providers anidados inician locales independientes, lo que rara vez es lo que quieres.
+- Con renderizado en el servidor (componentes de cliente de Next.js, React Router, TanStack Start), pasa `initialLocale` desde la petición. Sin él, el provider muestra primero el locale por defecto y aplica el recordado tras el montaje.
+- Con carga diferida, envuelve en `<Suspense>` la parte del árbol que lee diccionarios: `useDictionary` se suspende hasta que llega su diccionario, y `setLocale` usa una transición para que mientras tanto siga visible el idioma anterior.
+
+## Solución de problemas
+
+- **`useDialex must be used within a DialexProvider`**: el componente se renderiza fuera del provider, por ejemplo en la raíz de un portal o en una prueba. Envuélvelo o usa el [envoltorio de pruebas](../guide/testing.md).
+- **Una advertencia de hidratación sobre el texto**: el servidor renderizó un locale y el primer render del cliente usó otro. Pasa el locale del servidor como `initialLocale`.
+- **`getDictionary` devuelve `any`**: falta el registro de tipos. Ejecuta `dx generate` y asegúrate de que `dialex-env.d.ts` esté incluido en tu `tsconfig`.

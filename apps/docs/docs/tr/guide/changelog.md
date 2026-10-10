@@ -6,6 +6,19 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.7.2
+
+### Patch Changes
+
+- 0800399: Editor features follow a dictionary held in a variable: after `const s = useDictionary("showcase")`, hover, go to definition and completion work on `s.nav.features` and `s.`, in the language server and the VS Code extension.
+
+## 0.7.1
+
+### Patch Changes
+
+- b883a78: The VS Code extension re-reads only the files that changed. `analyzeProject` takes an optional `cache` (`createAnalysisCache()`) that remembers parsed dictionaries and scanned source files by modification time, and the extension keeps the project layout and `.gitignore` rules until files are added or removed. On a synthetic project with 10,000 source files a refresh went from about 950 ms to about 240 ms.
+- 8ee86f2: New package `@dialexjs/language-server`: a language server (LSP) for Dialex translations, so editors other than VS Code get diagnostics, hover, go to definition, completion, quick fixes and automatic `dialex.generated.ts` updates. The editor-independent features (hover, definition, completion, quick fixes, project discovery) moved into it and are shared with the VS Code extension.
+
 ## 0.7.0
 
 ### Minor Changes

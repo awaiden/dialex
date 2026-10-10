@@ -55,3 +55,15 @@ export class AppController {
 | `DIALEX_OPTIONS`                        | Injection token for the module options                                                              |
 
 `DialexLocale` and `DialexDictionary` read what the interceptor or middleware attached to the request, so make sure one of them is applied. All [locale detection options](../guide/locale-detection.md#options) apply.
+
+## Best practices
+
+- Import `DialexModule.forRoot({ ...dialex })` once in the root module. It is global by default, so feature modules do not import it again.
+- Take the locale and dictionaries as parameters with `@DialexLocale()` and `@DialexDictionary("home")` instead of reading `req`, which keeps controllers easy to test.
+- Register `DialexInterceptor` with `APP_INTERCEPTOR` for the whole app, or apply `DialexMiddleware` in `configure()` when you need the locale before guards run.
+
+## Troubleshooting
+
+- **`Nest can't resolve dependencies of ... (DialexService)`**: `DialexModule.forRoot(...)` is not imported in the module graph, or `isGlobal` was turned off.
+- **`req.getDictionary` is undefined**: neither `DialexInterceptor` nor `DialexMiddleware` is registered. The decorators and `DialexService` work without them, the request properties do not.
+- **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.
