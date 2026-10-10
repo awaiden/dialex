@@ -1,0 +1,22 @@
+// Zed settings for working on Dialex itself.
+//
+// Run the language server from this checkout instead of the published package, so changes to
+// `packages/language-server` show up after `bun run --cwd packages/language-server build`.
+{
+  "lsp": {
+    "dialex": {
+      "binary": {
+        "path": "node",
+        "arguments": ["packages/language-server/dist/index.mjs", "--stdio"]
+      },
+      "settings": {
+        "unusedKeys": false,
+        "autoGenerate": true
+      }
+    }
+  },
+  "languages": {
+    "TypeScript": { "language_servers": ["dialex", "..."] },
+    "TSX": { "language_servers": ["dialex", "..."] }
+  }
+}
