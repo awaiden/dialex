@@ -39,7 +39,7 @@ export function Providers({ children, locale }: { children: React.ReactNode; loc
 `createDialexMiddleware` 让每个页面都位于 locale 前缀之下：
 
 ```ts
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({

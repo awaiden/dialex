@@ -39,7 +39,7 @@ Keep the file current with `dx generate --watch` next to `next dev`, or with the
 `createDialexMiddleware` keeps every page under a locale prefix:
 
 ```ts
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({

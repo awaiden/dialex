@@ -130,7 +130,7 @@ export const { getDictionary, getT } = createDialexServer(dialex);
 Add the middleware that keeps every page under a locale prefix:
 
 ```typescript
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({ locales: ["en", "tr"], defaultLocale: "en" });

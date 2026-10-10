@@ -39,7 +39,7 @@ Mantén el archivo al día con `dx generate --watch` junto a `next dev`, o con l
 `createDialexMiddleware` mantiene cada página bajo un prefijo de locale:
 
 ```ts
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({

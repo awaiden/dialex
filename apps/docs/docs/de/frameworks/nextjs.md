@@ -39,7 +39,7 @@ Halte die Datei mit `dx generate --watch` neben `next dev` oder mit der VS-Code-
 `createDialexMiddleware` hält jede Seite unter einem Locale-Präfix:
 
 ```ts
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({

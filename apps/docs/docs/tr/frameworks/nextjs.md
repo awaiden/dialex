@@ -39,7 +39,7 @@ Dosyayı `next dev` yanında `dx generate --watch` ile ya da VS Code eklentisiyl
 `createDialexMiddleware` her sayfayı bir yerel ayar önekinin altında tutar:
 
 ```ts
-// middleware.ts
+// proxy.ts (named middleware.ts before Next.js 16)
 import { createDialexMiddleware } from "dialexjs/next/middleware";
 
 export default createDialexMiddleware({
