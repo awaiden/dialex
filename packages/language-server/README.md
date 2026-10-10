@@ -4,8 +4,7 @@ A [Language Server Protocol](https://microsoft.github.io/language-server-protoco
 [Dialex](https://github.com/awaiden/dialex) translations. Editors that speak LSP (Zed, Neovim,
 Helix, Sublime and others) get Dialex's diagnostics and hover without a dedicated plugin.
 
-> **Status: early.** Everything below works; it has been tested against an LSP client, and the
-> Zed extension is next.
+> **Status: early.** Everything below works, tested against an LSP client and in Zed.
 
 ## Run it
 

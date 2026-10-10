@@ -3,7 +3,7 @@
 Dialex 有一个语言服务器 [`@dialexjs/language-server`](https://www.npmjs.com/package/@dialexjs/language-server)，使用 Language Server Protocol。支持它的编辑器无需专门的插件，就能获得 Dialex 的诊断、悬停提示、转到定义、自动补全和快速修复。Zed 有一个负责查找并启动它的扩展。VS Code 扩展见 [VS Code 扩展](./vscode.md)。
 
 ::: warning 状态
-语言服务器已针对 LSP 客户端测试，Zed 扩展可以构建，但**尚未在真实的 Zed 窗口中试用过**，也不在 Zed 的扩展注册表中。请作为开发扩展安装，并反馈任何看起来不对的地方。
+语言服务器已针对 LSP 客户端测试，Zed 扩展已在 Zed 中试用过（诊断、悬停提示、转到定义、自动补全、快速修复和自动生成均可用）。它还不在 Zed 的扩展注册表中，请作为开发扩展安装，并反馈任何看起来不对的地方。
 :::
 
 ## Zed
@@ -28,7 +28,7 @@ Dialex 有一个语言服务器 [`@dialexjs/language-server`](https://www.npmjs.
 }
 ```
 
-如果服务器没有为 TypeScript 文件启动，请把它加入该语言的服务器列表：
+服务器会自动为 TypeScript 文件启动。如果你想显式指定，或它没有启动，请把它加入该语言的服务器列表：
 
 ```json
 {

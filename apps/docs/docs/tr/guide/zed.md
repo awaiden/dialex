@@ -3,7 +3,7 @@
 Dialex'in Language Server Protocol konuşan bir dil sunucusu var: [`@dialexjs/language-server`](https://www.npmjs.com/package/@dialexjs/language-server). Bunu destekleyen editörler, ayrı bir eklenti olmadan Dialex'in tanılamalarını, hover'ını, tanıma gitmesini, tamamlamasını ve hızlı düzeltmelerini alır. Zed için onu bulup başlatan bir eklenti var. VS Code eklentisi [VS Code Eklentisi](./vscode.md) sayfasında anlatılır.
 
 ::: warning Durum
-Dil sunucusu bir LSP istemcisine karşı test edilir ve Zed eklentisi derlenir, ancak **henüz gerçek bir Zed penceresinde denenmemiştir** ve Zed'in eklenti kayıt defterinde değildir. Geliştirme eklentisi olarak kurun ve yanlış görünen her şeyi bildirin.
+Dil sunucusu bir LSP istemcisine karşı test edilir ve Zed eklentisi Zed'de denenmiştir (tanılamalar, hover, tanıma git, tamamlama, hızlı düzeltmeler ve otomatik üretim çalışır). Henüz Zed'in eklenti kayıt defterinde değildir; geliştirme eklentisi olarak kurun ve yanlış görünen her şeyi bildirin.
 :::
 
 ## Zed
@@ -28,7 +28,7 @@ Ayarlar Zed'in ayarlarında `lsp.dialex` altına yazılır:
 }
 ```
 
-Sunucu TypeScript dosyaları için başlamazsa dilin sunucu listesine ekleyin:
+Sunucu TypeScript dosyaları için kendiliğinden başlar. Açıkça belirtmek isterseniz veya başlamazsa dilin sunucu listesine ekleyin:
 
 ```json
 {

@@ -3,7 +3,7 @@
 Dialex tiene un servidor de lenguaje, [`@dialexjs/language-server`](https://www.npmjs.com/package/@dialexjs/language-server), que habla el Language Server Protocol. Los editores que lo admiten obtienen los diagnósticos, el hover, ir a la definición, el autocompletado y las correcciones rápidas de Dialex sin un plugin propio. Para Zed hay una extensión que lo encuentra y lo inicia. La extensión de VS Code se describe en [Extensión de VS Code](./vscode.md).
 
 ::: warning Estado
-El servidor de lenguaje se prueba contra un cliente LSP y la extensión de Zed compila, pero **todavía no se ha probado en una ventana real de Zed** y no está en el registro de extensiones de Zed. Instálala como extensión de desarrollo e informa de cualquier cosa que parezca incorrecta.
+El servidor de lenguaje se prueba contra un cliente LSP y la extensión de Zed se ha probado en Zed (funcionan diagnósticos, hover, ir a la definición, autocompletado, correcciones rápidas y generación automática). Todavía no está en el registro de extensiones de Zed, así que instálala como extensión de desarrollo e informa de cualquier cosa que parezca incorrecta.
 :::
 
 ## Zed
@@ -28,7 +28,7 @@ Los ajustes van en la configuración de Zed, bajo `lsp.dialex`:
 }
 ```
 
-Si el servidor no se inicia para archivos TypeScript, añádelo a la lista de servidores del lenguaje:
+El servidor se inicia solo para archivos TypeScript. Si quieres ser explícito, o no se inicia, añádelo a la lista de servidores del lenguaje:
 
 ```json
 {

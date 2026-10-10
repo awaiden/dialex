@@ -2312,7 +2312,7 @@ To run the extension from source in a real VS Code window:
 Dialex has a language server, [`@dialexjs/language-server`](https://www.npmjs.com/package/@dialexjs/language-server), that speaks the Language Server Protocol. Editors that support it get Dialex's diagnostics, hover, go to definition, completion and quick fixes without a dedicated plugin. For Zed there is an extension that finds and starts it. The VS Code extension is described in [VS Code Extension](./vscode.md).
 
 ::: warning Status
-The language server is tested against an LSP client, and the Zed extension builds, but it has **not been tried in a real Zed window yet** and is not in Zed's extension registry. Install it as a dev extension and report anything that looks wrong.
+The language server is tested against an LSP client, and the Zed extension has been tried in Zed (diagnostics, hover, go to definition, completion, quick fixes and automatic generation work). It is not in Zed's extension registry yet, so install it as a dev extension and report anything that looks wrong.
 :::
 
 ## Zed
@@ -2337,7 +2337,7 @@ Settings go under `lsp.dialex` in Zed's settings:
 }
 ```
 
-If the server does not start for TypeScript files, add it to the language's server list:
+The server starts for TypeScript files on its own. If you want to be explicit, or it does not start, add it to the language's server list:
 
 ```json
 {
