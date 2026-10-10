@@ -3,18 +3,24 @@
 Dialex 扩展为翻译提供编辑器支持：诊断、悬停提示、转到定义、自动补全和快速修复。它位于仓库的 `packages/vscode` 中。
 
 ::: warning 状态
-该扩展可以构建、打包成 `.vsix`，其逻辑由针对 VS Code API 替身运行的测试覆盖。它**尚未在真实的 VS Code 窗口中试用过**，也没有发布到 Marketplace。请按照[试一试](#try-it-out)自行运行，并反馈任何看起来不对的地方。
+该扩展可以构建、打包成 `.vsix`，其逻辑由针对 VS Code API 替身运行的测试覆盖。它**尚未在真实的 VS Code 窗口中试用过**，也没有发布到 Marketplace，而是在每个 [GitHub Release](https://github.com/awaiden/dialex/releases/latest) 中以 `.vsix` 形式提供。请按照[试一试](#try-it-out)自行运行，并反馈任何看起来不对的地方。
 :::
 
 ## 安装
 
-构建并打包扩展，然后安装 `.vsix`：
+每个[发布版本](https://github.com/awaiden/dialex/releases/latest)都附带一个 `dialex-vscode-X.Y.Z.vsix`，由发布工作流构建并上传。下载后用下面的命令安装，或在 VS Code 中使用 **Extensions: Install from VSIX…** 命令：
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+如果想从仓库自行构建：
 
 ```bash
 cd packages/vscode
 bun run build
-bun run package                      # creates dialex-vscode-0.1.0.vsix
-code --install-extension dialex-vscode-0.1.0.vsix
+bun run package                      # creates dialex-vscode-<version>.vsix
+code --install-extension dialex-vscode-<version>.vsix
 ```
 
 ## 功能

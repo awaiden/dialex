@@ -3,18 +3,24 @@
 The Dialex extension adds editor support for translations: diagnostics, hover, go to definition, completion and quick fixes. It lives in `packages/vscode` of the repository.
 
 ::: warning Status
-The extension builds, packages into a `.vsix`, and its logic is covered by tests that run against a stand-in for the VS Code API. It has **not been tried in a real VS Code window yet**, and it is not published to the Marketplace. Follow [Try it out](#try-it-out) to run it yourself, and report anything that looks wrong.
+The extension builds, packages into a `.vsix`, and its logic is covered by tests that run against a stand-in for the VS Code API. It has **not been tried in a real VS Code window yet**, and it ships as a `.vsix` on every [GitHub Release](https://github.com/awaiden/dialex/releases/latest), not on the Marketplace. Follow [Try it out](#try-it-out) to run it yourself, and report anything that looks wrong.
 :::
 
 ## Install
 
-Build and package the extension, then install the `.vsix`:
+Every [release](https://github.com/awaiden/dialex/releases/latest) has a `dialex-vscode-X.Y.Z.vsix` attached; the release workflow builds and uploads it. Download it and install it, either with the command below or through the **Extensions: Install from VSIX…** command in VS Code:
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+To build it from the repository instead:
 
 ```bash
 cd packages/vscode
 bun run build
-bun run package                      # creates dialex-vscode-0.1.0.vsix
-code --install-extension dialex-vscode-0.1.0.vsix
+bun run package                      # creates dialex-vscode-<version>.vsix
+code --install-extension dialex-vscode-<version>.vsix
 ```
 
 ## Features

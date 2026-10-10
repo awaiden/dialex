@@ -3,18 +3,24 @@
 Dialex eklentisi çeviriler için editör desteği ekler: tanılamalar, üzerine gelince bilgi gösterme (hover), tanıma gitme, otomatik tamamlama ve hızlı düzeltmeler. Deponun `packages/vscode` klasöründe yer alır.
 
 ::: warning Durum
-Eklenti derlenir, bir `.vsix` olarak paketlenir ve mantığı VS Code API'sinin yerine geçen bir taklit üzerinde çalışan testlerle kapsanır. **Henüz gerçek bir VS Code penceresinde denenmemiştir** ve Marketplace'te yayımlanmamıştır. Kendiniz çalıştırmak için [Deneyin](#try-it-out) bölümünü izleyin ve yanlış görünen her şeyi bildirin.
+Eklenti derlenir, bir `.vsix` olarak paketlenir ve mantığı VS Code API'sinin yerine geçen bir taklit üzerinde çalışan testlerle kapsanır. **Henüz gerçek bir VS Code penceresinde denenmemiştir** ve Marketplace'te değil, her [GitHub sürümünde](https://github.com/awaiden/dialex/releases/latest) `.vsix` olarak sunulur. Kendiniz çalıştırmak için [Deneyin](#try-it-out) bölümünü izleyin ve yanlış görünen her şeyi bildirin.
 :::
 
 ## Kurulum
 
-Eklentiyi derleyip paketleyin, ardından `.vsix` dosyasını kurun:
+Her [sürümde](https://github.com/awaiden/dialex/releases/latest) bir `dialex-vscode-X.Y.Z.vsix` eklidir; sürüm iş akışı onu derler ve yükler. İndirip aşağıdaki komutla ya da VS Code'daki **Extensions: Install from VSIX…** komutuyla kurun:
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+Depodan kendiniz derlemek için:
 
 ```bash
 cd packages/vscode
 bun run build
-bun run package                      # creates dialex-vscode-0.1.0.vsix
-code --install-extension dialex-vscode-0.1.0.vsix
+bun run package                      # creates dialex-vscode-<version>.vsix
+code --install-extension dialex-vscode-<version>.vsix
 ```
 
 ## Özellikler

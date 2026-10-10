@@ -3,18 +3,24 @@
 La extensión de Dialex añade compatibilidad del editor para las traducciones: diagnósticos, información al pasar el cursor (hover), ir a la definición, autocompletado y correcciones rápidas. Está en `packages/vscode` del repositorio.
 
 ::: warning Estado
-La extensión se compila, se empaqueta en un `.vsix` y su lógica está cubierta por pruebas que se ejecutan contra un sustituto de la API de VS Code. **Todavía no se ha probado en una ventana real de VS Code** y no está publicada en el Marketplace. Sigue [Pruébala](#try-it-out) para ejecutarla tú mismo e informa de cualquier cosa que parezca incorrecta.
+La extensión se compila, se empaqueta en un `.vsix` y su lógica está cubierta por pruebas que se ejecutan contra un sustituto de la API de VS Code. **Todavía no se ha probado en una ventana real de VS Code** y se distribuye como `.vsix` en cada [GitHub Release](https://github.com/awaiden/dialex/releases/latest), no en el Marketplace. Sigue [Pruébala](#try-it-out) para ejecutarla tú mismo e informa de cualquier cosa que parezca incorrecta.
 :::
 
 ## Instalación
 
-Compila y empaqueta la extensión, y luego instala el `.vsix`:
+Cada [release](https://github.com/awaiden/dialex/releases/latest) lleva adjunto un `dialex-vscode-X.Y.Z.vsix`; el flujo de publicación lo compila y lo sube. Descárgalo e instálalo, con el comando de abajo o con el comando **Extensions: Install from VSIX…** de VS Code:
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+Para compilarla desde el repositorio:
 
 ```bash
 cd packages/vscode
 bun run build
-bun run package                      # creates dialex-vscode-0.1.0.vsix
-code --install-extension dialex-vscode-0.1.0.vsix
+bun run package                      # creates dialex-vscode-<version>.vsix
+code --install-extension dialex-vscode-<version>.vsix
 ```
 
 ## Funciones

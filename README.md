@@ -398,7 +398,7 @@ Check out runnable projects in [`examples/`](./examples):
 
 ## 🧩 VS Code Extension
 
-`packages/vscode` adds diagnostics, hover, go to definition, completion and quick fixes for translations. It reads your config and dictionaries without running them. See `apps/docs` (VS Code Extension) for install and usage.
+`packages/vscode` adds diagnostics, hover, go to definition, completion and quick fixes for translations. It reads your config and dictionaries without running them. Every [GitHub Release](https://github.com/awaiden/dialex/releases/latest) has the packaged `dialex-vscode-X.Y.Z.vsix` attached; see `apps/docs` (VS Code Extension) for install and usage.
 
 ---
 

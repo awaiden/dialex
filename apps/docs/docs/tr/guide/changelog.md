@@ -6,6 +6,18 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.6.0
+
+### Minor Changes
+
+- 725a0c0: The server adapters (Express, Fastify, Hono, Koa, Elysia, h3, Astro, SvelteKit, NestJS, Fetch API, Angular) accept the generated `config`, so `{ ...dialex }` from `dialex.generated.ts` is all they need: `defaultLocale`, `locales` and `fallbacks` no longer have to be repeated by hand. Explicit options still win.
+
+  Express, Hono, Koa, Elysia, h3 and Astro also export `dialexExpress`, `dialexHono`, `dialexKoa`, `dialexElysia`, `dialexH3` and `dialexAstro`, so the adapter and the generated `dialex` object do not share a name. `dialex` keeps working.
+
+- 39eca0b: `dialexjs` no longer depends on `fast-glob` and `unconfig` (about 2.9 MB of installed size, mostly `jiti`). The project scanner moved into `@dialexjs/cli`, which already did all the scanning.
+
+  **Breaking:** the `dialexjs/scanner` entry point is gone, and adapters no longer scan the project at startup when no `dictionaries` are passed. Pass the generated registry (`{ ...dialex }` from `dialex.generated.ts`); an adapter without it only finds dictionaries already registered through `defineDictionary`.
+
 ## 0.5.2
 
 ### Patch Changes

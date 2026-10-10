@@ -6,6 +6,16 @@
 
 Editor support for [Dialex](https://github.com/awaiden/dialex) translations.
 
+## Install
+
+Every [GitHub Release](https://github.com/awaiden/dialex/releases/latest) has a `dialex-vscode-X.Y.Z.vsix` attached. Download it and run:
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+or use **Extensions: Install from VSIX…** in VS Code. The extension is not on the Marketplace.
+
 ## Features
 
 - **Diagnostics**: missing keys and locales in `.content.ts` dictionaries, `getDictionary("x")` / `t("x.y")` calls that point at nothing, invalid ICU messages, and leftover `[TODO]` placeholders.

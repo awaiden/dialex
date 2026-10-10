@@ -91,10 +91,6 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` and the dictionary editing helpers the [VS Code extension](../guide/vscode.md) is built on. They read dictionaries and configs from the syntax tree without running project code.
 
-## `dialexjs/scanner`
-
-Runtime dictionary scanning used by adapters when no `dictionaries` option is passed. Prefer the compiled registry from `dialex generate` in production.
-
 
 ---
 
@@ -1314,6 +1310,18 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.6.0
+
+### Minor Changes
+
+- 725a0c0: The server adapters (Express, Fastify, Hono, Koa, Elysia, h3, Astro, SvelteKit, NestJS, Fetch API, Angular) accept the generated `config`, so `{ ...dialex }` from `dialex.generated.ts` is all they need: `defaultLocale`, `locales` and `fallbacks` no longer have to be repeated by hand. Explicit options still win.
+
+  Express, Hono, Koa, Elysia, h3 and Astro also export `dialexExpress`, `dialexHono`, `dialexKoa`, `dialexElysia`, `dialexH3` and `dialexAstro`, so the adapter and the generated `dialex` object do not share a name. `dialex` keeps working.
+
+- 39eca0b: `dialexjs` no longer depends on `fast-glob` and `unconfig` (about 2.9 MB of installed size, mostly `jiti`). The project scanner moved into `@dialexjs/cli`, which already did all the scanning.
+
+  **Breaking:** the `dialexjs/scanner` entry point is gone, and adapters no longer scan the project at startup when no `dictionaries` are passed. Pass the generated registry (`{ ...dialex }` from `dialex.generated.ts`); an adapter without it only finds dictionaries already registered through `defineDictionary`.
+
 ## 0.5.2
 
 ### Patch Changes
@@ -1966,7 +1974,7 @@ All adapters accept these (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | Check the first URL path segment |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Custom extractor                 |
 
-Plus, per adapter: `config` (the generated config; fills `defaultLocale`, `locales` and `fallbacks` when they are not set, and `{ ...dialex }` provides it), `dictionaries` (map or array of `defineDictionary` results; falls back to the bundled registry) and `setHeader` (default `true`, sets `Content-Language`).
+Plus, per adapter: `config` (the generated config; fills `defaultLocale`, `locales` and `fallbacks` when they are not set, and `{ ...dialex }` provides it), `dictionaries` (map or array of `defineDictionary` results; falls back to the dictionaries registered by `defineDictionary`) and `setHeader` (default `true`, sets `Content-Language`).
 
 ## Matching rules
 
@@ -2179,18 +2187,24 @@ Make sure `src/dialex-env.d.ts` is included by your `tsconfig.json`.
 The Dialex extension adds editor support for translations: diagnostics, hover, go to definition, completion and quick fixes. It lives in `packages/vscode` of the repository.
 
 ::: warning Status
-The extension builds, packages into a `.vsix`, and its logic is covered by tests that run against a stand-in for the VS Code API. It has **not been tried in a real VS Code window yet**, and it is not published to the Marketplace. Follow [Try it out](#try-it-out) to run it yourself, and report anything that looks wrong.
+The extension builds, packages into a `.vsix`, and its logic is covered by tests that run against a stand-in for the VS Code API. It has **not been tried in a real VS Code window yet**, and it ships as a `.vsix` on every [GitHub Release](https://github.com/awaiden/dialex/releases/latest), not on the Marketplace. Follow [Try it out](#try-it-out) to run it yourself, and report anything that looks wrong.
 :::
 
 ## Install
 
-Build and package the extension, then install the `.vsix`:
+Every [release](https://github.com/awaiden/dialex/releases/latest) has a `dialex-vscode-X.Y.Z.vsix` attached; the release workflow builds and uploads it. Download it and install it, either with the command below or through the **Extensions: Install from VSIX…** command in VS Code:
+
+```bash
+code --install-extension dialex-vscode-X.Y.Z.vsix
+```
+
+To build it from the repository instead:
 
 ```bash
 cd packages/vscode
 bun run build
-bun run package                      # creates dialex-vscode-0.1.0.vsix
-code --install-extension dialex-vscode-0.1.0.vsix
+bun run package                      # creates dialex-vscode-<version>.vsix
+code --install-extension dialex-vscode-<version>.vsix
 ```
 
 ## Features
