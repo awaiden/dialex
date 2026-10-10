@@ -388,4 +388,35 @@ describe("language server", () => {
       );
     });
   });
+
+  it("follows a dictionary held in a variable for hover, definition and completion", async () => {
+    const dir = writeProject({
+      "dialex.config.ts": CONFIG,
+      "src/home.content.ts": HOME,
+      "src/app.ts": `const s = useDictionary("home");\nconst a = s.nav.about;\nconst b = s.\n`,
+    });
+    const client = await start(dir);
+    await client.refresh();
+    const appFile = path.join(dir, "src/app.ts");
+    await open(client, appFile);
+    const textDocument = { uri: pathToFileURL(appFile).href };
+
+    const hover = (await client.connection.sendRequest("textDocument/hover", {
+      textDocument,
+      position: { line: 1, character: 17 },
+    })) as { contents: { value: string } } | null;
+    expect(hover?.contents.value).toContain("About");
+
+    const definition = (await client.connection.sendRequest("textDocument/definition", {
+      textDocument,
+      position: { line: 1, character: 17 },
+    })) as { uri: string } | null;
+    expect(definition?.uri).toBe(pathToFileURL(path.join(dir, "src/home.content.ts")).href);
+
+    const items = (await client.connection.sendRequest("textDocument/completion", {
+      textDocument,
+      position: { line: 2, character: 12 },
+    })) as { label: string }[];
+    expect(items.map((item) => item.label)).toEqual(expect.arrayContaining(["title", "nav"]));
+  });
 });

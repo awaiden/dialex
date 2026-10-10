@@ -40,7 +40,7 @@ Bir dil için eksik çoğul kategorileri (örneğin Rusça'da `few`) uyarı olar
 
 ### Üzerine gelince bilgi (Hover)
 
-`t("home.title")` içindeki bir anahtarın, `getDictionary("home")` içindeki bir sözlük adının ya da çağrının bir üyesinin (ör. `getDictionary("home").title` içindeki `.title`) üzerine gelin. Bir tablo metni her yerel ayarda gösterir (önce varsayılan yerel ayar) ve eksik olduğu yerel ayarları işaretler. Fonksiyon değerleri kaynak kodlarını gösterir.
+`t("home.title")` içindeki bir anahtarın, `getDictionary("home")` içindeki bir sözlük adının ya da çağrının bir üyesinin (ör. `getDictionary("home").title` içindeki `.title`) veya sözlüğü tutan bir değişkenin (`const s = useDictionary("showcase")` sonrasında `s.nav.features`) üzerine gelin. Bir tablo metni her yerel ayarda gösterir (önce varsayılan yerel ayar) ve eksik olduğu yerel ayarları işaretler. Fonksiyon değerleri kaynak kodlarını gösterir.
 
 ### Tanıma git
 

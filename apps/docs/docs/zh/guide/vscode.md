@@ -40,7 +40,7 @@ code --install-extension dialex-vscode-<version>.vsix
 
 ### 悬停提示
 
-将鼠标悬停在 `t("home.title")` 中的键、`getDictionary("home")` 中的词典名称，或调用的成员（例如 `getDictionary("home").title` 中的 `.title`）上。表格会显示每个 locale 中的文本（默认 locale 排在最前），并标出缺失它的 locale。函数值会显示其源代码。
+将鼠标悬停在 `t("home.title")` 中的键、`getDictionary("home")` 中的词典名称，或调用的成员（例如 `getDictionary("home").title` 中的 `.title`），或持有词典的变量的成员（例如 `const s = useDictionary("showcase")` 之后的 `s.nav.features`）上。表格会显示每个 locale 中的文本（默认 locale 排在最前），并标出缺失它的 locale。函数值会显示其源代码。
 
 ### 转到定义
 

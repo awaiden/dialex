@@ -41,6 +41,7 @@ import {
   completionEntries,
   definitionFor,
   discoverProjects,
+  findBindings,
   findReferenceAt,
   modelForFile,
   type CompletionEntry,
@@ -431,7 +432,11 @@ export function createServer(connection: Connection): DialexServer {
     const model = document && file ? modelFor(file) : undefined;
     if (!document || !model) return null;
 
-    const ref = findReferenceAt(lineOf(document, params.position.line), params.position.character);
+    const ref = findReferenceAt(
+      lineOf(document, params.position.line),
+      params.position.character,
+      findBindings(document.getText()),
+    );
     const markdown = ref ? buildHover(model, ref) : undefined;
     if (!ref || !markdown) return null;
 
@@ -450,7 +455,11 @@ export function createServer(connection: Connection): DialexServer {
     const model = document && file ? modelFor(file) : undefined;
     if (!document || !model) return null;
 
-    const ref = findReferenceAt(lineOf(document, params.position.line), params.position.character);
+    const ref = findReferenceAt(
+      lineOf(document, params.position.line),
+      params.position.character,
+      findBindings(document.getText()),
+    );
     const target = ref ? definitionFor(model, ref) : undefined;
     if (!target) return null;
 
@@ -470,7 +479,7 @@ export function createServer(connection: Connection): DialexServer {
     if (!document || !model) return [];
 
     const before = lineOf(document, params.position.line).slice(0, params.position.character);
-    const context = completionContextAt(before);
+    const context = completionContextAt(before, findBindings(document.getText()));
     if (!context) return [];
 
     const range = {

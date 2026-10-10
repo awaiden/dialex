@@ -1,5 +1,6 @@
 import type { AnalyzedDictionary } from "@dialexjs/cli/api";
 
+import type { Bindings } from "./bindings.js";
 import type { ProjectModel } from "./model.js";
 
 export type CompletionContext =
@@ -13,9 +14,12 @@ const CALL = /(?<![\w$.])(t|getDictionary|useDictionary|DialexDictionary)\(\s*([
  * `textBeforeCursor` is the line up to the cursor. `length` is how many characters before the
  * cursor a completion replaces.
  */
-export function completionContextAt(textBeforeCursor: string): CompletionContext | undefined {
+export function completionContextAt(
+  textBeforeCursor: string,
+  bindings?: Bindings,
+): CompletionContext | undefined {
   const match = CALL.exec(textBeforeCursor);
-  if (!match) return undefined;
+  if (!match) return bindings ? memberContextAt(textBeforeCursor, bindings) : undefined;
   const [, call, , value] = match;
 
   if (call === "t" && value.includes(".")) {
@@ -25,6 +29,25 @@ export function completionContextAt(textBeforeCursor: string): CompletionContext
     return { kind: "path", dictionary, parent, typed, length: typed.length };
   }
   return { kind: "dictionary", call, typed: value, length: value.length };
+}
+
+/** `s.nav.fe|` where `s` holds a dictionary: the keys under `nav` that start with `fe`. */
+function memberContextAt(
+  textBeforeCursor: string,
+  bindings: Bindings,
+): CompletionContext | undefined {
+  for (const [name, dictionary] of bindings) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const match = new RegExp(
+      `(?<![\\w$.])${escaped}((?:\\??\\.[A-Za-z_$][\\w$]*)*)\\??\\.([A-Za-z_$][\\w$]*)?$`,
+    ).exec(textBeforeCursor);
+    if (!match) continue;
+
+    const parent = [...match[1].matchAll(/\??\.([A-Za-z_$][\w$]*)/g)].map((m) => m[1]);
+    const typed = match[2] ?? "";
+    return { kind: "path", dictionary, parent, typed, length: typed.length };
+  }
+  return undefined;
 }
 
 export interface CompletionEntry {

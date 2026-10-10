@@ -40,7 +40,7 @@ Las categorías de plural que faltan para un idioma (por ejemplo `few` en ruso) 
 
 ### Hover
 
-Pasa el cursor sobre una clave en `t("home.title")`, un nombre de diccionario en `getDictionary("home")` o un miembro de la llamada, como `.title` en `getDictionary("home").title`. Una tabla muestra el texto en cada locale (primero el locale por defecto) y marca los locales en los que falta. Los valores de tipo función muestran su código fuente.
+Pasa el cursor sobre una clave en `t("home.title")`, un nombre de diccionario en `getDictionary("home")` o un miembro de la llamada, como `.title` en `getDictionary("home").title`, o de una variable que contiene el diccionario (`s.nav.features` tras `const s = useDictionary("showcase")`). Una tabla muestra el texto en cada locale (primero el locale por defecto) y marca los locales en los que falta. Los valores de tipo función muestran su código fuente.
 
 ### Ir a la definición
 

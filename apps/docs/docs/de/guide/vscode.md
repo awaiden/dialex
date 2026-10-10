@@ -40,7 +40,7 @@ Für eine Sprache fehlende Plural-Kategorien (zum Beispiel `few` im Russischen) 
 
 ### Hover
 
-Bewege den Mauszeiger über einen Schlüssel in `t("home.title")`, einen Wörterbuchnamen in `getDictionary("home")` oder einen Member des Aufrufs, etwa `.title` in `getDictionary("home").title`. Eine Tabelle zeigt den Text in jedem Locale (zuerst das Standard-Locale) und markiert Locales, in denen er fehlt. Funktionswerte zeigen ihren Quellcode.
+Bewege den Mauszeiger über einen Schlüssel in `t("home.title")`, einen Wörterbuchnamen in `getDictionary("home")` oder einen Member des Aufrufs, etwa `.title` in `getDictionary("home").title`, oder einer Variablen, die das Wörterbuch hält (`s.nav.features` nach `const s = useDictionary("showcase")`). Eine Tabelle zeigt den Text in jedem Locale (zuerst das Standard-Locale) und markiert Locales, in denen er fehlt. Funktionswerte zeigen ihren Quellcode.
 
 ### Gehe zu Definition
 

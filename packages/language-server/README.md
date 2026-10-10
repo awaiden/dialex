@@ -18,8 +18,10 @@ npx @dialexjs/language-server --stdio
 - **Diagnostics**: missing keys and locales in `.content.ts` dictionaries, `getDictionary("x")` and
   `t("x.y")` calls that point at nothing, invalid ICU messages, `[TODO]` placeholders, and
   translations whose source text changed since they were translated.
-- **Hover**: hover a `t("home.title")` key or a dictionary name to see the text in every locale.
-- **Go to definition**: jump from a key to where the dictionary writes it.
+- **Hover**: hover a `t("home.title")` key, a dictionary name, or a member of a variable that holds
+  a dictionary (`s.nav.features` after `const s = useDictionary("showcase")`) to see the text in
+  every locale.
+- **Go to definition**: jump from a key, or from `s.nav.features`, to where the dictionary writes it.
 - **Completion**: dictionary names and key paths inside `t("…")`, `getDictionary("…")` and
   `useDictionary("…")`, triggered by `"`, `'`, `` ` `` and `.`.
 - **Quick fixes**: copy a missing key into a locale (marked `[TODO]`), add every missing key in a

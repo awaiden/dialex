@@ -18,6 +18,7 @@ import {
   completionEntries,
   definitionFor,
   discoverProjects,
+  findBindings,
   findReferenceAt,
   modelForFile,
   type CompletionEntry,
@@ -223,7 +224,13 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     vscode.languages.registerHoverProvider(sourceSelector, {
       provideHover(doc, position) {
         const model = modelFor(doc);
-        const ref = model && findReferenceAt(doc.lineAt(position.line).text, position.character);
+        const ref =
+          model &&
+          findReferenceAt(
+            doc.lineAt(position.line).text,
+            position.character,
+            findBindings(doc.getText()),
+          );
         const markdown = ref && model ? buildHover(model, ref) : undefined;
         if (!ref || !markdown) return undefined;
 
@@ -239,7 +246,13 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     vscode.languages.registerDefinitionProvider(sourceSelector, {
       provideDefinition(doc, position) {
         const model = modelFor(doc);
-        const ref = model && findReferenceAt(doc.lineAt(position.line).text, position.character);
+        const ref =
+          model &&
+          findReferenceAt(
+            doc.lineAt(position.line).text,
+            position.character,
+            findBindings(doc.getText()),
+          );
         const target = ref && model ? definitionFor(model, ref) : undefined;
         if (!target) return undefined;
 
@@ -261,7 +274,7 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
         provideCompletionItems(doc, position) {
           const model = modelFor(doc);
           const before = doc.lineAt(position.line).text.slice(0, position.character);
-          const completion = model && completionContextAt(before);
+          const completion = model && completionContextAt(before, findBindings(doc.getText()));
           if (!model || !completion) return undefined;
 
           return completionEntries(model, completion).map((entry) => {

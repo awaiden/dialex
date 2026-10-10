@@ -40,7 +40,7 @@ Plural categories missing for a language (for example `few` in Russian) are repo
 
 ### Hover
 
-Hover a key in `t("home.title")`, a dictionary name in `getDictionary("home")`, or a member of the call, such as `.title` in `getDictionary("home").title`. A table shows the text in every locale (the default locale first) and marks locales where it is missing. Function values show their source.
+Hover a key in `t("home.title")`, a dictionary name in `getDictionary("home")`, or a member of the call, such as `.title` in `getDictionary("home").title`, or of a variable that holds the dictionary (`s.nav.features` after `const s = useDictionary("showcase")`). A table shows the text in every locale (the default locale first) and marks locales where it is missing. Function values show their source.
 
 ### Go to definition
 
