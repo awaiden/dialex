@@ -1,5 +1,12 @@
 # @dialexjs/mcp
 
+## 0.6.0
+
+### Patch Changes
+
+- Updated dependencies [39eca0b]
+  - @dialexjs/cli@0.6.0
+
 ## 0.5.2
 
 ### Patch Changes
