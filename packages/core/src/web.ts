@@ -1,5 +1,6 @@
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
+import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
   normalizeDictionaries,
@@ -40,8 +41,9 @@ export interface WebDialex {
  * ```
  */
 export function createDialexHandler(
-  options: WebDialexOptions = {},
+  rawOptions: WebDialexOptions = {},
 ): (request: Request) => Promise<WebDialex> {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,

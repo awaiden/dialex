@@ -8,6 +8,7 @@ import {
   extractCookieLocale,
   extractPathLocale,
   type LocaleResolverOptions,
+  withConfig,
 } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
@@ -43,7 +44,8 @@ declare module "hono" {
 /**
  * Hono middleware for i18n detection and dictionary resolution.
  */
-export function dialex(options: HonoDialexOptions = {}): MiddlewareHandler {
+export function dialex(rawOptions: HonoDialexOptions = {}): MiddlewareHandler {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -131,3 +133,5 @@ export function dialex(options: HonoDialexOptions = {}): MiddlewareHandler {
     }
   };
 }
+
+export { dialex as dialexHono };

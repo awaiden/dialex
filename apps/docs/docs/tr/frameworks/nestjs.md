@@ -6,10 +6,10 @@
 import { Module } from "@nestjs/common";
 import { DialexModule } from "dialexjs/nestjs";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 @Module({
-  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ ...dialex })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -22,7 +22,7 @@ DialexModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (config: ConfigService) => ({
-    dictionaries,
+    ...dialex,
     defaultLocale: config.get("DEFAULT_LOCALE"),
   }),
 });

@@ -1,20 +1,14 @@
 import Router from "@koa/router";
-import { dialex } from "dialexjs/koa";
+import { dialexKoa } from "dialexjs/koa";
 import Koa from "koa";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-// Register i18n middleware with auto-generated standalone dictionary bundle
-app.use(
-  dialex({
-    defaultLocale: "en",
-    locales: ["en", "tr"],
-    dictionaries,
-  }),
-);
+// Register i18n middleware from the generated registry (dictionaries and locale config)
+app.use(dialexKoa({ ...dialex }));
 
 // Root route demonstrating ctx.getDictionary and ctx.locale
 router.get("/", (ctx) => {

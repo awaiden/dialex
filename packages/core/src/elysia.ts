@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
+import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
   normalizeDictionaries,
@@ -22,7 +23,8 @@ export type ElysiaDialexOptions = BaseAdapterOptions;
  * Elysia plugin for i18n detection and dictionary resolution.
  * Adds `locale` and `getDictionary(name)` to the request context.
  */
-export function dialex(options: ElysiaDialexOptions = {}) {
+export function dialex(rawOptions: ElysiaDialexOptions = {}) {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -73,3 +75,5 @@ export function dialex(options: ElysiaDialexOptions = {}) {
 }
 
 export default dialex;
+
+export { dialex as dialexElysia };

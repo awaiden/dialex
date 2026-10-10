@@ -4,15 +4,11 @@
 import { dialexPlugin } from "dialexjs/fastify";
 import Fastify from "fastify";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(dialexPlugin, {
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+await app.register(dialexPlugin, { ...dialex });
 
 app.get("/:locale", async (req) => {
   const dict = req.getDictionary("home");

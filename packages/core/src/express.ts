@@ -8,6 +8,7 @@ import {
   extractCookieLocale,
   extractPathLocale,
   type LocaleResolverOptions,
+  withConfig,
 } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
@@ -49,7 +50,8 @@ declare global {
 /**
  * Express middleware for i18n detection and dictionary resolution.
  */
-export function dialex(options: ExpressDialexOptions = {}): RequestHandler {
+export function dialex(rawOptions: ExpressDialexOptions = {}): RequestHandler {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -153,3 +155,5 @@ export function dialex(options: ExpressDialexOptions = {}): RequestHandler {
     next();
   };
 }
+
+export { dialex as dialexExpress };

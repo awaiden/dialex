@@ -2,15 +2,15 @@
 
 ```ts
 import Router from "@koa/router";
-import { dialex } from "dialexjs/koa";
+import { dialexKoa } from "dialexjs/koa";
 import Koa from "koa";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexKoa({ ...dialex }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -21,4 +21,4 @@ app.use(router.routes());
 app.listen(3000);
 ```
 
-`dialex()` işlevini rotalarınızdan önce kaydedin. `ctx.locale` ve `ctx.getDictionary(name)` ekler. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.
+`dialexKoa()` işlevini rotalarınızdan önce kaydedin. `ctx.locale` ve `ctx.getDictionary(name)` ekler. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.

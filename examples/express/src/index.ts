@@ -1,18 +1,12 @@
-import { dialex } from "dialexjs/express";
+import { dialexExpress } from "dialexjs/express";
 import express from "express";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = express();
 
-// Register i18n middleware with auto-generated standalone dictionary bundle
-app.use(
-  dialex({
-    defaultLocale: "en",
-    locales: ["en", "tr"],
-    dictionaries,
-  }),
-);
+// Register i18n middleware from the generated registry (dictionaries and locale config)
+app.use(dialexExpress({ ...dialex }));
 
 // Root route demonstrating req.getDictionary and req.locale
 app.get("/", (req, res) => {

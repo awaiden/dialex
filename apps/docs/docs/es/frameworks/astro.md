@@ -2,15 +2,11 @@
 
 ```ts
 // src/middleware.ts
-import { dialex } from "dialexjs/astro";
+import { dialexAstro } from "dialexjs/astro";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const onRequest = dialex({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const onRequest = dialexAstro({ ...dialex });
 ```
 
 Combínalo con otro middleware usando `sequence` de `astro:middleware`.

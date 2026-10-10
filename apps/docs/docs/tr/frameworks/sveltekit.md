@@ -6,13 +6,9 @@
 // src/hooks.server.ts
 import { dialexHandle } from "dialexjs/sveltekit";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const handle = dialexHandle({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const handle = dialexHandle({ ...dialex });
 ```
 
 Diğer hook'larla birleştirmek için `@sveltejs/kit/hooks` içindeki `sequence` işlevini kullanın.

@@ -1,13 +1,13 @@
 # Express
 
 ```ts
-import { dialex } from "dialexjs/express";
+import { dialexExpress } from "dialexjs/express";
 import express from "express";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = express();
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexExpress({ ...dialex }));
 
 app.get("/:locale", (req, res) => {
   const dict = req.getDictionary("home");

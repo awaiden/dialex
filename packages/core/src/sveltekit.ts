@@ -1,5 +1,6 @@
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
+import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
   normalizeDictionaries,
@@ -59,7 +60,8 @@ export const LANG_PLACEHOLDER = "%dialex.lang%";
  * Adds `locale` and `getDictionary(name)` to `event.locals` and replaces
  * `%dialex.lang%` in the rendered HTML with the resolved locale.
  */
-export function dialexHandle(options: SvelteKitDialexOptions = {}): Handle {
+export function dialexHandle(rawOptions: SvelteKitDialexOptions = {}): Handle {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,

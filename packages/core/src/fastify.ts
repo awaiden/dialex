@@ -8,6 +8,7 @@ import {
   extractCookieLocale,
   extractPathLocale,
   type LocaleResolverOptions,
+  withConfig,
 } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
@@ -45,7 +46,8 @@ import fp from "fastify-plugin";
 /**
  * Fastify plugin for i18n detection and dictionary resolution.
  */
-const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify, options) => {
+const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify, rawOptions) => {
+  const options = withConfig(rawOptions ?? {});
   const {
     defaultLocale = "en",
     locales,

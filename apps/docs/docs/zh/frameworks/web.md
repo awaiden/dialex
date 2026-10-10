@@ -5,13 +5,9 @@
 ```ts
 import { createDialexHandler } from "dialexjs/web";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const resolveDialex = createDialexHandler({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const resolveDialex = createDialexHandler({ ...dialex });
 
 const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```

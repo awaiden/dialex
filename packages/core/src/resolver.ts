@@ -1,4 +1,20 @@
+/**
+ * The `config` object exported by `dialex.generated.ts`. Pass it (or the whole `dialex` registry)
+ * instead of repeating the locale settings by hand.
+ */
+export interface GeneratedConfig {
+  defaultLocale?: string;
+  locales?: readonly string[];
+  fallbacks?: Record<string, string[]>;
+  [key: string]: unknown;
+}
+
 export interface LocaleResolverOptions {
+  /**
+   * The generated config from `dialex.generated.ts` (`{ ...dialex }` sets this together with
+   * `dictionaries`). `defaultLocale`, `locales` and `fallbacks` below override it when set.
+   */
+  config?: GeneratedConfig;
   /**
    * The default locale to fall back to.
    * @default "en"
@@ -211,4 +227,19 @@ export function extractPathLocale(
   if (segments.length === 0) return undefined;
 
   return matchLocale(segments[0], supportedLocales);
+}
+
+/**
+ * Fills `defaultLocale`, `locales` and `fallbacks` from the generated `config` when they were not
+ * given explicitly, so `{ ...dialex }` from `dialex.generated.ts` is all an adapter needs.
+ */
+export function withConfig<T extends LocaleResolverOptions>(options: T): T {
+  const config = options.config;
+  if (!config) return options;
+  return {
+    ...options,
+    defaultLocale: options.defaultLocale ?? config.defaultLocale,
+    locales: options.locales ?? (config.locales ? [...config.locales] : undefined),
+    fallbacks: options.fallbacks ?? config.fallbacks,
+  };
 }

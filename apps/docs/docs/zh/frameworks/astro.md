@@ -2,15 +2,11 @@
 
 ```ts
 // src/middleware.ts
-import { dialex } from "dialexjs/astro";
+import { dialexAstro } from "dialexjs/astro";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const onRequest = dialex({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const onRequest = dialexAstro({ ...dialex });
 ```
 
 使用 `astro:middleware` 中的 `sequence` 把它与其他中间件组合起来。

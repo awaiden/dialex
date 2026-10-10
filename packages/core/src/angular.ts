@@ -16,6 +16,7 @@ import {
   writePersistedLocale,
   type PersistMode,
 } from "./persist.js";
+import { withConfig, type GeneratedConfig } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries, type DictionaryInput } from "./shared.js";
 
 export interface DictionaryRegistry {}
@@ -31,6 +32,11 @@ export interface AngularDialexOptions {
    * `import dictionaries from "./dialex.generated"`.
    */
   dictionaries: DictionaryInput;
+  /**
+   * The generated config from `dialex.generated.ts`; `{ ...dialex }` sets it together with
+   * `dictionaries`. `defaultLocale`, `locales` and `fallbacks` override it when set.
+   */
+  config?: GeneratedConfig;
   /** Locale used when nothing else decides. @default "en" */
   defaultLocale?: string;
   /** Supported locales. A remembered locale outside this list is ignored. */
@@ -64,7 +70,8 @@ export interface DialexStore {
 
 export const DIALEX_OPTIONS = new InjectionToken<AngularDialexOptions>("DIALEX_OPTIONS");
 
-function createStore(options: AngularDialexOptions): DialexStore {
+function createStore(rawOptions: AngularDialexOptions): DialexStore {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,

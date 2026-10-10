@@ -1,19 +1,12 @@
-import { dialex } from "dialexjs/hono";
+import { dialexHono } from "dialexjs/hono";
 import { Hono } from "hono";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = new Hono();
 
-// Register i18n middleware with auto-generated standalone dictionary bundle
-app.use(
-  "*",
-  dialex({
-    defaultLocale: "en",
-    locales: ["en", "tr"],
-    dictionaries,
-  }),
-);
+// Register i18n middleware from the generated registry (dictionaries and locale config)
+app.use("*", dialexHono({ ...dialex }));
 
 // Root route demonstrating dictionary and active locale
 app.get("/", (c) => {

@@ -8,6 +8,7 @@ import {
   extractCookieLocale,
   extractPathLocale,
   type LocaleResolverOptions,
+  withConfig,
 } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
@@ -43,7 +44,8 @@ declare module "koa" {
 /**
  * Koa middleware for i18n detection and dictionary resolution.
  */
-export function dialex(options: KoaDialexOptions = {}): Middleware {
+export function dialex(rawOptions: KoaDialexOptions = {}): Middleware {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -144,3 +146,5 @@ export function dialex(options: KoaDialexOptions = {}): Middleware {
 }
 
 export default dialex;
+
+export { dialex as dialexKoa };

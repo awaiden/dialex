@@ -426,23 +426,25 @@ Dialex ships one adapter per framework as a subpath export of `dialexjs`.
 | --------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------- |
 | [Next.js](./nextjs.md)      | `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server` | `createDialexMiddleware`, `DialexLink`, `createDialexServer`   |
 | [React / Vite](./react.md)  | `dialexjs/react`                                                    | `DialexProvider`, `useDialex`, `useDictionary`                 |
-| [Express](./express.md)     | `dialexjs/express`                                                  | `dialex()` middleware                                          |
+| [Express](./express.md)     | `dialexjs/express`                                                  | `dialexExpress()` middleware                                   |
 | [Fastify](./fastify.md)     | `dialexjs/fastify`                                                  | `dialexPlugin`                                                 |
-| [Koa](./koa.md)             | `dialexjs/koa`                                                      | `dialex()` middleware                                          |
-| [Hono](./hono.md)           | `dialexjs/hono`                                                     | `dialex()` middleware                                          |
+| [Koa](./koa.md)             | `dialexjs/koa`                                                      | `dialexKoa()` middleware                                       |
+| [Hono](./hono.md)           | `dialexjs/hono`                                                     | `dialexHono()` middleware                                      |
 | [NestJS](./nestjs.md)       | `dialexjs/nestjs`                                                   | `DialexModule`, decorators                                     |
-| [Elysia](./elysia.md)       | `dialexjs/elysia`                                                   | `dialex()` plugin                                              |
+| [Elysia](./elysia.md)       | `dialexjs/elysia`                                                   | `dialexElysia()` plugin                                        |
 | [SvelteKit](./sveltekit.md) | `dialexjs/sveltekit`                                                | `dialexHandle()` hook                                          |
-| [Astro](./astro.md)         | `dialexjs/astro`                                                    | `dialex()` middleware                                          |
+| [Astro](./astro.md)         | `dialexjs/astro`                                                    | `dialexAstro()` middleware                                     |
 | [Vue / Nuxt](./vue.md)      | `dialexjs/vue`, `dialexjs/nuxt`                                     | `createDialex`, `useDialex`, `useDictionary`, Nuxt module      |
 | [Angular](./angular.md)     | `dialexjs/angular`                                                  | `provideDialex`, `injectDialex`, `injectT`, `injectDictionary` |
-| [h3 / Nitro](./h3.md)       | `dialexjs/h3`                                                       | `dialex()` middleware (h3 1.x)                                 |
+| [h3 / Nitro](./h3.md)       | `dialexjs/h3`                                                       | `dialexH3()` middleware (h3 1.x)                               |
 | [Fetch API](./web.md)       | `dialexjs/web`                                                      | `createDialexHandler()` for any `Request`                      |
 
-The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Pass the output of `dialex generate` as `dictionaries`:
+The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Spread the `dialex` object from `dialex generate` into the adapter. It carries the dictionaries and the locale config (`defaultLocale`, `locales`, `fallbacks`), so nothing is repeated by hand:
 
 ```ts
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
+
+app.use(dialexExpress({ ...dialex }));
 ```
 
 Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.
@@ -473,16 +475,10 @@ dialex generate        # writes src/dialex.generated.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
 
-import dictionaries from "../dialex.generated";
+import { dialex } from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideDialex({
-      dictionaries,
-      defaultLocale: "en",
-      locales: ["en", "tr"],
-    }),
-  ],
+  providers: [provideDialex({ ...dialex })],
 };
 ```
 
@@ -548,7 +544,7 @@ import { inject } from "@angular/core";
 import { REQUEST } from "@angular/core"; // location depends on your Angular SSR version
 
 provideDialex({
-  dictionaries,
+  ...dialex,
   initialLocale: () => {
     const request = inject(REQUEST, { optional: true });
     const cookie = request?.headers.get("cookie") ?? "";
@@ -571,7 +567,7 @@ Dictionaries are passed in at startup, so [lazy loading](../guide/lazy-loading.m
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [provideDialex({ dictionaries, defaultLocale: "tr", persist: false })],
+  providers: [provideDialex({ ...dialex, defaultLocale: "tr", persist: false })],
 });
 ```
 
@@ -586,15 +582,11 @@ For code that does not need Angular, use [`createTestDialex`](../guide/testing.m
 
 ```ts
 // src/middleware.ts
-import { dialex } from "dialexjs/astro";
+import { dialexAstro } from "dialexjs/astro";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const onRequest = dialex({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const onRequest = dialexAstro({ ...dialex });
 ```
 
 Combine it with other middleware using `sequence` from `astro:middleware`.
@@ -621,13 +613,13 @@ The middleware reads the request URL, headers, and cookies, so it applies to on-
 # Elysia
 
 ```ts
-import { dialex } from "dialexjs/elysia";
+import { dialexElysia } from "dialexjs/elysia";
 import { Elysia } from "elysia";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Elysia()
-  .use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))
+  .use(dialexElysia({ ...dialex }))
   .get("/:locale", ({ locale, getDictionary }) => {
     const dict = getDictionary("home");
     return { title: dict.title, locale };
@@ -645,13 +637,13 @@ The plugin is registered globally and derives two values on the request context:
 # Express
 
 ```ts
-import { dialex } from "dialexjs/express";
+import { dialexExpress } from "dialexjs/express";
 import express from "express";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = express();
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexExpress({ ...dialex }));
 
 app.get("/:locale", (req, res) => {
   const dict = req.getDictionary("home");
@@ -674,15 +666,11 @@ The middleware adds `req.locale` and `req.getDictionary(name)` (also on `res.loc
 import { dialexPlugin } from "dialexjs/fastify";
 import Fastify from "fastify";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(dialexPlugin, {
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+await app.register(dialexPlugin, { ...dialex });
 
 app.get("/:locale", async (req) => {
   const dict = req.getDictionary("home");
@@ -705,11 +693,11 @@ For h3 1.x servers: Nitro 2, and Nuxt server routes and middleware.
 
 ```ts
 // server/middleware/dialex.ts (Nuxt / Nitro)
-import { dialex } from "dialexjs/h3";
+import { dialexH3 } from "dialexjs/h3";
 
-import dictionaries from "~/dialex.generated";
+import { dialex } from "~/dialex.generated";
 
-export default dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries });
+export default dialexH3({ ...dialex });
 ```
 
 ```ts
@@ -738,13 +726,13 @@ Built and tested against h3 `>=1.8 <2`. h3 2.x has a different API and is not su
 # Hono
 
 ```ts
-import { dialex } from "dialexjs/hono";
+import { dialexHono } from "dialexjs/hono";
 import { Hono } from "hono";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use("*", dialexHono({ ...dialex }));
 
 app.get("/:locale", (c) => {
   const dict = c.var.getDictionary("home");
@@ -765,15 +753,15 @@ The middleware sets `locale` and `getDictionary` as context variables, read thro
 
 ```ts
 import Router from "@koa/router";
-import { dialex } from "dialexjs/koa";
+import { dialexKoa } from "dialexjs/koa";
 import Koa from "koa";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexKoa({ ...dialex }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -784,7 +772,7 @@ app.use(router.routes());
 app.listen(3000);
 ```
 
-Register `dialex()` before your routes. It adds `ctx.locale` and `ctx.getDictionary(name)`. All [locale detection options](../guide/locale-detection.md#options) apply.
+Register `dialexKoa()` before your routes. It adds `ctx.locale` and `ctx.getDictionary(name)`. All [locale detection options](../guide/locale-detection.md#options) apply.
 
 
 ---
@@ -799,10 +787,10 @@ Register `dialex()` before your routes. It adds `ctx.locale` and `ctx.getDiction
 import { Module } from "@nestjs/common";
 import { DialexModule } from "dialexjs/nestjs";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 @Module({
-  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ ...dialex })],
   controllers: [AppController],
 })
 export class AppModule {}
@@ -815,7 +803,7 @@ DialexModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (config: ConfigService) => ({
-    dictionaries,
+    ...dialex,
     defaultLocale: config.get("DEFAULT_LOCALE"),
   }),
 });
@@ -1067,13 +1055,9 @@ The provider renders the default locale first, then applies the remembered local
 // src/hooks.server.ts
 import { dialexHandle } from "dialexjs/sveltekit";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const handle = dialexHandle({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const handle = dialexHandle({ ...dialex });
 ```
 
 Combine it with other hooks using `sequence` from `@sveltejs/kit/hooks`.
@@ -1176,13 +1160,9 @@ The Nuxt module is covered by unit tests of its setup calls only. It has not bee
 ```ts
 import { createDialexHandler } from "dialexjs/web";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
-export const resolveDialex = createDialexHandler({
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+export const resolveDialex = createDialexHandler({ ...dialex });
 
 const { locale, getDictionary, t, headers, applyHeaders } = await resolveDialex(request);
 ```
@@ -1986,7 +1966,7 @@ All adapters accept these (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | Check the first URL path segment |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Custom extractor                 |
 
-Plus, per adapter: `dictionaries` (map or array of `defineDictionary` results; falls back to the bundled registry) and `setHeader` (default `true`, sets `Content-Language`).
+Plus, per adapter: `config` (the generated config; fills `defaultLocale`, `locales` and `fallbacks` when they are not set, and `{ ...dialex }` provides it), `dictionaries` (map or array of `defineDictionary` results; falls back to the bundled registry) and `setHeader` (default `true`, sets `Content-Language`).
 
 ## Matching rules
 

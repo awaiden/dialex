@@ -21,6 +21,7 @@ import {
   extractPathLocale,
   lookupLocale,
   type LocaleResolverOptions,
+  withConfig,
 } from "./resolver.js";
 
 export interface DictionaryRegistry {}
@@ -80,7 +81,10 @@ export class DialexService {
   private customDictMap?: Record<string, Record<string, any>>;
   private scanPromise?: Promise<any>;
 
-  constructor(@Inject(DIALEX_OPTIONS) private options: NestDialexOptions = {}) {
+  private options: NestDialexOptions;
+
+  constructor(@Inject(DIALEX_OPTIONS) rawOptions: NestDialexOptions = {}) {
+    this.options = withConfig(rawOptions);
     this.customDictMap = normalizeDictionaries(this.options.dictionaries);
     if (!this.customDictMap) {
       this.scanPromise = autoScanAndLoadDictionaries(process.cwd(), {

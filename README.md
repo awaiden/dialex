@@ -175,15 +175,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 import { dialexPlugin } from "dialexjs/fastify";
 import Fastify from "fastify";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = Fastify();
 
-await app.register(dialexPlugin, {
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+await app.register(dialexPlugin, { ...dialex });
 
 app.get("/:locale", async (req) => {
   const dict = req.getDictionary("home");
@@ -199,15 +195,15 @@ await app.listen({ port: 3000 });
 
 ```typescript
 import Router from "@koa/router";
-import { dialex } from "dialexjs/koa";
+import { dialexKoa } from "dialexjs/koa";
 import Koa from "koa";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Koa();
 const router = new Router();
 
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexKoa({ ...dialex }));
 
 router.get("/:locale", (ctx) => {
   const dict = ctx.getDictionary("home");
@@ -223,13 +219,13 @@ app.listen(3000);
 ### Hono
 
 ```typescript
-import { dialex } from "dialexjs/hono";
+import { dialexHono } from "dialexjs/hono";
 import { Hono } from "hono";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use("*", dialexHono({ ...dialex }));
 
 app.get("/:locale", (c) => {
   const dict = c.var.getDictionary("home");
@@ -244,13 +240,13 @@ export default app;
 ### Express
 
 ```typescript
-import { dialex } from "dialexjs/express";
+import { dialexExpress } from "dialexjs/express";
 import express from "express";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = express();
-app.use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }));
+app.use(dialexExpress({ ...dialex }));
 
 app.get("/:locale", (req, res) => {
   const dict = req.getDictionary("home");
@@ -268,7 +264,7 @@ app.listen(3000);
 import { Module, Controller, Get } from "@nestjs/common";
 import { DialexModule, DialexLocale, DialexDictionary } from "dialexjs/nestjs";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 @Controller()
 export class AppController {
@@ -279,7 +275,7 @@ export class AppController {
 }
 
 @Module({
-  imports: [DialexModule.forRoot({ dictionaries, defaultLocale: "en", locales: ["en", "tr"] })],
+  imports: [DialexModule.forRoot({ ...dialex })],
   controllers: [AppController],
 })
 export class AppModule {}

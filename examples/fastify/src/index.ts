@@ -1,16 +1,12 @@
 import { dialexPlugin } from "dialexjs/fastify";
 import Fastify from "fastify";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = Fastify({ logger: false });
 
-// Register i18n plugin with auto-generated standalone dictionary bundle
-await app.register(dialexPlugin, {
-  defaultLocale: "en",
-  locales: ["en", "tr"],
-  dictionaries,
-});
+// Register i18n plugin from the generated registry (dictionaries and locale config)
+await app.register(dialexPlugin, { ...dialex });
 
 // Root route demonstrating req.getDictionary and req.locale
 app.get("/", async (req) => {

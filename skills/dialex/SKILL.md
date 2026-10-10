@@ -72,13 +72,13 @@ export function Header() {
 ### Server Middleware (Express / Hono / Fastify)
 
 ```typescript
-import { dialex } from "dialexjs/hono";
+import { dialexHono } from "dialexjs/hono";
 import { Hono } from "hono";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Hono();
-app.use("*", dialex({ dictionaries }));
+app.use("*", dialexHono({ ...dialex }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");

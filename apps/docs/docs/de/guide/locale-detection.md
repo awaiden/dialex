@@ -26,7 +26,7 @@ Alle Adapter akzeptieren diese Optionen (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | Erstes URL-Pfadsegment prüfen |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Eigener Extraktor             |
 
-Zusätzlich pro Adapter: `dictionaries` (Map oder Array von `defineDictionary`-Ergebnissen; ohne Angabe wird die gebündelte Registry verwendet) und `setHeader` (Standard `true`, setzt `Content-Language`).
+Zusätzlich pro Adapter: `config` (die generierte Konfiguration; füllt `defaultLocale`, `locales` und `fallbacks`, wenn sie nicht gesetzt sind, und `{ ...dialex }` liefert sie), `dictionaries` (Map oder Array von `defineDictionary`-Ergebnissen; ohne Angabe wird die gebündelte Registry verwendet) und `setHeader` (Standard `true`, setzt `Content-Language`).
 
 ## Abgleichsregeln
 

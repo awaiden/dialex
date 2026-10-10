@@ -26,7 +26,7 @@
 | `usePath`       | `boolean`                              | `true`               | 检查 URL 路径的第一段 |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | 自定义提取函数        |
 
-此外，每个适配器还有：`dictionaries`（词典映射，或 `defineDictionary` 结果的数组；省略时使用打包的注册表）和 `setHeader`（默认 `true`，设置 `Content-Language`）。
+此外，每个适配器还有：`config`（生成的配置；未设置时填充 `defaultLocale`、`locales` 和 `fallbacks`，`{ ...dialex }` 会提供它）、`dictionaries`（词典映射，或 `defineDictionary` 结果的数组；省略时使用打包的注册表）和 `setHeader`（默认 `true`，设置 `Content-Language`）。
 
 ## 匹配规则
 

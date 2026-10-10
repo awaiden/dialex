@@ -2,6 +2,7 @@ import { defineEventHandler, getRequestHeader, getRequestURL, setResponseHeader 
 
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
+import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
   normalizeDictionaries,
@@ -35,7 +36,8 @@ declare module "h3" {
  * export default dialex({ locales: ["en", "tr"] });
  * ```
  */
-export function dialex(options: H3DialexOptions = {}) {
+export function dialex(rawOptions: H3DialexOptions = {}) {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -84,3 +86,5 @@ type H3DialexContext = {
 };
 
 export default dialex;
+
+export { dialex as dialexH3 };

@@ -2,6 +2,7 @@ import type { MiddlewareHandler } from "astro";
 
 import { createT, type Locales, type Translate } from "./index.js";
 import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
+import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
   normalizeDictionaries,
@@ -37,7 +38,8 @@ declare global {
  * export const onRequest = dialex({ locales: ["en", "tr"] });
  * ```
  */
-export function dialex(options: AstroDialexOptions = {}): MiddlewareHandler {
+export function dialex(rawOptions: AstroDialexOptions = {}): MiddlewareHandler {
+  const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
     locales,
@@ -90,3 +92,5 @@ export function dialex(options: AstroDialexOptions = {}): MiddlewareHandler {
 }
 
 export default dialex;
+
+export { dialex as dialexAstro };

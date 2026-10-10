@@ -1,13 +1,13 @@
 # Elysia
 
 ```ts
-import { dialex } from "dialexjs/elysia";
+import { dialexElysia } from "dialexjs/elysia";
 import { Elysia } from "elysia";
 
-import dictionaries from "./src/dialex.generated.js";
+import { dialex } from "./src/dialex.generated.js";
 
 const app = new Elysia()
-  .use(dialex({ defaultLocale: "en", locales: ["en", "tr"], dictionaries }))
+  .use(dialexElysia({ ...dialex }))
   .get("/:locale", ({ locale, getDictionary }) => {
     const dict = getDictionary("home");
     return { title: dict.title, locale };

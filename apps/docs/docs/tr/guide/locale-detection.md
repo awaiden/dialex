@@ -26,7 +26,7 @@ Tüm adaptörler şunları kabul eder (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | İlk URL yol segmentini kontrol et |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Özel çıkarıcı                     |
 
-Buna ek olarak adaptöre göre: `dictionaries` (`defineDictionary` sonuçlarından oluşan harita veya dizi; verilmezse paketlenmiş kayıt defterine döner) ve `setHeader` (varsayılan `true`, `Content-Language` başlığını ayarlar).
+Buna ek olarak adaptöre göre: `config` (üretilen yapılandırma; ayarlanmamışsa `defaultLocale`, `locales` ve `fallbacks` değerlerini doldurur, `{ ...dialex }` bunu sağlar), `dictionaries` (`defineDictionary` sonuçlarından oluşan harita veya dizi; verilmezse paketlenmiş kayıt defterine döner) ve `setHeader` (varsayılan `true`, `Content-Language` başlığını ayarlar).
 
 ## Eşleştirme kuralları
 

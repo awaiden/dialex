@@ -38,13 +38,13 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 ## Express
 
 ```typescript
-import { dialex } from "dialexjs/express";
+import { dialexExpress } from "dialexjs/express";
 import express from "express";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = express();
-app.use(dialex({ dictionaries }));
+app.use(dialexExpress({ ...dialex }));
 
 app.get("/", (req, res) => {
   const dict = req.getDictionary("home");
@@ -55,13 +55,13 @@ app.get("/", (req, res) => {
 ## Hono
 
 ```typescript
-import { dialex } from "dialexjs/hono";
+import { dialexHono } from "dialexjs/hono";
 import { Hono } from "hono";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = new Hono();
-app.use("*", dialex({ dictionaries }));
+app.use("*", dialexHono({ ...dialex }));
 
 app.get("/", (c) => {
   const dict = c.var.getDictionary("home");
@@ -75,10 +75,10 @@ app.get("/", (c) => {
 import { dialexPlugin } from "dialexjs/fastify";
 import Fastify from "fastify";
 
-import dictionaries from "./dialex.generated.js";
+import { dialex } from "./dialex.generated.js";
 
 const app = Fastify();
-await app.register(dialexPlugin, { dictionaries });
+await app.register(dialexPlugin, { ...dialex });
 
 app.get("/", (req) => {
   const dict = req.getDictionary("home");

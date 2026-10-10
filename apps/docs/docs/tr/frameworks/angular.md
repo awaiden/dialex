@@ -19,16 +19,10 @@ dialex generate        # writes src/dialex.generated.ts
 import { ApplicationConfig } from "@angular/core";
 import { provideDialex } from "dialexjs/angular";
 
-import dictionaries from "../dialex.generated";
+import { dialex } from "../dialex.generated";
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideDialex({
-      dictionaries,
-      defaultLocale: "en",
-      locales: ["en", "tr"],
-    }),
-  ],
+  providers: [provideDialex({ ...dialex })],
 };
 ```
 
@@ -94,7 +88,7 @@ import { inject } from "@angular/core";
 import { REQUEST } from "@angular/core"; // location depends on your Angular SSR version
 
 provideDialex({
-  dictionaries,
+  ...dialex,
   initialLocale: () => {
     const request = inject(REQUEST, { optional: true });
     const cookie = request?.headers.get("cookie") ?? "";
@@ -117,7 +111,7 @@ Sözlükler başlangıçta verilir; bu yüzden [tembel yükleme](../guide/lazy-l
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [provideDialex({ dictionaries, defaultLocale: "tr", persist: false })],
+  providers: [provideDialex({ ...dialex, defaultLocale: "tr", persist: false })],
 });
 ```
 
