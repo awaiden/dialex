@@ -24,7 +24,7 @@ all work. The file lands in `.changeset/`.
    and rebuilds `bun.lock`.
 2. Review that PR and merge it when you want to release.
 3. The workflow runs again on `main`, finds nothing left to version, runs the full gate, and
-   publishes every package that is not on npm yet (with provenance). Then it creates the `vX.Y.Z` tag
+   publishes every package that is not on npm yet (with provenance). Then, if the tag for the version in `packages/core/package.json` is missing, it creates the `vX.Y.Z` tag
    and the GitHub Release, using the section of `packages/core/CHANGELOG.md` as its notes.
    The packaged VS Code extension (`dialex-vscode-X.Y.Z.vsix`) is attached to that release as an asset.
 

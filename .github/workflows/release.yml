@@ -96,8 +96,10 @@ jobs:
           done
           echo "published=$published" >> "$GITHUB_OUTPUT"
 
+      # The tag always follows packages/core/package.json: whenever nothing is left to version and
+      # the tag for that version is missing, it is created and a GitHub Release is made.
       - name: Tag and GitHub Release
-        if: steps.publish.outputs.published != ''
+        if: steps.changesets.outputs.hasChangesets == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -106,10 +108,12 @@ jobs:
           tag="v$version"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
-            git tag -a "$tag" -m "$tag"
-            git push origin "$tag"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            echo "$tag already exists"
+            exit 0
           fi
+          git tag -a "$tag" -m "$tag"
+          git push origin "$tag"
           # The editor extension ships as a release asset (it is not published to a marketplace).
           bun run --cwd packages/vscode build
           bun run --cwd packages/vscode package
