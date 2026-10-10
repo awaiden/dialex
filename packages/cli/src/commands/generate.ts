@@ -324,6 +324,8 @@ export function startGenerateWatcher(
   options: GenerateOptions,
   regenerate: () => void,
   delay = 100,
+  /** Where to report what triggered a regeneration. Defaults to the CLI logger (stdout). */
+  log: (message: string) => void = (message) => logger.info(message),
 ) {
   const dictionaryFiles = () => new Set(renderGenerated(root, options).files);
   let known = dictionaryFiles();
@@ -370,7 +372,7 @@ export function startGenerateWatcher(
       return;
     }
 
-    logger.info(`[${event}] ${path.relative(root, file)} changed, regenerating...`);
+    log(`[${event}] ${path.relative(root, file)} changed, regenerating...`);
     trigger();
   });
 

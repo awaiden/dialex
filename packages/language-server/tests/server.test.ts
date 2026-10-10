@@ -30,17 +30,19 @@ interface Client {
 }
 
 const opened: MessageConnection[] = [];
+const servers: { dispose(): Promise<void> }[] = [];
 
 async function start(
   dir: string,
   settings: Record<string, unknown> = {},
   watchedFilesRegistration = true,
-): Promise<Client & { refresh(): Promise<void> }> {
+): Promise<Client & { refresh(): Promise<void>; regenerate(): Promise<void> }> {
   const toServer = new PassThrough();
   const toClient = new PassThrough();
 
   const serverConnection = createConnection(toServer, toClient);
   const server = createServer(serverConnection);
+  servers.push(server);
   serverConnection.listen();
 
   const connection = createMessageConnection(
@@ -70,10 +72,11 @@ async function start(
   });
   await connection.sendNotification("initialized", {});
 
-  const client: Client & { refresh(): Promise<void> } = {
+  const client: Client & { refresh(): Promise<void>; regenerate(): Promise<void> } = {
     connection,
     published,
     refresh: () => server.refresh(),
+    regenerate: () => server.regenerate(),
     latest(file) {
       const uri = pathToFileURL(file).href;
       return [...published].reverse().find((entry) => entry.uri === uri)?.diagnostics;
@@ -102,7 +105,8 @@ function open(client: Client, file: string, languageId = "typescript") {
 
 const CONFIG = `export default { defaultLocale: "en", locales: ["en", "tr"] };\n`;
 
-afterEach(() => {
+afterEach(async () => {
+  for (const server of servers.splice(0)) await server.dispose();
   for (const connection of opened.splice(0)) connection.dispose();
   cleanup();
 });
@@ -297,5 +301,91 @@ describe("language server", () => {
     const target = Object.keys(created!.edit.changes)[0];
     expect(target).toBe(pathToFileURL(dictionaryFile).href);
     expect(created!.edit.changes[target][0].newText).toContain("brandNew");
+  });
+
+  describe("generated files", () => {
+    const EXTRA = `export default { name: "extra", dictionary: { en: { a: "x" }, tr: { a: "y" } } };\n`;
+
+    it("regenerates when the client reports a new dictionary file", async () => {
+      const dir = writeProject({
+        "dialex.config.ts": CONFIG,
+        "src/home.content.ts": HOME,
+        "src/dialex.generated.ts": "// stale\n",
+      });
+      const client = await start(dir);
+      await client.refresh();
+
+      const created = path.join(dir, "src/extra.content.ts");
+      fs.writeFileSync(created, EXTRA);
+      await client.connection.sendNotification("workspace/didChangeWatchedFiles", {
+        changes: [{ uri: pathToFileURL(created).href, type: 1 }],
+      });
+
+      const generated = path.join(dir, "src/dialex.generated.ts");
+      await client.waitFor(() => fs.readFileSync(generated, "utf-8").includes("extra.content"));
+      expect(fs.readFileSync(generated, "utf-8")).toContain("home.content");
+      expect(fs.existsSync(path.join(dir, "src/dialex-env.d.ts"))).toBe(true);
+    });
+
+    it("regenerates when a dictionary file is saved", async () => {
+      const dir = writeProject({
+        "dialex.config.ts": CONFIG,
+        "src/home.content.ts": HOME,
+        "src/dialex.generated.ts": "// stale\n",
+      });
+      const client = await start(dir);
+      await client.refresh();
+
+      const file = path.join(dir, "src/home.content.ts");
+      await client.connection.sendNotification("textDocument/didSave", {
+        textDocument: { uri: pathToFileURL(file).href },
+      });
+
+      const generated = path.join(dir, "src/dialex.generated.ts");
+      await client.waitFor(() => fs.readFileSync(generated, "utf-8").includes("home.content"));
+    });
+
+    it("does not create a generated file in a project that has none", async () => {
+      const dir = writeProject({ "dialex.config.ts": CONFIG, "src/home.content.ts": HOME });
+      const client = await start(dir);
+      await client.refresh();
+      await client.regenerate();
+
+      expect(fs.existsSync(path.join(dir, "src/dialex.generated.ts"))).toBe(false);
+    });
+
+    it("respects dialex.autoGenerate = false", async () => {
+      const dir = writeProject({
+        "dialex.config.ts": CONFIG,
+        "src/home.content.ts": HOME,
+        "src/dialex.generated.ts": "// stale\n",
+      });
+      const client = await start(dir, { autoGenerate: false });
+      await client.refresh();
+      await client.regenerate();
+
+      expect(fs.readFileSync(path.join(dir, "src/dialex.generated.ts"), "utf-8")).toBe(
+        "// stale\n",
+      );
+    });
+
+    it("watches the disk itself when the client cannot", async () => {
+      const dir = writeProject({
+        "dialex.config.ts": CONFIG,
+        "src/home.content.ts": HOME,
+        "src/dialex.generated.ts": "// stale\n",
+      });
+      const client = await start(dir, {}, false);
+      await client.refresh();
+      await new Promise((resolve) => setTimeout(resolve, 300)); // let the watcher get ready
+
+      fs.writeFileSync(path.join(dir, "src/extra.content.ts"), EXTRA);
+
+      const generated = path.join(dir, "src/dialex.generated.ts");
+      await client.waitFor(
+        () => fs.readFileSync(generated, "utf-8").includes("extra.content"),
+        6000,
+      );
+    });
   });
 });

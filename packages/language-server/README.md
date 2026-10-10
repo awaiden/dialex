@@ -4,8 +4,8 @@ A [Language Server Protocol](https://microsoft.github.io/language-server-protoco
 [Dialex](https://github.com/awaiden/dialex) translations. Editors that speak LSP (Zed, Neovim,
 Helix, Sublime and others) get Dialex's diagnostics and hover without a dedicated plugin.
 
-> **Status: early.** Diagnostics, hover, go to definition, completion and quick fixes work.
-> Automatic `dialex.generated.ts` updates are being added.
+> **Status: early.** Everything below works; it has been tested against an LSP client, and the
+> Zed extension is next.
 
 ## Run it
 
@@ -24,6 +24,11 @@ npx @dialexjs/language-server --stdio
   `useDictionary("…")`, triggered by `"`, `'`, `` ` `` and `.`.
 - **Quick fixes**: copy a missing key into a locale (marked `[TODO]`), add every missing key in a
   file, or create a key that code refers to.
+
+- **Generated files**: when a dictionary or config file is added, changed or removed, in a project
+  that already has a `dialex.generated.ts`, the server regenerates it and `dialex-env.d.ts`. It
+  uses the editor's file events when the client sends them and watches the disk itself otherwise.
+  It never creates a generated file in a project that has none; run `dx generate` once for that.
 
 It reads configs and dictionaries from the syntax tree and **never runs your project's code**.
 

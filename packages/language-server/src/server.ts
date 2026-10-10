@@ -5,7 +5,10 @@ import {
   analyzeProject,
   clearGitignore,
   createAnalysisCache,
+  generateDictionaries,
   readStaticConfig,
+  renderGenerated,
+  startGenerateWatcher,
   type AnalysisIssue,
 } from "@dialexjs/cli/api";
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -52,11 +55,16 @@ export interface Settings {
   enable: boolean;
   /** Fade out keys and dictionaries that no source file seems to use. */
   unusedKeys: boolean;
+  /**
+   * Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file
+   * changes, in projects that already have a generated file.
+   */
+  autoGenerate: boolean;
   /** Path to the Dialex config file, relative to each project root. */
   configPath?: string;
 }
 
-const DEFAULT_SETTINGS: Settings = { enable: true, unusedKeys: false };
+const DEFAULT_SETTINGS: Settings = { enable: true, unusedKeys: false, autoGenerate: true };
 
 /** Files whose creation or removal can change the set of Dialex projects or what is scanned. */
 const WATCHED_GLOBS = [
@@ -74,6 +82,10 @@ interface ProjectState {
 export interface DialexServer {
   /** Re-analyze every project now and publish diagnostics. */
   refresh(): Promise<void>;
+  /** Regenerate the generated files of every project that has them, now. */
+  regenerate(): Promise<void>;
+  /** Stop file watchers and timers. */
+  dispose(): Promise<void>;
 }
 
 function severityOf(issue: AnalysisIssue): DiagnosticSeverity {
@@ -158,6 +170,10 @@ export function createServer(connection: Connection): DialexServer {
   let settings: Settings = { ...DEFAULT_SETTINGS };
   let published = new Set<string>();
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let generateTimer: ReturnType<typeof setTimeout> | undefined;
+  /** True when the client sends file events itself; otherwise the server watches the disk. */
+  let clientWatches = false;
+  const watchers = new Map<string, { close(): Promise<void> }>();
 
   const projectsIn = (folder: string): ProjectRoot[] => {
     let projects = projectCache.get(folder);
@@ -184,6 +200,7 @@ export function createServer(connection: Connection): DialexServer {
       if (value && typeof value === "object") {
         if (typeof value.enable === "boolean") settings.enable = value.enable;
         if (typeof value.unusedKeys === "boolean") settings.unusedKeys = value.unusedKeys;
+        if (typeof value.autoGenerate === "boolean") settings.autoGenerate = value.autoGenerate;
         if (typeof value.configPath === "string" && value.configPath) {
           settings.configPath = value.configPath;
         }
@@ -216,6 +233,80 @@ export function createServer(connection: Connection): DialexServer {
     published = next;
   }
 
+  /** The projects whose generated file exists; the others do not use one. */
+  function generatedProjects(): { root: string; options: { config?: string; static: true } }[] {
+    const found: { root: string; options: { config?: string; static: true } }[] = [];
+    for (const folder of folders) {
+      for (const { root } of projectsIn(folder)) {
+        const options = { config: settings.configPath, static: true as const };
+        try {
+          if (fs.existsSync(renderGenerated(root, options).outputPath)) {
+            found.push({ root, options });
+          }
+        } catch (error) {
+          connection.console.error(`[${root}] generate failed: ${(error as Error).message}`);
+        }
+      }
+    }
+    return found;
+  }
+
+  /**
+   * Keeps `dialex.generated.ts` and `dialex-env.d.ts` current. The config is read from its syntax
+   * tree, so no project code runs.
+   */
+  async function regenerate(): Promise<void> {
+    if (!settings.autoGenerate || !settings.enable) return;
+    for (const { root, options } of generatedProjects()) {
+      try {
+        const { outputPath } = renderGenerated(root, options);
+        const before = fs.readFileSync(outputPath, "utf-8");
+        const { files } = generateDictionaries(root, options);
+        if (fs.readFileSync(outputPath, "utf-8") !== before) {
+          connection.console.info(
+            `[${root}] regenerated ${outputPath.slice(root.length + 1)} (${files.length} dictionaries)`,
+          );
+        }
+      } catch (error) {
+        connection.console.error(`[${root}] generate failed: ${(error as Error).message}`);
+      }
+    }
+  }
+
+  /** Without client file events, watch each project that has a generated file ourselves. */
+  async function syncWatchers(): Promise<void> {
+    const wanted = new Map<string, { config?: string; static: true }>();
+    if (!clientWatches && settings.autoGenerate && settings.enable) {
+      for (const { root, options } of generatedProjects()) wanted.set(root, options);
+    }
+
+    for (const [root, watcher] of watchers) {
+      if (!wanted.has(root)) {
+        watchers.delete(root);
+        await watcher.close();
+      }
+    }
+    for (const [root, options] of wanted) {
+      if (watchers.has(root)) continue;
+      try {
+        watchers.set(
+          root,
+          startGenerateWatcher(
+            root,
+            options,
+            () => {
+              void regenerate().then(() => schedule());
+            },
+            250,
+            (message) => connection.console.info(`[${root}] ${message}`),
+          ),
+        );
+      } catch (error) {
+        connection.console.error(`[${root}] could not watch: ${(error as Error).message}`);
+      }
+    }
+  }
+
   async function refresh(): Promise<void> {
     await loadSettings();
     states.clear();
@@ -246,11 +337,17 @@ export function createServer(connection: Connection): DialexServer {
       }
     }
     publish();
+    await syncWatchers();
   }
 
   function schedule(): void {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => void refresh(), 300);
+  }
+
+  function scheduleGenerate(): void {
+    if (generateTimer) clearTimeout(generateTimer);
+    generateTimer = setTimeout(() => void regenerate(), 250);
   }
 
   connection.onInitialize((params: InitializeParams): InitializeResult => {
@@ -262,6 +359,8 @@ export function createServer(connection: Connection): DialexServer {
       if (root) folders = [root];
     }
     canConfigure = params.capabilities.workspace?.configuration === true;
+    clientWatches =
+      params.capabilities.workspace?.didChangeWatchedFiles?.dynamicRegistration === true;
 
     return {
       capabilities: {
@@ -280,14 +379,18 @@ export function createServer(connection: Connection): DialexServer {
   });
 
   connection.onInitialized(async () => {
-    try {
-      await connection.client.register(DidChangeWatchedFilesNotification.type, {
-        watchers: WATCHED_GLOBS.map((globPattern) => ({ globPattern })),
-      });
-    } catch {
-      // the client does not support dynamic watcher registration; saves still refresh
+    if (clientWatches) {
+      try {
+        await connection.client.register(DidChangeWatchedFilesNotification.type, {
+          watchers: WATCHED_GLOBS.map((globPattern) => ({ globPattern })),
+        });
+      } catch {
+        // the client refused; the server watches the disk itself
+        clientWatches = false;
+      }
     }
     schedule();
+    scheduleGenerate();
   });
 
   connection.onDidChangeConfiguration(() => schedule());
@@ -297,9 +400,15 @@ export function createServer(connection: Connection): DialexServer {
     if (changes.some((change) => change.type !== FileChangeType.Changed)) projectCache.clear();
     if (changes.some((change) => change.uri.endsWith(".gitignore"))) forgetLayout();
     schedule();
+    scheduleGenerate();
   });
 
-  documents.onDidSave(() => schedule());
+  documents.onDidSave(() => {
+    schedule();
+    scheduleGenerate();
+  });
+
+  connection.onShutdown(() => dispose());
 
   /** The project model for a file, unless the features are turned off. */
   const modelFor = (file: string): ProjectModel | undefined =>
@@ -454,5 +563,12 @@ export function createServer(connection: Connection): DialexServer {
 
   documents.listen(connection);
 
-  return { refresh };
+  async function dispose(): Promise<void> {
+    if (timer) clearTimeout(timer);
+    if (generateTimer) clearTimeout(generateTimer);
+    await Promise.all([...watchers.values()].map((watcher) => watcher.close()));
+    watchers.clear();
+  }
+
+  return { refresh, regenerate, dispose };
 }

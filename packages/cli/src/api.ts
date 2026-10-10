@@ -80,6 +80,7 @@ export {
 export {
   generateDictionaries,
   renderGenerated,
+  startGenerateWatcher,
   type GenerateOptions,
   type RenderedGenerate,
 } from "./commands/generate.js";
