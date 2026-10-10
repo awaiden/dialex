@@ -26,7 +26,7 @@ Todos los adaptadores aceptan estas opciones (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | Comprobar el primer segmento de la ruta de la URL |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Extractor personalizado                           |
 
-Además, por adaptador: `config` (la configuración generada; rellena `defaultLocale`, `locales` y `fallbacks` cuando no se indican, y `{ ...dialex }` la aporta), `dictionaries` (mapa o array de resultados de `defineDictionary`; si se omite, usa el registro incluido en el bundle) y `setHeader` (por defecto `true`, establece `Content-Language`).
+Además, por adaptador: `config` (la configuración generada; rellena `defaultLocale`, `locales` y `fallbacks` cuando no se indican, y `{ ...dialex }` la aporta), `dictionaries` (mapa o array de resultados de `defineDictionary`; si se omite, usa los diccionarios registrados con `defineDictionary`) y `setHeader` (por defecto `true`, establece `Content-Language`).
 
 ## Reglas de coincidencia
 

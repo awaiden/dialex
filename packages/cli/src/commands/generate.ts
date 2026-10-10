@@ -3,12 +3,12 @@ import path from "node:path";
 
 import chokidar from "chokidar";
 import { DEFAULT_CONFIG } from "dialexjs";
-import { resolveDialexConfig, renderDts } from "dialexjs/scanner";
 import fg from "fast-glob";
 
 import { listLocales, parseDictionaryText } from "../utils/dictionary-edit.js";
 import { logger } from "../utils/logger.js";
 import { messageArguments } from "../utils/message-arguments.js";
+import { resolveDialexConfig, renderDts } from "../utils/scanner.js";
 import { splitLocales } from "../utils/split-locales.js";
 import { readStaticConfig } from "../utils/static-config.js";
 import { relativeImportExtension } from "../utils/tsconfig.js";

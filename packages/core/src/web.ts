@@ -1,5 +1,4 @@
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
@@ -44,24 +43,11 @@ export function createDialexHandler(
   rawOptions: WebDialexOptions = {},
 ): (request: Request) => Promise<WebDialex> {
   const options = withConfig(rawOptions);
-  const {
-    defaultLocale = "en",
-    locales,
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-  } = options;
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), { defaultLocale, locales });
-  }
-
   return async (request) => {
-    if (scanPromise) await scanPromise;
-
     const url = new URL(request.url);
     const locale = resolveRequestLocale(options, {
       custom: typeof custom === "function" ? custom(request) : undefined,

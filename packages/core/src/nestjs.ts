@@ -13,7 +13,6 @@ import {
 import { from, switchMap, type Observable } from "rxjs";
 
 import { globalDictionaries, type DictionaryDefinition, type Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -79,29 +78,12 @@ function normalizeDictionaries(
 @Injectable()
 export class DialexService {
   private customDictMap?: Record<string, Record<string, any>>;
-  private scanPromise?: Promise<any>;
 
   private options: NestDialexOptions;
 
   constructor(@Inject(DIALEX_OPTIONS) rawOptions: NestDialexOptions = {}) {
     this.options = withConfig(rawOptions);
     this.customDictMap = normalizeDictionaries(this.options.dictionaries);
-    if (!this.customDictMap) {
-      this.scanPromise = autoScanAndLoadDictionaries(process.cwd(), {
-        defaultLocale: this.options.defaultLocale || "en",
-        locales: this.options.locales,
-      });
-    }
-  }
-
-  hasScanPromise(): boolean {
-    return !!this.scanPromise;
-  }
-
-  async waitForScan(): Promise<void> {
-    if (this.scanPromise) {
-      await this.scanPromise;
-    }
   }
 
   getDefaultLocale(): string {
@@ -207,7 +189,6 @@ export class DialexInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const run = async () => {
-      await this.dialexService.waitForScan();
       const http = context.switchToHttp();
       const req = http.getRequest();
       const res = http.getResponse();
@@ -251,11 +232,7 @@ export class DialexMiddleware implements NestMiddleware {
       next();
     };
 
-    if (this.dialexService.hasScanPromise()) {
-      this.dialexService.waitForScan().then(handle).catch(next);
-    } else {
-      handle();
-    }
+    handle();
   }
 }
 

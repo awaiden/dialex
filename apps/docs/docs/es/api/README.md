@@ -77,7 +77,3 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 ## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` y los helpers de edición de diccionarios sobre los que está construida la [extensión de VS Code](../guide/vscode.md). Leen los diccionarios y las configuraciones del árbol sintáctico sin ejecutar código del proyecto.
-
-## `dialexjs/scanner`
-
-Análisis de diccionarios en tiempo de ejecución que usan los adaptadores cuando no se pasa la opción `dictionaries`. En producción, prefiere el registro compilado con `dialex generate`.

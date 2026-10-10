@@ -77,7 +77,3 @@ Herhangi bir `Request` için `createDialexHandler(options)` ve h3 1.x `dialex(op
 ## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` ve [VS Code eklentisinin](../guide/vscode.md) üzerine kurulduğu sözlük düzenleme yardımcıları. Sözlükleri ve yapılandırmaları proje kodunu çalıştırmadan sözdizimi ağacından okurlar.
-
-## `dialexjs/scanner`
-
-Bir `dictionaries` seçeneği verilmediğinde adaptörlerin kullandığı çalışma zamanı sözlük taraması. Üretimde `dialex generate` ile derlenmiş kayıt defterini tercih edin.

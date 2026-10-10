@@ -98,9 +98,6 @@ describe("NestJS integration", () => {
       locales: ["en", "tr"],
       dictionaries: [homeDict],
     });
-    let release!: () => void;
-    service.waitForScan = () => new Promise<void>((resolve) => (release = resolve));
-
     const req: any = { headers: { "accept-language": "tr" } };
     const res: any = { setHeader: (name: string, val: string) => (res[name] = val) };
     const context: any = {
@@ -115,10 +112,7 @@ describe("NestJS integration", () => {
     };
 
     const result = lastValueFrom(new DialexInterceptor(service).intercept(context, next));
-    await Promise.resolve();
-    expect(seenLocale).toBeUndefined();
 
-    release();
     expect(await result).toBe("ok");
     expect(seenLocale).toBe("tr");
     expect(req.getDictionary("home").title).toBe("Hoş Geldiniz");
@@ -127,7 +121,9 @@ describe("NestJS integration", () => {
 
   it("DialexInterceptor surfaces setup failures as observable errors", async () => {
     const service = new DialexService({ dictionaries: [homeDict] });
-    service.waitForScan = () => Promise.reject(new Error("scan failed"));
+    service.resolveLocale = () => {
+      throw new Error("resolve failed");
+    };
     const context: any = {
       switchToHttp: () => ({ getRequest: () => ({}), getResponse: () => ({}) }),
     };
@@ -141,7 +137,7 @@ describe("NestJS integration", () => {
 
     await expect(
       lastValueFrom(new DialexInterceptor(service).intercept(context, next)),
-    ).rejects.toThrow("scan failed");
+    ).rejects.toThrow("resolve failed");
     expect(handled).toBe(false);
   });
 });

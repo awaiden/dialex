@@ -1,7 +1,6 @@
 import { Elysia } from "elysia";
 
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
@@ -25,25 +24,12 @@ export type ElysiaDialexOptions = BaseAdapterOptions;
  */
 export function dialex(rawOptions: ElysiaDialexOptions = {}) {
   const options = withConfig(rawOptions);
-  const {
-    defaultLocale = "en",
-    locales,
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-  } = options;
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), { defaultLocale, locales });
-  }
-
   return new Elysia({ name: "dialex-elysia", seed: options })
     .derive({ as: "global" }, async (context) => {
-      if (scanPromise) await scanPromise;
-
       const { request } = context;
       const url = new URL(request.url);
 

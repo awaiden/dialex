@@ -1,11 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 
-import fg from "fast-glob";
+import { DEFAULT_CONFIG, type DialexConfig } from "dialexjs";
 import { loadConfigSync } from "unconfig";
-
-import { DEFAULT_CONFIG, globalDictionaries, type DialexConfig } from "./index.js";
 
 export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
   let loadedConfig: DialexConfig = {};
@@ -184,34 +181,4 @@ export function generateDts(root: string, files: string[], locales?: string[]) {
     fs.mkdirSync(path.dirname(dts.path), { recursive: true });
     fs.writeFileSync(dts.path, dts.content, "utf-8");
   }
-}
-
-let scanned = false;
-
-/**
- * Auto-scans all dictionary files (**\/*.content.ts) in the project,
- * imports them into memory, registers them, and ensures TypeScript declaration types are generated.
- */
-export async function autoScanAndLoadDictionaries(
-  root: string = process.cwd(),
-  inlineConfig: DialexConfig = {},
-): Promise<Record<string, Record<string, any>>> {
-  const config = resolveDialexConfig(root, inlineConfig);
-  const include = config.include || "**/*.content.ts";
-  const files = fg.sync(include, { cwd: root, absolute: true, ignore: ["**/node_modules/**"] });
-
-  // Dynamically load each dictionary into memory if not already done
-  if (!scanned) {
-    for (const file of files) {
-      try {
-        const fileUrl = pathToFileURL(file).href;
-        await import(fileUrl);
-      } catch {
-        // Continue if dynamic import is handled elsewhere
-      }
-    }
-    scanned = true;
-  }
-
-  return globalDictionaries;
 }

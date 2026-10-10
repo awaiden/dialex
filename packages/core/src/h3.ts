@@ -1,7 +1,6 @@
 import { defineEventHandler, getRequestHeader, getRequestURL, setResponseHeader } from "h3";
 
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
@@ -38,24 +37,11 @@ declare module "h3" {
  */
 export function dialex(rawOptions: H3DialexOptions = {}) {
   const options = withConfig(rawOptions);
-  const {
-    defaultLocale = "en",
-    locales,
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-  } = options;
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), { defaultLocale, locales });
-  }
-
   return defineEventHandler(async (event) => {
-    if (scanPromise) await scanPromise;
-
     const url = getRequestURL(event);
     const locale = resolveRequestLocale(options, {
       custom: typeof custom === "function" ? custom(event) : undefined,

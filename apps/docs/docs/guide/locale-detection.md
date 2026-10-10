@@ -24,7 +24,7 @@ All adapters accept these (`LocaleResolverOptions`):
 | `usePath`       | `boolean`                              | `true`               | Check the first URL path segment |
 | `custom`        | `(req) => string \| null \| undefined` | —                    | Custom extractor                 |
 
-Plus, per adapter: `config` (the generated config; fills `defaultLocale`, `locales` and `fallbacks` when they are not set, and `{ ...dialex }` provides it), `dictionaries` (map or array of `defineDictionary` results; falls back to the bundled registry) and `setHeader` (default `true`, sets `Content-Language`).
+Plus, per adapter: `config` (the generated config; fills `defaultLocale`, `locales` and `fallbacks` when they are not set, and `{ ...dialex }` provides it), `dictionaries` (map or array of `defineDictionary` results; falls back to the dictionaries registered by `defineDictionary`) and `setHeader` (default `true`, sets `Content-Language`).
 
 ## Matching rules
 

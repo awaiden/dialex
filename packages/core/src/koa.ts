@@ -1,7 +1,6 @@
 import type { Middleware, ParameterizedContext } from "koa";
 
 import type { DictionaryDefinition, Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -22,7 +21,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 export interface KoaDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
-   * If omitted, falls back to the auto-scanned dictionary registry.
+   * If omitted, only dictionaries already registered through `defineDictionary` are found.
    */
   dictionaries?:
     | Record<string, Record<string, any>>
@@ -61,19 +60,7 @@ export function dialex(rawOptions: KoaDialexOptions = {}): Middleware {
   const cookieKeyList = Array.isArray(cookieKeys) ? cookieKeys : [cookieKeys];
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), {
-      defaultLocale,
-      locales,
-    });
-  }
-
   return async (ctx: ParameterizedContext, next) => {
-    if (scanPromise) {
-      await scanPromise;
-    }
-
     const candidates: (string | null | undefined)[] = [];
 
     // 1. Custom extractor

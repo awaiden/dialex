@@ -187,10 +187,6 @@
     "packages/core": {
       "name": "dialexjs",
       "version": "0.5.2",
-      "dependencies": {
-        "fast-glob": "^3.3.3",
-        "unconfig": "^7.5.0",
-      },
       "devDependencies": {
         "@angular/common": "^22.2.1",
         "@angular/compiler": "^22.2.1",

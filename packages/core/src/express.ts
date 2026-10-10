@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
 
 import type { DictionaryDefinition, Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -22,7 +21,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 export interface ExpressDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
-   * If omitted, falls back to the bundled virtual dictionary registry.
+   * If omitted, only dictionaries already registered through `defineDictionary` are found.
    */
   dictionaries?:
     | Record<string, Record<string, any>>
@@ -67,19 +66,7 @@ export function dialex(rawOptions: ExpressDialexOptions = {}): RequestHandler {
   const cookieKeyList = Array.isArray(cookieKeys) ? cookieKeys : [cookieKeys];
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), {
-      defaultLocale,
-      locales,
-    });
-  }
-
   return async (req: Request, res: Response, next: NextFunction) => {
-    if (scanPromise) {
-      await scanPromise;
-    }
-
     const candidates: (string | null | undefined)[] = [];
 
     // 1. Custom extractor

@@ -1,7 +1,6 @@
 import type { MiddlewareHandler } from "astro";
 
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
@@ -40,24 +39,11 @@ declare global {
  */
 export function dialex(rawOptions: AstroDialexOptions = {}): MiddlewareHandler {
   const options = withConfig(rawOptions);
-  const {
-    defaultLocale = "en",
-    locales,
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-  } = options;
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), { defaultLocale, locales });
-  }
-
   return async (context, next) => {
-    if (scanPromise) await scanPromise;
-
     const { request, url } = context;
 
     const locale = resolveRequestLocale(options, {

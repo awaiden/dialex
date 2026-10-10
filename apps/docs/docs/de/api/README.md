@@ -77,7 +77,3 @@ Erzeugt ein typisiertes `t("dictionary.key.path", ...args)`. Siehe [Schlüsselpf
 ## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` und die Helfer zum Bearbeiten von Wörterbüchern, auf denen die [VS-Code-Erweiterung](../guide/vscode.md) aufbaut. Sie lesen Wörterbücher und Konfigurationen aus dem Syntaxbaum, ohne Projektcode auszuführen.
-
-## `dialexjs/scanner`
-
-Wörterbuch-Scan zur Laufzeit, den die Adapter verwenden, wenn keine Option `dictionaries` übergeben wird. Bevorzuge in Produktion die mit `dialex generate` kompilierte Registry.

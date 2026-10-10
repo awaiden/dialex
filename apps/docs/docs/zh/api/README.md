@@ -77,7 +77,3 @@
 ## `@dialexjs/cli/api`
 
 `analyzeProject`、`readStaticConfig`、`scanReferences` 以及 [VS Code 扩展](../guide/vscode.md)所基于的词典编辑辅助函数。它们从语法树读取词典和配置，不会运行项目代码。
-
-## `dialexjs/scanner`
-
-适配器在未传入 `dictionaries` 选项时使用的运行时词典扫描。在生产环境中，请优先使用 `dialex generate` 编译出的注册表。

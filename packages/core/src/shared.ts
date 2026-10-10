@@ -15,7 +15,7 @@ export type DictionaryInput =
 export interface BaseAdapterOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
-   * If omitted, falls back to the dictionaries registered by the project scan.
+   * If omitted, only dictionaries already registered through `defineDictionary` are found.
    */
   dictionaries?: DictionaryInput;
   /**

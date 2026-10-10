@@ -26,7 +26,6 @@ export default defineConfig({
       "src/testing/index.ts",
       "src/testing/react.ts",
       "src/testing/vue.ts",
-      "src/scanner.ts",
     ],
     deps: {
       // tsdown <0.23 compatibility: resolve external dependency subpaths.

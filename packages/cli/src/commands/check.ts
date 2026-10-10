@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { resolveDialexConfig } from "dialexjs/scanner";
 import fg from "fast-glob";
 import pc from "picocolors";
 
@@ -16,6 +15,7 @@ import {
   saveDictionaryFile,
 } from "../utils/dictionary-edit.js";
 import { logger } from "../utils/logger.js";
+import { resolveDialexConfig } from "../utils/scanner.js";
 import { renderGenerated } from "./generate.js";
 
 export interface CheckOptions {

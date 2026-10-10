@@ -77,7 +77,3 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 ## `@dialexjs/cli/api`
 
 `analyzeProject`, `readStaticConfig`, `scanReferences` and the dictionary editing helpers the [VS Code extension](../guide/vscode.md) is built on. They read dictionaries and configs from the syntax tree without running project code.
-
-## `dialexjs/scanner`
-
-Runtime dictionary scanning used by adapters when no `dictionaries` option is passed. Prefer the compiled registry from `dialex generate` in production.

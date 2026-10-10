@@ -1,7 +1,6 @@
 import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from "fastify";
 
 import type { DictionaryDefinition, Locales } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -22,7 +21,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 export interface FastifyDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
-   * If omitted, falls back to the auto-scanned dictionary registry.
+   * If omitted, only dictionaries already registered through `defineDictionary` are found.
    */
   dictionaries?:
     | Record<string, Record<string, any>>
@@ -63,14 +62,6 @@ const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify,
   const cookieKeyList = Array.isArray(cookieKeys) ? cookieKeys : [cookieKeys];
   const customDictMap = normalizeDictionaries(options?.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), {
-      defaultLocale,
-      locales,
-    });
-  }
-
   // Decorate FastifyRequest prototype for TypeScript and Fastify internals
   if (!fastify.hasRequestDecorator("locale")) {
     fastify.decorateRequest("locale", defaultLocale as Locales);
@@ -80,10 +71,6 @@ const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify,
   }
 
   fastify.addHook("onRequest", async (req: FastifyRequest, reply: FastifyReply) => {
-    if (scanPromise) {
-      await scanPromise;
-    }
-
     const candidates: (string | null | undefined)[] = [];
 
     // 1. Custom extractor

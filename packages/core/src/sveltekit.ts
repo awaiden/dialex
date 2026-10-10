@@ -1,5 +1,4 @@
 import { createT, type Locales, type Translate } from "./index.js";
-import { autoScanAndLoadDictionaries } from "./lazy-scanner.js";
 import { withConfig } from "./resolver.js";
 import {
   createGetDictionary,
@@ -62,24 +61,11 @@ export const LANG_PLACEHOLDER = "%dialex.lang%";
  */
 export function dialexHandle(rawOptions: SvelteKitDialexOptions = {}): Handle {
   const options = withConfig(rawOptions);
-  const {
-    defaultLocale = "en",
-    locales,
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-  } = options;
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
-  let scanPromise: Promise<any> | undefined;
-  if (!customDictMap) {
-    scanPromise = autoScanAndLoadDictionaries(process.cwd(), { defaultLocale, locales });
-  }
-
   return async ({ event, resolve }) => {
-    if (scanPromise) await scanPromise;
-
     const locale = resolveRequestLocale(options, {
       custom: typeof custom === "function" ? custom(event) : undefined,
       pathname: event.url.pathname,

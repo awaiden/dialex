@@ -1,10 +1,10 @@
 import path from "node:path";
 
 import type { DialexConfig } from "dialexjs";
-import { resolveDialexConfig } from "dialexjs/scanner";
 import fg from "fast-glob";
 
 import { loadDictionaryFile, type DictionaryFile } from "./dictionary-edit.js";
+import { resolveDialexConfig } from "./scanner.js";
 import { readStaticConfig } from "./static-config.js";
 
 export interface ProjectDictionary {

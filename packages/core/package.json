@@ -33,7 +33,6 @@
     "./nuxt": "./dist/nuxt.mjs",
     "./react": "./dist/react.mjs",
     "./routing": "./dist/routing.mjs",
-    "./scanner": "./dist/scanner.mjs",
     "./server": "./dist/server.mjs",
     "./sveltekit": "./dist/sveltekit.mjs",
     "./testing": "./dist/testing/index.mjs",
@@ -52,10 +51,6 @@
     "test": "vp test",
     "check": "vp check",
     "prepublishOnly": "vp run build"
-  },
-  "dependencies": {
-    "fast-glob": "^3.3.3",
-    "unconfig": "^7.5.0"
   },
   "devDependencies": {
     "@angular/common": "^22.2.1",
