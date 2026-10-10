@@ -163,7 +163,7 @@
     },
     "packages/cli": {
       "name": "@dialexjs/cli",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "bin": {
         "dialex": "./dist/index.mjs",
         "dx": "./dist/index.mjs",
@@ -187,7 +187,7 @@
     },
     "packages/core": {
       "name": "dialexjs",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "devDependencies": {
         "@angular/common": "^22.2.1",
         "@angular/compiler": "^22.2.1",
@@ -257,7 +257,7 @@
     },
     "packages/mcp": {
       "name": "@dialexjs/mcp",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "bin": {
         "dialex-mcp": "./dist/index.mjs",
       },
@@ -2600,7 +2600,7 @@
 
     "@bruits/satteri-wasm32-wasi/@emnapi/core/@emnapi/wasi-threads": ["@emnapi/wasi-threads@1.2.2", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA=="],
 
-    "@nestjs/platform-express/express/content-disposition": ["content-disposition@1.0.1", "", {}, "sha512-oIXISMynqSqm241k6kcQ5UwttDILMK4BiurCfGEREw6+X9jkkpEe5T9FZaApyLGGOnFuyMWZpdolTXMtvEJ08Q=="],
+    "@nestjs/platform-express/express/content-disposition": ["content-disposition@1.1.0", "", {}, "sha512-5jRCH9Z/+DRP7rkvY83B+yGIGX96OYdJmzngqnw2SBSxqCFPd0w2km3s5iawpGX8krnwSGmF0FW5Nhr0Hfai3g=="],
 
     "@nestjs/platform-express/express/cookie": ["cookie@0.7.2", "", {}, "sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w=="],
 
