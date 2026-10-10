@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/cli",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "High-performance CLI tool for Dialex internationalization (codegen, scaffolding, CI parity checking)",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
