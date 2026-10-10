@@ -23,6 +23,7 @@ Modern web development demands internationalization that doesn't compromise on r
 **Dialex** solves this with an Ahead-of-Time compiler model:
 
 - ⚡ **Zero Runtime Scanning**: Server and edge runtimes consume pre-compiled static dictionaries with zero disk I/O.
+- 📦 **Zero Dependencies**: `dialexjs` installs nothing else (about 0.5 MB); the scanning and code generation live in the CLI, which is a dev dependency.
 - 🎯 **Total Type Safety**: Full autocomplete for dictionary names, keys, and locale signatures powered by automatic TypeScript interface augmentation.
 - 🛠️ **Universal Architecture**: One unified API across **Next.js**, **React 19**, **Hono**, **Fastify**, **Express**, **Koa**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, **Angular**, **h3 / Nitro**, and any **Fetch API** runtime.
 - 🔢 **Plurals & Formatting**: Typed `plural`, `number`, `date`, `relativeTime`, and `list` helpers built on `Intl`.

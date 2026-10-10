@@ -18,6 +18,7 @@
 ## ✨ Features
 
 - 🏎️ **Zero Runtime Overhead in Production**: Standalone Ahead-of-Time (AOT) compilation eliminates filesystem reading on server runtimes.
+- 📦 **Zero Dependencies**: `dialexjs` installs nothing else (about 0.5 MB); the scanning and code generation live in `@dialexjs/cli`, which is a dev dependency.
 - 🔒 **End-to-End Type Safety**: Full autocomplete for dictionary keys and strict locale typing via TypeScript interface augmentation.
 - 🌐 **Full-Stack Ecosystem**: First-class adapters for **Next.js** (App Router & Pages Router), **Fastify**, **Koa**, **Hono**, **Express**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, and **React / Vite**.
 - 🧩 **No Bundler Plugin**: `dx generate` compiles your dictionaries and config into `dialex.generated.ts`; `dx generate --watch` or the VS Code extension keeps it current, and HMR works through ordinary imports.
