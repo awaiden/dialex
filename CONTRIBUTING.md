@@ -18,3 +18,7 @@ bun run ready   # format check, lint, types, tests, builds, docs checks
 4. Run `bun run ready` before opening the pull request.
 
 Releases are automated, see [RELEASING.md](RELEASING.md).
+
+## AI assistance
+
+This project is developed with AI assistance (Claude Code), and contributions made the same way are welcome. Hold them to the same bar as any other change: you are responsible for what you submit, it must pass `bun run ready`, and it should come with tests. Mention the tool in the commit with a `Co-Authored-By` trailer.

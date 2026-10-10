@@ -419,6 +419,12 @@ bun run ready # Runs vp check, vp test, and vp build across all workspaces
 
 See what changed in each release in the [changelog](https://github.com/awaiden/dialex/blob/main/CHANGELOG.md), or on [GitHub Releases](https://github.com/awaiden/dialex/releases).
 
+## 🤖 How it is built
+
+Dialex is developed with AI assistance. The maintainer sets the direction and makes the design decisions, and the code is written together with [Claude Code](https://claude.com/claude-code). Commits that were written this way carry a `Co-Authored-By` trailer.
+
+Nothing is released on trust: every change runs through formatting, linting, type checks, the unit and type tests, the example builds, a packed-tarball smoke test and the documentation checks (see [CONTRIBUTING.md](./CONTRIBUTING.md)). Bug reports about generated code are welcome and handled like any other.
+
 ## 📄 License
 
 MIT License © 2026 [awaiden](https://github.com/awaiden)

@@ -11,6 +11,8 @@
 
 > **Status: pre-1.0.** The API can still change between minor versions. Breaking changes are listed in the [changelog](https://github.com/awaiden/dialex/blob/main/packages/core/CHANGELOG.md) and ship in a minor release; patch releases stay compatible. Pin the minor version (`~0.5.0`) if you need a stable surface.
 
+> **Built with AI assistance.** Dialex is directed by its maintainer and implemented with [Claude Code](https://claude.com/claude-code). Commits carry a `Co-Authored-By` trailer, and every change has to pass the tests, type checks and CI before it is released.
+
 ---
 
 ## ✨ Features

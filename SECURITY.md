@@ -18,3 +18,6 @@ The CLI reads dictionaries and configs from the syntax tree and does not execute
 except for the opt-in `runtime` analysis and `loadProject`. Reports about code execution outside
 those opt-in paths, path traversal in the CLI or MCP server, or leaking provider API keys are in
 scope.
+
+Parts of this codebase are written with AI assistance. That does not change how reports are handled:
+they are triaged and fixed like any other vulnerability.
