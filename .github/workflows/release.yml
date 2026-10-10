@@ -1,25 +1,31 @@
 name: Release
 
+# Every push to main either opens or updates the "Version Packages" pull request (while changesets
+# are pending) or, once that PR is merged and nothing is left to version, publishes what is not on
+# npm yet. See RELEASING.md.
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+permissions:
+  contents: write # push the version branch, the tag and the GitHub Release
+  pull-requests: write
+  id-token: write # npm provenance
+
 jobs:
-  publish:
-    name: Publish to npm
+  release:
+    name: Version PR or publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # create the GitHub Release
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -35,55 +41,82 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Run Quality Verification
+      # With pending changesets this opens or updates the "Version Packages" PR (bumps the
+      # versions, writes the changelogs, rebuilds bun.lock) and sets hasChangesets to true.
+      - name: Version PR
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: bun run changeset:version
+          commit: "Version Packages"
+          title: "Version Packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify
+        if: steps.changesets.outputs.hasChangesets == 'false'
         run: bun run ready
 
-      # `bun pm pack` rewrites `workspace:*` dependencies to real versions;
-      # plain `npm publish` would ship them as-is and break installs.
-      # The tag, the four package versions, bun.lock (which `bun pm pack` reads to write real
-      # dependency versions) and the changelog must all agree before anything is published.
-      - name: Check release versions
-        run: node scripts/release.mjs --check ${{ github.ref_type == 'tag' && github.ref_name || '' }}
-
-      # A release without notes is a mistake: fail before anything is published.
-      - name: Check changelog entry
-        if: github.ref_type == 'tag'
-        run: node scripts/release-notes.mjs "$GITHUB_REF_NAME" > "$RUNNER_TEMP/release-notes.md"
-
-      - name: Publish Core Package (dialexjs)
-        run: |
-          cd packages/core
-          bun pm pack --destination "$RUNNER_TEMP"
-          # Publish from outside the repo: npm rejects the root devEngines (bun).
-          cd "$RUNNER_TEMP"
-          npm publish "$RUNNER_TEMP"/dialexjs-*.tgz --access public --provenance
+      # `bun pm pack` writes the versions of workspace dependencies from bun.lock, which keeps the
+      # old ones after a bump. Rebuilding the lock first, and checking the tarball, is what stops
+      # a package from depending on a stale release (0.2.0 did).
+      - name: Publish what is not on npm yet
+        id: publish
+        if: steps.changesets.outputs.hasChangesets == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish CLI Package (@dialexjs/cli)
         run: |
-          cd packages/cli
-          bun pm pack --destination "$RUNNER_TEMP"
-          cd "$RUNNER_TEMP"
-          npm publish "$RUNNER_TEMP"/dialexjs-cli-*.tgz --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          set -euo pipefail
+          rm -f bun.lock && bun install
+          published=""
+          for dir in core cli mcp; do
+            name=$(node -p "require('./packages/$dir/package.json').name")
+            version=$(node -p "require('./packages/$dir/package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already on npm"
+              continue
+            fi
+            (cd "packages/$dir" && bun pm pack --destination "$RUNNER_TEMP")
+            tarball=$(ls -t "$RUNNER_TEMP"/*.tgz | head -1)
+            tar -xOzf "$tarball" package/package.json | node -e '
+              let text = "";
+              process.stdin.on("data", (d) => (text += d)).on("end", () => {
+                const want = process.argv[1];
+                const deps = JSON.parse(text).dependencies ?? {};
+                for (const [n, v] of Object.entries(deps)) {
+                  if ((n === "dialexjs" || n.startsWith("@dialexjs/")) && v !== want) {
+                    console.error(`${n} is ${v} in the tarball, expected ${want}`);
+                    process.exit(1);
+                  }
+                }
+              });
+            ' "$version"
+            (cd "$RUNNER_TEMP" && npm publish "$tarball" --access public --provenance)
+            published="$published $name@$version"
+          done
+          echo "published=$published" >> "$GITHUB_OUTPUT"
 
-      - name: Publish MCP Package (@dialexjs/mcp)
-        run: |
-          cd packages/mcp
-          bun pm pack --destination "$RUNNER_TEMP"
-          cd "$RUNNER_TEMP"
-          npm publish "$RUNNER_TEMP"/dialexjs-mcp-*.tgz --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create GitHub Release
-        if: github.ref_type == 'tag'
-        run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --notes-file "$RUNNER_TEMP/release-notes.md" \
-            --verify-tag
+      - name: Tag and GitHub Release
+        if: steps.publish.outputs.published != ''
         env:
           GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./packages/core/package.json').version")
+          tag="v$version"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            git tag -a "$tag" -m "$tag"
+            git push origin "$tag"
+          fi
+          # The editor extension ships as a release asset (it is not published to a marketplace).
+          bun run --cwd packages/vscode build
+          bun run --cwd packages/vscode package
+          vsix=$(ls packages/vscode/*.vsix | head -1)
+          notes=$(awk -v v="$version" '$0 == "## " v { found = 1; next } /^## / { found = 0 } found' packages/core/CHANGELOG.md)
+          if [ -n "$notes" ]; then
+            gh release create "$tag" --title "$tag" --notes "$notes" --verify-tag "$vsix"
+          else
+            gh release create "$tag" --title "$tag" --generate-notes --verify-tag "$vsix"
+          fi

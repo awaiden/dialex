@@ -1,4 +1,5 @@
 ---
+"dialexjs": minor
 "@dialexjs/cli": minor
 "@dialexjs/mcp": minor
 ---

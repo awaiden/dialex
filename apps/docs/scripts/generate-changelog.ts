@@ -39,12 +39,25 @@ const PAGES: Record<string, { title: string; intro: string }> = {
   },
 };
 
-const changelog = fs.readFileSync(path.join(ROOT, "CHANGELOG.md"), "utf-8");
-// Drop the top-level title and the maintainer-only HTML comment.
-const notes = changelog
-  .replace(/^# .*\n+/, "")
-  .replace(/<!--[\s\S]*?-->\n*/g, "")
-  .trim();
+/** A changelog without its title and the maintainer-only HTML comment. */
+const clean = (text: string) =>
+  text
+    .replace(/^# .*\n+/, "")
+    .replace(/<!--[\s\S]*?-->\n*/g, "")
+    .trim();
+
+// Releases up to 0.4.0 were written by hand in the root CHANGELOG.md. Later ones are written by
+// Changesets into packages/core/CHANGELOG.md (all packages share one version, and every changeset
+// names dialexjs), and come first.
+const history = clean(fs.readFileSync(path.join(ROOT, "CHANGELOG.md"), "utf-8"));
+const firstRelease = history.search(/^## \[/m);
+const intro = firstRelease === -1 ? history : history.slice(0, firstRelease).trim();
+const older = firstRelease === -1 ? "" : history.slice(firstRelease).trim();
+
+const corePath = path.join(ROOT, "packages/core/CHANGELOG.md");
+const current = fs.existsSync(corePath) ? clean(fs.readFileSync(corePath, "utf-8")) : "";
+
+const notes = [intro, current, older].filter(Boolean).join("\n\n");
 
 for (const [lang, { title, intro }] of Object.entries(PAGES)) {
   const dir = path.join(DOCS, lang, "guide");

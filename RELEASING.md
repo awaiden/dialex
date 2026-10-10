@@ -1,8 +1,8 @@
 # Releasing
 
-All four packages (`dialexjs`, `@dialexjs/cli`, `@dialexjs/mcp`, the VS Code extension) share one
-version. Releases use [Changesets](https://github.com/changesets/changesets) to decide the bump, plus
-a small script (`scripts/release.mjs`) that keeps one root `CHANGELOG.md`.
+`dialexjs`, `@dialexjs/cli` and `@dialexjs/mcp` share one version and are released with
+[Changesets](https://github.com/changesets/changesets). There is no release script: a GitHub Action
+does the versioning and publishing. (The VS Code extension is private and versioned by hand.)
 
 ## Describing a change
 
@@ -12,40 +12,31 @@ Add a changeset with the change itself:
 bun run changeset
 ```
 
-Pick `dialexjs` (the packages are versioned together), a bump (`patch` or `minor`; while the version
-is 0.x, breaking changes are `minor`) and write the note. It is Markdown: several paragraphs, a table
-or a migration guide all work. The file lands in `.changeset/`.
+Always include `dialexjs` (that package's `CHANGELOG.md` is the release notes), plus the other
+packages the change touches. Pick a bump (`patch` or `minor`; while the version is 0.x, breaking
+changes are `minor`) and write the note in Markdown: several paragraphs, a table or a migration guide
+all work. The file lands in `.changeset/`.
 
 ## Releasing
 
-```bash
-bun run release --dry-run   # which changesets, the planned version and the changelog entry
-bun run release
-```
+1. Merge changes (with their changesets) into `main`. The Release workflow opens or updates a
+   **Version Packages** pull request: it bumps the versions, writes each package's `CHANGELOG.md`
+   and rebuilds `bun.lock`.
+2. Review that PR and merge it when you want to release.
+3. The workflow runs again on `main`, finds nothing left to version, runs the full gate, and
+   publishes every package that is not on npm yet (with provenance). Then it creates the `vX.Y.Z` tag
+   and the GitHub Release, using the section of `packages/core/CHANGELOG.md` as its notes.
+   The packaged VS Code extension (`dialex-vscode-X.Y.Z.vsix`) is attached to that release as an asset.
 
-`bun run release`:
+The docs changelog page is built from `packages/core/CHANGELOG.md` (newer releases) and the root
+`CHANGELOG.md` (history up to 0.4.0).
 
-1. checks that the working tree is clean, the package versions agree, `bun.lock` is current and there
-   is at least one changeset;
-2. runs `changeset version`, which picks the largest bump, bumps the packages and deletes the
-   changeset files (the VS Code package is private, so the script keeps it on the same version);
-3. adds the collected notes to `CHANGELOG.md` as `## [x.y.z] - date`, grouped into Major, Minor and
-   Patch changes, with the compare link;
-4. rebuilds `bun.lock`, regenerates the docs changelog pages and `llms*.txt`, and checks that it all
-   agrees;
-5. commits as `Release vX.Y.Z` and creates the tag. Use `--no-commit` to stop before that, and
-   `--gate` to run `bun run ready` first.
+## Things to know
 
-Then push the branch, wait for CI, and push the tag:
-
-```bash
-git push origin main
-git push origin v0.5.0
-```
-
-The Release workflow runs `node scripts/release.mjs --check <tag>`, publishes to npm with provenance
-and creates the GitHub Release from the changelog section. Publishing does not use `changeset
-publish`: the packages are packed with `bun pm pack` so `workspace:*` becomes a real version.
-
-`bun.lock` is rebuilt, not just checked: `bun pm pack` writes dependency versions from it, and a stale
-lock once published `@dialexjs/mcp` depending on an old `@dialexjs/cli`.
+- Packing: `bun pm pack` writes the versions of workspace dependencies from `bun.lock`, which keeps
+  the old ones after a bump. The workflow deletes and rebuilds `bun.lock` before packing and checks the
+  tarball, so a package cannot depend on a stale release (0.2.0 did). `bun run changeset:version`
+  does the same when it versions.
+- The repository setting **Settings, Actions, General, "Allow GitHub Actions to create and approve
+  pull requests"** must be on, or the Version Packages PR cannot be opened.
+- `NPM_TOKEN` must be an Actions secret.
