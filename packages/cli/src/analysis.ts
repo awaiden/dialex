@@ -13,7 +13,7 @@ import {
   type DictionaryFile,
   type SourceRange,
 } from "./utils/dictionary-edit.js";
-import { scanFiles } from "./utils/files.js";
+import { createGitignoreFilter, scanFiles } from "./utils/files.js";
 import { checkIcu, type LocaleStrings } from "./utils/icu-check.js";
 import { isStale, readLock } from "./utils/lockfile.js";
 
@@ -68,6 +68,33 @@ export interface AnalysisConfig {
   exclude?: string[];
 }
 
+/**
+ * Remembers parsed dictionaries and scanned source files between `analyzeProject` calls, keyed by
+ * modification time and size, so a long-lived caller (the editor extension) only re-reads what
+ * changed. Create one with {@link createAnalysisCache}; one-shot callers do not need it.
+ */
+export interface AnalysisCache {
+  dictionaries: Map<string, { stamp: string; loaded: Loaded }>;
+  sources: Map<string, { stamp: string; scan: SourceScan }>;
+  /** The `.gitignore` filter, reused until {@link clearGitignore} is called. */
+  gitignore: Map<string, (absolutePath: string) => boolean>;
+}
+
+export function createAnalysisCache(): AnalysisCache {
+  return { dictionaries: new Map(), sources: new Map(), gitignore: new Map() };
+}
+
+/** Forget the cached `.gitignore` rules, for example after a `.gitignore` file changed. */
+export function clearGitignore(cache: AnalysisCache): void {
+  cache.gitignore.clear();
+}
+
+interface SourceScan {
+  /** Distinct word-like tokens, for the unused-key heuristic. */
+  tokens: string[];
+  refs: { ref: Reference; range: SourceRange }[];
+}
+
 export interface AnalysisOptions {
   root: string;
   config: AnalysisConfig;
@@ -81,6 +108,8 @@ export interface AnalysisOptions {
   unused?: boolean;
   /** Report translations whose source text changed since `dialex.lock.json` recorded them. @default true */
   lock?: boolean;
+  /** Reuse work between calls. Ignored when `runtime` is set, because that evaluates code. */
+  cache?: AnalysisCache;
 }
 
 export interface LeafInfo {
@@ -268,6 +297,41 @@ async function loadDictionaryData(file: string, runtime: boolean): Promise<Loade
       };
 }
 
+function stampOf(file: string): string | undefined {
+  try {
+    const stat = fs.statSync(file);
+    return `${stat.mtimeMs}:${stat.size}`;
+  } catch {
+    return undefined;
+  }
+}
+
+async function cachedDictionary(
+  file: string,
+  runtime: boolean,
+  cache: AnalysisCache | undefined,
+): Promise<Loaded> {
+  const stamp = cache ? stampOf(file) : undefined;
+  const hit = stamp ? cache!.dictionaries.get(file) : undefined;
+  if (hit && hit.stamp === stamp) return hit.loaded;
+
+  const loaded = await loadDictionaryData(file, runtime);
+  if (cache && stamp) cache.dictionaries.set(file, { stamp, loaded });
+  return loaded;
+}
+
+function scanSource(text: string): SourceScan {
+  const starts = lineStarts(text);
+  const rangeOf = (start: number, end: number): SourceRange => ({
+    start: positionAt(starts, start),
+    end: positionAt(starts, end),
+  });
+  return {
+    tokens: [...new Set(text.match(/[\w$-]+/g) ?? [])],
+    refs: scanReferences(text).map((ref) => ({ ref, range: rangeOf(ref.start, ref.end) })),
+  };
+}
+
 export async function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult> {
   const { root, config } = options;
   const include = config.include || "**/*.content.ts";
@@ -275,7 +339,18 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
   const defaultLocale = config.defaultLocale || "en";
   const extraIgnore = options.ignore ?? [];
 
-  const files = scanFiles(root, include, { exclude: config.exclude, ignore: extraIgnore });
+  const cache = options.runtime ? undefined : options.cache;
+  let gitignore = cache?.gitignore.get(root);
+  if (cache && !gitignore) {
+    gitignore = createGitignoreFilter(root);
+    cache.gitignore.set(root, gitignore);
+  }
+
+  const files = scanFiles(root, include, {
+    exclude: config.exclude,
+    ignore: extraIgnore,
+    gitignoreFilter: gitignore,
+  });
 
   const issues: AnalysisIssue[] = [];
   const dictionaries: AnalyzedDictionary[] = [];
@@ -283,7 +358,7 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
 
   // 1. Dictionaries: parity, placeholders, ICU
   for (const file of files) {
-    const loaded = await loadDictionaryData(file, options.runtime === true);
+    const loaded = await cachedDictionary(file, options.runtime === true, cache);
     if (!loaded.ok) {
       for (const message of loaded.message.split("\n")) {
         issues.push({ file, level: loaded.level, code: loaded.code, message });
@@ -417,27 +492,28 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
           kind: "source",
           exclude: config.exclude,
           ignore: extraIgnore,
+          gitignoreFilter: gitignore,
         }).filter((f) => !dictionaryFiles.has(f));
 
   if (sourceFiles.length > 0) {
     const tokens = new Set<string>();
 
     for (const file of sourceFiles) {
-      let text: string;
-      try {
-        text = fs.readFileSync(file, "utf-8");
-      } catch {
-        continue;
+      const stamp = cache ? stampOf(file) : undefined;
+      let scan = stamp ? cache!.sources.get(file) : undefined;
+      if (!scan || scan.stamp !== stamp) {
+        let text: string;
+        try {
+          text = fs.readFileSync(file, "utf-8");
+        } catch {
+          continue;
+        }
+        scan = { stamp: stamp ?? "", scan: scanSource(text) };
+        if (cache && stamp) cache.sources.set(file, scan);
       }
-      for (const token of text.match(/[\w$-]+/g) ?? []) tokens.add(token);
+      for (const token of scan.scan.tokens) tokens.add(token);
 
-      const starts = lineStarts(text);
-      const rangeOf = (start: number, end: number): SourceRange => ({
-        start: positionAt(starts, start),
-        end: positionAt(starts, end),
-      });
-
-      for (const ref of scanReferences(text)) {
+      for (const { ref, range } of scan.scan.refs) {
         if (ref.kind === "dictionary") {
           if (!known.has(ref.value)) {
             issues.push({
@@ -445,7 +521,7 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
               level: "error",
               code: "unknown-dictionary",
               message: `Unknown dictionary "${ref.value}"`,
-              range: rangeOf(ref.start, ref.end),
+              range,
               dictionary: ref.value,
             });
           }
@@ -463,7 +539,7 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
             level: "error",
             code: "unknown-path",
             message: `Unknown translation path "${ref.value}"`,
-            range: rangeOf(ref.start, ref.end),
+            range,
             dictionary: name,
             path: rest,
           });
@@ -503,6 +579,13 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
           });
         }
       }
+    }
+  }
+
+  if (cache) {
+    const live = new Set([...files, ...sourceFiles]);
+    for (const map of [cache.dictionaries, cache.sources] as Map<string, unknown>[]) {
+      for (const key of map.keys()) if (key.startsWith(root) && !live.has(key)) map.delete(key);
     }
   }
 

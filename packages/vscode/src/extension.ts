@@ -2,6 +2,8 @@ import fs from "node:fs";
 
 import {
   analyzeProject,
+  clearGitignore,
+  createAnalysisCache,
   generateDictionaries,
   readStaticConfig,
   renderGenerated,
@@ -13,7 +15,7 @@ import { completionContextAt, completionEntries, type CompletionEntry } from "./
 import { definitionFor } from "./definition.js";
 import { buildHover } from "./hover.js";
 import { buildModel, modelForFile, type ProjectModel } from "./model.js";
-import { discoverProjects } from "./projects.js";
+import { discoverProjects, type ProjectRoot } from "./projects.js";
 import { addMissingKeys, addUnknownKey, type MissingKey } from "./quickfix.js";
 import { findReferenceAt } from "./references.js";
 
@@ -73,6 +75,24 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
   let timer: ReturnType<typeof setTimeout> | undefined;
   let generateTimer: ReturnType<typeof setTimeout> | undefined;
 
+  // Parsed dictionaries and scanned sources are kept between refreshes and only redone for files
+  // whose modification time changed, so saving one file does not re-read the whole workspace.
+  const cache = createAnalysisCache();
+  // Finding the projects walks the workspace, so it is redone only when files come or go.
+  const projectCache = new Map<string, ProjectRoot[]>();
+  const projectsIn = (folder: string): ProjectRoot[] => {
+    let projects = projectCache.get(folder);
+    if (!projects) {
+      projects = discoverProjects(folder);
+      projectCache.set(folder, projects);
+    }
+    return projects;
+  };
+  const forgetLayout = () => {
+    projectCache.clear();
+    clearGitignore(cache);
+  };
+
   const settings = () => vscode.workspace.getConfiguration("dialex");
   const modelFor = (doc: vscode.TextDocument) =>
     settings().get<boolean>("enable", true)
@@ -121,12 +141,19 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     const unused = settings().get<boolean>("unusedKeys", false);
 
     for (const folder of vscode.workspace.workspaceFolders ?? []) {
-      for (const { root, ignore } of discoverProjects(folder.uri.fsPath)) {
+      for (const { root, ignore } of projectsIn(folder.uri.fsPath)) {
         try {
           const { config, notes } = readStaticConfig(root, configPath);
           for (const note of notes) output.appendLine(`[${root}] ${note}`);
 
-          const result = await analyzeProject({ root, config, runtime: false, ignore, unused });
+          const result = await analyzeProject({
+            root,
+            config,
+            runtime: false,
+            ignore,
+            unused,
+            cache,
+          });
           states.set(root, {
             model: buildModel(root, config.defaultLocale, result),
             issues: result.issues,
@@ -155,7 +182,7 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
 
     const configPath = settings().get<string>("configPath") || undefined;
     for (const folder of vscode.workspace.workspaceFolders ?? []) {
-      for (const { root } of discoverProjects(folder.uri.fsPath)) {
+      for (const { root } of projectsIn(folder.uri.fsPath)) {
         try {
           const options = { config: configPath, static: true };
           const { outputPath } = renderGenerated(root, options);
@@ -338,7 +365,10 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     }),
 
     vscode.workspace.onDidSaveTextDocument(schedule),
-    vscode.workspace.onDidChangeWorkspaceFolders(schedule),
+    vscode.workspace.onDidChangeWorkspaceFolders(() => {
+      forgetLayout();
+      schedule();
+    }),
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("dialex")) schedule();
     }),
@@ -351,8 +381,25 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
       watcher.onDidChange(handler);
       watcher.onDidDelete(handler);
     }
+    // A file appearing or disappearing can change which projects exist; an edit cannot.
+    watcher.onDidCreate(() => projectCache.clear());
+    watcher.onDidDelete(() => projectCache.clear());
     context.subscriptions.push(watcher);
   }
+
+  const gitignoreWatcher = vscode.workspace.createFileSystemWatcher("**/.gitignore");
+  for (const subscribe of [
+    gitignoreWatcher.onDidCreate,
+    gitignoreWatcher.onDidChange,
+    gitignoreWatcher.onDidDelete,
+  ]) {
+    subscribe.call(gitignoreWatcher, () => {
+      forgetLayout();
+      schedule();
+      scheduleGenerate();
+    });
+  }
+  context.subscriptions.push(gitignoreWatcher);
 
   context.subscriptions.push({
     dispose() {

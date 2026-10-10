@@ -213,12 +213,18 @@ export const workspace = {
       key in state.settings ? state.settings[key] : fallback,
   }),
   createFileSystemWatcher: (pattern: string) => {
-    const fire = { create: () => {}, change: () => {}, delete: () => {} };
+    // Like the real watcher, every listener is kept and all of them run when an event fires.
+    const handlers = { create: [] as Handler[], change: [] as Handler[], delete: [] as Handler[] };
+    const fire = {
+      create: () => handlers.create.forEach((h) => h()),
+      change: () => handlers.change.forEach((h) => h()),
+      delete: () => handlers.delete.forEach((h) => h()),
+    };
     state.watchers.push({ pattern, fire });
     return {
-      onDidCreate: (h: Handler) => void (fire.create = h),
-      onDidChange: (h: Handler) => void (fire.change = h),
-      onDidDelete: (h: Handler) => void (fire.delete = h),
+      onDidCreate: (h: Handler) => void handlers.create.push(h),
+      onDidChange: (h: Handler) => void handlers.change.push(h),
+      onDidDelete: (h: Handler) => void handlers.delete.push(h),
       dispose() {},
     };
   },

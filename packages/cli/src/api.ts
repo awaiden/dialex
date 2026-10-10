@@ -6,6 +6,9 @@
  */
 export {
   analyzeProject,
+  createAnalysisCache,
+  clearGitignore,
+  type AnalysisCache,
   scanReferences,
   relativeFile,
   DEFAULT_SOURCE_GLOB,

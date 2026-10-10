@@ -101,6 +101,8 @@ export interface ScanOptions {
   ignore?: string[];
   /** Skip what `.gitignore` files ignore. @default true */
   gitignore?: boolean;
+  /** A filter from {@link createGitignoreFilter} to reuse instead of reading `.gitignore` again. */
+  gitignoreFilter?: (absolutePath: string) => boolean;
 }
 
 /** Finds files under `root`, skipping build output, configured excludes and Git-ignored paths. */
@@ -116,6 +118,6 @@ export function scanFiles(
     ignore: [...builtin, ...(options.exclude ?? []), ...(options.ignore ?? [])],
   });
   if (options.gitignore === false) return files;
-  const ignored = createGitignoreFilter(root);
+  const ignored = options.gitignoreFilter ?? createGitignoreFilter(root);
   return files.filter((file) => !ignored(file));
 }

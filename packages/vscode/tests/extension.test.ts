@@ -71,6 +71,7 @@ describe("activation", () => {
       "**/*.content.ts",
       "**/dialex.config.*",
       "**/i18n.config.*",
+      "**/.gitignore",
     ]);
   });
 
