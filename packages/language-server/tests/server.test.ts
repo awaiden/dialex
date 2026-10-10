@@ -205,4 +205,97 @@ describe("language server", () => {
     const file = path.join(dir, "src/home.content.ts");
     await client.waitFor(() => (client.latest(file)?.length ?? 0) > 0);
   });
+
+  it("jumps from a key to where the dictionary defines it", async () => {
+    const dir = writeProject({
+      "dialex.config.ts": CONFIG,
+      "src/home.content.ts": HOME,
+      "src/app.ts": `const title = t("home.title");\n`,
+    });
+    const client = await start(dir);
+    await client.refresh();
+    const appFile = path.join(dir, "src/app.ts");
+    await open(client, appFile);
+
+    const location = (await client.connection.sendRequest("textDocument/definition", {
+      textDocument: { uri: pathToFileURL(appFile).href },
+      position: { line: 0, character: 22 },
+    })) as { uri: string; range: { start: { line: number } } } | null;
+
+    expect(location?.uri).toBe(pathToFileURL(path.join(dir, "src/home.content.ts")).href);
+    expect(location?.range.start.line).toBeGreaterThan(0);
+  });
+
+  it("completes dictionary names and key paths inside t()", async () => {
+    const dir = writeProject({
+      "dialex.config.ts": CONFIG,
+      "src/home.content.ts": HOME,
+      "src/app.ts": `t("ho");\nt("home.");\nt("home.nav.");\n`,
+    });
+    const client = await start(dir);
+    await client.refresh();
+    const appFile = path.join(dir, "src/app.ts");
+    await open(client, appFile);
+    const complete = async (line: number, character: number) =>
+      (await client.connection.sendRequest("textDocument/completion", {
+        textDocument: { uri: pathToFileURL(appFile).href },
+        position: { line, character },
+      })) as {
+        label: string;
+        textEdit: { newText: string; range: { start: { character: number } } };
+      }[];
+
+    const names = await complete(0, 5);
+    expect(names.map((item) => item.textEdit.newText)).toContain("home.");
+    expect(names[0].textEdit.range.start.character).toBe(3);
+
+    const keys = await complete(1, 8);
+    expect(keys.map((item) => item.label)).toEqual(expect.arrayContaining(["title", "nav"]));
+
+    const nested = await complete(2, 12);
+    expect(nested.map((item) => item.label)).toEqual(expect.arrayContaining(["about", "contact"]));
+
+    expect(await complete(0, 0)).toEqual([]);
+  });
+
+  it("offers quick fixes: copy a missing key, add every missing key, create an unknown key", async () => {
+    const dir = writeProject({
+      "dialex.config.ts": CONFIG,
+      "src/home.content.ts": HOME,
+      "src/app.ts": `t("home.brandNew");\n`,
+    });
+    const client = await start(dir);
+    await client.refresh();
+    const dictionaryFile = path.join(dir, "src/home.content.ts");
+    const appFile = path.join(dir, "src/app.ts");
+    await client.waitFor(
+      () => client.latest(dictionaryFile) !== undefined && client.latest(appFile) !== undefined,
+    );
+    await open(client, dictionaryFile);
+    await open(client, appFile);
+
+    type Action = {
+      title: string;
+      edit: { changes: Record<string, { newText: string }[]> };
+    };
+    const actionsFor = async (file: string) =>
+      (await client.connection.sendRequest("textDocument/codeAction", {
+        textDocument: { uri: pathToFileURL(file).href },
+        range: { start: { line: 0, character: 0 }, end: { line: 0, character: 0 } },
+        context: { diagnostics: client.latest(file) },
+      })) as Action[];
+
+    const onDictionary = await actionsFor(dictionaryFile);
+    const missing = onDictionary.find((action) => action.title.includes("nav.contact"));
+    expect(missing).toBeDefined();
+    const [edit] = missing!.edit.changes[pathToFileURL(dictionaryFile).href];
+    expect(edit.newText).toContain("[TODO] Contact");
+
+    const onCode = await actionsFor(appFile);
+    const created = onCode.find((action) => action.title.includes("brandNew"));
+    expect(created).toBeDefined();
+    const target = Object.keys(created!.edit.changes)[0];
+    expect(target).toBe(pathToFileURL(dictionaryFile).href);
+    expect(created!.edit.changes[target][0].newText).toContain("brandNew");
+  });
 });

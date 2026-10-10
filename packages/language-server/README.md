@@ -4,8 +4,8 @@ A [Language Server Protocol](https://microsoft.github.io/language-server-protoco
 [Dialex](https://github.com/awaiden/dialex) translations. Editors that speak LSP (Zed, Neovim,
 Helix, Sublime and others) get Dialex's diagnostics and hover without a dedicated plugin.
 
-> **Status: early.** Diagnostics and hover work. Go to definition, completion, quick fixes and
-> automatic `dialex.generated.ts` updates are being added.
+> **Status: early.** Diagnostics, hover, go to definition, completion and quick fixes work.
+> Automatic `dialex.generated.ts` updates are being added.
 
 ## Run it
 
@@ -19,6 +19,11 @@ npx @dialexjs/language-server --stdio
   `t("x.y")` calls that point at nothing, invalid ICU messages, `[TODO]` placeholders, and
   translations whose source text changed since they were translated.
 - **Hover**: hover a `t("home.title")` key or a dictionary name to see the text in every locale.
+- **Go to definition**: jump from a key to where the dictionary writes it.
+- **Completion**: dictionary names and key paths inside `t("…")`, `getDictionary("…")` and
+  `useDictionary("…")`, triggered by `"`, `'`, `` ` `` and `.`.
+- **Quick fixes**: copy a missing key into a locale (marked `[TODO]`), add every missing key in a
+  file, or create a key that code refers to.
 
 It reads configs and dictionaries from the syntax tree and **never runs your project's code**.
 
