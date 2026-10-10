@@ -243,7 +243,7 @@
     },
     "packages/cli": {
       "name": "@dialexjs/cli",
-      "version": "0.7.2",
+      "version": "0.8.0",
       "bin": {
         "dialex": "./dist/index.mjs",
         "dx": "./dist/index.mjs",
@@ -267,7 +267,7 @@
     },
     "packages/core": {
       "name": "dialexjs",
-      "version": "0.7.2",
+      "version": "0.8.0",
       "devDependencies": {
         "@angular/common": "^22.2.1",
         "@angular/compiler": "^22.2.1",
@@ -343,7 +343,7 @@
     },
     "packages/language-server": {
       "name": "@dialexjs/language-server",
-      "version": "0.7.2",
+      "version": "0.8.0",
       "bin": {
         "dialex-language-server": "./dist/index.mjs",
       },
@@ -361,7 +361,7 @@
     },
     "packages/mcp": {
       "name": "@dialexjs/mcp",
-      "version": "0.7.2",
+      "version": "0.8.0",
       "bin": {
         "dialex-mcp": "./dist/index.mjs",
       },

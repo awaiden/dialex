@@ -1,5 +1,12 @@
 # @dialexjs/language-server
 
+## 0.8.0
+
+### Patch Changes
+
+- Updated dependencies [5c72368]
+  - @dialexjs/cli@0.8.0
+
 ## 0.7.2
 
 ### Patch Changes
