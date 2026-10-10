@@ -50,3 +50,29 @@ The docs changelog page is built from `packages/core/CHANGELOG.md` (newer releas
 ## Updating your own VS Code
 
 After a release, `bun run vscode:install` downloads the latest `.vsix` from the GitHub Release and installs it into the local VS Code (`code --install-extension --force`). Reload the window afterwards.
+
+## Publishing the Zed extension
+
+The Zed extension (`packages/zed`) has its own version in `extension.toml` and is published through
+a pull request to [`zed-industries/extensions`](https://github.com/zed-industries/extensions),
+which pins a commit of this repository. It is not part of the Changesets release.
+
+First submission, from a fork of that repository:
+
+```bash
+git submodule add https://github.com/awaiden/dialex.git extensions/dialex
+```
+
+and add this to its `extensions.toml`, then run `pnpm sort-extensions` and open the pull request:
+
+```toml
+[dialex]
+submodule = "extensions/dialex"
+path = "packages/zed"
+version = "0.1.0"
+```
+
+For an update, bump `version` in `packages/zed/extension.toml` and `Cargo.toml`, merge it, then
+open a pull request that moves the submodule to the new commit and sets the same `version`.
+The server itself (`@dialexjs/language-server`) updates through npm; the extension installs the
+latest version on its own.
