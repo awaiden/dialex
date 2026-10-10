@@ -1,6 +1,6 @@
 {
   "name": "dialexjs",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Type-safe, zero-boilerplate internationalization (i18n) framework for React, Next.js, Hono, Express, Fastify, Koa, NestJS, and Vite.",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {

@@ -1,5 +1,12 @@
 # @dialexjs/cli
 
+## 0.7.2
+
+### Patch Changes
+
+- Updated dependencies [0800399]
+  - dialexjs@0.7.2
+
 ## 0.7.1
 
 ### Patch Changes
