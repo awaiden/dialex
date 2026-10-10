@@ -3,6 +3,8 @@ import { describe, expect, it } from "vite-plus/test";
 import {
   alternateLanguages,
   alternateLinks,
+  isLocale,
+  localeFromPath,
   localizePath,
   sitemapEntries,
   stripLocale,
@@ -93,5 +95,24 @@ describe("alternates and sitemap", () => {
         languages: { en: "https://example.com/en/about", tr: "https://example.com/tr/about" },
       },
     });
+  });
+});
+
+describe("localeFromPath", () => {
+  const opts = { locales, defaultLocale: "en" };
+
+  it("reads the locale prefix and falls back to the default", () => {
+    expect(localeFromPath("/tr/about", opts)).toBe("tr");
+    expect(localeFromPath("/PT-br", opts)).toBe("pt-BR");
+    expect(localeFromPath("/about", opts)).toBe("en");
+    expect(localeFromPath("/english", { ...opts, defaultLocale: "tr" })).toBe("tr");
+  });
+});
+
+describe("isLocale", () => {
+  it("matches supported locales exactly", () => {
+    expect(isLocale("tr", locales)).toBe(true);
+    expect(isLocale("fr", locales)).toBe(false);
+    expect(isLocale("TR", locales)).toBe(false);
   });
 });

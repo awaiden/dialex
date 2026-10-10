@@ -34,6 +34,16 @@ localizePath("/about", "tr", asNeeded); // "/tr/about"
 
 Removes a leading locale segment and tells you which one it was. Only exact, case-insensitive matches count, so `/english/about` is left alone.
 
+## `localeFromPath(path, options)` and `isLocale(value, locales)`
+
+`localeFromPath` returns the locale a path is under, or `defaultLocale` when it has no prefix. `isLocale` checks a string (for example a route param) against your supported locales.
+
+```ts
+localeFromPath("/tr/about", options); // "tr"
+localeFromPath("/about", options); // "en"
+isLocale("tr", options.locales); // true
+```
+
 ## hreflang and sitemaps
 
 ```ts

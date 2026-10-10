@@ -42,6 +42,26 @@ export function stripLocale(path: string, locales: string[]): { path: string; lo
 }
 
 /**
+ * Returns the locale a path is under, or `defaultLocale` when it has no locale prefix.
+ *
+ * ```ts
+ * localeFromPath("/tr/about", { locales: ["en", "tr"], defaultLocale: "en" }); // "tr"
+ * localeFromPath("/about", { locales: ["en", "tr"], defaultLocale: "en" }); // "en"
+ * ```
+ */
+export function localeFromPath(
+  path: string,
+  options: RoutingOptions & { defaultLocale: string },
+): string {
+  return stripLocale(path, options.locales).locale ?? options.defaultLocale;
+}
+
+/** Whether `value` is exactly one of `locales`. */
+export function isLocale(value: string, locales: string[]): boolean {
+  return locales.includes(value);
+}
+
+/**
  * Prefixes a path with a locale, replacing any locale prefix it already has.
  * External URLs, `mailto:` links and bare `#fragments` are returned unchanged.
  *
