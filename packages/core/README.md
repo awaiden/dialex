@@ -153,8 +153,10 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 | `dialexjs`                                                                                          | `defineDictionary`, `defineConfig`, `plural`/`number`/`date`/`relativeTime`/`list`, `createT`  |
 | `dialexjs/react`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/angular`                               | Providers, `useDictionary`, `useT`, Nuxt module                                                |
 | `dialexjs/svelte`, `dialexjs/solid`                                                                 | Svelte stores and Solid accessors: `provideDialex` / `DialexProvider`, `useDictionary`, `useT` |
+| `dialexjs/preact`, `dialexjs/qwik`, `dialexjs/lit`, `dialexjs/react-native`                         | Preact, Qwik, Lit and React Native / Expo providers, controllers and hooks                     |
 | `dialexjs/next/middleware`, `dialexjs/next/link`, `dialexjs/server`                                 | Next.js middleware and link, server helpers                                                    |
 | `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `nestjs`, `sveltekit`, `astro`, `h3`, `web` | Server and runtime adapters                                                                    |
+| `dialexjs/hapi`, `dialexjs/adonis`, `dialexjs/trpc`                                                 | Hapi plugin, AdonisJS middleware, tRPC context                                                 |
 | `dialexjs/routing`                                                                                  | `localizePath`, `stripLocale`, hreflang and sitemap helpers                                    |
 | `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                                | Test helpers                                                                                   |
 

@@ -18,20 +18,26 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.mjs",
+    "./adonis": "./dist/adonis.mjs",
     "./angular": "./dist/angular.mjs",
     "./astro": "./dist/astro.mjs",
     "./elysia": "./dist/elysia.mjs",
     "./express": "./dist/express.mjs",
     "./fastify": "./dist/fastify.mjs",
     "./h3": "./dist/h3.mjs",
+    "./hapi": "./dist/hapi.mjs",
     "./hono": "./dist/hono.mjs",
     "./icu": "./dist/icu/index.mjs",
     "./koa": "./dist/koa.mjs",
+    "./lit": "./dist/lit.mjs",
     "./nestjs": "./dist/nestjs.mjs",
     "./next/link": "./dist/next/link.mjs",
     "./next/middleware": "./dist/next/middleware.mjs",
     "./nuxt": "./dist/nuxt.mjs",
+    "./preact": "./dist/preact.mjs",
+    "./qwik": "./dist/qwik.mjs",
     "./react": "./dist/react.mjs",
+    "./react-native": "./dist/react-native.mjs",
     "./routing": "./dist/routing.mjs",
     "./server": "./dist/server.mjs",
     "./solid": "./dist/solid.mjs",
@@ -40,6 +46,7 @@
     "./testing": "./dist/testing/index.mjs",
     "./testing/react": "./dist/testing/react.mjs",
     "./testing/vue": "./dist/testing/vue.mjs",
+    "./trpc": "./dist/trpc.mjs",
     "./vue": "./dist/vue.mjs",
     "./web": "./dist/web.mjs",
     "./package.json": "./package.json"
@@ -55,10 +62,13 @@
     "prepublishOnly": "vp run build"
   },
   "devDependencies": {
+    "@adonisjs/http-server": "^7.8.1",
     "@angular/common": "^22.2.1",
     "@angular/compiler": "^22.2.1",
     "@angular/core": "^22.2.1",
     "@angular/platform-browser": "^22.2.1",
+    "@builder.io/qwik": "^1.20.2",
+    "@hapi/hapi": "^21.4.10",
     "@nestjs/common": "^12.1.2",
     "@nestjs/core": "^12.1.2",
     "@nuxt/kit": "^4.6.0",
@@ -76,7 +86,9 @@
     "hono": "^4.13.13",
     "jsdom": "^30.1.2",
     "koa": "^3.2.1",
+    "lit": "^3.3.3",
     "next": "^16.4.0",
+    "preact": "^10.29.8",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "reflect-metadata": "^0.2.2",
@@ -90,7 +102,10 @@
     "zone.js": "^0.16.3"
   },
   "peerDependencies": {
+    "@adonisjs/http-server": ">=7.0.0",
     "@angular/core": ">=17.0.0",
+    "@builder.io/qwik": ">=1.5.0 <2",
+    "@hapi/hapi": ">=21.0.0",
     "@nestjs/common": ">=10.0.0",
     "@nestjs/core": ">=10.0.0",
     "@nuxt/kit": ">=3.0.0",
@@ -101,15 +116,26 @@
     "h3": ">=1.8.0 <2",
     "hono": ">=3.0.0",
     "koa": ">=2.0.0",
+    "lit": "^3.0.0",
     "next": ">=13.0.0",
-    "react": "^19.3.0",
+    "preact": ">=10.0.0",
+    "react": ">=19.0.0",
     "rxjs": ">=7.0.0",
     "solid-js": "^1.8.0",
     "svelte": "^4.0.0 || ^5.0.0",
     "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
+    "@adonisjs/http-server": {
+      "optional": true
+    },
     "@angular/core": {
+      "optional": true
+    },
+    "@builder.io/qwik": {
+      "optional": true
+    },
+    "@hapi/hapi": {
       "optional": true
     },
     "@nestjs/common": {
@@ -142,7 +168,13 @@
     "koa": {
       "optional": true
     },
+    "lit": {
+      "optional": true
+    },
     "next": {
+      "optional": true
+    },
+    "preact": {
       "optional": true
     },
     "rxjs": {

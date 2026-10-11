@@ -49,6 +49,8 @@ export interface DialexProviderProps extends DialexSource {
    * @default "locale"
    */
   storageKey?: string;
+  /** Called after `setLocale` changes the locale. */
+  onLocaleChange?: (locale: string) => void;
 }
 
 export function DialexProvider({
@@ -60,6 +62,7 @@ export function DialexProvider({
   initialLocale,
   persist = "cookie",
   storageKey = "locale",
+  onLocaleChange,
 }: DialexProviderProps) {
   // One store per generated `dialex` object, so `preloadDictionaries(dialex, ...)` shares it.
   const store = getDictionaryStore({ dictionaries, config, loaders });
@@ -87,8 +90,9 @@ export function DialexProvider({
       if (store.lazy) startTransition(() => setLocaleState(next));
       else setLocaleState(next);
       writePersistedLocale(persist, storageKey, next);
+      onLocaleChange?.(next);
     },
-    [persist, storageKey, store],
+    [persist, storageKey, store, onLocaleChange],
   );
 
   const value = useMemo(() => ({ locale, setLocale, store }), [locale, setLocale, store]);

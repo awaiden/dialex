@@ -1,6 +1,17 @@
+import { fileURLToPath } from "node:url";
+
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+  test: {
+    // Qwik's server build is bundled by Vite here so the alias below reaches its import.
+    server: { deps: { inline: ["@builder.io/qwik"] } },
+    alias: {
+      "@qwik-client-manifest": fileURLToPath(
+        new URL("./tests/stubs/qwik-client-manifest.ts", import.meta.url),
+      ),
+    },
+  },
   pack: {
     entry: [
       "src/index.ts",
@@ -15,6 +26,13 @@ export default defineConfig({
       "src/sveltekit.ts",
       "src/svelte.ts",
       "src/solid.ts",
+      "src/preact.ts",
+      "src/qwik.ts",
+      "src/lit.ts",
+      "src/react-native.ts",
+      "src/hapi.ts",
+      "src/adonis.ts",
+      "src/trpc.ts",
       "src/astro.ts",
       "src/vue.ts",
       "src/nuxt.ts",
