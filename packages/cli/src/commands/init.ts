@@ -213,8 +213,13 @@ export async function runInit(options: InitOptions = {}) {
       : path.join(root, "dialex.config.ts");
   const configFileName = path.basename(configPath);
 
-  // React Router keeps its source in app/, so the generated file goes there
-  const generatedOutput = framework === "react-router" ? "app/dialex.generated.ts" : undefined;
+  // These keep their source outside src/, so the generated file goes where their imports expect it
+  const generatedOutput =
+    framework === "react-router"
+      ? "app/dialex.generated.ts"
+      : framework === "adonis"
+        ? "start/dialex.generated.ts"
+        : undefined;
 
   try {
     if (fs.existsSync(configPath)) {
@@ -275,7 +280,8 @@ export default defineConfig({
 
   // 3. Create starter dictionary in src/ (or root)
   const targetDir =
-    framework === "react-router" && fs.existsSync(path.join(root, "app"))
+    (framework === "react-router" || framework === "adonis") &&
+    fs.existsSync(path.join(root, "app"))
       ? path.join(root, "app")
       : fs.existsSync(path.join(root, "src"))
         ? path.join(root, "src")
@@ -305,7 +311,9 @@ ${dictRecords}
   }
 
   // 4. Run standalone dictionary generation immediately
-  generateDictionaries(root);
+  // The config was just written as literals; reading it statically does not need `dialexjs`
+  // installed yet, which it is not on a fresh project.
+  generateDictionaries(root, { static: true });
   logger.success("Generated types and standalone dictionary registry!");
 
   // 5. Update package.json: required packages and the generate script
@@ -738,7 +746,7 @@ server.route({
       logger.log(`
 // app/middleware/dialex_middleware.ts
 import { createDialexMiddleware } from "dialexjs/adonis";
-import { dialex } from "../dialex.generated.js";
+import { dialex } from "#start/dialex.generated";
 
 export default createDialexMiddleware({ ...dialex });
 

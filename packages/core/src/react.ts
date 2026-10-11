@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   startTransition,
   use,
   useState,
@@ -83,6 +84,11 @@ export function DialexProvider({
     syncDocumentLang(locale);
   }, [locale]);
 
+  // Kept in a ref, so an inline `onLocaleChange` does not rebuild `setLocale` and the context value
+  // (and with them every consumer) on each render.
+  const onLocaleChangeRef = useRef(onLocaleChange);
+  onLocaleChangeRef.current = onLocaleChange;
+
   const setLocale = useCallback(
     (next: string) => {
       // With lazy dictionaries the new locale may still be downloading. A transition keeps the
@@ -90,9 +96,9 @@ export function DialexProvider({
       if (store.lazy) startTransition(() => setLocaleState(next));
       else setLocaleState(next);
       writePersistedLocale(persist, storageKey, next);
-      onLocaleChange?.(next);
+      onLocaleChangeRef.current?.(next);
     },
-    [persist, storageKey, store, onLocaleChange],
+    [persist, storageKey, store],
   );
 
   const value = useMemo(() => ({ locale, setLocale, store }), [locale, setLocale, store]);

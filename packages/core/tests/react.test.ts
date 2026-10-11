@@ -102,4 +102,24 @@ describe("DialexProvider", () => {
     expect(localStorage.length).toBe(0);
     expect(text()).toBe("tr|Hoş Geldiniz|Hoş Geldiniz");
   });
+
+  it("keeps setLocale stable when onLocaleChange is a new function on every render", async () => {
+    const seen: Array<(locale: string) => void> = [];
+    function Spy() {
+      seen.push(useDialex().setLocale);
+      return null;
+    }
+    const render = () =>
+      root.render(
+        createElement(
+          DialexProvider as any,
+          { ...dialex, onLocaleChange: () => {} },
+          createElement(Spy),
+        ),
+      );
+    await act(async () => render());
+    await act(async () => render());
+
+    expect(new Set(seen).size).toBe(1);
+  });
 });

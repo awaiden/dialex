@@ -1,7 +1,7 @@
-import { createElement, Fragment, useEffect, type ReactNode } from "react";
+import { createElement, useEffect, useState, type ReactNode } from "react";
 
 import type { DialexSource } from "./index.js";
-import { DialexProvider as ReactDialexProvider, useDialex } from "./react.js";
+import { DialexProvider as ReactDialexProvider } from "./react.js";
 import { resolveLocaleFromCandidates } from "./resolver.js";
 
 export {
@@ -33,7 +33,7 @@ export interface DialexProviderProps extends DialexSource {
   initialLocale?: string;
   /**
    * Where the user's choice is remembered. Without it the choice lasts until the app restarts.
-   * The stored locale is applied as soon as it has been read.
+   * Children render once it has been read, so the first render is already in the right language.
    */
   storage?: LocaleStorage;
   /**
@@ -43,36 +43,6 @@ export interface DialexProviderProps extends DialexSource {
   storageKey?: string;
   /** Called after the locale changes. */
   onLocaleChange?: (locale: string) => void;
-}
-
-/** Applies the remembered locale once, after the storage has been read. */
-function RestoreLocale({
-  storage,
-  storageKey,
-  locales,
-}: {
-  storage: LocaleStorage;
-  storageKey: string;
-  locales?: string[];
-}) {
-  const { setLocale } = useDialex();
-  useEffect(() => {
-    let active = true;
-    void (async () => {
-      try {
-        const stored = await storage.getItem(storageKey);
-        const supported = !locales?.length || locales.includes(stored ?? "");
-        if (active && stored && supported) setLocale(stored);
-      } catch {
-        // An unreadable store behaves like an empty one.
-      }
-    })();
-    return () => {
-      active = false;
-    };
-    // Only on mount: later changes go through setLocale.
-  }, []);
-  return null;
 }
 
 /**
@@ -111,9 +81,38 @@ export function DialexProvider({
 }: DialexProviderProps) {
   const locales = source.config?.locales;
   const defaultLocale = source.defaultLocale ?? source.config?.defaultLocale ?? "en";
+
+  // With a storage, the remembered locale is read before anything renders, so the first render is
+  // already in the right language and restoring it is not reported as a change.
+  const [stored, setStored] = useState<string | null | undefined>(
+    storage && !initialLocale ? undefined : null,
+  );
+  useEffect(() => {
+    if (stored !== undefined || !storage) return;
+    let active = true;
+    void (async () => {
+      let value: string | null | undefined;
+      try {
+        value = await storage.getItem(storageKey);
+      } catch {
+        // An unreadable store behaves like an empty one.
+      }
+      if (active) setStored(value ?? null);
+    })();
+    return () => {
+      active = false;
+    };
+    // Only on mount: later changes go through setLocale.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (stored === undefined) return null;
+
+  const supportedStored = stored && (!locales?.length || locales.includes(stored)) ? stored : null;
   const candidates = Array.isArray(deviceLocales) ? deviceLocales : [deviceLocales];
   const start =
     initialLocale ||
+    supportedStored ||
     (deviceLocales ? resolveLocaleFromCandidates(candidates, locales, defaultLocale) : undefined);
 
   return createElement(ReactDialexProvider, {
@@ -121,14 +120,7 @@ export function DialexProvider({
     // Without a document there is nothing for the web persistence modes to do.
     persist: false,
     initialLocale: start,
-    children: createElement(
-      Fragment,
-      null,
-      storage && !initialLocale
-        ? createElement(RestoreLocale, { storage, storageKey, locales })
-        : null,
-      children,
-    ),
+    children,
     onLocaleChange(next: string) {
       if (storage) {
         void Promise.resolve(storage.setItem(storageKey, next)).catch(() => {

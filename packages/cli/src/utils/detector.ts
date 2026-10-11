@@ -164,13 +164,6 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (solid-js)",
         };
       }
-      if ("preact" in allDeps) {
-        return {
-          framework: "preact",
-          confidence: "high",
-          matchedRule: "package.json dependencies (preact)",
-        };
-      }
       if ("svelte" in allDeps) {
         return {
           framework: "svelte",
@@ -185,7 +178,14 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (vue)",
         };
       }
-      if ("lit" in allDeps) {
+      if ("preact" in allDeps) {
+        return {
+          framework: "preact",
+          confidence: "high",
+          matchedRule: "package.json dependencies (preact)",
+        };
+      }
+      if ("lit" in allDeps && !("react" in allDeps)) {
         return {
           framework: "lit",
           confidence: "high",

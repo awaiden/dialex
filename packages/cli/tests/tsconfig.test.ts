@@ -97,6 +97,22 @@ describe("relativeImportExtension", () => {
     expect(relativeImportExtension(nested)).toBe(".js");
   });
 
+  it("merges every config of an extends array, later entries winning", () => {
+    const dir = project({
+      "node_modules/@adonisjs/tsconfig/tsconfig.app.json": `{ "compilerOptions": { "module": "NodeNext" } }`,
+      "tsconfig.local.json": `{ "compilerOptions": { "strict": true } }`,
+      "tsconfig.json": `{ "extends": ["@adonisjs/tsconfig/tsconfig.app.json", "./tsconfig.local.json"] }`,
+    });
+    expect(relativeImportExtension(dir)).toBe(".js");
+
+    const overridden = project({
+      "tsconfig.a.json": `{ "compilerOptions": { "moduleResolution": "nodenext" } }`,
+      "tsconfig.b.json": `{ "compilerOptions": { "moduleResolution": "bundler" } }`,
+      "tsconfig.json": `{ "extends": ["./tsconfig.a.json", "./tsconfig.b.json"] }`,
+    });
+    expect(relativeImportExtension(overridden)).toBe("");
+  });
+
   it("ignores a package extends it cannot find", () => {
     const dir = project({ "tsconfig.json": `{ "extends": "@missing/tsconfig/base.json" }` });
     expect(relativeImportExtension(dir)).toBe("");

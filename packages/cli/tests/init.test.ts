@@ -121,6 +121,24 @@ describe("CLI init command", () => {
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
+  it("puts the generated file and the starter dictionary where AdonisJS expects them", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-adonis-"));
+    fs.mkdirSync(path.join(dir, "app"), { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "package.json"),
+      JSON.stringify({ name: "x", dependencies: { "@adonisjs/core": "^6.0.0" } }),
+    );
+
+    await runInit({ cwd: dir, yes: true, defaultLocale: "en", locales: "en,tr" });
+
+    expect(fs.readFileSync(path.join(dir, "dialex.config.ts"), "utf-8")).toContain(
+      'output: "start/dialex.generated.ts"',
+    );
+    expect(fs.existsSync(path.join(dir, "app", "home.content.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(dir, "start", "dialex.generated.ts"))).toBe(true);
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
   it("creates dialex.config.ts with --ai too", async () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-config-ai-"));
     fs.writeFileSync(path.join(dir, "package.json"), JSON.stringify({ name: "x" }));

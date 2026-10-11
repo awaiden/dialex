@@ -95,10 +95,13 @@ export function createDialex(options: CreateDialexOptions = {}): Dialex {
   const ensureLoaded = (name: string) => {
     if (!store.lazy || store.isLoaded(name, locale)) return;
     const requested = locale;
-    void store.load(name, requested).then(() => {
-      // A newer locale may have been chosen while the module downloaded.
-      if (requested === locale) notify();
-    });
+    store
+      .load(name, requested)
+      .then(() => {
+        // A newer locale may have been chosen while the module downloaded.
+        if (requested === locale) notify();
+      })
+      .catch((error) => console.error(`[dialex] Could not load dictionary "${name}".`, error));
   };
 
   const read = (name: string) => {

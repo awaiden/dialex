@@ -125,4 +125,17 @@ describe("dialexjs/preact", () => {
     });
     await vi.waitFor(() => expect(container.textContent).toBe("en|Welcome|Welcome"));
   });
+
+  it("keeps setLocale stable when onLocaleChange is a new function on every render", async () => {
+    const seen: Array<(locale: string) => void> = [];
+    function Spy() {
+      seen.push(useDialex().setLocale);
+      return null;
+    }
+    for (let i = 0; i < 2; i++) {
+      await mount({ onLocaleChange: () => {} }, h(Spy, null));
+    }
+    expect(seen.length).toBeGreaterThan(1);
+    expect(new Set(seen).size).toBe(1);
+  });
 });

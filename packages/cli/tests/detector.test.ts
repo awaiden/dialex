@@ -67,6 +67,20 @@ describe("Framework detector", () => {
     expect(detectFramework(tempDir).framework).toBe("preact");
   });
 
+  it("does not take a React app or a Vue/Svelte app for Lit or Preact", () => {
+    const write = (dependencies: Record<string, string>) =>
+      fs.writeFileSync(path.join(tempDir, "package.json"), JSON.stringify({ dependencies }));
+
+    write({ react: "^19.0.0", lit: "^3.0.0", vite: "^8.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("react");
+
+    write({ vue: "^3.5.0", preact: "^10.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("vue");
+
+    write({ svelte: "^5.0.0", preact: "^10.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("svelte");
+  });
+
   it("detects NestJS from @nestjs/core", () => {
     const pkg = { dependencies: { "@nestjs/core": "^11.0.0" } };
     fs.writeFileSync(path.join(tempDir, "package.json"), JSON.stringify(pkg), "utf-8");

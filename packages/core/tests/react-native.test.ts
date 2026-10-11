@@ -123,4 +123,48 @@ describe("dialexjs/react-native", () => {
     expect(storage.getItem).not.toHaveBeenCalled();
     expect(text()).toBe("en|Welcome|Welcome");
   });
+
+  it("does not report or write back a restored locale", async () => {
+    const storage = memoryStorage({ locale: "tr" });
+    const onLocaleChange = vi.fn();
+    await mount({ storage, onLocaleChange });
+
+    expect(text()).toBe("tr|Hoş Geldiniz|Hoş Geldiniz");
+    expect(onLocaleChange).not.toHaveBeenCalled();
+    expect(storage.setItem).not.toHaveBeenCalled();
+  });
+
+  it("renders nothing until the storage has been read", async () => {
+    let release!: (value: string | null) => void;
+    const storage = {
+      getItem: vi.fn(() => new Promise<string | null>((resolve) => (release = resolve))),
+      setItem: vi.fn(async () => {}),
+    };
+    await mount({ storage });
+    expect(text()).toBe("");
+
+    await act(async () => release("tr"));
+    expect(text()).toBe("tr|Hoş Geldiniz|Hoş Geldiniz");
+  });
+
+  it("keeps setLocale stable when onLocaleChange is a new function on every render", async () => {
+    const seen: Array<(locale: string) => void> = [];
+    function Spy() {
+      seen.push(useDialex().setLocale);
+      return null;
+    }
+    const render = () =>
+      root.render(
+        createElement(
+          DialexProvider as any,
+          { ...dialex, onLocaleChange: () => {} },
+          createElement(Spy),
+        ),
+      );
+    await act(async () => render());
+    await act(async () => render());
+
+    expect(seen.length).toBeGreaterThan(1);
+    expect(new Set(seen).size).toBe(1);
+  });
 });

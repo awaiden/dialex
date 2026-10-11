@@ -50,8 +50,6 @@ export const dialexPlugin: Plugin<HapiDialexOptions> = {
     } = options;
     const customDictMap = normalizeDictionaries(options.dictionaries);
 
-    const localeOf = new WeakMap<Request, string>();
-
     // Declare the properties; `onRequest` fills them in for each request.
     server.decorate("request", "locale", defaultLocale);
     server.decorate("request", "getDictionary", () => ({}));
@@ -67,7 +65,6 @@ export const dialexPlugin: Plugin<HapiDialexOptions> = {
         cookieHeader: request.headers.cookie as string | undefined,
         acceptLanguage: request.headers[headerKey.toLowerCase()] as string | undefined,
       });
-      localeOf.set(request, locale);
       request.locale = locale;
       request.getDictionary = createGetDictionary({
         customDictMap,
@@ -81,7 +78,7 @@ export const dialexPlugin: Plugin<HapiDialexOptions> = {
 
     if (setHeader) {
       server.ext("onPreResponse", (request, h) => {
-        const locale = localeOf.get(request);
+        const locale = request.locale;
         const response = request.response;
         if (!locale) return h.continue;
         if ("isBoom" in response && response.isBoom) {

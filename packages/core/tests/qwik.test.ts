@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { componentQrl, inlinedQrl, jsx, Slot } from "@builder.io/qwik";
 import { renderToString } from "@builder.io/qwik/server";
-import { beforeEach, describe, expect, it } from "vite-plus/test";
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
 import { createDialexQwik } from "../src/qwik.js";
 
@@ -74,7 +74,7 @@ describe("dialexjs/qwik", () => {
 
   it("setLocale updates the state, the cookie and <html lang>", () => {
     const dx = createDialexQwik({ ...source });
-    const state = { locale: "en" };
+    const state = { locale: "en", loaded: 0 };
 
     dx.setLocale(state, "tr");
 
@@ -86,13 +86,43 @@ describe("dialexjs/qwik", () => {
   it("setLocale persists to localStorage with the given key", () => {
     localStorage.clear();
     const dx = createDialexQwik({ ...source, persist: "localStorage", storageKey: "lang" });
-    dx.setLocale({ locale: "en" }, "tr");
+    dx.setLocale({ locale: "en", loaded: 0 }, "tr");
     expect(localStorage.getItem("lang")).toBe("tr");
   });
 
   it("setLocale does not persist when persist is false", () => {
     const dx = createDialexQwik({ ...source, persist: false });
-    dx.setLocale({ locale: "en" }, "tr");
+    dx.setLocale({ locale: "en", loaded: 0 }, "tr");
     expect(document.cookie).not.toContain("locale=tr");
+  });
+
+  it("loads lazy dictionaries on first read and counts the finished load", async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const dx = createDialexQwik({
+      config: { ...source.config, lazy: true },
+      loaders: {
+        home: async () => {
+          await gate;
+          return { dictionary: home };
+        },
+      },
+    });
+    const state = { locale: "en", loaded: 0 };
+    const context = { useContext: () => state };
+    // The hooks only need the provider state, so a stand-in context is enough here.
+    const qwik = await import("@builder.io/qwik");
+    const spy = vi.spyOn(qwik, "useContext").mockImplementation(context.useContext as any);
+    try {
+      const dict = dx.useDictionary("home") as unknown as () => { title?: string };
+      expect(dict().title).toBeUndefined();
+      expect(state.loaded).toBe(0);
+
+      release();
+      await vi.waitFor(() => expect(state.loaded).toBeGreaterThan(0));
+      expect(dx.useDictionary("home")()).toEqual(home.en);
+    } finally {
+      spy.mockRestore();
+    }
   });
 });

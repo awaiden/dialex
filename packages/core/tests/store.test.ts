@@ -46,6 +46,27 @@ describe("createDictionaryStore", () => {
   });
 });
 
+describe("failed loads", () => {
+  it("are not cached, so the next load retries", async () => {
+    let attempts = 0;
+    const store = createDictionaryStore({
+      config: { defaultLocale: "en", locales: ["en"], lazy: true },
+      loaders: {
+        home: async () => {
+          attempts++;
+          if (attempts === 1) throw new Error("network");
+          return { dictionary: { en: { title: "Welcome" } } };
+        },
+      },
+    });
+
+    await expect(store.load("home")).rejects.toThrow("network");
+    await expect(store.load("home")).resolves.toEqual({ en: { title: "Welcome" } });
+    expect(attempts).toBe(2);
+    expect(store.isLoaded("home")).toBe(true);
+  });
+});
+
 describe("getDictionaryStore and preloadDictionaries", () => {
   it("returns one store per generated source, so preloading is shared with providers", async () => {
     const loaders = { home: async () => ({ default: { name: "home", dictionary: home } }) };

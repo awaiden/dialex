@@ -11,4 +11,8 @@ const loader = document.createElement("script");
 loader.textContent = qwikloader;
 document.head.append(loader);
 
-void render(document.getElementById("app") as HTMLElement, <Root />);
+// The promise is used on purpose: a bare `void render(...)` is dropped by the production build,
+// because @builder.io/qwik is marked side-effect free.
+render(document.getElementById("app") as HTMLElement, <Root />).catch((error) => {
+  console.error("[dialex] Could not render the app.", error);
+});

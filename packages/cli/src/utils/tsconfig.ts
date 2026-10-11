@@ -62,14 +62,15 @@ function read(file: string, depth = 0): Resolved {
   }
   const dir = path.dirname(file);
 
-  const extendsFrom: unknown = Array.isArray(json.extends) ? json.extends.at(-1) : json.extends;
-  const parent =
-    typeof extendsFrom === "string" && depth < 5
-      ? extendsFrom.startsWith(".")
-        ? configFile(path.resolve(dir, extendsFrom))
-        : packageConfig(dir, extendsFrom)
-      : undefined;
-  if (parent) Object.assign(result, read(parent, depth + 1));
+  // `extends` may list several configs; later ones override earlier ones, and this file overrides all.
+  const parents: unknown[] = Array.isArray(json.extends) ? json.extends : [json.extends];
+  for (const extendsFrom of parents) {
+    if (typeof extendsFrom !== "string" || depth >= 5) continue;
+    const parent = extendsFrom.startsWith(".")
+      ? configFile(path.resolve(dir, extendsFrom))
+      : packageConfig(dir, extendsFrom);
+    if (parent) Object.assign(result, read(parent, depth + 1));
+  }
 
   const options = json.compilerOptions ?? {};
   const module = typeof options.module === "string" ? options.module.toLowerCase() : undefined;

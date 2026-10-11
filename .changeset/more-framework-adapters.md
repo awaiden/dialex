@@ -15,7 +15,9 @@ Seven new framework entry points and CLI support for them.
 - `DialexProvider` of `dialexjs/react` accepts `onLocaleChange(locale)`.
 - The `react` peer dependency is `>=19.0.0` (was `^19.3.0`), so Expo SDK apps pinned to React 19.2 install without a warning.
 - `dialex init` and the type registry detect Preact, Qwik, Lit, React Native / Expo, Hapi, AdonisJS and tRPC. React Native shares the `dialexjs/react` declarations.
-- `dx generate` follows a `tsconfig.json` that extends a package (such as `@adonisjs/tsconfig`) when it decides whether generated imports need the `.js` extension.
+- `dialexjs/react-native` reads `storage` before it renders, so the first screen is already in the remembered language and a restore is not reported through `onLocaleChange`.
+- `dialexjs/qwik` loads lazy dictionaries (`lazy: true`) and renders the readers again when they arrive.
+- `dx generate` follows a `tsconfig.json` that extends a package (such as `@adonisjs/tsconfig`), or lists several configs, when it decides whether generated imports need the `.js` extension.
 - New examples: `examples/preact`, `qwik`, `lit`, `expo`, `hapi`, `adonis` and `trpc`.
 
 Documentation: a page for each new framework in five languages.

@@ -107,6 +107,26 @@ describe("dialexjs/lit", () => {
     expect((dialex.getDictionary("home") as any).title).toBe("Welcome");
   });
 
+  it("logs a failed lazy load instead of leaving an unhandled rejection", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const dialex = createDialex({
+        config: { ...config, lazy: true },
+        loaders: {
+          home: async () => {
+            throw new Error("network");
+          },
+        },
+        persist: false,
+      });
+      dialex.getDictionary("home");
+      await vi.waitFor(() => expect(error).toHaveBeenCalled());
+      expect(String(error.mock.calls[0][0])).toContain('Could not load dictionary "home"');
+    } finally {
+      error.mockRestore();
+    }
+  });
+
   describe("DialexController", () => {
     it("registers with the host and requests an update on locale changes", () => {
       const dialex = createDialex({ dictionaries, config, persist: false });

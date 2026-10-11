@@ -1,5 +1,5 @@
 import { createContext, createElement, type ComponentChildren, type VNode } from "preact";
-import { useCallback, useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { createT, type DialexClientConfig, type DialexSource, type Translate } from "./index.js";
 import {
@@ -64,7 +64,10 @@ function useLazyDictionaries(store: DictionaryStore, names: string[], locale: st
     let active = true;
     for (const name of key ? key.split("\0") : []) {
       if (store.isLoaded(name, locale)) continue;
-      void store.load(name, locale).then(() => active && setLoaded((n) => n + 1));
+      store
+        .load(name, locale)
+        .then(() => active && setLoaded((n) => n + 1))
+        .catch((error) => console.error(`[dialex] Could not load dictionary "${name}".`, error));
     }
     return () => {
       active = false;
@@ -117,13 +120,17 @@ export function DialexProvider({
     syncDocumentLang(locale);
   }, [locale]);
 
+  // Kept in a ref, so an inline `onLocaleChange` does not rebuild `setLocale` on each render.
+  const onLocaleChangeRef = useRef(onLocaleChange);
+  onLocaleChangeRef.current = onLocaleChange;
+
   const setLocale = useCallback(
     (next: string) => {
       setLocaleState(next);
       writePersistedLocale(persist, storageKey, next);
-      onLocaleChange?.(next);
+      onLocaleChangeRef.current?.(next);
     },
-    [persist, storageKey, onLocaleChange],
+    [persist, storageKey],
   );
 
   const value = useMemo(() => ({ locale, setLocale, store }), [locale, setLocale, store]);

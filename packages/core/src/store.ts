@@ -76,6 +76,10 @@ export function createDictionaryStore(source: DialexSource = {}): DictionaryStor
         }
         return dictionaries[name];
       });
+      // A failed load (network, chunk error) must not be cached, or it could never be retried.
+      pending[key].catch(() => {
+        delete pending[key];
+      });
       return pending[key];
     },
   };

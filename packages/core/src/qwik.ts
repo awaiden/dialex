@@ -28,6 +28,8 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 /** What the context holds. It is plain data, so Qwik can serialize it and resume on the client. */
 export interface DialexState {
   locale: string;
+  /** Counts finished lazy loads, so components that read a dictionary render again. */
+  loaded: number;
 }
 
 export interface CreateDialexQwikOptions extends DialexSource {
@@ -75,13 +77,14 @@ export function createDialexQwik(options: CreateDialexQwikOptions = {}) {
   const store = getDictionaryStore({ dictionaries, config, loaders });
   const defaultLocale = store.config.defaultLocale || "en";
 
-  // The id is created per instance, so two apps on one page do not share a context.
+  // The id is the same for every instance, so use one `createDialexQwik` per app.
   const context: ContextId<DialexState> = createContextId<DialexState>("dialex");
 
   /** Provides the locale to the components below. Call it in the root layout. */
   function useDialexProvider(providerOptions: UseDialexProviderOptions = {}): DialexState {
     const state = useStore<DialexState>({
       locale: providerOptions.initialLocale || defaultLocale,
+      loaded: 0,
     });
     useContextProvider(context, state);
     return state;
@@ -106,6 +109,21 @@ export function createDialexQwik(options: CreateDialexQwikOptions = {}) {
   }
 
   /**
+   * With lazy dictionaries, starts loading `name` for `locale` and renders the readers again when
+   * it arrives. On the server nothing waits for it: `await preloadDictionaries(dialex, ...)` in a
+   * `routeLoader$` so the first render has the text.
+   */
+  function ensureLoaded(state: DialexState, name: string, locale: string): void {
+    if (!store.lazy || store.isLoaded(name, locale)) return;
+    store
+      .load(name, locale)
+      .then(() => {
+        state.loaded++;
+      })
+      .catch((error) => console.error(`[dialex] Could not load dictionary "${name}".`, error));
+  }
+
+  /**
    * An accessor for the dictionary of the current locale: `const home = useDictionary("home")`,
    * then `home().title` in JSX. The component renders again when the locale changes.
    *
@@ -116,14 +134,20 @@ export function createDialexQwik(options: CreateDialexQwikOptions = {}) {
   function useDictionary<K extends DictionaryKey, T = ResolveDictionaryType<K>>(name: K): () => T {
     const state = useContext(context);
     const locale = state.locale;
-    return () => readDictionary(store, name as string, locale) as T;
+    void state.loaded; // tracked, so the component renders again when a lazy load finishes
+    ensureLoaded(state, name as string, locale);
+    return () => readDictionary(store, name as string, locale, store.lazy) as T;
   }
 
   /** A `t("dictionary.key.path", ...args)` bound to the current locale. */
   function useT(): Translate {
     const state = useContext(context);
     const locale = state.locale;
-    return createT((name) => readDictionary(store, name, locale), locale) as Translate;
+    void state.loaded;
+    return createT((name) => {
+      ensureLoaded(state, name, locale);
+      return readDictionary(store, name, locale, store.lazy);
+    }, locale) as Translate;
   }
 
   /**
