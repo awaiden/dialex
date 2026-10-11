@@ -6,9 +6,22 @@
 // app/middleware/dialex_middleware.ts
 import { createDialexMiddleware } from "dialexjs/adonis";
 
-import { dialex } from "../dialex.generated.js";
+import { dialex } from "#start/dialex.generated";
 
 export default createDialexMiddleware({ ...dialex });
+```
+
+上面的导入从 `start/` 读取生成的文件。在 `dialex.config.ts` 中设置 `output` 使其生成到那里（`dialex init` 会为 AdonisJS 这样做）：
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "start/dialex.generated.ts",
+});
 ```
 
 把它注册为路由中间件，使它对每个路由都生效：

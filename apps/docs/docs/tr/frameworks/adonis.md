@@ -6,9 +6,22 @@
 // app/middleware/dialex_middleware.ts
 import { createDialexMiddleware } from "dialexjs/adonis";
 
-import { dialex } from "../dialex.generated.js";
+import { dialex } from "#start/dialex.generated";
 
 export default createDialexMiddleware({ ...dialex });
+```
+
+Yukarıdaki içe aktarma, üretilen dosyayı `start/` içinden okur. Dosyanın oraya yazılması için `dialex.config.ts` içinde `output` ayarla (`dialex init` bunu AdonisJS için yapar):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "start/dialex.generated.ts",
+});
 ```
 
 Her rotada çalışması için router middleware'i olarak kaydet:

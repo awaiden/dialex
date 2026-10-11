@@ -175,6 +175,7 @@ export default component$(() => {
 - Erzeuge die Hooks mit `createDialexQwik` in einem Modul und importiere sie von dort. Rufe `createDialexQwik` nicht in einer Komponente auf, denn die Wörterbücher dürfen nicht Teil des Komponentenzustands sein.
 - Lies `useDialex().locale` in der Komponente, die es braucht, nicht im Layout, damit bei einem Wechsel nur diese Komponente neu rendert.
 - Übergib `initialLocale` aus einem `routeLoader$` für servergerenderte Seiten, damit ein Besucher mit gemerktem Locale kein kurzes Aufblitzen der Standardsprache sieht.
+- Mit Lazy Loading verwendest du `await preloadDictionaries(dialex, "home")` in einem `routeLoader$`, damit das Server-Rendering den Text schon hat. Im Browser werden Komponenten neu gerendert, wenn ein Ladevorgang abgeschlossen ist.
 - Rufe den Accessor in JSX auf (`home().title`), statt `home()` einmal in eine Variable zu kopieren. Qwik aktualisiert einfache Property-Zugriffe auf ein kopiertes Objekt bei einem Locale-Wechsel nicht.
 
 ## Fehlerbehebung

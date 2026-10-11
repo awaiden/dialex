@@ -1,6 +1,6 @@
 # tRPC
 
-`dialexjs/trpc` coloca el locale y los diccionarios en el contexto de tRPC, para que cada procedimiento pueda traducir sus propios errores y mensajes. No depende de `@trpc/server`; lee la petición que tu adaptador ya entrega a `createContext`.
+`dialexjs/trpc` coloca el locale y los diccionarios en el contexto de tRPC, para que cada procedimiento pueda traducir sus propios errores y mensajes. No depende de `@trpc/server`; lee la petición que tu adaptador ya entrega a `createContext`. La detección por cabecera, cookie y query string funciona con todos los adaptadores; con los adaptadores de Express y standalone `req.url` es relativa a la ruta de montaje, así que un prefijo de locale en la ruta de la URL solo se ve cuando se pasa la URL completa en `url`.
 
 ```ts
 // src/trpc.ts

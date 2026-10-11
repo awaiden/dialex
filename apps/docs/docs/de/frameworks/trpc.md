@@ -1,6 +1,6 @@
 # tRPC
 
-`dialexjs/trpc` legt das Locale und die Wörterbücher in den tRPC-Kontext, sodass jede Prozedur ihre eigenen Fehler und Meldungen übersetzen kann. Es hat keine Abhängigkeit von `@trpc/server`; es liest die Anfrage, die dein Adapter ohnehin an `createContext` übergibt.
+`dialexjs/trpc` legt das Locale und die Wörterbücher in den tRPC-Kontext, sodass jede Prozedur ihre eigenen Fehler und Meldungen übersetzen kann. Es hat keine Abhängigkeit von `@trpc/server`; es liest die Anfrage, die dein Adapter ohnehin an `createContext` übergibt. Die Erkennung per Header, Cookie und Query-String funktioniert mit jedem Adapter; beim Express- und beim Standalone-Adapter ist `req.url` relativ zum Mount-Pfad, daher wird ein Locale-Präfix im URL-Pfad nur gesehen, wenn die vollständige URL in `url` übergeben wird.
 
 ```ts
 // src/trpc.ts

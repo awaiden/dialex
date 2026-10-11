@@ -6,9 +6,22 @@
 // app/middleware/dialex_middleware.ts
 import { createDialexMiddleware } from "dialexjs/adonis";
 
-import { dialex } from "../dialex.generated.js";
+import { dialex } from "#start/dialex.generated";
 
 export default createDialexMiddleware({ ...dialex });
+```
+
+Der Import oben liest die generierte Datei aus `start/`. Setze `output` in `dialex.config.ts`, damit sie dort landet (`dialex init` macht das für AdonisJS):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "start/dialex.generated.ts",
+});
 ```
 
 Registriere sie als Router-Middleware, damit sie für jede Route läuft:

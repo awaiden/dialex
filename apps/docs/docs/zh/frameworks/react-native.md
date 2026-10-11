@@ -161,6 +161,7 @@ export const storage = {
 
 - 在根部、导航之上只放一个 `DialexProvider`，使每个屏幕共享 locale。
 - 传入 `deviceLocales`，使首次启动时以设备语言打开。之后以保存的选择为准。
+- 使用 `storage` 时，在读取到保存的 locale 之前不会渲染任何内容，因此第一个界面就已经是正确的语言。在此之前保持启动画面（splash）不消失。
 - 只有当你自己决定 locale 时才传入 `initialLocale`，例如来自账户设置。它优先于设备和存储。
 - 设备语言只在用户做出选择之前有意义。在设置界面中显示该选择，并从那里调用 `setLocale`。
 

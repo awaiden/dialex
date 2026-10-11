@@ -175,6 +175,7 @@ export default component$(() => {
 - Hook'ları `createDialexQwik` ile tek bir modülde oluştur ve oradan içe aktar. `createDialexQwik`'i bir bileşenin içinde çağırma; çünkü sözlükler bileşen durumunun parçası olmamalıdır.
 - `useDialex().locale` değerini düzende değil, ihtiyaç duyan bileşende oku; böylece değişimde yalnızca o bileşen yeniden oluşturulur.
 - Sunucuda oluşturulan sayfalarda `initialLocale` değerini bir `routeLoader$`'dan ver; böylece hatırlanan yerel ayarı olan ziyaretçi varsayılan dilin kısa süreli parlamasını görmez.
+- Tembel yüklemede, sunucu oluşturması metne zaten sahip olsun diye bir `routeLoader$` içinde `await preloadDictionaries(dialex, "home")` kullan. Tarayıcıda bileşenler bir yükleme bittiğinde yeniden oluşturulur.
 - Erişimciyi JSX içinde çağır (`home().title`); `home()` sonucunu bir kez değişkene kopyalama. Qwik, kopyalanan nesnenin düz özellik okumalarını yerel ayar değişince yenilemez.
 
 ## Sorun giderme

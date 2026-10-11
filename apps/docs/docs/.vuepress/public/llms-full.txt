@@ -492,9 +492,22 @@ Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`
 // app/middleware/dialex_middleware.ts
 import { createDialexMiddleware } from "dialexjs/adonis";
 
-import { dialex } from "../dialex.generated.js";
+import { dialex } from "#start/dialex.generated";
 
 export default createDialexMiddleware({ ...dialex });
+```
+
+The import above reads the generated file from `start/`. Set `output` in `dialex.config.ts` to put it there (`dialex init` does this for AdonisJS):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "start/dialex.generated.ts",
+});
 ```
 
 Register it as a router middleware, so it runs for every route:
@@ -1678,7 +1691,7 @@ export default component$(() => {
 
 ## Use dictionaries
 
-`useDictionary(name)` returns the dictionary of the current locale, and `useT()` returns a `t("dictionary.key", values?)` function. Components that read them render again when the locale changes:
+`useDictionary(name)` returns an accessor for the dictionary of the current locale, so JSX reads `home().title`, and `useT()` returns a `t("dictionary.key", values?)` function. Components that read them render again when the locale changes:
 
 ```tsx
 import { component$ } from "@builder.io/qwik";
@@ -1691,8 +1704,8 @@ export default component$(() => {
 
   return (
     <>
-      <h1>{home.title}</h1>
-      <p>{home.greeting("Alex")}</p>
+      <h1>{home().title}</h1>
+      <p>{home().greeting("Alex")}</p>
       <p>{t("home.items", { count: 2 })}</p>
     </>
   );
@@ -1759,20 +1772,22 @@ export default component$(() => {
 
 `createDialexQwik({ ...dialex })` accepts the generated `dictionaries`, `config` and `loaders`, plus `persist` (`"cookie"`, `"localStorage"` or `false`) and `storageKey`. It returns:
 
-| Export                                 | Description                                                                         |
-| -------------------------------------- | ----------------------------------------------------------------------------------- |
-| `useDialexProvider({ initialLocale })` | Provides the locale to the components below. Call it once, in the root layout       |
-| `useDialex()`                          | Returns the provider state, `{ locale }`. Read `locale`; change it with `setLocale` |
-| `setLocale(state, locale)`             | Changes the locale, remembers it and keeps `<html lang>` in sync                    |
-| `useDictionary(name)`                  | The dictionary for the current locale, following the fallback chain                 |
-| `useT()`                               | A `t("dictionary.key", values?)` function bound to the current locale               |
+| Export                                 | Description                                                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `useDialexProvider({ initialLocale })` | Provides the locale to the components below. Call it once, in the root layout                                      |
+| `useDialex()`                          | Returns the provider state, `{ locale }`. Read `locale`; change it with `setLocale`                                |
+| `setLocale(state, locale)`             | Changes the locale, remembers it and keeps `<html lang>` in sync                                                   |
+| `getPersistedLocale()`                 | The locale remembered in this browser, when the app supports it. `undefined` on the server                         |
+| `useDictionary(name)`                  | An accessor for the dictionary of the current locale, following the fallback chain. Call it in JSX: `home().title` |
+| `useT()`                               | A `t("dictionary.key", values?)` function bound to the current locale                                              |
 
 ## Best practices
 
 - Create the hooks with `createDialexQwik` in one module and import from it. Do not call `createDialexQwik` inside a component, because the dictionaries must not be part of the component state.
 - Read `useDialex().locale` in the component that needs it, not in the layout, so only that component renders again on a change.
 - Pass `initialLocale` from a `routeLoader$` for server-rendered pages, so a visitor with a remembered locale does not see a flash of the default language.
-- Keep `useT()` for messages with values, and read plain strings from `useDictionary()`.
+- With lazy loading, `await preloadDictionaries(dialex, "home")` in a `routeLoader$` so the server render already has the text. In the browser, components render again when a load finishes.
+- Call the accessor in JSX (`home().title`) rather than copying `home()` into a variable once. Qwik does not refresh plain property reads of a copied object when the locale changes.
 
 ## Troubleshooting
 
@@ -1948,6 +1963,7 @@ export const storage = {
 
 - Keep one `DialexProvider` at the root, above navigation, so every screen shares the locale.
 - Pass `deviceLocales` so a first launch opens in the language of the device. The stored choice wins after that.
+- With `storage`, nothing renders until the stored locale has been read, so the first screen is already in the right language. Keep the splash screen up until then.
 - Pass `initialLocale` only when you decide the locale yourself, for example from an account setting. It wins over the device and the storage.
 - The device language only matters until the user chooses. Show the choice in a settings screen, and call `setLocale` from there.
 
@@ -2673,7 +2689,7 @@ Put the placeholder in `src/app.html`; it is replaced with the resolved locale o
 
 # tRPC
 
-`dialexjs/trpc` puts the locale and the dictionaries into the tRPC context, so every procedure can translate its own errors and messages. It has no dependency on `@trpc/server`; it reads the request your adapter already gives to `createContext`.
+`dialexjs/trpc` puts the locale and the dictionaries into the tRPC context, so every procedure can translate its own errors and messages. It has no dependency on `@trpc/server`; it reads the request your adapter already gives to `createContext`. Header, cookie and query-string detection work with every adapter; with the Express and standalone adapters `req.url` is relative to the mount path, so a locale prefix in the URL path is only seen when the whole URL is passed in `url`.
 
 ```ts
 // src/trpc.ts

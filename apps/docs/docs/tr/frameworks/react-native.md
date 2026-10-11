@@ -161,6 +161,7 @@ export const storage = {
 
 - Kökte, gezinmenin üstünde tek bir `DialexProvider` tut; böylece her ekran yerel ayarı paylaşır.
 - İlk açılışın cihazın dilinde olması için `deviceLocales` ver. Bundan sonra kayıtlı seçim geçerlidir.
+- `storage` ile, kayıtlı yerel ayar okunana kadar hiçbir şey oluşturulmaz; böylece ilk ekran daha en baştan doğru dildedir. O zamana kadar açılış ekranını (splash) açık tut.
 - `initialLocale`'i yalnızca yerel ayarı kendin belirlediğinde ver, örneğin bir hesap ayarından. Cihazdan ve depolamadan önceliklidir.
 - Cihaz dili yalnızca kullanıcı seçene kadar önemlidir. Seçimi bir ayarlar ekranında göster ve `setLocale`'i oradan çağır.
 

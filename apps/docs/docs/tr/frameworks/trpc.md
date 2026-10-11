@@ -1,6 +1,6 @@
 # tRPC
 
-`dialexjs/trpc`, yerel ayarı ve sözlükleri tRPC bağlamına (context) koyar; böylece her prosedür kendi hatalarını ve mesajlarını çevirebilir. `@trpc/server`'a bağımlılığı yoktur; adaptörünün zaten `createContext`'e verdiği isteği okur.
+`dialexjs/trpc`, yerel ayarı ve sözlükleri tRPC bağlamına (context) koyar; böylece her prosedür kendi hatalarını ve mesajlarını çevirebilir. `@trpc/server`'a bağımlılığı yoktur; adaptörünün zaten `createContext`'e verdiği isteği okur. Başlık, çerez ve sorgu dizesi algılaması her adaptörle çalışır; Express ve standalone adaptörlerinde `req.url` bağlama yoluna göredir, bu yüzden URL yolundaki yerel ayar öneki yalnızca tam URL `url` içinde verildiğinde görülür.
 
 ```ts
 // src/trpc.ts

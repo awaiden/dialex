@@ -161,6 +161,7 @@ export const storage = {
 
 - Mantén un solo `DialexProvider` en la raíz, por encima de la navegación, para que cada pantalla comparta el locale.
 - Pasa `deviceLocales` para que el primer arranque se abra en el idioma del dispositivo. Después prevalece la elección guardada.
+- Con `storage`, no se renderiza nada hasta que se ha leído el locale guardado, así que la primera pantalla ya está en el idioma correcto. Mantén la pantalla de inicio (splash) hasta entonces.
 - Pasa `initialLocale` solo cuando decidas tú el locale, por ejemplo a partir de un ajuste de la cuenta. Prevalece sobre el dispositivo y el almacenamiento.
 - El idioma del dispositivo solo importa hasta que el usuario elige. Muestra la elección en una pantalla de ajustes y llama a `setLocale` desde allí.
 

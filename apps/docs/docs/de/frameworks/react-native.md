@@ -161,6 +161,7 @@ export const storage = {
 
 - Verwende einen einzigen `DialexProvider` an der Wurzel, oberhalb der Navigation, damit jeder Bildschirm das Locale teilt.
 - Übergib `deviceLocales`, damit der erste Start in der Sprache des Geräts öffnet. Danach gewinnt die gespeicherte Auswahl.
+- Mit `storage` wird nichts gerendert, bis das gespeicherte Locale gelesen wurde, sodass der erste Bildschirm schon in der richtigen Sprache erscheint. Lass den Splash-Screen so lange stehen.
 - Übergib `initialLocale` nur, wenn du das Locale selbst bestimmst, zum Beispiel aus einer Kontoeinstellung. Es hat Vorrang vor Gerät und Speicher.
 - Die Gerätesprache zählt nur, bis der Nutzer wählt. Zeige die Auswahl in einem Einstellungsbildschirm und rufe dort `setLocale` auf.
 

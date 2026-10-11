@@ -161,6 +161,7 @@ export const storage = {
 
 - Keep one `DialexProvider` at the root, above navigation, so every screen shares the locale.
 - Pass `deviceLocales` so a first launch opens in the language of the device. The stored choice wins after that.
+- With `storage`, nothing renders until the stored locale has been read, so the first screen is already in the right language. Keep the splash screen up until then.
 - Pass `initialLocale` only when you decide the locale yourself, for example from an account setting. It wins over the device and the storage.
 - The device language only matters until the user chooses. Show the choice in a settings screen, and call `setLocale` from there.
 

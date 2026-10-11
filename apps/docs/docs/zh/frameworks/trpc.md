@@ -1,6 +1,6 @@
 # tRPC
 
-`dialexjs/trpc` 把 locale 和词典放进 tRPC 上下文，使每个过程都能翻译自己的错误和消息。它不依赖 `@trpc/server`；它读取你的适配器本来就传给 `createContext` 的请求。
+`dialexjs/trpc` 把 locale 和词典放进 tRPC 上下文，使每个过程都能翻译自己的错误和消息。它不依赖 `@trpc/server`；它读取你的适配器本来就传给 `createContext` 的请求。通过头、cookie 和查询字符串的检测适用于所有适配器；使用 Express 和 standalone 适配器时，`req.url` 相对于挂载路径，因此只有把完整 URL 传入 `url` 时，才能看到 URL 路径中的 locale 前缀。
 
 ```ts
 // src/trpc.ts

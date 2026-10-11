@@ -1,6 +1,6 @@
 # tRPC
 
-`dialexjs/trpc` puts the locale and the dictionaries into the tRPC context, so every procedure can translate its own errors and messages. It has no dependency on `@trpc/server`; it reads the request your adapter already gives to `createContext`.
+`dialexjs/trpc` puts the locale and the dictionaries into the tRPC context, so every procedure can translate its own errors and messages. It has no dependency on `@trpc/server`; it reads the request your adapter already gives to `createContext`. Header, cookie and query-string detection work with every adapter; with the Express and standalone adapters `req.url` is relative to the mount path, so a locale prefix in the URL path is only seen when the whole URL is passed in `url`.
 
 ```ts
 // src/trpc.ts

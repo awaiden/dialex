@@ -175,6 +175,7 @@ export default component$(() => {
 - 在一个模块中用 `createDialexQwik` 创建 hooks，并从该模块导入。不要在组件内部调用 `createDialexQwik`，因为词典不能成为组件状态的一部分。
 - 在需要它的组件中读取 `useDialex().locale`，而不是在布局中，这样变化时只有该组件重新渲染。
 - 对服务端渲染的页面，从 `routeLoader$` 传入 `initialLocale`，这样有已记住 locale 的访客不会看到默认语言的闪现。
+- 使用懒加载时，在 `routeLoader$` 中用 `await preloadDictionaries(dialex, "home")`，使服务器渲染时就有文本。在浏览器中，加载完成后组件会重新渲染。
 - 在 JSX 中调用访问器（`home().title`），不要把 `home()` 的结果一次性复制到变量里。locale 变化时，Qwik 不会刷新对复制出来的对象的普通属性读取。
 
 ## 故障排除
