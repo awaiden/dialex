@@ -1,0 +1,22 @@
+{
+  "name": "example-hapi",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "dx:generate": "dx generate",
+    "build": "dx generate && tsc --noEmit",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.4.10",
+    "dialexjs": "workspace:*"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "^7.0.2"
+  }
+}

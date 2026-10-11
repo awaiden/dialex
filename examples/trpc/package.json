@@ -1,0 +1,23 @@
+{
+  "name": "example-trpc",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "dx:generate": "dx generate",
+    "build": "dx generate && tsc --noEmit",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@trpc/server": "^11.19.0",
+    "dialexjs": "workspace:*",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Dialex + Expo",
+    "slug": "dialex-expo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "plugins": ["expo-localization"],
+    "ios": { "supportsTablet": true },
+    "android": {}
+  }
+}

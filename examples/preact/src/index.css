@@ -1,0 +1,48 @@
+:root {
+  color-scheme: light dark;
+  font:
+    18px/1.5 system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 8px;
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+footer {
+  margin-top: 3rem;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}

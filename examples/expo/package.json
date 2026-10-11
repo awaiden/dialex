@@ -1,0 +1,29 @@
+{
+  "name": "example-expo",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "dx generate && expo start",
+    "android": "dx generate && expo start --android",
+    "ios": "dx generate && expo start --ios",
+    "build": "dx generate && tsc --noEmit",
+    "dx:generate": "dx generate",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "dialexjs": "workspace:*",
+    "expo": "~57.0.27",
+    "expo-localization": "~57.0.2",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "devDependencies": {
+    "@dialexjs/cli": "workspace:*",
+    "@types/react": "~19.2.0",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2"
+  }
+}
