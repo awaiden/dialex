@@ -284,9 +284,9 @@ export class AppModule {}
 
 ---
 
-### Elysia, SvelteKit, Astro, Vue / Nuxt, Svelte, Solid, React Router, Angular
+### Elysia, SvelteKit, Astro, Vue / Nuxt, Svelte, Solid, Preact, Qwik, Lit, React Native, Hapi, AdonisJS, tRPC, React Router, Angular
 
-Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/astro`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/svelte`, `dialexjs/solid` and `dialexjs/angular`. React Router uses `dialexjs/web` with `dialexjs/react`. Every framework has a detailed page, with best practices and troubleshooting, on the docs site (`apps/docs`).
+Adapters for these ship as `dialexjs/elysia`, `dialexjs/sveltekit`, `dialexjs/astro`, `dialexjs/vue`, `dialexjs/nuxt`, `dialexjs/svelte`, `dialexjs/solid`, `dialexjs/preact`, `dialexjs/qwik`, `dialexjs/lit`, `dialexjs/react-native`, `dialexjs/hapi`, `dialexjs/adonis`, `dialexjs/trpc` and `dialexjs/angular`. React Router uses `dialexjs/web` with `dialexjs/react`. Every framework has a detailed page, with best practices and troubleshooting, on the docs site (`apps/docs`).
 
 ---
 
@@ -397,6 +397,13 @@ Check out runnable projects in [`examples/`](./examples):
 - [`examples/vue`](./examples/vue): Vite + Vue 3 SPA with `createDialex`
 - [`examples/svelte`](./examples/svelte): Vite + Svelte 5 SPA with `dialexjs/svelte`
 - [`examples/solid`](./examples/solid): Vite + SolidJS SPA with `dialexjs/solid`
+- [`examples/preact`](./examples/preact): Vite + Preact SPA with `dialexjs/preact`
+- [`examples/qwik`](./examples/qwik): Vite + Qwik (client-side rendering) with `dialexjs/qwik`
+- [`examples/lit`](./examples/lit): Vite + Lit web components with `dialexjs/lit`
+- [`examples/expo`](./examples/expo): Expo (React Native) app with `dialexjs/react-native`
+- [`examples/hapi`](./examples/hapi): Hapi server with `dialexjs/hapi`
+- [`examples/adonis`](./examples/adonis): AdonisJS 6 app with `dialexjs/adonis`
+- [`examples/trpc`](./examples/trpc): tRPC server with `dialexjs/trpc`
 
 ---
 

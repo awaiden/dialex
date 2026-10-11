@@ -58,9 +58,25 @@ Erzeugt ein typisiertes `t("dictionary.key.path", ...args)`. Siehe [Schlüsselpf
 
 `DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Siehe [Solid](../frameworks/solid.md).
 
+## `dialexjs/preact`
+
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Siehe [Preact](../frameworks/preact.md).
+
+## `dialexjs/qwik`
+
+`createDialexQwik` gibt `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` und `useT` zurück; dazu `preloadDictionaries`. Siehe [Qwik](../frameworks/qwik.md).
+
+## `dialexjs/lit`
+
+`createDialex`, `DialexController`, `preloadDictionaries`. Siehe [Lit](../frameworks/lit.md).
+
+## `dialexjs/react-native`
+
+`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Siehe [React Native](../frameworks/react-native.md).
+
 ## Server-Adapter
 
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` und Zubehör), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Gemeinsame Optionen stehen unter [Locale-Erkennung](../guide/locale-detection.md#options).
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` und Zubehör), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Gemeinsame Optionen stehen unter [Locale-Erkennung](../guide/locale-detection.md#options).
 
 ## `dialexjs/routing`
 

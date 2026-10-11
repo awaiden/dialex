@@ -14,21 +14,28 @@
 - [dialex init](/cli/init.html): dialex init documentation and reference.
 - [dialex translate](/cli/translate.html): dialex translate documentation and reference.
 - [Frameworks](/frameworks/README.html): Frameworks documentation and reference.
+- [AdonisJS](/frameworks/adonis.html): AdonisJS documentation and reference.
 - [Angular](/frameworks/angular.html): Angular documentation and reference.
 - [Astro](/frameworks/astro.html): Astro documentation and reference.
 - [Elysia](/frameworks/elysia.html): Elysia documentation and reference.
 - [Express](/frameworks/express.html): Express documentation and reference.
 - [Fastify](/frameworks/fastify.html): Fastify documentation and reference.
 - [h3 / Nitro](/frameworks/h3.html): h3 / Nitro documentation and reference.
+- [Hapi](/frameworks/hapi.html): Hapi documentation and reference.
 - [Hono](/frameworks/hono.html): Hono documentation and reference.
 - [Koa](/frameworks/koa.html): Koa documentation and reference.
+- [Lit](/frameworks/lit.html): Lit documentation and reference.
 - [NestJS](/frameworks/nestjs.html): NestJS documentation and reference.
 - [Next.js](/frameworks/nextjs.html): Next.js documentation and reference.
+- [Preact](/frameworks/preact.html): Preact documentation and reference.
+- [Qwik](/frameworks/qwik.html): Qwik documentation and reference.
+- [React Native](/frameworks/react-native.html): React Native documentation and reference.
 - [React Router](/frameworks/react-router.html): React Router documentation and reference.
 - [React / Vite](/frameworks/react.html): React / Vite documentation and reference.
 - [Solid](/frameworks/solid.html): Solid documentation and reference.
 - [Svelte](/frameworks/svelte.html): Svelte documentation and reference.
 - [SvelteKit](/frameworks/sveltekit.html): SvelteKit documentation and reference.
+- [tRPC](/frameworks/trpc.html): tRPC documentation and reference.
 - [Vue / Nuxt](/frameworks/vue.html): Vue / Nuxt documentation and reference.
 - [Fetch API (Request)](/frameworks/web.html): Fetch API (Request) documentation and reference.
 - [AI Assistants & MCP](/guide/ai.html): AI Assistants & MCP documentation and reference.

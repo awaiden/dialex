@@ -58,9 +58,25 @@ Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Y
 
 `DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [Solid](../frameworks/solid.md).
 
+## `dialexjs/preact`
+
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [Preact](../frameworks/preact.md).
+
+## `dialexjs/qwik`
+
+`createDialexQwik`, `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` ve `useT` değerlerini döndürür; ayrıca `preloadDictionaries` vardır. Bkz. [Qwik](../frameworks/qwik.md).
+
+## `dialexjs/lit`
+
+`createDialex`, `DialexController`, `preloadDictionaries`. Bkz. [Lit](../frameworks/lit.md).
+
+## `dialexjs/react-native`
+
+`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React Native](../frameworks/react-native.md).
+
 ## Sunucu adaptörleri
 
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` ve ilgili parçalar), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` ve ilgili parçalar), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
 
 ## `dialexjs/routing`
 

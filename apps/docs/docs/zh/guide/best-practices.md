@@ -58,7 +58,7 @@ t("cart.items", { count: 3 }); // "3 items"; `count` is checked at compile time
 
 - 每个请求（服务端）或每个应用（浏览器）只决定一次 locale，然后向下传递。不要在单个组件中读取 cookie 或 `navigator.language`。
 - 使用服务端渲染时，把服务端使用的 locale（`initialLocale`）交给客户端，使客户端首次渲染与 HTML 一致。否则页面会闪现错误的语言，或者水合报告不匹配。
-- 把 `<html lang>` 设置为当前 locale。React、Svelte 和 Solid 的 provider 会替你完成；在服务端则需要写入你渲染的 HTML。
+- 把 `<html lang>` 设置为当前 locale。React、Preact、Svelte、Solid、Qwik 和 Lit 的 provider 会替你完成；在服务端则需要写入你渲染的 HTML。
 - 把访客的选择保存在服务端适配器会读取的 `locale` cookie 中，而不是服务端看不到的 `localStorage`。
 
 ## 只加载页面需要的内容

@@ -71,9 +71,25 @@ Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key
 
 `DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. See [Solid](../frameworks/solid.md).
 
+## `dialexjs/preact`
+
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. See [Preact](../frameworks/preact.md).
+
+## `dialexjs/qwik`
+
+`createDialexQwik` returns `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` and `useT`; `preloadDictionaries`. See [Qwik](../frameworks/qwik.md).
+
+## `dialexjs/lit`
+
+`createDialex`, `DialexController`, `preloadDictionaries`. See [Lit](../frameworks/lit.md).
+
+## `dialexjs/react-native`
+
+`DialexProvider` (with `deviceLocales` and `storage`), and the `useDialex`, `useDialexConfig`, `useDictionary`, `useT` and `preloadDictionaries` hooks of `dialexjs/react`. See [React Native](../frameworks/react-native.md).
+
 ## Server adapters
 
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` and friends), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` and friends), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
 
 ## `dialexjs/routing`
 
@@ -309,12 +325,12 @@ dialex init                                  # interactive
 dialex init --framework fastify --default-locale en --locales en,tr -y
 ```
 
-| Option                          | Description                                                                                                                                         |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `react-router`, or `react` |
-| `-d, --default-locale <locale>` | Default locale, e.g. `en`                                                                                                                           |
-| `-l, --locales <locales>`       | Comma-separated locales, e.g. `en,tr`                                                                                                               |
-| `-y, --yes`                     | Skip prompts and use defaults                                                                                                                       |
+| Option                          | Description                                                                                                                                                                                                            |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-f, --framework <framework>`   | `hono`, `express`, `fastify`, `koa`, `nestjs`, `elysia`, `sveltekit`, `astro`, `vue`, `nuxt`, `next`, `svelte`, `solid`, `preact`, `qwik`, `lit`, `react-native`, `hapi`, `adonis`, `trpc`, `react-router`, or `react` |
+| `-d, --default-locale <locale>` | Default locale, e.g. `en`                                                                                                                                                                                              |
+| `-l, --locales <locales>`       | Comma-separated locales, e.g. `en,tr`                                                                                                                                                                                  |
+| `-y, --yes`                     | Skip prompts and use defaults                                                                                                                                                                                          |
 
 
 ---
@@ -442,11 +458,18 @@ Dialex ships one adapter per framework as a subpath export of `dialexjs`.
 | [Vue / Nuxt](./vue.md)            | `dialexjs/vue`, `dialexjs/nuxt`                                     | `createDialex`, `useDialex`, `useDictionary`, Nuxt module      |
 | [Svelte](./svelte.md)             | `dialexjs/svelte`                                                   | `provideDialex`, `useDialex`, `useDictionary`, `useT`          |
 | [Solid](./solid.md)               | `dialexjs/solid`                                                    | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
+| [Preact](./preact.md)             | `dialexjs/preact`                                                   | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
+| [Qwik](./qwik.md)                 | `dialexjs/qwik`                                                     | `createDialexQwik`, `useDictionary`, `useT`, `setLocale`       |
+| [Lit](./lit.md)                   | `dialexjs/lit`                                                      | `createDialex`, `DialexController`                             |
+| [React Native](./react-native.md) | `dialexjs/react-native`                                             | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
 | [Angular](./angular.md)           | `dialexjs/angular`                                                  | `provideDialex`, `injectDialex`, `injectT`, `injectDictionary` |
+| [Hapi](./hapi.md)                 | `dialexjs/hapi`                                                     | `dialexPlugin`                                                 |
+| [AdonisJS](./adonis.md)           | `dialexjs/adonis`                                                   | `createDialexMiddleware()`                                     |
+| [tRPC](./trpc.md)                 | `dialexjs/trpc`                                                     | `createDialexContext()`                                        |
 | [h3 / Nitro](./h3.md)             | `dialexjs/h3`                                                       | `dialexH3()` middleware (h3 1.x)                               |
 | [Fetch API](./web.md)             | `dialexjs/web`                                                      | `createDialexHandler()` for any `Request`                      |
 
-The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Spread the `dialex` object from `dialex generate` into the adapter. It carries the dictionaries and the locale config (`defaultLocale`, `locales`, `fallbacks`), so nothing is repeated by hand:
+The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3, Hapi, AdonisJS) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Spread the `dialex` object from `dialex generate` into the adapter. It carries the dictionaries and the locale config (`defaultLocale`, `locales`, `fallbacks`), so nothing is repeated by hand:
 
 ```ts
 import { dialex } from "./src/dialex.generated.js";
@@ -454,7 +477,60 @@ import { dialex } from "./src/dialex.generated.js";
 app.use(dialexExpress({ ...dialex }));
 ```
 
-Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.
+Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@hapi/hapi`, `@adonisjs/http-server`, `@angular/core`, `next`, `react`, `preact`, `lit`, `@builder.io/qwik`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.
+
+
+---
+
+# File: frameworks/adonis.md
+
+# AdonisJS
+
+`dialexjs/adonis` builds a middleware class for AdonisJS 6 and later. Create it in a middleware file:
+
+```ts
+// app/middleware/dialex_middleware.ts
+import { createDialexMiddleware } from "dialexjs/adonis";
+
+import { dialex } from "../dialex.generated.js";
+
+export default createDialexMiddleware({ ...dialex });
+```
+
+Register it as a router middleware, so it runs for every route:
+
+```ts
+// start/kernel.ts
+import router from "@adonisjs/core/services/router";
+
+router.use([() => import("#middleware/dialex_middleware")]);
+```
+
+Handlers then read `ctx.locale` and `ctx.getDictionary(name)`:
+
+```ts
+// start/routes.ts
+import router from "@adonisjs/core/services/router";
+
+router.get("/:locale", ({ locale, getDictionary }) => {
+  const dict = getDictionary("home");
+  return { title: dict.title, locale };
+});
+```
+
+The middleware also sets the `Content-Language` response header. All [locale detection options](../guide/locale-detection.md#options) apply.
+
+## Best practices
+
+- Pass `{ ...dialex }` from `dialex.generated.ts` to `createDialexMiddleware`. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.
+- Register it with `router.use`, not on a single route, so every route sees the locale and the `Content-Language` header.
+- Destructure `locale` and `getDictionary` from the context in handlers; both are set for the whole request.
+
+## Troubleshooting
+
+- **`ctx.getDictionary is not a function`**: the middleware is not registered, or the route it belongs to is not covered by it. Add it with `router.use` in `start/kernel.ts`.
+- **Type error on `ctx.locale`**: the declarations of `dialexjs/adonis` are not part of your project. Run `dx generate` and include `dialex-env.d.ts` in your `tsconfig`.
+- **Always the default locale**: no source matched the request. The order is the URL prefix (`/tr/...`), `?locale=` or `?lang=`, the `locale` cookie, then `Accept-Language`. Check which of them the client really sends.
 
 
 ---
@@ -801,6 +877,49 @@ Built and tested against h3 `>=1.8 <2`. h3 2.x has a different API and is not su
 
 ---
 
+# File: frameworks/hapi.md
+
+# Hapi
+
+```ts
+import Hapi from "@hapi/hapi";
+import { dialexPlugin } from "dialexjs/hapi";
+
+import { dialex } from "./src/dialex.generated.js";
+
+const server = Hapi.server({ port: 3000 });
+
+await server.register({ plugin: dialexPlugin, options: { ...dialex } });
+
+server.route({
+  method: "GET",
+  path: "/{locale}",
+  handler: (request) => {
+    const dict = request.getDictionary("home");
+    return { title: dict.title, locale: request.locale };
+  },
+});
+
+await server.start();
+```
+
+Register `dialexPlugin` before your routes. It adds `request.locale` and `request.getDictionary(name)` to every request and sets the `Content-Language` response header, on error responses too. All [locale detection options](../guide/locale-detection.md#options) apply.
+
+## Best practices
+
+- Pass `{ ...dialex }` from `dialex.generated.ts` as the plugin options. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.
+- Register the plugin before the routes that read the locale. The locale is resolved in the `onRequest` extension point, so it is available in every later step of the lifecycle, including authentication and validation.
+- Use `request.locale` to pick the language of any text you send, including `Boom` error messages, so they match the rest of the page.
+
+## Troubleshooting
+
+- **`request.getDictionary is not a function`**: the plugin is not registered on the server that owns the route. Register it on the root server, or on the plugin that defines the route.
+- **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.
+- **Always the default locale**: no source matched the request. The order is the URL prefix (`/tr/...`), `?locale=` or `?lang=`, the `locale` cookie, then `Accept-Language`. Check which of them the client really sends.
+
+
+---
+
 # File: frameworks/hono.md
 
 # Hono
@@ -877,6 +996,203 @@ Register `dialexKoa()` before your routes. It adds `ctx.locale` and `ctx.getDict
 - **`ctx.getDictionary is not a function`**: `dialexKoa()` is registered after the router. Add it with `app.use` before `router.routes()`.
 - **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.
 - **Always the default locale**: no source matched the request. The order is the URL prefix (`/tr/...`), `?locale=` or `?lang=`, the `locale` cookie, then `Accept-Language`. Check which of them the client really sends.
+
+
+---
+
+# File: frameworks/lit.md
+
+# Lit
+
+`dialexjs/lit` works with Lit and with any custom element. `createDialex()` holds the locale and the dictionaries, and `DialexController` is a [reactive controller](https://lit.dev/docs/composition/controllers/) that re-renders an element when the locale changes.
+
+## Install
+
+Install the runtime and the CLI:
+
+```bash
+npm install dialexjs
+npm install -D @dialexjs/cli
+```
+
+## Set up
+
+Create `dialex.config.ts` with your locales (or run `dialex init`, which also adds the packages and a starter dictionary):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+});
+```
+
+Write a dictionary next to the code that uses it. Every locale has the same keys:
+
+```ts
+// src/home.content.ts
+import { defineDictionary } from "dialexjs";
+
+export default defineDictionary("home", {
+  en: {
+    title: "One dictionary, every language",
+    greeting: (name: string) => `Hello, ${name}!`,
+    items: "{count, plural, =0 {Your cart is empty} one {# item} other {# items}}",
+  },
+  tr: {
+    title: "Tek sözlük, her dil",
+    greeting: (name: string) => `Merhaba, ${name}!`,
+    items: "{count, plural, =0 {Sepetiniz boş} other {# ürün}}",
+  },
+});
+```
+
+Compile the dictionaries into `dialex.generated.ts` and the type declarations. Run it again when a dictionary changes, or keep `dx generate --watch` running:
+
+```bash
+npx dx generate
+```
+
+Create the locale state once, in a module of its own. Every element imports it from there, so they all share one locale:
+
+```ts
+// src/i18n.ts
+import { createDialex } from "dialexjs/lit";
+
+import { dialex } from "./dialex.generated";
+
+export const i18n = createDialex({ ...dialex });
+```
+
+## Use dictionaries
+
+Add a `DialexController` to an element. `dictionary(name)` returns the dictionary of the current locale, and `t(...names)` returns a `t("dictionary.key", values?)` function:
+
+```ts
+import { DialexController } from "dialexjs/lit";
+// src/home-page.ts
+import { html, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
+
+import { i18n } from "./i18n";
+
+@customElement("home-page")
+export class HomePage extends LitElement {
+  private dx = new DialexController(this, i18n);
+
+  render() {
+    const home = this.dx.dictionary("home");
+    const t = this.dx.t("home");
+
+    return html`
+      <h1>${home.title}</h1>
+      <p>${home.greeting("Alex")}</p>
+      <p>${t("home.items", { count: 2 })}</p>
+    `;
+  }
+}
+```
+
+Values are type-checked from the ICU message, so `count` above must be a number.
+
+## Switch the locale
+
+`setLocale` changes the locale for every element that uses the controller. `createDialex` remembers the choice in the `locale` cookie, applies it when it is created, and keeps `<html lang>` in sync:
+
+```ts
+import { DialexController } from "dialexjs/lit";
+// src/language-switcher.ts
+import { html, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
+
+import { locales } from "./dialex.generated";
+import { i18n } from "./i18n";
+
+@customElement("language-switcher")
+export class LanguageSwitcher extends LitElement {
+  private dx = new DialexController(this, i18n);
+
+  render() {
+    return html`
+      <select
+        @change=${(event: Event) => this.dx.setLocale((event.target as HTMLSelectElement).value)}
+      >
+        ${locales.map(
+          (code) =>
+            html`<option value=${code} ?selected=${code === this.dx.locale}>${code}</option>`,
+        )}
+      </select>
+    `;
+  }
+}
+```
+
+## Without Lit
+
+`createDialex` does not depend on Lit. Any component can read the locale and subscribe to changes, which makes it work with plain custom elements and other libraries:
+
+```ts
+import { i18n } from "./i18n";
+
+class PlainElement extends HTMLElement {
+  private unsubscribe?: () => void;
+
+  connectedCallback() {
+    this.unsubscribe = i18n.subscribe(() => this.render());
+    this.render();
+  }
+
+  disconnectedCallback() {
+    this.unsubscribe?.();
+  }
+
+  render() {
+    this.textContent = i18n.getDictionary("home").title;
+  }
+}
+
+customElements.define("plain-element", PlainElement);
+```
+
+## API
+
+`createDialex({ ...dialex })` accepts the generated `dictionaries`, `config` and `loaders`, plus `defaultLocale`, `initialLocale`, `persist` (`"cookie"`, `"localStorage"` or `false`), `storageKey` and `onLocaleChange(locale)`.
+
+| Export                               | Description                                                                                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `createDialex(options)`              | Creates the shared locale state: `locale`, `setLocale`, `subscribe`, `getDictionary(name)`, `t(...names)`                   |
+| `new DialexController(host, dialex)` | A reactive controller. Requests an update of `host` when the locale changes or a lazy dictionary loads                      |
+| `controller.locale`                  | The active locale                                                                                                           |
+| `controller.setLocale(locale)`       | Changes the locale for every element that uses the same `createDialex` instance                                             |
+| `controller.dictionary(name)`        | The dictionary for the current locale, following the fallback chain                                                         |
+| `controller.t(...names)`             | A `t("dictionary.key", values?)` function bound to the current locale. Name the dictionaries to load them with lazy loading |
+
+## Lazy loading
+
+With `lazy: true` or `"locale"` in `dialex.config.ts`, `dictionary(name)` returns an empty object until the dictionary has loaded, and the element renders again when it arrives. Preload what the next view needs with `preloadDictionaries`:
+
+```ts
+import { preloadDictionaries } from "dialexjs/lit";
+
+import { dialex } from "./dialex.generated";
+
+preloadDictionaries(dialex, { locale: "tr" }, "checkout");
+```
+
+## Best practices
+
+- Create one `createDialex` instance per app and import it. Two instances do not share their locale.
+- Read the dictionary inside `render()`, so the element shows the new text after a locale change. A value read in the constructor stays in the old language.
+- Use `t("home")` for text with numbers or choices, and read plain strings from `dictionary("home")`.
+- An instance holds one locale, which suits the browser. On a server, do not share one instance between requests; create one per request with `initialLocale`.
+
+## Troubleshooting
+
+- **The element does not update on locale change**: the controller was created with a different `createDialex` instance than the one `setLocale` was called on. Import the same `i18n` module everywhere.
+- **The text is empty with lazy loading**: the dictionary has not arrived yet. The element renders again when it does; use `preloadDictionaries` to load it earlier.
+- **Keys are not autocompleted**: run `dx generate` and include `dialex-env.d.ts` in your `tsconfig`. The CLI adds the `dialexjs/lit` declarations when `lit` is in `package.json`.
 
 
 ---
@@ -1091,6 +1407,556 @@ export default () => sitemapEntries(["/", "/about"], routing);
 - **A redirect loop on every request**: the middleware `matcher` includes paths it then redirects again (static files, `/api`). Use the matcher from this page, which skips `_next`, `api` and files with an extension.
 - **A server component shows the default language**: the locale was not passed. Read `params` in the page and give it to `getDictionary(name, locale)`.
 - **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.
+
+
+---
+
+# File: frameworks/preact.md
+
+# Preact
+
+`dialexjs/preact` provides a context provider and hooks for Preact 10 and later. It does not need `preact/compat`, so it works in apps that use the plain Preact API.
+
+## Install
+
+Install the runtime and the CLI:
+
+```bash
+npm install dialexjs
+npm install -D @dialexjs/cli
+```
+
+## Set up
+
+Create `dialex.config.ts` with your locales (or run `dialex init`, which also adds the packages and a starter dictionary):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+});
+```
+
+Write a dictionary next to the code that uses it. Every locale has the same keys:
+
+```ts
+// src/home.content.ts
+import { defineDictionary } from "dialexjs";
+
+export default defineDictionary("home", {
+  en: {
+    title: "One dictionary, every language",
+    greeting: (name: string) => `Hello, ${name}!`,
+    items: "{count, plural, =0 {Your cart is empty} one {# item} other {# items}}",
+  },
+  tr: {
+    title: "Tek sözlük, her dil",
+    greeting: (name: string) => `Merhaba, ${name}!`,
+    items: "{count, plural, =0 {Sepetiniz boş} other {# ürün}}",
+  },
+});
+```
+
+Compile the dictionaries into `dialex.generated.ts` and the type declarations. Run it again when a dictionary changes, or keep `dx generate --watch` running:
+
+```bash
+npx dx generate
+```
+
+Wrap the app in `DialexProvider` and spread the generated `dialex` export into it:
+
+```tsx
+// src/index.tsx
+import { DialexProvider } from "dialexjs/preact";
+import { render } from "preact";
+
+import { App } from "./app";
+import { dialex } from "./dialex.generated";
+
+render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+  document.getElementById("app")!,
+);
+```
+
+## Use dictionaries
+
+`useDictionary(name)` returns the dictionary of the current locale, and `useT(...names)` returns a `t("dictionary.key", values?)` function:
+
+```tsx
+import { useDictionary, useT } from "dialexjs/preact";
+import { useState } from "preact/hooks";
+
+export function Home() {
+  const home = useDictionary("home");
+  const t = useT("home");
+  const [count, setCount] = useState(2);
+
+  return (
+    <>
+      <h1>{home.title}</h1>
+      <p>{home.greeting("Alex")}</p>
+      <p>{t("home.items", { count })}</p>
+      <button onClick={() => setCount((n) => n + 1)}>+1</button>
+    </>
+  );
+}
+```
+
+Values are type-checked from the ICU message, so `count` above must be a number.
+
+## Switch the locale
+
+`useDialex()` returns the active `locale` and `setLocale`. The provider remembers the choice in the `locale` cookie and keeps `<html lang>` in sync:
+
+```tsx
+import { useDialex } from "dialexjs/preact";
+
+import { locales } from "../dialex.generated";
+
+export function LanguageSwitcher() {
+  const { locale, setLocale } = useDialex();
+
+  return (
+    <select value={locale} onChange={(event) => setLocale(event.currentTarget.value)}>
+      {locales.map((code) => (
+        <option value={code}>{code.toUpperCase()}</option>
+      ))}
+    </select>
+  );
+}
+```
+
+## Server rendering
+
+With `preact-render-to-string` or a framework such as Fresh, pass the locale the server resolved as `initialLocale`, so the markup and the first client render agree. Use [`dialexjs/web`](./web.md) to resolve it from the request:
+
+```tsx
+import { DialexProvider } from "dialexjs/preact";
+import { createDialexHandler } from "dialexjs/web";
+import { renderToString } from "preact-render-to-string";
+
+import { App } from "./app";
+import { dialex } from "./dialex.generated";
+
+const resolveDialex = createDialexHandler({ ...dialex });
+
+export async function render(request: Request) {
+  const { locale } = await resolveDialex(request);
+  return renderToString(
+    <DialexProvider {...dialex} initialLocale={locale}>
+      <App />
+    </DialexProvider>,
+  );
+}
+```
+
+## API
+
+| Export                         | Description                                                                                                                                                                                                                                    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<DialexProvider {...dialex}>` | Provides the locale and dictionaries to the tree. Props: the generated `dictionaries`, `config`, `loaders`, plus `defaultLocale`, `initialLocale`, `persist` (`"cookie"`, `"localStorage"` or `false`), `storageKey`, `onLocaleChange(locale)` |
+| `useDialex()`                  | Returns `{ locale, setLocale, store }`. Throws outside a `DialexProvider`                                                                                                                                                                      |
+| `useDictionary(name)`          | The dictionary for the current locale, following the fallback chain. The component re-renders on locale change and when a lazy dictionary loads                                                                                                |
+| `useT(...names)`               | A `t("dictionary.key", values?)` function bound to the current locale. Name the dictionaries to load them with lazy loading                                                                                                                    |
+| `useDialexConfig()`            | The generated `config` (`locales`, `defaultLocale`, `prefixDefault`)                                                                                                                                                                           |
+
+## Lazy loading
+
+With `lazy: true` or `"locale"` in `dialex.config.ts`, `useDictionary` returns an empty object until the dictionary has loaded, and the component re-renders when it arrives. Preload what the next view needs with `preloadDictionaries`:
+
+```ts
+import { preloadDictionaries } from "dialexjs/preact";
+
+import { dialex } from "./dialex.generated";
+
+preloadDictionaries(dialex, { locale: "tr" }, "checkout");
+```
+
+## Best practices
+
+- Render `DialexProvider` once, at the root. Every component below it shares the same locale and the same loaded dictionaries.
+- Pass `initialLocale` when you render on the server. Without it the server renders the default locale and the remembered one is applied after mount.
+- Call hooks at the top level of the component, as with any Preact hook.
+- Use `useT("home")` for text with numbers or choices, and read plain strings from `useDictionary("home")`.
+
+## Troubleshooting
+
+- **`useDialex must be used within a DialexProvider`**: the component is rendered outside the provider. Wrap the root in `<DialexProvider {...dialex}>`.
+- **The text flashes the default language on load**: the remembered locale is applied after mount. Resolve it on the server and pass it as `initialLocale`.
+- **Keys are not autocompleted**: run `dx generate` and include `dialex-env.d.ts` in your `tsconfig`. The CLI adds the `dialexjs/preact` declarations when `preact` is in `package.json`.
+
+
+---
+
+# File: frameworks/qwik.md
+
+# Qwik
+
+`dialexjs/qwik` binds Qwik hooks to your dictionaries. Qwik serializes component state into the HTML and resumes on the client, and dictionaries contain functions that cannot be serialized, so they stay in a module of their own. Only the active locale, a string, travels in the page.
+
+## Install
+
+Install the runtime and the CLI:
+
+```bash
+npm install dialexjs
+npm install -D @dialexjs/cli
+```
+
+## Set up
+
+Create `dialex.config.ts` with your locales (or run `dialex init`, which also adds the packages and a starter dictionary):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+});
+```
+
+Write a dictionary next to the code that uses it. Every locale has the same keys:
+
+```ts
+// src/home.content.ts
+import { defineDictionary } from "dialexjs";
+
+export default defineDictionary("home", {
+  en: {
+    title: "One dictionary, every language",
+    greeting: (name: string) => `Hello, ${name}!`,
+    items: "{count, plural, =0 {Your cart is empty} one {# item} other {# items}}",
+  },
+  tr: {
+    title: "Tek sözlük, her dil",
+    greeting: (name: string) => `Merhaba, ${name}!`,
+    items: "{count, plural, =0 {Sepetiniz boş} other {# ürün}}",
+  },
+});
+```
+
+Compile the dictionaries into `dialex.generated.ts` and the type declarations. Run it again when a dictionary changes, or keep `dx generate --watch` running:
+
+```bash
+npx dx generate
+```
+
+Bind the hooks once, in a module, and import them from there:
+
+```ts
+// src/i18n.ts
+import { createDialexQwik } from "dialexjs/qwik";
+
+import { dialex } from "./dialex.generated";
+
+export const { useDialexProvider, useDialex, setLocale, useDictionary, useT } = createDialexQwik({
+  ...dialex,
+});
+```
+
+Call `useDialexProvider()` in the root layout:
+
+```tsx
+// src/routes/layout.tsx
+import { component$, Slot } from "@builder.io/qwik";
+
+import { useDialexProvider } from "../i18n";
+
+export default component$(() => {
+  useDialexProvider();
+  return <Slot />;
+});
+```
+
+## Use dictionaries
+
+`useDictionary(name)` returns the dictionary of the current locale, and `useT()` returns a `t("dictionary.key", values?)` function. Components that read them render again when the locale changes:
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+
+import { useDictionary, useT } from "../i18n";
+
+export default component$(() => {
+  const home = useDictionary("home");
+  const t = useT();
+
+  return (
+    <>
+      <h1>{home.title}</h1>
+      <p>{home.greeting("Alex")}</p>
+      <p>{t("home.items", { count: 2 })}</p>
+    </>
+  );
+});
+```
+
+Values are type-checked from the ICU message, so `count` above must be a number.
+
+## Switch the locale
+
+`useDialex()` returns the state of the provider, and `setLocale(state, locale)` changes it. `setLocale` is a plain function, so an `onClick$` can use it without capturing anything that cannot be serialized:
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+
+import { locales } from "../dialex.generated";
+import { setLocale, useDialex } from "../i18n";
+
+export const LanguageSwitcher = component$(() => {
+  const dialex = useDialex();
+
+  return (
+    <select value={dialex.locale} onChange$={(_, element) => setLocale(dialex, element.value)}>
+      {locales.map((code) => (
+        <option key={code} value={code}>
+          {code.toUpperCase()}
+        </option>
+      ))}
+    </select>
+  );
+});
+```
+
+`setLocale` remembers the choice in the `locale` cookie and keeps `<html lang>` in sync.
+
+## Resolve the locale on the server
+
+Resolve the locale from the request with [`dialexjs/web`](./web.md) in a `routeLoader$`, and give it to the provider. The first render on the server and the resumed client then agree:
+
+```tsx
+// src/routes/layout.tsx
+import { component$, Slot } from "@builder.io/qwik";
+import { routeLoader$ } from "@builder.io/qwik-city";
+import { createDialexHandler } from "dialexjs/web";
+
+import { dialex } from "../dialex.generated";
+import { useDialexProvider } from "../i18n";
+
+const resolveDialex = createDialexHandler({ ...dialex });
+
+export const useLocale = routeLoader$(async ({ request }) => {
+  const { locale } = await resolveDialex(request);
+  return locale;
+});
+
+export default component$(() => {
+  const locale = useLocale();
+  useDialexProvider({ initialLocale: locale.value });
+  return <Slot />;
+});
+```
+
+## API
+
+`createDialexQwik({ ...dialex })` accepts the generated `dictionaries`, `config` and `loaders`, plus `persist` (`"cookie"`, `"localStorage"` or `false`) and `storageKey`. It returns:
+
+| Export                                 | Description                                                                         |
+| -------------------------------------- | ----------------------------------------------------------------------------------- |
+| `useDialexProvider({ initialLocale })` | Provides the locale to the components below. Call it once, in the root layout       |
+| `useDialex()`                          | Returns the provider state, `{ locale }`. Read `locale`; change it with `setLocale` |
+| `setLocale(state, locale)`             | Changes the locale, remembers it and keeps `<html lang>` in sync                    |
+| `useDictionary(name)`                  | The dictionary for the current locale, following the fallback chain                 |
+| `useT()`                               | A `t("dictionary.key", values?)` function bound to the current locale               |
+
+## Best practices
+
+- Create the hooks with `createDialexQwik` in one module and import from it. Do not call `createDialexQwik` inside a component, because the dictionaries must not be part of the component state.
+- Read `useDialex().locale` in the component that needs it, not in the layout, so only that component renders again on a change.
+- Pass `initialLocale` from a `routeLoader$` for server-rendered pages, so a visitor with a remembered locale does not see a flash of the default language.
+- Keep `useT()` for messages with values, and read plain strings from `useDictionary()`.
+
+## Troubleshooting
+
+- **The hooks cannot find the provider**: the component is rendered outside it. Call `useDialexProvider()` in a layout above the component.
+- **Qwik reports a value that cannot be serialized**: a dictionary or the result of `useT()` was captured by a `$` closure, for example an `onClick$`. Read the text you need while the component renders, and pass only plain values into the closure.
+- **Keys are not autocompleted**: run `dx generate` and include `dialex-env.d.ts` in your `tsconfig`. The CLI adds the `dialexjs/qwik` declarations when `@builder.io/qwik` is in `package.json`.
+
+
+---
+
+# File: frameworks/react-native.md
+
+# React Native
+
+`dialexjs/react-native` is the provider for React Native and Expo apps. A native app has no cookies, no `localStorage` and no URL, so the provider takes the device's languages and a storage you already use, and the hooks are the same ones as in [React](./react.md).
+
+## Install
+
+Install the runtime and the CLI:
+
+```bash
+npm install dialexjs
+npm install -D @dialexjs/cli
+```
+
+## Set up
+
+Create `dialex.config.ts` with your locales (or run `dialex init`, which also adds the packages and a starter dictionary):
+
+```ts
+// dialex.config.ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+});
+```
+
+Write a dictionary next to the code that uses it. Every locale has the same keys:
+
+```ts
+// src/home.content.ts
+import { defineDictionary } from "dialexjs";
+
+export default defineDictionary("home", {
+  en: {
+    title: "One dictionary, every language",
+    greeting: (name: string) => `Hello, ${name}!`,
+    items: "{count, plural, =0 {Your cart is empty} one {# item} other {# items}}",
+  },
+  tr: {
+    title: "Tek sözlük, her dil",
+    greeting: (name: string) => `Merhaba, ${name}!`,
+    items: "{count, plural, =0 {Sepetiniz boş} other {# ürün}}",
+  },
+});
+```
+
+Compile the dictionaries into `dialex.generated.ts` and the type declarations. Run it again when a dictionary changes, or keep `dx generate --watch` running:
+
+```bash
+npx dx generate
+```
+
+Wrap the app in `DialexProvider`. With Expo, read the device's languages from `expo-localization`, and remember the user's choice with AsyncStorage:
+
+```tsx
+// App.tsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DialexProvider } from "dialexjs/react-native";
+import { getLocales } from "expo-localization";
+
+import { dialex } from "./src/dialex.generated";
+import { Home } from "./src/Home";
+
+export default function App() {
+  return (
+    <DialexProvider
+      {...dialex}
+      deviceLocales={getLocales().map((locale) => locale.languageTag)}
+      storage={AsyncStorage}
+    >
+      <Home />
+    </DialexProvider>
+  );
+}
+```
+
+The provider picks the first device language that the app supports, then applies the locale remembered in `storage` as soon as it has been read, and writes every later change back.
+
+## Use dictionaries
+
+`useDictionary(name)` and `useT(...names)` work as in React:
+
+```tsx
+import { useDictionary, useT } from "dialexjs/react-native";
+import { useState } from "react";
+import { Button, Text, View } from "react-native";
+
+export function Home() {
+  const home = useDictionary("home");
+  const t = useT("home");
+  const [count, setCount] = useState(2);
+
+  return (
+    <View>
+      <Text>{home.title}</Text>
+      <Text>{home.greeting("Alex")}</Text>
+      <Text>{t("home.items", { count })}</Text>
+      <Button title="+1" onPress={() => setCount((n) => n + 1)} />
+    </View>
+  );
+}
+```
+
+Values are type-checked from the ICU message, so `count` above must be a number.
+
+## Switch the locale
+
+`useDialex()` returns the active `locale` and `setLocale`:
+
+```tsx
+import { useDialex } from "dialexjs/react-native";
+import { Button, View } from "react-native";
+
+import { locales } from "../dialex.generated";
+
+export function LanguageSwitcher() {
+  const { locale, setLocale } = useDialex();
+
+  return (
+    <View>
+      {locales.map((code) => (
+        <Button
+          key={code}
+          title={code.toUpperCase()}
+          disabled={code === locale}
+          onPress={() => setLocale(code)}
+        />
+      ))}
+    </View>
+  );
+}
+```
+
+## Storage
+
+`storage` is anything with `getItem(key)` and `setItem(key, value)`, synchronous or returning a promise. AsyncStorage fits, and so does a small wrapper around MMKV or `expo-secure-store`:
+
+```ts
+import { MMKV } from "react-native-mmkv";
+
+const mmkv = new MMKV();
+
+export const storage = {
+  getItem: (key: string) => mmkv.getString(key),
+  setItem: (key: string, value: string) => mmkv.set(key, value),
+};
+```
+
+## API
+
+| Export                         | Description                                                                                                                                                                                                                                                                             |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<DialexProvider {...dialex}>` | Provides the locale and dictionaries to the tree. Props: the generated `dictionaries`, `config`, `loaders`, plus `deviceLocales` (a string or an array, most preferred first), `storage`, `storageKey` (default `"locale"`), `defaultLocale`, `initialLocale`, `onLocaleChange(locale)` |
+| `useDialex()`                  | Returns `{ locale, setLocale, store }`. Throws outside a `DialexProvider`                                                                                                                                                                                                               |
+| `useDictionary(name)`          | The dictionary for the current locale, following the fallback chain. With lazy loading it suspends until the dictionary has loaded                                                                                                                                                      |
+| `useT(...names)`               | A `t("dictionary.key", values?)` function bound to the current locale. Name the dictionaries to load them with lazy loading                                                                                                                                                             |
+| `useDialexConfig()`            | The generated `config` (`locales`, `defaultLocale`, `prefixDefault`)                                                                                                                                                                                                                    |
+
+## Best practices
+
+- Keep one `DialexProvider` at the root, above navigation, so every screen shares the locale.
+- Pass `deviceLocales` so a first launch opens in the language of the device. The stored choice wins after that.
+- Pass `initialLocale` only when you decide the locale yourself, for example from an account setting. It wins over the device and the storage.
+- The device language only matters until the user chooses. Show the choice in a settings screen, and call `setLocale` from there.
+
+## Troubleshooting
+
+- **`useDialex must be used within a DialexProvider`**: the component is rendered outside the provider. Wrap the root component in `<DialexProvider {...dialex}>`.
+- **The app opens in the default language**: no entry of `deviceLocales` matches a configured locale, or `deviceLocales` was not passed. `en-US` matches `en`, but `pt-BR` does not match `en`.
+- **The choice is not remembered**: no `storage` was passed. Without it the choice lasts until the app restarts.
+- **Keys are not autocompleted**: run `dx generate` and include `dialex-env.d.ts` in your `tsconfig`. The CLI adds the `dialexjs/react` declarations when `react-native` or `expo` is in `package.json`, and `dialexjs/react-native` shares them.
 
 
 ---
@@ -1803,6 +2669,65 @@ Put the placeholder in `src/app.html`; it is replaced with the resolved locale o
 
 ---
 
+# File: frameworks/trpc.md
+
+# tRPC
+
+`dialexjs/trpc` puts the locale and the dictionaries into the tRPC context, so every procedure can translate its own errors and messages. It has no dependency on `@trpc/server`; it reads the request your adapter already gives to `createContext`.
+
+```ts
+// src/trpc.ts
+import { initTRPC } from "@trpc/server";
+import { createDialexContext } from "dialexjs/trpc";
+
+import { dialex } from "./dialex.generated.js";
+
+const resolveDialex = createDialexContext({ ...dialex });
+
+export const createContext = ({ req }: { req: Request }) => ({
+  ...resolveDialex(req),
+});
+
+const t = initTRPC.context<Awaited<ReturnType<typeof createContext>>>().create();
+
+export const appRouter = t.router({
+  greeting: t.procedure.query(({ ctx }) => {
+    const dict = ctx.getDictionary("home");
+    return { title: dict.title, locale: ctx.locale };
+  }),
+});
+```
+
+`resolveDialex(request)` returns `{ locale, getDictionary, t }`. Spread it into your own context next to the session or database handle.
+
+## Request shapes
+
+The argument can be a Fetch `Request`, which the fetch, Next.js and Cloudflare adapters pass, or any object with `headers` and an optional `url`, which is what the Express and standalone adapters pass:
+
+```ts
+// Express adapter
+createExpressMiddleware({
+  router: appRouter,
+  createContext: ({ req }) => ({ ...resolveDialex(req) }),
+});
+```
+
+## Best practices
+
+- Pass `{ ...dialex }` from `dialex.generated.ts` to `createDialexContext`. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.
+- Create `resolveDialex` once, at module level, and call it per request inside `createContext`.
+- Use `ctx.getDictionary("errors")` to build the message of a `TRPCError`, so clients receive text in their own language.
+- tRPC calls often come from your own frontend. Send the locale as the `locale` cookie or the `Accept-Language` header, which the browser does by itself, rather than as an input of every procedure.
+
+## Troubleshooting
+
+- **The locale is always the default**: with the Express adapter `req.url` is relative to the mount path, so a locale prefix in the path is not seen. Use the cookie or `Accept-Language` instead, or pass the original URL in `url`.
+- **`[dialex] Dictionary "x" not found`**: the dictionary is not in `dialex.generated.ts`. Run `dx generate` and check that `include` in `dialex.config.ts` matches the file.
+- **`ctx.getDictionary` is missing in a procedure**: `createContext` does not return the result of `resolveDialex`. Spread it into the object you return.
+
+
+---
+
 # File: frameworks/vue.md
 
 # Vue / Nuxt
@@ -2106,7 +3031,7 @@ t("cart.items", { count: 3 }); // "3 items"; `count` is checked at compile time
 
 - Decide the locale once per request (on the server) or once per app (in the browser), and pass it down. Do not read cookies or `navigator.language` in individual components.
 - With server rendering, give the client the locale the server used (`initialLocale`) so the first client render matches the HTML. Otherwise the page flashes the wrong language or hydration reports a mismatch.
-- Set `<html lang>` to the active locale. The React, Svelte and Solid providers do it for you; on the server, write it into the HTML you render.
+- Set `<html lang>` to the active locale. The React, Preact, Svelte, Solid, Qwik and Lit providers do it for you; on the server, write it into the HTML you render.
 - Remember the visitor's choice in the `locale` cookie, which the server adapters read, rather than in `localStorage`, which the server cannot see.
 
 ## Load only what a page needs

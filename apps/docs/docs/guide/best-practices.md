@@ -58,7 +58,7 @@ t("cart.items", { count: 3 }); // "3 items"; `count` is checked at compile time
 
 - Decide the locale once per request (on the server) or once per app (in the browser), and pass it down. Do not read cookies or `navigator.language` in individual components.
 - With server rendering, give the client the locale the server used (`initialLocale`) so the first client render matches the HTML. Otherwise the page flashes the wrong language or hydration reports a mismatch.
-- Set `<html lang>` to the active locale. The React, Svelte and Solid providers do it for you; on the server, write it into the HTML you render.
+- Set `<html lang>` to the active locale. The React, Preact, Svelte, Solid, Qwik and Lit providers do it for you; on the server, write it into the HTML you render.
 - Remember the visitor's choice in the `locale` cookie, which the server adapters read, rather than in `localStorage`, which the server cannot see.
 
 ## Load only what a page needs

@@ -58,9 +58,25 @@
 
 `DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [Solid](../frameworks/solid.md)。
 
+## `dialexjs/preact`
+
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [Preact](../frameworks/preact.md)。
+
+## `dialexjs/qwik`
+
+`createDialexQwik` 返回 `useDialexProvider`、`useDialex`、`setLocale`、`useDictionary` 和 `useT`；另有 `preloadDictionaries`。 参见 [Qwik](../frameworks/qwik.md)。
+
+## `dialexjs/lit`
+
+`createDialex`, `DialexController`, `preloadDictionaries`. 参见 [Lit](../frameworks/lit.md)。
+
+## `dialexjs/react-native`
+
+`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [React Native](../frameworks/react-native.md)。
+
 ## 服务端适配器
 
-`dialexjs/express`（`dialex`）、`dialexjs/fastify`（`dialexPlugin`）、`dialexjs/koa`（`dialex`）、`dialexjs/hono`（`dialex`）、`dialexjs/nestjs`（`DialexModule` 及相关项）、`dialexjs/elysia`（`dialex`）、`dialexjs/sveltekit`（`dialexHandle`）、`dialexjs/astro`（`dialex`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
+`dialexjs/express`（`dialex`）、`dialexjs/fastify`（`dialexPlugin`）、`dialexjs/koa`（`dialex`）、`dialexjs/hono`（`dialex`）、`dialexjs/nestjs`（`DialexModule` 及相关项）、`dialexjs/elysia`（`dialex`）、`dialexjs/sveltekit`（`dialexHandle`）、`dialexjs/astro`（`dialex`）、`dialexjs/hapi`（`dialexPlugin`）、`dialexjs/adonis`（`createDialexMiddleware`）、`dialexjs/trpc`（`createDialexContext`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
 
 ## `dialexjs/routing`
 

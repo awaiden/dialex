@@ -58,7 +58,7 @@ t("cart.items", { count: 3 }); // "3 items"; `count` is checked at compile time
 
 - Decide el locale una vez por petición (en el servidor) o una vez por aplicación (en el navegador) y pásalo hacia abajo. No leas cookies ni `navigator.language` en componentes individuales.
 - Con renderizado en el servidor, da al cliente el locale que usó el servidor (`initialLocale`) para que el primer render del cliente coincida con el HTML. Si no, la página parpadea con el idioma equivocado o la hidratación informa de una discrepancia.
-- Establece `<html lang>` con el locale activo. Los providers de React, Svelte y Solid lo hacen por ti; en el servidor, escríbelo en el HTML que renderizas.
+- Establece `<html lang>` con el locale activo. Los providers de React, Preact, Svelte, Solid, Qwik y Lit lo hacen por ti; en el servidor, escríbelo en el HTML que renderizas.
 - Recuerda la elección del visitante en la cookie `locale`, que leen los adaptadores de servidor, en lugar de en `localStorage`, que el servidor no puede ver.
 
 ## Carga solo lo que necesita una página

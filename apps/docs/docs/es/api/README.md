@@ -58,9 +58,25 @@ Construye un `t("dictionary.key.path", ...args)` con tipos. Consulta [Rutas de c
 
 `DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [Solid](../frameworks/solid.md).
 
+## `dialexjs/preact`
+
+`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [Preact](../frameworks/preact.md).
+
+## `dialexjs/qwik`
+
+`createDialexQwik` devuelve `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` y `useT`; además `preloadDictionaries`. Consulta [Qwik](../frameworks/qwik.md).
+
+## `dialexjs/lit`
+
+`createDialex`, `DialexController`, `preloadDictionaries`. Consulta [Lit](../frameworks/lit.md).
+
+## `dialexjs/react-native`
+
+`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Consulta [React Native](../frameworks/react-native.md).
+
 ## Adaptadores de servidor
 
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` y compañía), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`). Las opciones compartidas están en [Detección de locale](../guide/locale-detection.md#options).
+`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` y compañía), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Las opciones compartidas están en [Detección de locale](../guide/locale-detection.md#options).
 
 ## `dialexjs/routing`
 

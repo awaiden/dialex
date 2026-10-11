@@ -18,11 +18,18 @@ Dialex ships one adapter per framework as a subpath export of `dialexjs`.
 | [Vue / Nuxt](./vue.md)            | `dialexjs/vue`, `dialexjs/nuxt`                                     | `createDialex`, `useDialex`, `useDictionary`, Nuxt module      |
 | [Svelte](./svelte.md)             | `dialexjs/svelte`                                                   | `provideDialex`, `useDialex`, `useDictionary`, `useT`          |
 | [Solid](./solid.md)               | `dialexjs/solid`                                                    | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
+| [Preact](./preact.md)             | `dialexjs/preact`                                                   | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
+| [Qwik](./qwik.md)                 | `dialexjs/qwik`                                                     | `createDialexQwik`, `useDictionary`, `useT`, `setLocale`       |
+| [Lit](./lit.md)                   | `dialexjs/lit`                                                      | `createDialex`, `DialexController`                             |
+| [React Native](./react-native.md) | `dialexjs/react-native`                                             | `DialexProvider`, `useDialex`, `useDictionary`, `useT`         |
 | [Angular](./angular.md)           | `dialexjs/angular`                                                  | `provideDialex`, `injectDialex`, `injectT`, `injectDictionary` |
+| [Hapi](./hapi.md)                 | `dialexjs/hapi`                                                     | `dialexPlugin`                                                 |
+| [AdonisJS](./adonis.md)           | `dialexjs/adonis`                                                   | `createDialexMiddleware()`                                     |
+| [tRPC](./trpc.md)                 | `dialexjs/trpc`                                                     | `createDialexContext()`                                        |
 | [h3 / Nitro](./h3.md)             | `dialexjs/h3`                                                       | `dialexH3()` middleware (h3 1.x)                               |
 | [Fetch API](./web.md)             | `dialexjs/web`                                                      | `createDialexHandler()` for any `Request`                      |
 
-The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Spread the `dialex` object from `dialex generate` into the adapter. It carries the dictionaries and the locale config (`defaultLocale`, `locales`, `fallbacks`), so nothing is repeated by hand:
+The server adapters (Express, Fastify, Koa, Hono, NestJS, Elysia, SvelteKit, Astro, h3, Hapi, AdonisJS) all behave the same way: they resolve the locale ([see detection](../guide/locale-detection.md)) and expose `locale` and `getDictionary(name)` on the request. Spread the `dialex` object from `dialex generate` into the adapter. It carries the dictionaries and the locale config (`defaultLocale`, `locales`, `fallbacks`), so nothing is repeated by hand:
 
 ```ts
 import { dialex } from "./src/dialex.generated.js";
@@ -30,4 +37,4 @@ import { dialex } from "./src/dialex.generated.js";
 app.use(dialexExpress({ ...dialex }));
 ```
 
-Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@angular/core`, `next`, `react`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.
+Framework packages (`express`, `fastify`, `hono`, `koa`, `elysia`, `astro`, `h3`, `@hapi/hapi`, `@adonisjs/http-server`, `@angular/core`, `next`, `react`, `preact`, `lit`, `@builder.io/qwik`, `vue`, `@nuxt/kit`, `@nestjs/*`, `rxjs`, `vite`) are optional peer dependencies; install only what you use.

@@ -58,7 +58,7 @@ t("cart.items", { count: 3 }); // "3 items"; `count` is checked at compile time
 
 - Yerel ayarı istek başına bir kez (sunucuda) veya uygulama başına bir kez (tarayıcıda) belirleyin ve aşağıya aktarın. Çerezleri veya `navigator.language` değerini tek tek bileşenlerde okumayın.
 - Sunucu tarafı oluşturmada, ilk istemci oluşturması HTML ile eşleşsin diye istemciye sunucunun kullandığı yerel ayarı verin (`initialLocale`). Aksi halde sayfa yanlış dilde yanıp söner veya hidrasyon uyuşmazlık bildirir.
-- `<html lang>` değerini etkin yerel ayara ayarlayın. React, Svelte ve Solid sağlayıcıları bunu sizin için yapar; sunucuda oluşturduğunuz HTML'e kendiniz yazın.
+- `<html lang>` değerini etkin yerel ayara ayarlayın. React, Preact, Svelte, Solid, Qwik ve Lit sağlayıcıları bunu sizin için yapar; sunucuda oluşturduğunuz HTML'e kendiniz yazın.
 - Ziyaretçinin seçimini sunucunun göremediği `localStorage` yerine sunucu adaptörlerinin okuduğu `locale` çerezinde saklayın.
 
 ## Yalnızca bir sayfanın ihtiyacı olanı yükleyin

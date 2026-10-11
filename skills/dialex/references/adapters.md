@@ -111,6 +111,73 @@ import { dialex } from "./dialex.generated";
 const home = useDictionary("home"); // an accessor: home().title
 ```
 
+## Preact
+
+```tsx
+import { DialexProvider, useDictionary } from "dialexjs/preact";
+import { render } from "preact";
+
+import { dialex } from "./dialex.generated";
+
+// render(<DialexProvider {...dialex}><App /></DialexProvider>, root)
+const home = useDictionary("home"); // a plain object: home.title
+```
+
+## Qwik
+
+Dictionaries contain functions, so bind the hooks in a module and import them (never create
+them inside a component):
+
+```ts
+// src/i18n.ts
+import { createDialexQwik } from "dialexjs/qwik";
+
+import { dialex } from "./dialex.generated";
+
+export const { useDialexProvider, useDialex, setLocale, useDictionary, useT } = createDialexQwik({
+  ...dialex,
+});
+```
+
+Call `useDialexProvider({ initialLocale })` in the root layout. Change the locale with
+`setLocale(useDialex(), "tr")`. `useDictionary("home")` returns an accessor: write `home().title`
+in JSX, because Qwik does not refresh plain property reads of a copied object.
+
+## Lit and Web Components
+
+```ts
+import { createDialex, DialexController } from "dialexjs/lit";
+
+export const i18n = createDialex({ ...dialex }); // once, in its own module
+
+// in an element: private dx = new DialexController(this, i18n);
+// in render(): this.dx.dictionary("home").title, this.dx.t("home")("home.items", { count })
+```
+
+## React Native / Expo
+
+```tsx
+import { DialexProvider, useDictionary } from "dialexjs/react-native";
+
+// <DialexProvider {...dialex} deviceLocales={["tr-TR", "en-US"]} storage={AsyncStorage}>
+```
+
+`deviceLocales` picks the first supported device language, and `storage` (anything with
+`getItem` and `setItem`) remembers the user's choice. The hooks are those of `dialexjs/react`.
+
+## Hapi, AdonisJS and tRPC
+
+```ts
+// Hapi: request.locale, request.getDictionary("home")
+await server.register({ plugin: dialexPlugin, options: { ...dialex } }); // dialexjs/hapi
+
+// AdonisJS: export default createDialexMiddleware({ ...dialex }) // dialexjs/adonis
+// then router.use([() => import("#middleware/dialex_middleware")])
+
+// tRPC: const resolveDialex = createDialexContext({ ...dialex }) // dialexjs/trpc
+// createContext: ({ req }) => ({ ...resolveDialex(req) })
+```
+
 ## React Router (framework mode)
 
 Resolve the locale in the root loader with `createDialexHandler({ ...dialex })` from
