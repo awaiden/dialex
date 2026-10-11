@@ -32,7 +32,7 @@ Binaries installed: `dialex` and the shorter alias `dx` (handy in package.json s
 
 Initialize or configure Dialex in any project:
 
-- **Automatic Framework Detection**: Identifies Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, and React/Vite.
+- **Automatic Framework Detection**: Identifies Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, Svelte, Solid, Preact, Qwik, Lit, React Native, Hapi, AdonisJS, tRPC, React Router, and React/Vite.
 - **Magicast AST Injection**: Manipulates `dialex.config.ts` and registers the module in `nuxt.config.ts` (Nuxt) cleanly.
 - **Starter Dictionaries**: Emits typed starter dictionary and TypeScript declaration file.
 

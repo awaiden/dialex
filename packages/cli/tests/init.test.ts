@@ -97,6 +97,13 @@ describe("CLI init command", () => {
     ["koa", { koa: "^3.0.0" }],
     ["nestjs", { "@nestjs/core": "^11.0.0" }],
     ["elysia", { elysia: "^1.0.0" }],
+    ["preact", { preact: "^10.0.0" }],
+    ["qwik", { "@builder.io/qwik": "^1.0.0" }],
+    ["lit", { lit: "^3.0.0" }],
+    ["react-native", { "react-native": "^0.80.0" }],
+    ["hapi", { "@hapi/hapi": "^21.0.0" }],
+    ["adonis", { "@adonisjs/core": "^7.0.0" }],
+    ["trpc", { "@trpc/server": "^11.0.0" }],
     [undefined, {}],
   ])("creates dialex.config.ts for %s", async (framework, deps) => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-config-test-"));

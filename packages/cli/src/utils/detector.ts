@@ -16,7 +16,14 @@ export type SupportedFramework =
   | "nuxt"
   | "svelte"
   | "solid"
-  | "react-router";
+  | "react-router"
+  | "preact"
+  | "qwik"
+  | "lit"
+  | "react-native"
+  | "hapi"
+  | "adonis"
+  | "trpc";
 
 export interface DetectedFramework {
   framework: SupportedFramework;
@@ -73,6 +80,20 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (@nestjs/core)",
         };
       }
+      if ("@adonisjs/core" in allDeps) {
+        return {
+          framework: "adonis",
+          confidence: "high",
+          matchedRule: "package.json dependencies (@adonisjs/core)",
+        };
+      }
+      if ("@hapi/hapi" in allDeps) {
+        return {
+          framework: "hapi",
+          confidence: "high",
+          matchedRule: "package.json dependencies (@hapi/hapi)",
+        };
+      }
       if ("fastify" in allDeps) {
         return {
           framework: "fastify",
@@ -108,6 +129,27 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (hono)",
         };
       }
+      if ("@trpc/server" in allDeps) {
+        return {
+          framework: "trpc",
+          confidence: "high",
+          matchedRule: "package.json dependencies (@trpc/server)",
+        };
+      }
+      if ("@builder.io/qwik" in allDeps) {
+        return {
+          framework: "qwik",
+          confidence: "high",
+          matchedRule: "package.json dependencies (@builder.io/qwik)",
+        };
+      }
+      if ("react-native" in allDeps || "expo" in allDeps) {
+        return {
+          framework: "react-native",
+          confidence: "high",
+          matchedRule: "package.json dependencies (react-native/expo)",
+        };
+      }
       if ("@react-router/dev" in allDeps) {
         return {
           framework: "react-router",
@@ -122,6 +164,13 @@ export function detectFramework(root: string): DetectedFramework {
           matchedRule: "package.json dependencies (solid-js)",
         };
       }
+      if ("preact" in allDeps) {
+        return {
+          framework: "preact",
+          confidence: "high",
+          matchedRule: "package.json dependencies (preact)",
+        };
+      }
       if ("svelte" in allDeps) {
         return {
           framework: "svelte",
@@ -134,6 +183,13 @@ export function detectFramework(root: string): DetectedFramework {
           framework: "vue",
           confidence: "high",
           matchedRule: "package.json dependencies (vue)",
+        };
+      }
+      if ("lit" in allDeps) {
+        return {
+          framework: "lit",
+          confidence: "high",
+          matchedRule: "package.json dependencies (lit)",
         };
       }
       if ("react" in allDeps || "vite" in allDeps) {

@@ -79,6 +79,29 @@ describe("relativeImportExtension", () => {
     expect(relativeImportExtension(dir)).toBe(".js");
   });
 
+  it("follows extends that names a package (AdonisJS, @tsconfig/*)", () => {
+    const dir = project({
+      "node_modules/@adonisjs/tsconfig/tsconfig.app.json": `{ "extends": "./tsconfig.base.json" }`,
+      "node_modules/@adonisjs/tsconfig/tsconfig.base.json": `{ "compilerOptions": { "module": "NodeNext" } }`,
+      "tsconfig.json": `{ "extends": "@adonisjs/tsconfig/tsconfig.app.json" }`,
+    });
+    expect(relativeImportExtension(dir)).toBe(".js");
+
+    // the nearest node_modules wins, found from the project's own folder upwards
+    const nested = path.join(dir, "packages", "app");
+    fs.mkdirSync(nested, { recursive: true });
+    fs.writeFileSync(
+      path.join(nested, "tsconfig.json"),
+      `{ "extends": "@adonisjs/tsconfig/tsconfig.app.json" }`,
+    );
+    expect(relativeImportExtension(nested)).toBe(".js");
+  });
+
+  it("ignores a package extends it cannot find", () => {
+    const dir = project({ "tsconfig.json": `{ "extends": "@missing/tsconfig/base.json" }` });
+    expect(relativeImportExtension(dir)).toBe("");
+  });
+
   it("follows the project reference that covers src in a solution tsconfig (Vite templates)", () => {
     const dir = project({
       "tsconfig.json": `{ "files": [], "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }] }`,

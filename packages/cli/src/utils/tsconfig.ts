@@ -42,7 +42,16 @@ function configFile(from: string): string | undefined {
   return undefined;
 }
 
-/** `moduleResolution` and `include` of a tsconfig, following relative `extends`. */
+/** A package in `extends` (`@adonisjs/tsconfig/tsconfig.app.json`), looked up from `dir` upwards. */
+function packageConfig(from: string, specifier: string): string | undefined {
+  for (let dir = from; ; dir = path.dirname(dir)) {
+    const found = configFile(path.join(dir, "node_modules", specifier));
+    if (found) return found;
+    if (path.dirname(dir) === dir) return undefined;
+  }
+}
+
+/** `moduleResolution` and `include` of a tsconfig, following `extends` (relative or a package). */
 function read(file: string, depth = 0): Resolved {
   const result: Resolved = { references: [] };
   let json: any;
@@ -53,9 +62,12 @@ function read(file: string, depth = 0): Resolved {
   }
   const dir = path.dirname(file);
 
+  const extendsFrom: unknown = Array.isArray(json.extends) ? json.extends.at(-1) : json.extends;
   const parent =
-    typeof json.extends === "string" && json.extends.startsWith(".") && depth < 5
-      ? configFile(path.resolve(dir, json.extends))
+    typeof extendsFrom === "string" && depth < 5
+      ? extendsFrom.startsWith(".")
+        ? configFile(path.resolve(dir, extendsFrom))
+        : packageConfig(dir, extendsFrom)
       : undefined;
   if (parent) Object.assign(result, read(parent, depth + 1));
 

@@ -60,6 +60,20 @@ describe("generateDts adapters", () => {
     expect(REGISTRY_ADAPTERS).toEqual(expect.arrayContaining(["svelte", "solid"]));
   });
 
+  it("maps the newer frameworks to their entry points", () => {
+    expect(detectAdapters(project({ preact: "^10.0.0" }).dir)).toEqual(["preact"]);
+    expect(detectAdapters(project({ "@builder.io/qwik": "^1.0.0" }).dir)).toEqual(["qwik"]);
+    expect(detectAdapters(project({ lit: "^3.0.0" }).dir)).toEqual(["lit"]);
+    expect(detectAdapters(project({ "@hapi/hapi": "^21.0.0" }).dir)).toEqual(["hapi"]);
+    expect(detectAdapters(project({ "@adonisjs/core": "^7.0.0" }).dir)).toEqual(["adonis"]);
+    expect(detectAdapters(project({ "@trpc/server": "^11.0.0" }).dir)).toEqual(["trpc"]);
+    // React Native shares the registry of dialexjs/react, which it re-exports.
+    expect(detectAdapters(project({ "react-native": "^0.80.0" }).dir)).toEqual(["react"]);
+    expect(REGISTRY_ADAPTERS).toEqual(
+      expect.arrayContaining(["preact", "qwik", "lit", "hapi", "adonis", "trpc"]),
+    );
+  });
+
   it("falls back to every adapter when nothing is recognised or there is no package.json", () => {
     expect(detectAdapters(project({ lodash: "^4.0.0" }).dir)).toEqual([...REGISTRY_ADAPTERS]);
     expect(detectAdapters(project().dir)).toEqual([...REGISTRY_ADAPTERS]);

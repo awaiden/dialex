@@ -60,6 +60,12 @@ export const REGISTRY_ADAPTERS = [
   "angular",
   "svelte",
   "solid",
+  "preact",
+  "qwik",
+  "lit",
+  "hapi",
+  "adonis",
+  "trpc",
 ] as const;
 
 /** Dependencies that tell which `dialexjs/*` entry points a project can import. */
@@ -83,6 +89,16 @@ const ADAPTER_DEPENDENCIES: Record<string, string[]> = {
   "@angular/core": ["angular"],
   svelte: ["svelte"],
   "solid-js": ["solid"],
+  preact: ["preact"],
+  "@builder.io/qwik": ["qwik"],
+  lit: ["lit"],
+  "@hapi/hapi": ["hapi"],
+  "@adonisjs/core": ["adonis"],
+  "@adonisjs/http-server": ["adonis"],
+  "@trpc/server": ["trpc"],
+  // `dialexjs/react-native` re-exports the hooks of `dialexjs/react`, so one registry serves both.
+  "react-native": ["react"],
+  expo: ["react"],
   // Frameworks that hand you a standard `Request`, served by `dialexjs/web`.
   "react-router": ["web"],
   "react-router-dom": ["web"],

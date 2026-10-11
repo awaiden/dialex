@@ -109,6 +109,41 @@ export async function runInit(options: InitOptions = {}) {
         label: "React Router",
         hint: detected.framework === "react-router" ? "detected" : undefined,
       },
+      {
+        value: "react-native",
+        label: "React Native / Expo",
+        hint: detected.framework === "react-native" ? "detected" : undefined,
+      },
+      {
+        value: "preact",
+        label: "Preact / Vite",
+        hint: detected.framework === "preact" ? "detected" : undefined,
+      },
+      {
+        value: "qwik",
+        label: "Qwik",
+        hint: detected.framework === "qwik" ? "detected" : undefined,
+      },
+      {
+        value: "lit",
+        label: "Lit / Web Components",
+        hint: detected.framework === "lit" ? "detected" : undefined,
+      },
+      {
+        value: "hapi",
+        label: "Hapi",
+        hint: detected.framework === "hapi" ? "detected" : undefined,
+      },
+      {
+        value: "adonis",
+        label: "AdonisJS",
+        hint: detected.framework === "adonis" ? "detected" : undefined,
+      },
+      {
+        value: "trpc",
+        label: "tRPC",
+        hint: detected.framework === "trpc" ? "detected" : undefined,
+      },
     ];
 
     const selectedFramework = await p.select({
@@ -600,6 +635,135 @@ export default function App() {
     </DialexProvider>
   );
 }
+`);
+      break;
+    case "preact":
+      logger.log(`
+// src/index.tsx
+import { render } from "preact";
+import { DialexProvider } from "dialexjs/preact";
+import { dialex } from "./dialex.generated";
+import { App } from "./app";
+
+render(
+  <DialexProvider {...dialex}>
+    <App />
+  </DialexProvider>,
+  document.getElementById("app")!,
+);
+
+// In components: const dict = useDictionary("home")
+`);
+      break;
+    case "qwik":
+      logger.log(`
+// src/i18n.ts
+import { createDialexQwik } from "dialexjs/qwik";
+import { dialex } from "./dialex.generated";
+
+export const { useDialexProvider, useDialex, setLocale, useDictionary, useT } =
+  createDialexQwik({ ...dialex });
+
+// src/routes/layout.tsx
+export default component$(() => {
+  useDialexProvider();
+  return <Slot />;
+});
+
+// In components: const home = useDictionary("home"); then {home().title}
+`);
+      break;
+    case "lit":
+      logger.log(`
+// src/i18n.ts
+import { createDialex } from "dialexjs/lit";
+import { dialex } from "./dialex.generated";
+
+export const i18n = createDialex({ ...dialex });
+
+// src/my-element.ts
+import { LitElement, html } from "lit";
+import { DialexController } from "dialexjs/lit";
+import { i18n } from "./i18n";
+
+class MyElement extends LitElement {
+  private dx = new DialexController(this, i18n);
+
+  render() {
+    return html\`<h1>\${this.dx.dictionary("home").title}</h1>\`;
+  }
+}
+`);
+      break;
+    case "react-native":
+      logger.log(`
+// App.tsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getLocales } from "expo-localization";
+import { DialexProvider } from "dialexjs/react-native";
+import { dialex } from "./src/dialex.generated";
+
+export default function App() {
+  return (
+    <DialexProvider
+      {...dialex}
+      deviceLocales={getLocales().map((locale) => locale.languageTag)}
+      storage={AsyncStorage}
+    >
+      <Home />
+    </DialexProvider>
+  );
+}
+
+// In components: const dict = useDictionary("home")
+`);
+      break;
+    case "hapi":
+      logger.log(`
+import Hapi from "@hapi/hapi";
+import { dialexPlugin } from "dialexjs/hapi";
+import { dialex } from "./src/dialex.generated.js";
+
+const server = Hapi.server({ port: 3000 });
+await server.register({ plugin: dialexPlugin, options: { ...dialex } });
+
+server.route({
+  method: "GET",
+  path: "/",
+  handler: (request) => ({ title: request.getDictionary("home").title }),
+});
+`);
+      break;
+    case "adonis":
+      logger.log(`
+// app/middleware/dialex_middleware.ts
+import { createDialexMiddleware } from "dialexjs/adonis";
+import { dialex } from "../dialex.generated.js";
+
+export default createDialexMiddleware({ ...dialex });
+
+// start/kernel.ts
+router.use([() => import("#middleware/dialex_middleware")]);
+
+// In handlers: ctx.locale, ctx.getDictionary("home")
+`);
+      break;
+    case "trpc":
+      logger.log(`
+// src/trpc.ts
+import { initTRPC } from "@trpc/server";
+import { createDialexContext } from "dialexjs/trpc";
+import { dialex } from "./dialex.generated.js";
+
+const resolveDialex = createDialexContext({ ...dialex });
+
+export const createContext = ({ req }: { req: Request }) => ({ ...resolveDialex(req) });
+
+const t = initTRPC.context<Awaited<ReturnType<typeof createContext>>>().create();
+
+export const appRouter = t.router({
+  greeting: t.procedure.query(({ ctx }) => ctx.getDictionary("home").title),
+});
 `);
       break;
     case "nuxt":

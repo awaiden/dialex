@@ -36,6 +36,14 @@ describe("Framework detector", () => {
     ["react-router", { "@react-router/dev": "^8.0.0", react: "^19.0.0", vite: "^8.0.0" }],
     ["sveltekit", { "@sveltejs/kit": "^2.0.0", svelte: "^5.0.0" }],
     ["vue", { vue: "^3.5.0", vite: "^8.0.0" }],
+    ["preact", { preact: "^10.0.0", vite: "^8.0.0" }],
+    ["qwik", { "@builder.io/qwik": "^1.0.0", vite: "^8.0.0" }],
+    ["lit", { lit: "^3.0.0", vite: "^8.0.0" }],
+    ["react-native", { "react-native": "^0.80.0", react: "^19.0.0" }],
+    ["react-native", { expo: "^54.0.0", react: "^19.0.0" }],
+    ["hapi", { "@hapi/hapi": "^21.0.0" }],
+    ["adonis", { "@adonisjs/core": "^7.0.0" }],
+    ["trpc", { "@trpc/server": "^11.0.0" }],
   ])("detects %s from dependencies", (framework, dependencies) => {
     fs.writeFileSync(
       path.join(tempDir, "package.json"),
@@ -43,6 +51,20 @@ describe("Framework detector", () => {
       "utf-8",
     );
     expect(detectFramework(tempDir).framework).toBe(framework);
+  });
+
+  it("prefers the host framework over tRPC and Preact over Vite's React default", () => {
+    const write = (dependencies: Record<string, string>) =>
+      fs.writeFileSync(path.join(tempDir, "package.json"), JSON.stringify({ dependencies }));
+
+    write({ "@trpc/server": "^11.0.0", express: "^5.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("express");
+
+    write({ "@trpc/server": "^11.0.0", next: "^15.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("next");
+
+    write({ preact: "^10.0.0", react: "^19.0.0" });
+    expect(detectFramework(tempDir).framework).toBe("preact");
   });
 
   it("detects NestJS from @nestjs/core", () => {
