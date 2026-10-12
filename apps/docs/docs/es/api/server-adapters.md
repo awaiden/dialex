@@ -24,10 +24,10 @@ Cada adaptador acepta las opciones de detección de locale y, salvo `createDiale
 
 ### Opciones base de adaptador (`BaseAdapterOptions`)
 
-| Opción         | Tipo              | Por defecto | Descripción                                                                                                                                                                |
-| -------------- | ----------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dictionaries` | `DictionaryInput` | —           | Un mapa `{ name: { locale: content } }` o un array de resultados de `defineDictionary`. Sin ella solo se encuentran los diccionarios ya registrados con `defineDictionary` |
-| `setHeader`    | `boolean`         | `true`      | Enviar el locale resuelto como `Content-Language`                                                                                                                          |
+| Opción         | Tipo              | Por defecto | Descripción                                                                                                                                                                                                                                                                                          |
+| -------------- | ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dictionaries` | `DictionaryInput` | —           | Los `dictionaries` generados; `{ ...dialex }` los establece. Pase su propio mapa `{ name: { locale: content } }` o un array de resultados de `defineDictionary` solo si no usa el archivo generado. Sin ninguno de los dos solo se encuentran los diccionarios ya registrados con `defineDictionary` |
+| `setHeader`    | `boolean`         | `true`      | Enviar el locale resuelto como `Content-Language`                                                                                                                                                                                                                                                    |
 
 ## Qué añade cada adaptador
 

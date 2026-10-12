@@ -24,10 +24,10 @@ Every adapter takes the locale detection options and, except `createDialexMiddle
 
 ### Base adapter options (`BaseAdapterOptions`)
 
-| Option         | Type              | Default | Description                                                                                                                                                           |
-| -------------- | ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dictionaries` | `DictionaryInput` | —       | A `{ name: { locale: content } }` map or an array of `defineDictionary` results. Without it only dictionaries already registered through `defineDictionary` are found |
-| `setHeader`    | `boolean`         | `true`  | Send the resolved locale as `Content-Language`                                                                                                                        |
+| Option         | Type              | Default | Description                                                                                                                                                                                                                                                                            |
+| -------------- | ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dictionaries` | `DictionaryInput` | —       | The generated `dictionaries`; `{ ...dialex }` sets it. Pass your own `{ name: { locale: content } }` map or array of `defineDictionary` results only when you do not use the generated file. Without either, only dictionaries already registered through `defineDictionary` are found |
+| `setHeader`    | `boolean`         | `true`  | Send the resolved locale as `Content-Language`                                                                                                                                                                                                                                         |
 
 ## What each adapter adds
 
