@@ -176,6 +176,55 @@ export function LanguageSwitcher() {
 }
 ```
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 React Router 的链接组件：自己写的几行代码就能让 `useNavigate()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+把路由放在可选的 `:locale?` 段之下，这样 `/cart` 和 `/tr/cart` 都能匹配：
+
+```ts
+// app/routes.ts
+import { index, route, type RouteConfig } from "@react-router/dev/routes";
+
+export default [
+  route(":locale?", "routes/layout.tsx", [
+    index("routes/home.tsx"),
+    route("cart", "routes/cart.tsx"),
+  ]),
+] satisfies RouteConfig;
+```
+
+```tsx
+// app/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+import { Link, useNavigate } from "react-router";
+
+import { useLocalizedPath } from "../useLocalizedPath";
+
+export function CartLinks() {
+  const localize = useLocalizedPath();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to={localize("/cart")}>Cart</Link>
+      <button onClick={() => navigate(localize("/checkout"))}>Checkout</button>
+    </>
+  );
+}
+```
+
 ## 最佳实践
 
 - 只在根 loader 中解析 locale，在子路由中用 `useRouteLoaderData("root")` 或从 provider 读取。在每个路由中重复解析既浪费又可能不一致。

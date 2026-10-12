@@ -177,6 +177,25 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 Lit 的链接组件：自己写的几行代码就能让 `location.assign()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```ts
+import { localizePath } from "dialexjs/routing";
+import { html } from "lit";
+
+import { config } from "./dialex.generated";
+import { i18n } from "./i18n";
+
+const localize = (path: string, to = i18n.locale) => localizePath(path, to, config);
+
+html`<a href=${localize("/about")}>About</a>`;
+
+// Programmatic navigation without a router:
+location.assign(localize("/cart"));
+```
+
 ## 最佳实践
 
 - 每个应用创建一个 `createDialex` 实例并导入它。两个实例不会共享 locale。

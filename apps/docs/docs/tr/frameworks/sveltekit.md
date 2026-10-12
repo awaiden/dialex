@@ -35,6 +35,24 @@ Yer tutucuyu `src/app.html` içine koyun; her yanıtta çözülen yerel ayarla d
 
 `setHeader` `false` olmadıkça `Content-Language` ayarlanır. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir ve `custom`, istek olayını (request event) alır.
 
+## Bağlantılar ve gezinme
+
+Bir ziyaretçiyi bir hook ya da uç noktadan yerelleştirilmiş bir sayfaya yönlendirmek için, adaptörün çözdüğü locale ile `localizePath` kullanın:
+
+```ts
+// src/routes/account/+page.server.ts
+import { redirect } from "@sveltejs/kit";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../../dialex.generated.js";
+
+export function load({ locals, cookies }) {
+  if (!cookies.get("session")) {
+    redirect(302, localizePath("/login", locals.locale, config));
+  }
+}
+```
+
 ## En iyi uygulamalar
 
 - Yerel ayarı sunucuda `dialexHandle` ile çözün ve kök `+layout.server.ts` dosyasından tarayıcıya aktarın. Bileşenlerde ilk istemci oluşturması HTML ile eşleşsin diye `initialLocale` ile [`dialexjs/svelte`](./svelte.md) kullanın.

@@ -57,6 +57,40 @@ The module installs the Vue plugin with the dictionaries from `dialex.generated.
 The Nuxt module is covered by unit tests of its setup calls only. It has not been run inside a full Nuxt application yet.
 :::
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Vue Router and Nuxt: a few lines of your own keep `router.push()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```ts
+import { localizePath } from "dialexjs/routing";
+// src/composables/useLocalizedPath.ts
+import { useDialex } from "dialexjs/vue";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale.value) => localizePath(path, to, config);
+}
+```
+
+```vue
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+import { useLocalizedPath } from "./composables/useLocalizedPath";
+
+const localize = useLocalizedPath();
+const router = useRouter();
+// In Nuxt: <NuxtLink :to="localize('/about')"> and navigateTo(localize("/cart"))
+</script>
+
+<template>
+  <RouterLink :to="localize('/about')">About</RouterLink>
+  <button @click="router.push(localize('/cart'))">Cart</button>
+</template>
+```
+
 ## Best practices
 
 - Remember the choice yourself in plain Vue: `createDialex` has no persistence, so pass `onLocaleChange` to write a cookie or `localStorage`, and read it back as `defaultLocale`.

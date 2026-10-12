@@ -188,6 +188,26 @@ it("switches to Turkish", () => {
 });
 ```
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 SvelteKit 的链接组件：自己写的几行代码就能让 `goto()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```svelte
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { useDialex } from "dialexjs/svelte";
+  import { localizePath } from "dialexjs/routing";
+
+  import { config } from "../dialex.generated";
+
+  const { locale } = useDialex();
+  const localize = (path: string, to = $locale) => localizePath(path, to, config);
+</script>
+
+<a href={localize("/about")}>About</a>
+<button onclick={() => goto(localize("/cart"))}>Cart</button>
+```
+
 ## 最佳实践
 
 - 只在根组件中调用 `provideDialex`。下层组件使用 `useDictionary` 和 `useT`；第二个 `provideDialex` 会开启一个独立的 locale。

@@ -73,6 +73,63 @@ Provider 先渲染默认 locale，然后在挂载后应用已记住的 locale（
 
 `useT(...dictionaryNames)` 返回一个 [`t` 函数](../guide/key-paths.md)。启用[懒加载](../guide/lazy-loading.md)后，`useDictionary` 会挂起，直到它的词典加载完成。
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 React 的链接组件：自己写的几行代码就能让 `useNavigate()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```tsx
+// src/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+const localize = useLocalizedPath();
+
+<a href={localize("/about")}>About</a>;
+<a href={localize("/about", "en")}>English</a>;
+```
+
+使用 TanStack Router 时，把 locale 设为可选路径参数 `{-$locale}`，并通过 `params` 传入。当 `prefixDefault` 为 `false` 时，默认 locale 会被省略：
+
+```tsx
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useDialex } from "dialexjs/react";
+
+import { config } from "./dialex.generated";
+
+function localeParam(locale: string) {
+  return locale === config.defaultLocale && !config.prefixDefault ? undefined : locale;
+}
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to="/{-$locale}/about" params={{ locale: localeParam(locale) }}>
+        About
+      </Link>
+      <button
+        onClick={() =>
+          navigate({ to: "/{-$locale}/cart", params: { locale: localeParam(locale) } })
+        }
+      >
+        Cart
+      </button>
+    </>
+  );
+}
+```
+
 ## 最佳实践
 
 - 在根部只渲染一个 `DialexProvider`。嵌套的 provider 会开启彼此独立的 locale，这通常不是你想要的。

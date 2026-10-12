@@ -176,6 +176,55 @@ export function LanguageSwitcher() {
 }
 ```
 
+## Enlaces y navegación
+
+Si sus URL llevan la locale (`/tr/about`), construya los enlaces con `localizePath` de [Helpers de enrutamiento](../guide/routing.md) y la locale que muestra la aplicación. Dialex no incluye un componente de enlace para React Router: unas pocas líneas propias mantienen `useNavigate()` y las redirecciones funcionando igual, y muestran exactamente qué le pasa a una ruta. El `config` generado ya contiene `locales`, `defaultLocale` y `prefixDefault`, así que no se repite nada.
+
+Ponga las rutas bajo un segmento opcional `:locale?`, de modo que coincidan tanto `/cart` como `/tr/cart`:
+
+```ts
+// app/routes.ts
+import { index, route, type RouteConfig } from "@react-router/dev/routes";
+
+export default [
+  route(":locale?", "routes/layout.tsx", [
+    index("routes/home.tsx"),
+    route("cart", "routes/cart.tsx"),
+  ]),
+] satisfies RouteConfig;
+```
+
+```tsx
+// app/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+import { Link, useNavigate } from "react-router";
+
+import { useLocalizedPath } from "../useLocalizedPath";
+
+export function CartLinks() {
+  const localize = useLocalizedPath();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to={localize("/cart")}>Cart</Link>
+      <button onClick={() => navigate(localize("/checkout"))}>Checkout</button>
+    </>
+  );
+}
+```
+
 ## Buenas prácticas
 
 - Resuelve el locale solo en el loader raíz y léelo en las rutas hijas con `useRouteLoaderData("root")` o desde el provider. Resolverlo de nuevo en cada ruta repite trabajo y puede discrepar.

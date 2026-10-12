@@ -117,6 +117,47 @@ TestBed.configureTestingModule({
 
 Angular gerektirmeyen kod için [`createTestDialex`](../guide/testing.md) kullanın.
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in the Angular router için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `Router.navigateByUrl()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```ts
+// src/app/localized-path.ts
+import { injectDialex } from "dialexjs/angular";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated";
+
+export function injectLocalizedPath() {
+  const { locale } = injectDialex();
+  return (path: string, to = locale()) => localizePath(path, to, config);
+}
+```
+
+```ts
+import { Component, inject } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+
+import { injectLocalizedPath } from "./localized-path";
+
+@Component({
+  selector: "app-nav",
+  imports: [RouterLink],
+  template: `
+    <a [routerLink]="localize('/about')">About</a>
+    <button (click)="cart()">Cart</button>
+  `,
+})
+export class NavComponent {
+  private readonly router = inject(Router);
+  protected readonly localize = injectLocalizedPath();
+
+  protected cart() {
+    void this.router.navigateByUrl(this.localize("/cart"));
+  }
+}
+```
+
 ## En iyi uygulamalar
 
 - Dialex'i `app.config.ts` içinde `provideDialex({ ...dialex })` ile bir kez yapılandırın ve bileşenlerde `injectDictionary` ve `injectT` ile okuyun. Signal döndürürler; şablonlar kendiliğinden güncellenir.

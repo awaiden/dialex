@@ -43,6 +43,25 @@ Adaptör [yerel ayar algılama seçeneklerini](../guide/locale-detection.md), `d
 
 `dialex generate` `dialex-env.d.ts` dosyasını yazar. Bu dosya `tsconfig.json` içine dahil edildiğinde (ve `moduleResolution` `"bundler"` ya da `"nodenext"` olduğunda), `Astro.locals.getDictionary("home")` sözlük adlarını otomatik tamamlar, içeriği tipler ve `locale`, yapılandırılmış yerel ayarlarınızın birleşimi olur.
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in Astro için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `Astro.redirect()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```astro
+---
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated.js";
+
+const { locale } = Astro.locals;
+const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+// In a page that must send the visitor elsewhere: return Astro.redirect(localize("/login"));
+---
+
+<a href={localize("/about")}>About</a>
+```
+
 ## En iyi uygulamalar
 
 - `dialex.generated.ts` içindeki `{ ...dialex }` değerini adaptöre geçirin. Sözlükleri ve yerel ayar yapılandırmasını taşır; böylece `defaultLocale`, `locales` ve `fallbacks` yalnızca bir kez, `dialex.config.ts` içinde yazılır.

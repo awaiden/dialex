@@ -35,6 +35,24 @@ Coloca el marcador en `src/app.html`; se sustituye por el locale resuelto en cad
 
 `Content-Language` se establece a menos que `setHeader` sea `false`. Se aplican todas las [opciones de detección de locale](../guide/locale-detection.md#options), y `custom` recibe el evento de la petición.
 
+## Enlaces y navegación
+
+Para enviar a un visitante a una página localizada desde un hook o un endpoint, use `localizePath` con la locale que resolvió el adaptador:
+
+```ts
+// src/routes/account/+page.server.ts
+import { redirect } from "@sveltejs/kit";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../../dialex.generated.js";
+
+export function load({ locals, cookies }) {
+  if (!cookies.get("session")) {
+    redirect(302, localizePath("/login", locals.locale, config));
+  }
+}
+```
+
 ## Buenas prácticas
 
 - Resuelve el locale en el servidor con `dialexHandle` y pásalo al navegador desde el `+layout.server.ts` raíz. En los componentes, usa [`dialexjs/svelte`](./svelte.md) con `initialLocale`, para que el primer render del cliente coincida con el HTML.

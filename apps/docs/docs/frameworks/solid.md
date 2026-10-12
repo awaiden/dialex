@@ -139,6 +139,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Solid Router: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { A, useNavigate } from "@solidjs/router";
+import { localizePath } from "dialexjs/routing";
+import { useDialex } from "dialexjs/solid";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string, to = locale()) => localizePath(path, to, config);
+
+  return (
+    <>
+      <A href={localize("/about")}>About</A>
+      <button onClick={() => navigate(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## Best practices
 
 - Read the accessor where you use it (`{home().title}`), not once at the top of the component into a plain variable. A value copied out of the accessor does not update when the locale changes.

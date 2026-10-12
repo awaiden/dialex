@@ -139,6 +139,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links und Navigation
+
+Wenn Ihre URLs die Locale tragen (`/tr/about`), bauen Sie Links mit `localizePath` aus [Routing-Helfer](../guide/routing.md) und der Locale, die die App gerade zeigt. Dialex liefert keine Link-Komponente für Solid Router: ein paar eigene Zeilen halten `useNavigate()` und Weiterleitungen gleich und zeigen genau, was mit einem Pfad geschieht. Die generierte `config` enthält bereits `locales`, `defaultLocale` und `prefixDefault`, nichts wird wiederholt.
+
+```tsx
+import { A, useNavigate } from "@solidjs/router";
+import { localizePath } from "dialexjs/routing";
+import { useDialex } from "dialexjs/solid";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string, to = locale()) => localizePath(path, to, config);
+
+  return (
+    <>
+      <A href={localize("/about")}>About</A>
+      <button onClick={() => navigate(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## Bewährte Vorgehensweisen
 
 - Lies den Accessor dort, wo du ihn nutzt (`{home().title}`), nicht einmal oben in der Komponente in eine einfache Variable. Ein aus dem Accessor kopierter Wert aktualisiert sich bei einem Locale-Wechsel nicht.

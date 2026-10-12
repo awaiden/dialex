@@ -176,6 +176,55 @@ export function LanguageSwitcher() {
 }
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for React Router: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+Put the routes under an optional `:locale?` segment, so `/cart` and `/tr/cart` both match:
+
+```ts
+// app/routes.ts
+import { index, route, type RouteConfig } from "@react-router/dev/routes";
+
+export default [
+  route(":locale?", "routes/layout.tsx", [
+    index("routes/home.tsx"),
+    route("cart", "routes/cart.tsx"),
+  ]),
+] satisfies RouteConfig;
+```
+
+```tsx
+// app/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+import { Link, useNavigate } from "react-router";
+
+import { useLocalizedPath } from "../useLocalizedPath";
+
+export function CartLinks() {
+  const localize = useLocalizedPath();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to={localize("/cart")}>Cart</Link>
+      <button onClick={() => navigate(localize("/checkout"))}>Checkout</button>
+    </>
+  );
+}
+```
+
 ## Best practices
 
 - Resolve the locale in the root loader only, and read it in child routes with `useRouteLoaderData("root")` or from the provider. Resolving it again in every route repeats work and can disagree.

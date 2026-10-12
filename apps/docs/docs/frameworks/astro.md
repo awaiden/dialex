@@ -43,6 +43,25 @@ The adapter takes the [locale detection options](../guide/locale-detection.md), 
 
 `dialex generate` writes `dialex-env.d.ts`. With it included in `tsconfig.json` (and `moduleResolution` set to `"bundler"` or `"nodenext"`), `Astro.locals.getDictionary("home")` autocompletes the dictionary names, types the content, and `locale` is the union of your configured locales.
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Astro: a few lines of your own keep `Astro.redirect()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```astro
+---
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated.js";
+
+const { locale } = Astro.locals;
+const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+// In a page that must send the visitor elsewhere: return Astro.redirect(localize("/login"));
+---
+
+<a href={localize("/about")}>About</a>
+```
+
 ## Best practices
 
 - Pass `{ ...dialex }` from `dialex.generated.ts` to the adapter. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.

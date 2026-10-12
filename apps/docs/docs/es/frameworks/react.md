@@ -73,6 +73,63 @@ El provider renderiza primero el locale por defecto y después aplica el locale 
 
 `useT(...dictionaryNames)` devuelve una [función `t`](../guide/key-paths.md). Con la [carga diferida](../guide/lazy-loading.md), `useDictionary` suspende hasta que su diccionario se ha cargado.
 
+## Enlaces y navegación
+
+Si sus URL llevan la locale (`/tr/about`), construya los enlaces con `localizePath` de [Helpers de enrutamiento](../guide/routing.md) y la locale que muestra la aplicación. Dialex no incluye un componente de enlace para React: unas pocas líneas propias mantienen `useNavigate()` y las redirecciones funcionando igual, y muestran exactamente qué le pasa a una ruta. El `config` generado ya contiene `locales`, `defaultLocale` y `prefixDefault`, así que no se repite nada.
+
+```tsx
+// src/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+const localize = useLocalizedPath();
+
+<a href={localize("/about")}>About</a>;
+<a href={localize("/about", "en")}>English</a>;
+```
+
+Con TanStack Router, haga de la locale un parámetro de ruta opcional, `{-$locale}`, y páselo en `params`. La locale por defecto se omite cuando `prefixDefault` es `false`:
+
+```tsx
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useDialex } from "dialexjs/react";
+
+import { config } from "./dialex.generated";
+
+function localeParam(locale: string) {
+  return locale === config.defaultLocale && !config.prefixDefault ? undefined : locale;
+}
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to="/{-$locale}/about" params={{ locale: localeParam(locale) }}>
+        About
+      </Link>
+      <button
+        onClick={() =>
+          navigate({ to: "/{-$locale}/cart", params: { locale: localeParam(locale) } })
+        }
+      >
+        Cart
+      </button>
+    </>
+  );
+}
+```
+
 ## Buenas prácticas
 
 - Renderiza un único `DialexProvider` en la raíz. Los providers anidados inician locales independientes, lo que rara vez es lo que quieres.

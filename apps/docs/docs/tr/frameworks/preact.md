@@ -163,6 +163,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in preact-iso için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `route()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```tsx
+import { useDialex } from "dialexjs/preact";
+import { localizePath } from "dialexjs/routing";
+import { useLocation } from "preact-iso";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const { route } = useLocation();
+  const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+  return (
+    <>
+      <a href={localize("/about")}>About</a>
+      <button onClick={() => route(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## En iyi uygulamalar
 
 - `DialexProvider`'ı kökte bir kez oluştur. Altındaki her bileşen aynı yerel ayarı ve aynı yüklü sözlükleri paylaşır.

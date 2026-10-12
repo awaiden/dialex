@@ -188,6 +188,26 @@ it("switches to Turkish", () => {
 });
 ```
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in SvelteKit için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `goto()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```svelte
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { useDialex } from "dialexjs/svelte";
+  import { localizePath } from "dialexjs/routing";
+
+  import { config } from "../dialex.generated";
+
+  const { locale } = useDialex();
+  const localize = (path: string, to = $locale) => localizePath(path, to, config);
+</script>
+
+<a href={localize("/about")}>About</a>
+<button onclick={() => goto(localize("/cart"))}>Cart</button>
+```
+
 ## En iyi uygulamalar
 
 - `provideDialex` işlevini yalnızca kök bileşende çağırın. Altındaki bileşenler `useDictionary` ve `useT` kullanır; ikinci bir `provideDialex` ayrı bir yerel ayar başlatır.

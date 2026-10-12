@@ -35,6 +35,24 @@ Put the placeholder in `src/app.html`; it is replaced with the resolved locale o
 
 `Content-Language` is set unless `setHeader` is `false`. All [locale detection options](../guide/locale-detection.md#options) apply, and `custom` receives the request event.
 
+## Links and navigation
+
+To send a visitor to a localized page from a hook or an endpoint, use `localizePath` with the locale the adapter resolved:
+
+```ts
+// src/routes/account/+page.server.ts
+import { redirect } from "@sveltejs/kit";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../../dialex.generated.js";
+
+export function load({ locals, cookies }) {
+  if (!cookies.get("session")) {
+    redirect(302, localizePath("/login", locals.locale, config));
+  }
+}
+```
+
 ## Best practices
 
 - Resolve the locale on the server with `dialexHandle` and pass it to the browser from the root `+layout.server.ts`. In components, use [`dialexjs/svelte`](./svelte.md) with `initialLocale`, so the first client render matches the HTML.

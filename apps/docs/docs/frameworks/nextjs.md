@@ -83,6 +83,29 @@ import { DialexLink } from "dialexjs/next/link";
 
 It reads `locales`, `defaultLocale` and `prefixDefault` from the generated config, so render it inside `<DialexProvider {...dialex}>`. External URLs and `#fragments` are left alone. See also [Routing helpers](../guide/routing.md).
 
+`DialexLink` replaces `next/link`. For `router.push` and `router.replace`, apply `localizePath` the same way, with the locale the app is showing:
+
+```tsx
+"use client";
+
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+import { useRouter } from "next/navigation";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedRouter() {
+  const router = useRouter();
+  const { locale } = useDialex();
+  const localize = (path: string) => localizePath(path, locale, config);
+
+  return {
+    push: (path: string) => router.push(localize(path)),
+    replace: (path: string) => router.replace(localize(path)),
+  };
+}
+```
+
 ## Server Components
 
 ```tsx

@@ -163,6 +163,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 preact-iso 的链接组件：自己写的几行代码就能让 `route()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```tsx
+import { useDialex } from "dialexjs/preact";
+import { localizePath } from "dialexjs/routing";
+import { useLocation } from "preact-iso";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const { route } = useLocation();
+  const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+  return (
+    <>
+      <a href={localize("/about")}>About</a>
+      <button onClick={() => route(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## 最佳实践
 
 - 只在根部渲染一次 `DialexProvider`。它下面的所有组件共享同一个 locale 和同一批已加载的词典。

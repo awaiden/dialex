@@ -83,6 +83,29 @@ import { DialexLink } from "dialexjs/next/link";
 
 它从生成的配置读取 `locales`、`defaultLocale` 和 `prefixDefault`，因此请在 `<DialexProvider {...dialex}>` 内渲染它。外部 URL 和 `#片段` 保持不变。另请参见[路由辅助函数](../guide/routing.md)。
 
+`DialexLink` 取代 `next/link`。对于 `router.push` 和 `router.replace`，以同样的方式、用应用当前显示的 locale 应用 `localizePath`：
+
+```tsx
+"use client";
+
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+import { useRouter } from "next/navigation";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedRouter() {
+  const router = useRouter();
+  const { locale } = useDialex();
+  const localize = (path: string) => localizePath(path, locale, config);
+
+  return {
+    push: (path: string) => router.push(localize(path)),
+    replace: (path: string) => router.replace(localize(path)),
+  };
+}
+```
+
 ## Server Components
 
 ```tsx
