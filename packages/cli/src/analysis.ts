@@ -8,7 +8,7 @@ import {
   flattenPaths,
   listLeaves,
   listLocales,
-  loadDictionaryFile,
+  parseDictionaryText,
   locationOf,
   type DictionaryFile,
   type SourceRange,
@@ -66,6 +66,18 @@ export interface AnalysisConfig {
   locales?: string[];
   include?: string | string[];
   exclude?: string[];
+  /** `lint.rules` of the config: `"off"` drops an issue, `"warn"` and `"error"` set its level. */
+  lint?: { rules?: Record<string, LintSetting> };
+}
+
+type LintLevel = "off" | "warn" | "error";
+
+/** A rule as written in the config: `"warn"` or `["warn", { ...options }]`. */
+export type LintSetting = LintLevel | readonly [LintLevel, unknown?];
+
+function lintLevel(setting: LintSetting | undefined): LintLevel | undefined {
+  const level = Array.isArray(setting) ? setting[0] : setting;
+  return level === "off" || level === "warn" || level === "error" ? level : undefined;
 }
 
 /**
@@ -93,6 +105,8 @@ interface SourceScan {
   /** Distinct word-like tokens, for the unused-key heuristic. */
   tokens: string[];
   refs: { ref: Reference; range: SourceRange }[];
+  /** Dictionary names registered inline with `dictionaries: { name: ... }`. */
+  inline: string[];
 }
 
 export interface AnalysisOptions {
@@ -110,6 +124,8 @@ export interface AnalysisOptions {
   lock?: boolean;
   /** Reuse work between calls. Ignored when `runtime` is set, because that evaluates code. */
   cache?: AnalysisCache;
+  /** Unsaved text of files, by absolute path, used instead of reading them from disk. */
+  contents?: ReadonlyMap<string, string>;
 }
 
 export interface LeafInfo {
@@ -137,6 +153,8 @@ export interface AnalysisResult {
   /** Absolute paths of every dictionary file that matched. */
   files: string[];
   sourceFilesScanned: number;
+  /** Dictionary names registered in code with `dictionaries: { name: ... }`. Empty without `src`. */
+  inlineDictionaries: string[];
 }
 
 export const DEFAULT_SOURCE_GLOB = "**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}";
@@ -156,18 +174,141 @@ export interface Reference {
   end: number;
 }
 
-/** Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. */
-export function scanReferences(text: string): Reference[] {
+/**
+ * Offsets of `//`, `/* *\/` and `<!-- -->` comments. Quoted strings are skipped so `"http://x"`
+ * is not a comment; `'` and `"` end at a newline, template literals do not.
+ */
+function commentRanges(text: string): [number, number][] {
+  const ranges: [number, number][] = [];
+  const length = text.length;
+  let i = 0;
+  while (i < length) {
+    const c = text[i];
+    if (c === '"' || c === "'" || c === "`") {
+      i++;
+      while (i < length && text[i] !== c && (c === "`" || text[i] !== "\n")) {
+        if (text[i] === "\\") i++;
+        i++;
+      }
+      i++;
+      continue;
+    }
+    let close: string | undefined;
+    if (c === "/" && text[i + 1] === "/") close = "\n";
+    else if (c === "/" && text[i + 1] === "*") close = "*/";
+    else if (c === "<" && text.startsWith("<!--", i)) close = "-->";
+    if (close === undefined) {
+      i++;
+      continue;
+    }
+    const found = text.indexOf(close, i + 2);
+    const end = found === -1 ? length : close === "\n" ? found : found + close.length;
+    ranges.push([i, end]);
+    i = end;
+  }
+  return ranges;
+}
+
+const IGNORE_DIRECTIVE = /dialex-ignore(-next-line)?(?![\w-])/;
+/** `dictionaries: { name: ..., "other-name": ..., shorthand }`, up to the first key. */
+const DICTIONARIES_OBJECT = /\bdictionaries\s*:\s*\{/g;
+const OBJECT_KEY = /\s*(?:([A-Za-z_$][\w$-]*)|(["'])([^"'\n]+)\2)\s*(?=[:,}])/y;
+
+/** Replaces comments with spaces of the same length, keeping offsets and line breaks. */
+function maskComments(text: string, comments: [number, number][]): string {
+  if (comments.length === 0) return text;
+  let out = "";
+  let at = 0;
+  for (const [from, to] of comments) {
+    out += text.slice(at, from) + text.slice(from, to).replace(/[^\n]/g, " ");
+    at = to;
+  }
+  return out + text.slice(at);
+}
+
+/** Names that an object literal `dictionaries: { ... }` registers inline. */
+function inlineDictionaryNames(masked: string): string[] {
+  const names = new Set<string>();
+  for (const match of masked.matchAll(DICTIONARIES_OBJECT)) {
+    let i = match.index! + match[0].length;
+    let depth = 1;
+    let expectKey = true;
+    while (i < masked.length && depth > 0) {
+      if (expectKey && depth === 1) {
+        OBJECT_KEY.lastIndex = i;
+        const key = OBJECT_KEY.exec(masked);
+        if (key) {
+          names.add(key[1] ?? key[3]);
+          i = OBJECT_KEY.lastIndex;
+        }
+        expectKey = false;
+        continue;
+      }
+      const c = masked[i];
+      if (c === '"' || c === "'" || c === "`") {
+        i++;
+        while (i < masked.length && masked[i] !== c && (c === "`" || masked[i] !== "\n")) {
+          if (masked[i] === "\\") i++;
+          i++;
+        }
+      } else if (c === "{" || c === "[" || c === "(") depth++;
+      else if (c === "}" || c === "]" || c === ")") depth--;
+      else if (c === "," && depth === 1) expectKey = true;
+      i++;
+    }
+  }
+  return [...names];
+}
+
+/** Lines that a `dialex-ignore` / `dialex-ignore-next-line` comment excludes from checking. */
+function ignoredLines(text: string, comments: [number, number][]): Set<number> {
+  const lines = new Set<number>();
+  if (!text.includes("dialex-ignore")) return lines;
+  const starts = lineStarts(text);
+  for (const [from, to] of comments) {
+    const directive = IGNORE_DIRECTIVE.exec(text.slice(from, to));
+    if (!directive) continue;
+    const first = positionAt(starts, from).line;
+    const last = positionAt(starts, Math.max(from, to - 1)).line;
+    if (directive[1]) lines.add(last + 1);
+    else for (let line = first; line <= last; line++) lines.add(line);
+  }
+  return lines;
+}
+
+/** References and inline dictionary names found in one source file. */
+export function scanText(text: string): { references: Reference[]; inline: string[] } {
+  const comments = commentRanges(text);
+  const ignored = ignoredLines(text, comments);
+  const starts = ignored.size > 0 ? lineStarts(text) : [];
+  const inComment = (offset: number) =>
+    comments.some(([from, to]) => offset >= from && offset < to);
   const references: Reference[] = [];
   const collect = (pattern: RegExp, kind: Reference["kind"]) => {
     for (const match of text.matchAll(pattern)) {
       const [start, end] = match.indices![2] as [number, number];
+      if (comments.length > 0 && inComment(start)) continue;
+      if (ignored.size > 0 && ignored.has(positionAt(starts, start).line)) continue;
       references.push({ kind, value: match[2], start, end });
     }
   };
   collect(DICTIONARY_CALL, "dictionary");
   collect(T_CALL, "path");
-  return references.sort((a, b) => a.start - b.start);
+  references.sort((a, b) => a.start - b.start);
+  return {
+    references,
+    inline: text.includes("dictionaries")
+      ? inlineDictionaryNames(maskComments(text, comments))
+      : [],
+  };
+}
+
+/**
+ * Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. References inside
+ * comments, and on lines a `dialex-ignore` comment covers, are skipped.
+ */
+export function scanReferences(text: string): Reference[] {
+  return scanText(text).references;
 }
 
 function lineStarts(text: string): number[] {
@@ -270,31 +411,41 @@ async function fromRuntime(file: string): Promise<Loaded> {
   }
 }
 
-async function loadDictionaryData(file: string, runtime: boolean): Promise<Loaded> {
-  let astError: Error | undefined;
+function fromParsed(parsed: () => DictionaryFile | undefined): Loaded | undefined {
   try {
-    const df = await loadDictionaryFile(file);
+    const df = parsed();
     if (df?.complete && df.name) return { ok: true, data: fromSyntaxTree(df) };
   } catch (error) {
-    astError = error as Error;
+    return {
+      ok: false,
+      level: "error",
+      code: "invalid-dictionary",
+      message: `Failed to parse dictionary: ${(error as Error).message}`,
+    };
   }
+  return undefined;
+}
 
+const UNANALYZABLE: Loaded = {
+  ok: false,
+  level: "info",
+  code: "unanalyzable",
+  message:
+    "This dictionary uses spreads, computed keys, imported values, or a computed name, so it cannot be analyzed statically.",
+};
+
+/** Reads a dictionary from its syntax tree. Never runs project code. */
+function loadDictionaryDataStatic(file: string): Loaded {
+  return (
+    fromParsed(() => parseDictionaryText(file, fs.readFileSync(file, "utf-8"))) ?? UNANALYZABLE
+  );
+}
+
+async function loadDictionaryData(file: string, runtime: boolean): Promise<Loaded> {
+  const parsed = fromParsed(() => parseDictionaryText(file, fs.readFileSync(file, "utf-8")));
+  if (parsed?.ok) return parsed;
   if (runtime) return fromRuntime(file);
-
-  return astError
-    ? {
-        ok: false,
-        level: "error",
-        code: "invalid-dictionary",
-        message: `Failed to parse dictionary: ${astError.message}`,
-      }
-    : {
-        ok: false,
-        level: "info",
-        code: "unanalyzable",
-        message:
-          "This dictionary uses spreads, computed keys, imported values, or a computed name, so it cannot be analyzed statically.",
-      };
+  return parsed ?? UNANALYZABLE;
 }
 
 function stampOf(file: string): string | undefined {
@@ -320,19 +471,45 @@ async function cachedDictionary(
   return loaded;
 }
 
+function cachedDictionaryStatic(file: string, cache: AnalysisCache | undefined): Loaded {
+  const stamp = cache ? stampOf(file) : undefined;
+  const hit = stamp ? cache!.dictionaries.get(file) : undefined;
+  if (hit && hit.stamp === stamp) return hit.loaded;
+
+  const loaded = loadDictionaryDataStatic(file);
+  if (cache && stamp) cache.dictionaries.set(file, { stamp, loaded });
+  return loaded;
+}
+
 function scanSource(text: string): SourceScan {
   const starts = lineStarts(text);
   const rangeOf = (start: number, end: number): SourceRange => ({
     start: positionAt(starts, start),
     end: positionAt(starts, end),
   });
+  const { references, inline } = scanText(text);
   return {
     tokens: [...new Set(text.match(/[\w$-]+/g) ?? [])],
-    refs: scanReferences(text).map((ref) => ({ ref, range: rangeOf(ref.start, ref.end) })),
+    refs: references.map((ref) => ({ ref, range: rangeOf(ref.start, ref.end) })),
+    inline,
   };
 }
 
-export async function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult> {
+/** What the analysis needs next: a dictionary file loaded. The driver answers with the result. */
+interface LoadRequest {
+  file: string;
+  runtime: boolean;
+  cache: AnalysisCache | undefined;
+  /** Unsaved text to read instead of the file. Such a load is never cached. */
+  text: string | undefined;
+}
+
+/**
+ * The analysis itself, written once. It yields a `LoadRequest` for every dictionary so that a
+ * synchronous driver (`analyzeProjectSync`) and an asynchronous one (`analyzeProject`, which may
+ * import dictionaries at runtime) can share it.
+ */
+function* analysisSteps(options: AnalysisOptions): Generator<LoadRequest, AnalysisResult, Loaded> {
   const { root, config } = options;
   const include = config.include || "**/*.content.ts";
   const configuredLocales = config.locales || [];
@@ -358,7 +535,12 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
 
   // 1. Dictionaries: parity, placeholders, ICU
   for (const file of files) {
-    const loaded = await cachedDictionary(file, options.runtime === true, cache);
+    const loaded: Loaded = yield {
+      file,
+      runtime: options.runtime === true,
+      cache,
+      text: options.contents?.get(file),
+    };
     if (!loaded.ok) {
       for (const message of loaded.message.split("\n")) {
         issues.push({ file, level: loaded.level, code: loaded.code, message });
@@ -495,8 +677,10 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
           gitignoreFilter: gitignore,
         }).filter((f) => !dictionaryFiles.has(f));
 
+  const inline = new Set<string>();
   if (sourceFiles.length > 0) {
     const tokens = new Set<string>();
+    const scans: { file: string; scan: SourceScan }[] = [];
 
     for (const file of sourceFiles) {
       const stamp = cache ? stampOf(file) : undefined;
@@ -512,10 +696,16 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
         if (cache && stamp) cache.sources.set(file, scan);
       }
       for (const token of scan.scan.tokens) tokens.add(token);
+      scans.push({ file, scan: scan.scan });
+    }
 
-      for (const { ref, range } of scan.scan.refs) {
+    // Dictionaries registered in code are known project-wide, wherever they are read
+    for (const { scan } of scans) for (const name of scan.inline) inline.add(name);
+
+    for (const { file, scan } of scans) {
+      for (const { ref, range } of scan.refs) {
         if (ref.kind === "dictionary") {
-          if (!known.has(ref.value)) {
+          if (!known.has(ref.value) && !inline.has(ref.value)) {
             issues.push({
               file,
               level: "error",
@@ -589,7 +779,56 @@ export async function analyzeProject(options: AnalysisOptions): Promise<Analysis
     }
   }
 
-  return { issues, dictionaries, files, sourceFilesScanned: sourceFiles.length };
+  const rules = config.lint?.rules;
+  if (rules && Object.keys(rules).length > 0) {
+    for (let i = issues.length - 1; i >= 0; i--) {
+      const level = lintLevel(rules[issues[i].code]);
+      if (!level) continue;
+      if (level === "off") issues.splice(i, 1);
+      else issues[i].level = level === "error" ? "error" : "warning";
+    }
+  }
+
+  return {
+    issues,
+    dictionaries,
+    files,
+    sourceFilesScanned: sourceFiles.length,
+    inlineDictionaries: [...inline],
+  };
+}
+
+/** Analyzes a project. With `runtime: true`, dictionaries the syntax tree cannot describe are imported. */
+export async function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult> {
+  const steps = analysisSteps(options);
+  let step = steps.next();
+  while (!step.done) {
+    const { file, runtime, cache, text } = step.value;
+    step = steps.next(
+      text === undefined
+        ? await cachedDictionary(file, runtime, cache)
+        : (fromParsed(() => parseDictionaryText(file, text)) ?? UNANALYZABLE),
+    );
+  }
+  return step.value;
+}
+
+/**
+ * `analyzeProject` for callers that cannot await, such as lint rules. Reads dictionaries from the
+ * syntax tree only: `runtime` is ignored, so project code is never executed.
+ */
+export function analyzeProjectSync(options: AnalysisOptions): AnalysisResult {
+  const steps = analysisSteps({ ...options, runtime: false });
+  let step = steps.next();
+  while (!step.done) {
+    const { file, cache, text } = step.value;
+    step = steps.next(
+      text === undefined
+        ? cachedDictionaryStatic(file, cache)
+        : (fromParsed(() => parseDictionaryText(file, text)) ?? UNANALYZABLE),
+    );
+  }
+  return step.value;
 }
 
 /** Project root-relative path with forward slashes, for display. */

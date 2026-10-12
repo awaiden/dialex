@@ -32,6 +32,7 @@ export default defineConfig({
       fallbacks: { "pt-BR": ["pt", "es"] },
       prefixDefault: false,
       lazy: true,
+      lint: { rules: {} },
     });
   });
 
@@ -112,5 +113,31 @@ describe("readStaticConfig", () => {
     const d = dir({ "custom.ts": `export default { defaultLocale: "es" };` });
     expect(readStaticConfig(d, "custom.ts").config.defaultLocale).toBe("es");
     expect(readStaticConfig(dir({})).config).toEqual(DEFAULT_STATIC_CONFIG);
+  });
+});
+
+describe("lint rules", () => {
+  it("reads severities and options from the syntax tree", () => {
+    const { config, notes } = parseStaticConfig(
+      `export default { lint: { rules: {
+        "unused-key": "off",
+        "missing-key": "warn",
+        "literal-string": ["warn", { ignore: ["^OK$"] }],
+      } } };`,
+    );
+    expect(notes).toEqual([]);
+    expect(config.lint.rules).toEqual({
+      "unused-key": "off",
+      "missing-key": "warn",
+      "literal-string": ["warn", { ignore: ["^OK$"] }],
+    });
+  });
+
+  it("explains values it cannot read and keeps the default", () => {
+    const { config, notes } = parseStaticConfig(
+      `export default { lint: { rules: { a: "loud" } } };`,
+    );
+    expect(config.lint.rules).toEqual({});
+    expect(notes[0]).toContain('"lint" could not be read statically');
   });
 });

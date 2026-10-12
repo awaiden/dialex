@@ -45,6 +45,15 @@ Dafür braucht es zu durchsuchende Quelldateien; ohne sie werden sie übersprung
 | `unused-key`         | warning     | `Key "only_en" is possibly unused`   | Keine Quelldatei enthält das letzte Segment des Schlüssels als Wort. Eine Heuristik: dynamischer Zugriff wird nie gemeldet, manche ungenutzten Schlüssel bleiben unbemerkt |
 | `unused-dictionary`  | warning     | `Dictionary "c" is never referenced` | Keine Quelldatei enthält den Namen des Wörterbuchs                                                                                                                         |
 
+Kommentare werden nie geprüft. Ein im Code mit einem Objektliteral registriertes Wörterbuch, `dictionaries: { name: ... }`, gilt als bekannt; es mit `getDictionary("name")` zu lesen ist also kein Fehler. Um einen unbedenklichen Verweis stummzuschalten, setzen Sie `dialex-ignore-next-line` in einen Kommentar in der Zeile darüber oder `dialex-ignore` in einen Kommentar in derselben Zeile:
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+Dieselben Prüfungen in ESLint und oxlint finden Sie unter [Linting](./linting.md).
+
 ## Generierte Dateien
 
 `dialex check` vergleicht außerdem `dialex.generated.ts` und `dialex-env.d.ts` mit dem, was `dialex generate` schreiben würde, ohne Formatierung zu beachten. Dieses Problem hat keinen Code:

@@ -54,7 +54,7 @@ impl StaticConfigResult {
     }
 }
 
-const KEYS: [&str; 8] = [
+const KEYS: [&str; 9] = [
     "defaultLocale",
     "locales",
     "include",
@@ -63,6 +63,7 @@ const KEYS: [&str; 8] = [
     "fallbacks",
     "prefixDefault",
     "lazy",
+    "lint",
 ];
 
 fn unwrap<'a, 'b>(mut expression: &'b Expression<'a>) -> &'b Expression<'a> {
@@ -370,6 +371,56 @@ mod serde_json_like {
     }
 }
 
+/// How loudly a `lint.rules` entry reports.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LintLevel {
+    Off,
+    Warn,
+    Error,
+}
+
+impl LintLevel {
+    fn parse(value: &ConfigValue) -> Option<LintLevel> {
+        match value.as_str()? {
+            "off" => Some(LintLevel::Off),
+            "warn" => Some(LintLevel::Warn),
+            "error" => Some(LintLevel::Error),
+            _ => None,
+        }
+    }
+}
+
+/// `lint: { rules: { code: "warn" | ["warn", { ...options }] } }`. Options matter to the ESLint
+/// plugin only, so they are checked for shape and not kept.
+fn lint_rules(value: &ConfigValue) -> Option<Vec<(String, LintLevel)>> {
+    let ConfigValue::Object(entries) = value else {
+        return None;
+    };
+    let Some((_, rules)) = entries.iter().find(|(name, _)| name == "rules") else {
+        return Some(Vec::new());
+    };
+    let ConfigValue::Object(rules) = rules else {
+        return None;
+    };
+    rules
+        .iter()
+        .map(|(code, setting)| {
+            let level = match setting {
+                ConfigValue::Array(items) => {
+                    if let Some(options) = items.get(1) {
+                        if !matches!(options, ConfigValue::Object(_)) {
+                            return None;
+                        }
+                    }
+                    LintLevel::parse(items.first()?)?
+                }
+                other => LintLevel::parse(other)?,
+            };
+            Some((code.clone(), level))
+        })
+        .collect()
+}
+
 /// How `lazy` is set.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Lazy {
@@ -389,6 +440,8 @@ pub struct StaticConfig {
     pub fallbacks: Vec<(String, Vec<String>)>,
     pub prefix_default: bool,
     pub lazy: Lazy,
+    /// `lint.rules`: the level of each check, by diagnostic code.
+    pub lint: Vec<(String, LintLevel)>,
 }
 
 impl Default for StaticConfig {
@@ -402,6 +455,7 @@ impl Default for StaticConfig {
             fallbacks: Vec::new(),
             prefix_default: true,
             lazy: Lazy::Off,
+            lint: Vec::new(),
         }
     }
 }
@@ -476,6 +530,57 @@ impl StaticConfigResult {
                 _ => invalid("lazy", "true, false or \"locale\""),
             }
         }
+        if let Some(value) = self.get("lint") {
+            match lint_rules(value) {
+                Some(rules) => config.lint = rules,
+                None => invalid(
+                    "lint",
+                    "{ rules: { code: \"off\" | \"warn\" | \"error\" | [level, options] } }",
+                ),
+            }
+        }
         (config, notes)
+    }
+}
+
+#[cfg(test)]
+mod lint_tests {
+    use super::*;
+
+    fn lint(source: &str) -> (Vec<(String, LintLevel)>, Vec<String>) {
+        let (config, notes) = parse_static_config("dialex.config.ts", source)
+            .unwrap()
+            .resolve();
+        (config.lint, notes)
+    }
+
+    #[test]
+    fn reads_levels_and_ignores_options() {
+        let (rules, notes) = lint(
+            r#"export default { lint: { rules: {
+                "unused-key": "off",
+                "missing-key": "warn",
+                "literal-string": ["error", { ignore: ["^OK$"] }],
+            } } };"#,
+        );
+        assert!(notes.is_empty(), "{notes:?}");
+        assert_eq!(
+            rules,
+            vec![
+                ("unused-key".to_string(), LintLevel::Off),
+                ("missing-key".to_string(), LintLevel::Warn),
+                ("literal-string".to_string(), LintLevel::Error),
+            ]
+        );
+    }
+
+    #[test]
+    fn explains_what_it_cannot_read_and_keeps_the_default() {
+        let (rules, notes) = lint(r#"export default { lint: { rules: { a: "loud" } } };"#);
+        assert!(rules.is_empty());
+        assert!(
+            notes[0].contains("\"lint\" could not be read statically"),
+            "{notes:?}"
+        );
     }
 }

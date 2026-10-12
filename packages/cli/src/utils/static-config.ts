@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import type { LintRuleSetting } from "dialexjs";
 import { parseModule } from "magicast";
 
 import {
@@ -26,6 +27,8 @@ export interface StaticConfig {
   fallbacks: Record<string, string[]>;
   prefixDefault: boolean;
   lazy: boolean | "locale";
+  /** Severity and options of each check, by diagnostic code. */
+  lint: { rules: Record<string, LintRuleSetting> };
 }
 
 export interface StaticConfigResult {
@@ -47,6 +50,7 @@ export const DEFAULT_STATIC_CONFIG: StaticConfig = {
   fallbacks: {},
   prefixDefault: true,
   lazy: false,
+  lint: { rules: {} },
 };
 
 const NOT_LITERAL = Symbol("not literal");
@@ -91,6 +95,26 @@ function findConfigObject(declaration: AstNode): AstNode | undefined {
 const isStringArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((v) => typeof v === "string");
 
+const LINT_LEVELS = ["off", "warn", "error"];
+
+/** `lint: { rules: { code: "warn" | ["warn", {...}] } }`, or `undefined` when it is not that shape. */
+function lintRules(value: unknown): Record<string, LintRuleSetting> | undefined {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return undefined;
+  const rules = (value as { rules?: unknown }).rules;
+  if (rules === undefined) return {};
+  if (typeof rules !== "object" || rules === null || Array.isArray(rules)) return undefined;
+
+  const result: Record<string, LintRuleSetting> = {};
+  for (const [code, setting] of Object.entries(rules)) {
+    const [level, options] = Array.isArray(setting) ? setting : [setting];
+    if (typeof level !== "string" || !LINT_LEVELS.includes(level)) return undefined;
+    if (options !== undefined && (typeof options !== "object" || options === null))
+      return undefined;
+    result[code] = setting as LintRuleSetting;
+  }
+  return result;
+}
+
 function apply(object: Record<string, unknown>, config: StaticConfig, notes: string[]) {
   const accept = <K extends keyof StaticConfig>(
     key: K,
@@ -120,6 +144,16 @@ function apply(object: Record<string, unknown>, config: StaticConfig, notes: str
   );
   accept("prefixDefault", (v) => typeof v === "boolean", "true or false");
   accept("lazy", (v) => typeof v === "boolean" || v === "locale", 'true, false or "locale"');
+
+  if ("lint" in object) {
+    const rules = lintRules(object.lint);
+    if (rules) config.lint = { rules };
+    else {
+      notes.push(
+        '"lint" could not be read statically (expected { rules: { code: "off" | "warn" | "error" | [level, options] } }).',
+      );
+    }
+  }
 }
 
 /** Reads a config file's source text. Exposed for tests and for unsaved buffers. */
@@ -153,6 +187,7 @@ export function parseStaticConfig(text: string, file = "dialex.config.ts"): Stat
         "fallbacks",
         "prefixDefault",
         "lazy",
+        "lint",
       ]) {
         const prop = findProperty(object, key);
         if (!prop) continue;

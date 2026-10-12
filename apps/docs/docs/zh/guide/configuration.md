@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | 每个 locale 显式的[回退链](./fallbacks.md)                                                                             |
 | `prefixDefault` | `boolean`                     | `true`              | 默认 locale 是否也带 URL 前缀。由 `DialexLink` 和[路由辅助函数](./routing.md)读取                                      |
 | `lazy`          | `boolean \| "locale"`         | `false`             | 按需加载词典（客户端包）：`true` 按词典拆分，`"locale"` 按词典和 locale 拆分。参见[懒加载](./lazy-loading.md)          |
+| `lint`          | `{ rules }`                   | —                   | 关闭检查或更改其级别和选项，适用于 `dialex check`、编辑器以及 [ESLint 和 oxlint 规则](./linting.md)                    |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | [`dialex translate`](../cli/translate.md) 使用的提供者                                                                 |
 
 Dialex 会跳过 `node_modules`、构建输出以及 `.gitignore` 文件忽略的所有内容（对于 monorepo 中的包，也包括仓库根目录的 `.gitignore`）。其他情况请使用 `exclude`，例如你提交的 vendor 目录。

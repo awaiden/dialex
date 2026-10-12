@@ -19,6 +19,7 @@ fn codes(root: &Path) -> Vec<(String, String)> {
         locales: vec!["en".into(), "tr".into()],
         include: vec!["src/**/*.content.ts".into()],
         exclude: vec![],
+        lint: vec![],
     };
     let options = AnalysisOptions {
         runtime: false,
@@ -82,4 +83,60 @@ fn unchanged_projects_give_the_same_issues() {
         r#"export default defineDictionary("a", { en: { x: "1", only: "e" }, tr: { x: "2" } });"#,
     );
     assert_eq!(codes(root), codes(root));
+}
+
+#[test]
+fn lint_rules_drop_issues_and_change_levels() {
+    use dialex_cli::analysis::Level;
+    use dialex_syntax::LintLevel;
+
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    write(
+        root,
+        "src/a.content.ts",
+        r#"export default defineDictionary("a", { en: { x: "1" }, tr: {} });"#,
+    );
+    write(root, "src/page.ts", r#"getDictionary("nope");"#);
+
+    let run = |lint: Vec<(String, LintLevel)>| {
+        let config = AnalysisConfig {
+            default_locale: "en".into(),
+            locales: vec!["en".into(), "tr".into()],
+            include: vec!["src/**/*.content.ts".into()],
+            exclude: vec![],
+            lint,
+        };
+        let options = AnalysisOptions {
+            runtime: false,
+            unused: false,
+            ..AnalysisOptions::default()
+        };
+        analyze_project(root, &config, &options)
+            .unwrap()
+            .issues
+            .into_iter()
+            .map(|i| (i.code, i.level))
+            .collect::<Vec<_>>()
+    };
+
+    let base = run(vec![]);
+    assert!(base.contains(&("missing-key", Level::Error)), "{base:?}");
+    assert!(
+        base.contains(&("unknown-dictionary", Level::Error)),
+        "{base:?}"
+    );
+
+    let changed = run(vec![
+        ("missing-key".to_string(), LintLevel::Warn),
+        ("unknown-dictionary".to_string(), LintLevel::Off),
+    ]);
+    assert!(
+        changed.contains(&("missing-key", Level::Warning)),
+        "{changed:?}"
+    );
+    assert!(
+        !changed.iter().any(|(c, _)| *c == "unknown-dictionary"),
+        "{changed:?}"
+    );
 }

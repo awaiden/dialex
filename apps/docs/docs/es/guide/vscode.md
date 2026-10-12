@@ -65,12 +65,13 @@ Las correcciones reemplazan el texto del archivo en el editor, por lo que se pue
 
 ## Ajustes
 
-| Ajuste                | Valor por defecto | Descripción                                                                                                                                                   |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dialex.enable`       | `true`            | Activa o desactiva todas las funciones                                                                                                                        |
-| `dialex.unusedKeys`   | `false`           | Atenúa las claves y los diccionarios posiblemente sin usar. Es una heurística basada en coincidencia de palabras, por eso está desactivado por defecto        |
-| `dialex.autoGenerate` | `true`            | Regenera `dialex.generated.ts` y `dialex-env.d.ts` cuando cambia un diccionario o un archivo de configuración, en proyectos que ya tienen un archivo generado |
-| `dialex.configPath`   | `""`              | Ruta del archivo de configuración, relativa a la raíz de cada proyecto                                                                                        |
+| Ajuste                | Valor por defecto | Descripción                                                                                                                                                                         |
+| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`            | Activa o desactiva todas las funciones                                                                                                                                              |
+| `dialex.diagnostics`  | `true`            | Mostrar los problemas de Dialex. Desactívelo si un [plugin de ESLint u oxlint](./linting.md) los informa; el hover, el autocompletado y las correcciones rápidas siguen funcionando |
+| `dialex.unusedKeys`   | `false`           | Atenúa las claves y los diccionarios posiblemente sin usar. Es una heurística basada en coincidencia de palabras, por eso está desactivado por defecto                              |
+| `dialex.autoGenerate` | `true`            | Regenera `dialex.generated.ts` y `dialex-env.d.ts` cuando cambia un diccionario o un archivo de configuración, en proyectos que ya tienen un archivo generado                       |
+| `dialex.configPath`   | `""`              | Ruta del archivo de configuración, relativa a la raíz de cada proyecto                                                                                                              |
 
 El comando **Dialex: Refresh Diagnostics** vuelve a analizarlo todo. Los diagnósticos también se actualizan cuando guardas un archivo o cuando cambia un diccionario o un archivo de configuración.
 

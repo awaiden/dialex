@@ -19,6 +19,7 @@ Dialex 有一个语言服务器 [`@dialexjs/language-server`](https://www.npmjs.
   "lsp": {
     "dialex": {
       "settings": {
+        "diagnostics": true,
         "unusedKeys": false,
         "autoGenerate": true,
         "configPath": ""

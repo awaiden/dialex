@@ -105,18 +105,27 @@ Eksik bir ayar ya da eksik yapılandırma dosyasının tamamı için bütün ara
 
 `dialex.config.ts` dosyasının biçimi. Her alan isteğe bağlıdır.
 
-| Alan            | Tip                        | Varsayılan          | Açıklama                                                                         |
-| --------------- | -------------------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `defaultLocale` | `string`                   | `"en"`              | Hiçbiri çözümlenemediğinde kullanılan yerel ayar                                 |
-| `locales`       | `string[]`                 | —                   | Desteklenen yerel ayarlar                                                        |
-| `include`       | `string \| string[]`       | `"**/*.content.ts"` | Sözlük dosyalarının glob'u                                                       |
-| `exclude`       | `string[]`                 | —                   | `node_modules`, derleme çıktısı ve `.gitignore` dışında asla taranmayan glob'lar |
-| `output`        | `string`                   | `src/` ya da kök    | `dialex.generated.ts` dosyasının yazıldığı yer                                   |
-| `configFile`    | `string`                   | —                   | Yapılandırma dosyasının özel yolu                                                |
-| `fallbacks`     | `Record<string, string[]>` | —                   | Açık [yedek zincirleri](../guide/fallbacks.md)                                   |
-| `prefixDefault` | `boolean`                  | `true`              | Varsayılan yerel ayarın da URL öneki alıp almayacağı                             |
-| `lazy`          | `boolean \| "locale"`      | `false`             | Sözlükleri isteğe bağlı yükle. Bkz. [Tembel yükleme](../guide/lazy-loading.md)   |
-| `translate`     | `TranslateConfig`          | —                   | [`dialex translate`](../cli/translate.md) ayarları                               |
+| Alan            | Tip                        | Varsayılan          | Açıklama                                                                           |
+| --------------- | -------------------------- | ------------------- | ---------------------------------------------------------------------------------- |
+| `defaultLocale` | `string`                   | `"en"`              | Hiçbiri çözümlenemediğinde kullanılan yerel ayar                                   |
+| `locales`       | `string[]`                 | —                   | Desteklenen yerel ayarlar                                                          |
+| `include`       | `string \| string[]`       | `"**/*.content.ts"` | Sözlük dosyalarının glob'u                                                         |
+| `exclude`       | `string[]`                 | —                   | `node_modules`, derleme çıktısı ve `.gitignore` dışında asla taranmayan glob'lar   |
+| `output`        | `string`                   | `src/` ya da kök    | `dialex.generated.ts` dosyasının yazıldığı yer                                     |
+| `configFile`    | `string`                   | —                   | Yapılandırma dosyasının özel yolu                                                  |
+| `fallbacks`     | `Record<string, string[]>` | —                   | Açık [yedek zincirleri](../guide/fallbacks.md)                                     |
+| `prefixDefault` | `boolean`                  | `true`              | Varsayılan yerel ayarın da URL öneki alıp almayacağı                               |
+| `lazy`          | `boolean \| "locale"`      | `false`             | Sözlükleri isteğe bağlı yükle. Bkz. [Tembel yükleme](../guide/lazy-loading.md)     |
+| `lint`          | `LintConfig`               | —                   | Her denetimin seviyesi ve seçenekleri. [Lint](../guide/linting.md) sayfasına bakın |
+| `translate`     | `TranslateConfig`          | —                   | [`dialex translate`](../cli/translate.md) ayarları                                 |
+
+### `LintConfig`
+
+| Alan    | Tip                               | Açıklama                                                                        |
+| ------- | --------------------------------- | ------------------------------------------------------------------------------- |
+| `rules` | `Record<string, LintRuleSetting>` | Tanı kodu başına seviye ve seçenekler; ayrıca `dynamic-key` ve `literal-string` |
+
+Bir `LintRuleSetting`, bir `LintSeverity` (`"off"`, `"warn"` ya da `"error"`) ya da seçenek alan denetimler için `[LintSeverity, options]` olur. `dialex check`, editörler ve [`@dialexjs/eslint-plugin`](../guide/linting.md) hepsi onu okur.
 
 ### `TranslateConfig`
 

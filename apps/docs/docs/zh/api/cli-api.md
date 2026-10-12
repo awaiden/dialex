@@ -16,25 +16,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 找出项目的词典，检查 locale 一致性、ICU 消息、锁文件中的过期翻译以及源码中的引用，并返回问题列表。`dialex check` 是它之上的一层薄封装。
 
-| 选项      | 类型             | 默认值                | 说明                                                                              |
-| --------- | ---------------- | --------------------- | --------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | 项目文件夹。必填                                                                  |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`、`locales`、`include`、`exclude`。必填                            |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | 要扫描引用的源码 glob。传入 `[]` 则跳过扫描                                       |
-| `runtime` | `boolean`        | `false`               | **会运行项目代码。** 导入语法树无法描述的词典（展开、计算键）。编辑器必须保持关闭 |
-| `ignore`  | `string[]`       | —                     | 更多忽略 glob，相对于 `root`（嵌套项目）                                          |
-| `unused`  | `boolean`        | `true`                | 报告可能未使用的键和词典                                                          |
-| `lock`    | `boolean`        | `true`                | 报告自 `dialex.lock.json` 记录之后源文本发生变化的翻译                            |
-| `cache`   | `AnalysisCache`  | —                     | 在多次调用之间复用已解析的词典和已扫描的源文件。与 `runtime` 一起使用时被忽略     |
+| 选项       | 类型                  | 默认值                | 说明                                                                              |
+| ---------- | --------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | 项目文件夹。必填                                                                  |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`、`locales`、`include`、`exclude`。必填                            |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | 要扫描引用的源码 glob。传入 `[]` 则跳过扫描                                       |
+| `runtime`  | `boolean`             | `false`               | **会运行项目代码。** 导入语法树无法描述的词典（展开、计算键）。编辑器必须保持关闭 |
+| `ignore`   | `string[]`            | —                     | 更多忽略 glob，相对于 `root`（嵌套项目）                                          |
+| `unused`   | `boolean`             | `true`                | 报告可能未使用的键和词典                                                          |
+| `lock`     | `boolean`             | `true`                | 报告自 `dialex.lock.json` 记录之后源文本发生变化的翻译                            |
+| `cache`    | `AnalysisCache`       | —                     | 在多次调用之间复用已解析的词典和已扫描的源文件。与 `runtime` 一起使用时被忽略     |
+| `contents` | `Map<string, string>` | —                     | 按绝对路径给出的文件未保存文本，会代替磁盘上的文件被读取。供 linter 和编辑器使用  |
 
 返回结果：
 
-| 字段                 | 类型                   | 说明                           |
-| -------------------- | ---------------------- | ------------------------------ |
-| `issues`             | `AnalysisIssue[]`      | 发现的全部问题。见下表         |
-| `dictionaries`       | `AnalyzedDictionary[]` | 每个可读取的词典一项           |
-| `files`              | `string[]`             | 每个匹配到的词典文件的绝对路径 |
-| `sourceFilesScanned` | `number`               | 为查找引用而扫描的源文件数量   |
+| 字段                 | 类型                   | 说明                                                                      |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------- |
+| `issues`             | `AnalysisIssue[]`      | 发现的全部问题。见下表                                                    |
+| `dictionaries`       | `AnalyzedDictionary[]` | 每个可读取的词典一项                                                      |
+| `files`              | `string[]`             | 每个匹配到的词典文件的绝对路径                                            |
+| `sourceFilesScanned` | `number`               | 为查找引用而扫描的源文件数量                                              |
+| `inlineDictionaries` | `string[]`             | 在代码中用 `dictionaries: { name: ... }` 注册的名称。`src` 为 `[]` 时为空 |
 
 `AnalysisIssue` 包含 `file`、`level`（`"error" \| "warning" \| "info"`）、`code`（[见代码列表](../guide/diagnostics.md)）、`message`，以及已知时的 `range`（由 `{ line, column }` 组成的从零开始的 `{ start, end }`）、`dictionary`、`locale`、`path` 和 `sourceLocale`（对 `missing-key`：可从中复制该键的 locale）。
 
@@ -42,13 +44,15 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 ### 其他分析导出
 
-| 导出                       | 说明                                                                                                 |
-| -------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `createAnalysisCache()`    | 供长期运行的调用方使用的 `AnalysisCache`。复用未变化的内容（按修改时间和大小判断）                   |
-| `clearGitignore(cache)`    | 清除缓存的 `.gitignore` 规则，例如在 `.gitignore` 改变之后                                           |
-| `scanReferences(text)`     | 在源文本中查找 `getDictionary("x")` 形式和 `t("x.y.z")` 的引用。返回 `{ kind, value, start, end }[]` |
-| `relativeFile(root, file)` | 相对于根目录、使用正斜杠的路径，用于显示                                                             |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                  |
+| 导出                          | 说明                                                                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `createAnalysisCache()`       | 供长期运行的调用方使用的 `AnalysisCache`。复用未变化的内容（按修改时间和大小判断）                                       |
+| `analyzeProjectSync(options)` | 供无法 await 的调用方（如 lint 规则）使用的 `analyzeProject`。只从语法树读取字典：`runtime` 被忽略，因此项目代码从不运行 |
+| `clearGitignore(cache)`       | 清除缓存的 `.gitignore` 规则，例如在 `.gitignore` 改变之后                                                               |
+| `scanReferences(text)`        | 在源文本中查找 `getDictionary("x")` 形式和 `t("x.y.z")` 的引用。返回 `{ kind, value, start, end }[]`                     |
+| `scanText(text)`              | 与 `scanReferences` 类似，并返回文本中内联注册的字典名。返回 `{ references, inline }`                                    |
+| `relativeFile(root, file)`    | 相对于根目录、使用正斜杠的路径，用于显示                                                                                 |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                      |
 
 ## 扫描文件
 

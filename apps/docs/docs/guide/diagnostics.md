@@ -45,6 +45,15 @@ These need source files to scan; they are skipped when there are none. See [`dia
 | `unused-key`         | warning  | `Key "only_en" is possibly unused`   | No source file contains the key's last segment as a word. A heuristic: dynamic access is never reported, and some unused keys go unnoticed |
 | `unused-dictionary`  | warning  | `Dictionary "c" is never referenced` | No source file contains the dictionary's name                                                                                              |
 
+Comments are never checked. A dictionary registered in code with an object literal, `dictionaries: { name: ... }`, counts as known, so reading it with `getDictionary("name")` is not an error. To silence a reference that is fine, put `dialex-ignore-next-line` in a comment on the line above it, or `dialex-ignore` in a comment on the same line:
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+For the same checks in ESLint and oxlint, see [Linting](./linting.md).
+
 ## Generated files
 
 `dialex check` also compares `dialex.generated.ts` and `dialex-env.d.ts` with what `dialex generate` would write, ignoring formatting. This one has no code:

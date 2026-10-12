@@ -19,6 +19,7 @@ Los ajustes van en la configuración de Zed, bajo `lsp.dialex`:
   "lsp": {
     "dialex": {
       "settings": {
+        "diagnostics": true,
         "unusedKeys": false,
         "autoGenerate": true,
         "configPath": ""

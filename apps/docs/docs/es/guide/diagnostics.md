@@ -45,6 +45,15 @@ Necesitan archivos fuente que escanear; se omiten cuando no hay ninguno. Lo que 
 | `unused-key`         | warning  | `Key "only_en" is possibly unused`   | Ningún archivo fuente contiene el último segmento de la clave como palabra. Es una heurística: el acceso dinámico nunca se informa y algunas claves sin usar pasan desapercibidas |
 | `unused-dictionary`  | warning  | `Dictionary "c" is never referenced` | Ningún archivo fuente contiene el nombre del diccionario                                                                                                                          |
 
+Los comentarios nunca se comprueban. Un diccionario registrado en el código con un literal de objeto, `dictionaries: { name: ... }`, se considera conocido, así que leerlo con `getDictionary("name")` no es un error. Para silenciar una referencia correcta, escriba `dialex-ignore-next-line` en un comentario de la línea anterior, o `dialex-ignore` en un comentario de la misma línea:
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+Para las mismas comprobaciones en ESLint y oxlint, consulte [Linting](./linting.md).
+
 ## Archivos generados
 
 `dialex check` también compara `dialex.generated.ts` y `dialex-env.d.ts` con lo que escribiría `dialex generate`, ignorando el formato. Este problema no tiene código:

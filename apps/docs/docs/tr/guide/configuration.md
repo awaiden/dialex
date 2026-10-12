@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | Yerel ayar başına açık [yedek zincirleri](./fallbacks.md)                                                                                                                       |
 | `prefixDefault` | `boolean`                     | `true`              | Varsayılan yerel ayarın da URL öneki alıp almayacağı. `DialexLink` ve [yönlendirme yardımcıları](./routing.md) tarafından okunur                                                |
 | `lazy`          | `boolean \| "locale"`         | `false`             | Sözlükleri isteğe bağlı yükler (istemci paketleri): `true` sözlük başına, `"locale"` sözlük ve dil başına böler. Bkz. [Tembel Yükleme](./lazy-loading.md)                       |
+| `lint`          | `{ rules }`                   | —                   | Denetimleri kapatır ya da seviyesini ve seçeneklerini değiştirir; `dialex check`, editörler ve [ESLint ile oxlint kuralları](./linting.md) için                                 |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | [`dialex translate`](../cli/translate.md) için sağlayıcı                                                                                                                        |
 
 Dialex `node_modules` klasörünü, derleme çıktısını ve `.gitignore` dosyalarınızın yok saydığı her şeyi atlar (bir monorepo içindeki paket için deponun `.gitignore` dosyası da dahil). Başka her şey için, örneğin commit ettiğiniz bir vendor klasörü için, `exclude` kullanın.

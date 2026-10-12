@@ -26,6 +26,8 @@ use crate::text::{end_position, line_text, offset_at};
 #[derive(Clone)]
 pub struct Settings {
     pub enable: bool,
+    /// Publish problems. Off when an ESLint or oxlint plugin reports them instead.
+    pub diagnostics: bool,
     pub unused_keys: bool,
     pub auto_generate: bool,
     pub config_path: Option<String>,
@@ -35,6 +37,7 @@ impl Default for Settings {
     fn default() -> Self {
         Settings {
             enable: true,
+            diagnostics: true,
             unused_keys: false,
             auto_generate: true,
             config_path: None,
@@ -347,6 +350,9 @@ impl Server {
             if let Some(v) = value["enable"].as_bool() {
                 settings.enable = v;
             }
+            if let Some(v) = value["diagnostics"].as_bool() {
+                settings.diagnostics = v;
+            }
             if let Some(v) = value["unusedKeys"].as_bool() {
                 settings.unused_keys = v;
             }
@@ -412,6 +418,7 @@ impl Server {
                             locales: config.locales.clone(),
                             include: config.include.clone(),
                             exclude: config.exclude.clone(),
+                            lint: config.lint.clone(),
                         },
                         &AnalysisOptions {
                             runtime: false,
@@ -449,7 +456,12 @@ impl Server {
 
     fn publish(&mut self) {
         let mut by_file: BTreeMap<PathBuf, Vec<Value>> = BTreeMap::new();
-        for project in &self.projects {
+        let shown: &[Project] = if self.settings.diagnostics {
+            &self.projects
+        } else {
+            &[]
+        };
+        for project in shown {
             for issue in &project.analysis.issues {
                 by_file
                     .entry(issue.file.clone())

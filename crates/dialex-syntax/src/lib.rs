@@ -5,7 +5,9 @@ mod config;
 mod dictionary;
 mod edit;
 
-pub use config::{parse_static_config, ConfigValue, Lazy, StaticConfig, StaticConfigResult};
+pub use config::{
+    parse_static_config, ConfigValue, Lazy, LintLevel, StaticConfig, StaticConfigResult,
+};
 pub use dictionary::{
     parse_dictionary, Dictionary, Leaf, LeafKind, Locale, Member, Object, ParseError, Property,
     Value,

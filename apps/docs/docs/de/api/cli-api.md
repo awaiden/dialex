@@ -16,25 +16,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 Findet die Wörterbücher eines Projekts, prüft Locale-Parität, ICU-Nachrichten, veraltete Einträge der Lock-Datei und Referenzen aus dem Quellcode und liefert die Probleme. `dialex check` ist eine dünne Schicht darüber.
 
-| Option    | Typ              | Standard              | Beschreibung                                                                                                                                          |
-| --------- | ---------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | Der Projektordner. Erforderlich                                                                                                                       |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Erforderlich                                                                                        |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | Quell-Globs, die nach Referenzen durchsucht werden. `[]` überspringt die Suche                                                                        |
-| `runtime` | `boolean`        | `false`               | **Führt Projektcode aus.** Importiert Wörterbücher, die der Syntaxbaum nicht beschreiben kann (Spreads, berechnete Schlüssel). Editoren lassen es aus |
-| `ignore`  | `string[]`       | —                     | Weitere Ignore-Globs relativ zu `root` (verschachtelte Projekte)                                                                                      |
-| `unused`  | `boolean`        | `true`                | Möglicherweise ungenutzte Schlüssel und Wörterbücher melden                                                                                           |
-| `lock`    | `boolean`        | `true`                | Übersetzungen melden, deren Ausgangstext sich seit `dialex.lock.json` geändert hat                                                                    |
-| `cache`   | `AnalysisCache`  | —                     | Geparste Wörterbücher und durchsuchte Quellen zwischen Aufrufen wiederverwenden. Mit `runtime` ignoriert                                              |
+| Option     | Typ                   | Standard              | Beschreibung                                                                                                                                          |
+| ---------- | --------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | Der Projektordner. Erforderlich                                                                                                                       |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Erforderlich                                                                                        |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | Quell-Globs, die nach Referenzen durchsucht werden. `[]` überspringt die Suche                                                                        |
+| `runtime`  | `boolean`             | `false`               | **Führt Projektcode aus.** Importiert Wörterbücher, die der Syntaxbaum nicht beschreiben kann (Spreads, berechnete Schlüssel). Editoren lassen es aus |
+| `ignore`   | `string[]`            | —                     | Weitere Ignore-Globs relativ zu `root` (verschachtelte Projekte)                                                                                      |
+| `unused`   | `boolean`             | `true`                | Möglicherweise ungenutzte Schlüssel und Wörterbücher melden                                                                                           |
+| `lock`     | `boolean`             | `true`                | Übersetzungen melden, deren Ausgangstext sich seit `dialex.lock.json` geändert hat                                                                    |
+| `cache`    | `AnalysisCache`       | —                     | Geparste Wörterbücher und durchsuchte Quellen zwischen Aufrufen wiederverwenden. Mit `runtime` ignoriert                                              |
+| `contents` | `Map<string, string>` | —                     | Ungespeicherter Text von Dateien nach absolutem Pfad, der statt der Datei auf der Platte gelesen wird. Für Linter und Editoren                        |
 
 Das Ergebnis:
 
-| Feld                 | Typ                    | Beschreibung                                             |
-| -------------------- | ---------------------- | -------------------------------------------------------- |
-| `issues`             | `AnalysisIssue[]`      | Alles Gefundene. Siehe die Tabelle unten                 |
-| `dictionaries`       | `AnalyzedDictionary[]` | Ein Eintrag je lesbarem Wörterbuch                       |
-| `files`              | `string[]`             | Absolute Pfade jeder passenden Wörterbuchdatei           |
-| `sourceFilesScanned` | `number`               | Wie viele Quelldateien nach Referenzen durchsucht wurden |
+| Feld                 | Typ                    | Beschreibung                                                                            |
+| -------------------- | ---------------------- | --------------------------------------------------------------------------------------- |
+| `issues`             | `AnalysisIssue[]`      | Alles Gefundene. Siehe die Tabelle unten                                                |
+| `dictionaries`       | `AnalyzedDictionary[]` | Ein Eintrag je lesbarem Wörterbuch                                                      |
+| `files`              | `string[]`             | Absolute Pfade jeder passenden Wörterbuchdatei                                          |
+| `sourceFilesScanned` | `number`               | Wie viele Quelldateien nach Referenzen durchsucht wurden                                |
+| `inlineDictionaries` | `string[]`             | Im Code mit `dictionaries: { name: ... }` registrierte Namen. Leer, wenn `src` `[]` ist |
 
 Eine `AnalysisIssue` hat `file`, `level` (`"error" \| "warning" \| "info"`), `code` ([siehe die Codes](../guide/diagnostics.md)), `message` und, wenn bekannt, `range` (nullbasiertes `{ start, end }` aus `{ line, column }`), `dictionary`, `locale`, `path` und `sourceLocale` (bei `missing-key`: eine Locale, aus der der Schlüssel kopiert werden kann).
 
@@ -42,13 +44,15 @@ Ein `AnalyzedDictionary` hat `name`, `file`, `locales`, `leaves` (`locale -> Pun
 
 ### Weitere Analyse-Exporte
 
-| Export                     | Beschreibung                                                                                                           |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `createAnalysisCache()`    | Ein `AnalysisCache` für langlebige Aufrufer. Er verwendet Unverändertes wieder (Schlüssel: Änderungszeit und Größe)    |
-| `clearGitignore(cache)`    | Vergisst die zwischengespeicherten `.gitignore`-Regeln, etwa nachdem sich eine `.gitignore` geändert hat               |
-| `scanReferences(text)`     | Findet Referenzen der Form `getDictionary("x")` und `t("x.y.z")` im Quelltext. Liefert `{ kind, value, start, end }[]` |
-| `relativeFile(root, file)` | Ein Pfad relativ zur Wurzel mit Schrägstrichen, zur Anzeige                                                            |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                    |
+| Export                        | Beschreibung                                                                                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createAnalysisCache()`       | Ein `AnalysisCache` für langlebige Aufrufer. Er verwendet Unverändertes wieder (Schlüssel: Änderungszeit und Größe)                                                  |
+| `analyzeProjectSync(options)` | `analyzeProject` für Aufrufer, die nicht warten können, etwa Lint-Regeln. Liest Wörterbücher nur aus dem Syntaxbaum: `runtime` wird ignoriert, Projektcode läuft nie |
+| `clearGitignore(cache)`       | Vergisst die zwischengespeicherten `.gitignore`-Regeln, etwa nachdem sich eine `.gitignore` geändert hat                                                             |
+| `scanReferences(text)`        | Findet Referenzen der Form `getDictionary("x")` und `t("x.y.z")` im Quelltext. Liefert `{ kind, value, start, end }[]`                                               |
+| `scanText(text)`              | Wie `scanReferences`, liefert aber auch die Wörterbuchnamen, die der Text inline registriert. Liefert `{ references, inline }`                                       |
+| `relativeFile(root, file)`    | Ein Pfad relativ zur Wurzel mit Schrägstrichen, zur Anzeige                                                                                                          |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                                                                  |
 
 ## Dateien durchsuchen
 

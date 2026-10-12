@@ -16,25 +16,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 Bir projenin sözlüklerini bulur; yerel ayar eşitliğini, ICU mesajlarını, kilit dosyasındaki eskimiş çevirileri ve kaynak koddaki başvuruları denetler ve sorunları döndürür. `dialex check` bunun üzerinde ince bir katmandır.
 
-| Seçenek   | Tip              | Varsayılan            | Açıklama                                                                                                                                                   |
-| --------- | ---------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | Proje klasörü. Zorunlu                                                                                                                                     |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Zorunlu                                                                                                  |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | Başvurular için taranacak kaynak glob'ları. Taramayı atlamak için `[]` verin                                                                               |
-| `runtime` | `boolean`        | `false`               | **Proje kodunu çalıştırır.** Sözdizimi ağacının tanımlayamadığı sözlükleri (spread, hesaplanan anahtarlar) içe aktarır. Editörler bunu kapalı bırakmalıdır |
-| `ignore`  | `string[]`       | —                     | `root`'a göre ek yok sayma glob'ları (iç içe projeler)                                                                                                     |
-| `unused`  | `boolean`        | `true`                | Muhtemelen kullanılmayan anahtarları ve sözlükleri bildir                                                                                                  |
-| `lock`    | `boolean`        | `true`                | `dialex.lock.json` kaydından sonra kaynak metni değişen çevirileri bildir                                                                                  |
-| `cache`   | `AnalysisCache`  | —                     | Çağrılar arasında ayrıştırılmış sözlükleri ve taranmış kaynakları yeniden kullan. `runtime` ile yok sayılır                                                |
+| Seçenek    | Tip                   | Varsayılan            | Açıklama                                                                                                                                                   |
+| ---------- | --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | Proje klasörü. Zorunlu                                                                                                                                     |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Zorunlu                                                                                                  |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | Başvurular için taranacak kaynak glob'ları. Taramayı atlamak için `[]` verin                                                                               |
+| `runtime`  | `boolean`             | `false`               | **Proje kodunu çalıştırır.** Sözdizimi ağacının tanımlayamadığı sözlükleri (spread, hesaplanan anahtarlar) içe aktarır. Editörler bunu kapalı bırakmalıdır |
+| `ignore`   | `string[]`            | —                     | `root`'a göre ek yok sayma glob'ları (iç içe projeler)                                                                                                     |
+| `unused`   | `boolean`             | `true`                | Muhtemelen kullanılmayan anahtarları ve sözlükleri bildir                                                                                                  |
+| `lock`     | `boolean`             | `true`                | `dialex.lock.json` kaydından sonra kaynak metni değişen çevirileri bildir                                                                                  |
+| `cache`    | `AnalysisCache`       | —                     | Çağrılar arasında ayrıştırılmış sözlükleri ve taranmış kaynakları yeniden kullan. `runtime` ile yok sayılır                                                |
+| `contents` | `Map<string, string>` | —                     | Dosyaların kaydedilmemiş metni (mutlak yola göre); diskteki dosya yerine okunur. Linter'lar ve editörler için                                              |
 
 Sonuç:
 
-| Alan                 | Tip                    | Açıklama                                        |
-| -------------------- | ---------------------- | ----------------------------------------------- |
-| `issues`             | `AnalysisIssue[]`      | Bulunan her şey. Aşağıdaki tabloya bakın        |
-| `dictionaries`       | `AnalyzedDictionary[]` | Okunabilen her sözlük için bir girdi            |
-| `files`              | `string[]`             | Eşleşen her sözlük dosyasının mutlak yolu       |
-| `sourceFilesScanned` | `number`               | Başvurular için kaç kaynak dosyasının tarandığı |
+| Alan                 | Tip                    | Açıklama                                                                        |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------- |
+| `issues`             | `AnalysisIssue[]`      | Bulunan her şey. Aşağıdaki tabloya bakın                                        |
+| `dictionaries`       | `AnalyzedDictionary[]` | Okunabilen her sözlük için bir girdi                                            |
+| `files`              | `string[]`             | Eşleşen her sözlük dosyasının mutlak yolu                                       |
+| `sourceFilesScanned` | `number`               | Başvurular için kaç kaynak dosyasının tarandığı                                 |
+| `inlineDictionaries` | `string[]`             | Kodda `dictionaries: { name: ... }` ile kaydedilen adlar. `src` `[]` ise boştur |
 
 Bir `AnalysisIssue`, `file`, `level` (`"error" \| "warning" \| "info"`), `code` ([kodlara bakın](../guide/diagnostics.md)), `message` ve biliniyorsa `range` (`{ line, column }` çiftlerinden sıfır tabanlı `{ start, end }`), `dictionary`, `locale`, `path` ve `sourceLocale` (`missing-key` için: anahtarın kopyalanacağı bir yerel ayar) taşır.
 
@@ -42,13 +44,15 @@ Bir `AnalyzedDictionary`; `name`, `file`, `locales`, `leaves` (`locale -> noktal
 
 ### Diğer analiz dışa aktarımları
 
-| Dışa aktarım               | Açıklama                                                                                                                    |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `createAnalysisCache()`    | Uzun ömürlü bir çağıran için `AnalysisCache`. Değişmeyeni yeniden kullanır (değişiklik zamanı ve boyuta göre)               |
-| `clearGitignore(cache)`    | Önbelleğe alınmış `.gitignore` kurallarını unutur; örneğin bir `.gitignore` değiştikten sonra                               |
-| `scanReferences(text)`     | Kaynak metindeki `getDictionary("x")` biçimli ve `t("x.y.z")` başvurularını bulur. `{ kind, value, start, end }[]` döndürür |
-| `relativeFile(root, file)` | Görüntüleme için, eğik çizgili, köke göre göreli yol                                                                        |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                         |
+| Dışa aktarım                  | Açıklama                                                                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createAnalysisCache()`       | Uzun ömürlü bir çağıran için `AnalysisCache`. Değişmeyeni yeniden kullanır (değişiklik zamanı ve boyuta göre)                                                       |
+| `analyzeProjectSync(options)` | Lint kuralları gibi `await` edemeyen çağıranlar için `analyzeProject`. Sözlükleri yalnızca sözdizimi ağacından okur: `runtime` yok sayılır, proje kodu hiç çalışmaz |
+| `clearGitignore(cache)`       | Önbelleğe alınmış `.gitignore` kurallarını unutur; örneğin bir `.gitignore` değiştikten sonra                                                                       |
+| `scanReferences(text)`        | Kaynak metindeki `getDictionary("x")` biçimli ve `t("x.y.z")` başvurularını bulur. `{ kind, value, start, end }[]` döndürür                                         |
+| `scanText(text)`              | `scanReferences` gibi, ayrıca metnin satır içi kaydettiği sözlük adlarını da döndürür. `{ references, inline }` döndürür                                            |
+| `relativeFile(root, file)`    | Görüntüleme için, eğik çizgili, köke göre göreli yol                                                                                                                |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                                                                 |
 
 ## Dosyaları tarama
 
