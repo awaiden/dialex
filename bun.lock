@@ -387,6 +387,7 @@
       },
       "dependencies": {
         "@clack/prompts": "^1.8.1",
+        "@dialexjs/config": "workspace:*",
         "chokidar": "^5.0.0",
         "commander": "^15.0.0",
         "dialexjs": "workspace:*",
@@ -394,7 +395,6 @@
         "ignore": "^7.0.12",
         "magicast": "^0.5.5",
         "picocolors": "^1.1.1",
-        "unconfig": "^7.5.0",
       },
       "devDependencies": {
         "@types/node": "^26.1.1",
@@ -433,6 +433,23 @@
     "packages/cli-win32-x64": {
       "name": "@dialexjs/cli-win32-x64",
       "version": "0.8.0",
+    },
+    "packages/config": {
+      "name": "@dialexjs/config",
+      "version": "0.8.0",
+      "bin": {
+        "dialex-config": "./dist/cli.mjs",
+      },
+      "dependencies": {
+        "dialexjs": "workspace:*",
+        "magicast": "^0.5.5",
+        "unconfig": "^7.5.0",
+      },
+      "devDependencies": {
+        "@types/node": "^26.1.1",
+        "typescript": "^7.0.2",
+        "vite-plus": "catalog:",
+      },
     },
     "packages/core": {
       "name": "dialexjs",
@@ -964,6 +981,8 @@
     "@dialexjs/cli-win32-arm64": ["@dialexjs/cli-win32-arm64@workspace:packages/cli-win32-arm64"],
 
     "@dialexjs/cli-win32-x64": ["@dialexjs/cli-win32-x64@workspace:packages/cli-win32-x64"],
+
+    "@dialexjs/config": ["@dialexjs/config@workspace:packages/config"],
 
     "@dialexjs/docs": ["@dialexjs/docs@workspace:apps/docs"],
 

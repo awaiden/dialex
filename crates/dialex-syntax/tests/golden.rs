@@ -1,7 +1,7 @@
 //! Compares the dictionary and config readers with the TypeScript ones on the same sources
 //! (`crates/tests/gen-syntax-golden.mjs`).
 
-use dialex_syntax::{parse_dictionary, parse_static_config, Lazy, LeafKind, ParseError};
+use dialex_syntax::{parse_dictionary, LeafKind, ParseError};
 use serde_json::{json, Value};
 
 fn golden() -> Value {
@@ -71,86 +71,5 @@ fn dictionaries_match() {
                 locale.name
             );
         }
-    }
-}
-
-#[test]
-fn configs_match() {
-    let golden = golden();
-    for entry in golden["configs"].as_array().unwrap() {
-        let name = entry["name"].as_str().unwrap();
-        let source = entry["source"].as_str().unwrap();
-        let file = entry["file"].as_str().unwrap();
-
-        let parsed = parse_static_config(file, source);
-        if entry.get("error").is_some()
-            || entry["notes"].as_array().is_some_and(|n| {
-                n.iter()
-                    .any(|note| note.as_str().unwrap().starts_with("Could not parse"))
-            })
-        {
-            assert!(parsed.is_err(), "{name}: expected a syntax error");
-            continue;
-        }
-        let (config, notes) = parsed.unwrap().resolve();
-        let expected = &entry["config"];
-
-        assert_eq!(
-            json!(config.default_locale),
-            expected["defaultLocale"],
-            "{name}: defaultLocale"
-        );
-        assert_eq!(
-            json!(config.locales),
-            expected["locales"],
-            "{name}: locales"
-        );
-        assert_eq!(
-            json!(
-                config.include.len() == 1 && !expected["include"].is_array()
-                    || config.include
-                        == expected["include"]
-                            .as_array()
-                            .map(|a| a
-                                .iter()
-                                .map(|v| v.as_str().unwrap().to_string())
-                                .collect::<Vec<_>>())
-                            .unwrap_or_default()
-            ),
-            json!(true),
-            "{name}: include"
-        );
-        assert_eq!(
-            json!(config.exclude),
-            expected["exclude"],
-            "{name}: exclude"
-        );
-        assert_eq!(
-            json!(config.output),
-            json!(expected.get("output").cloned().unwrap_or(Value::Null)),
-            "{name}: output"
-        );
-        let fallbacks: serde_json::Map<String, Value> = config
-            .fallbacks
-            .iter()
-            .map(|(k, v)| (k.clone(), json!(v)))
-            .collect();
-        assert_eq!(
-            Value::Object(fallbacks),
-            expected["fallbacks"],
-            "{name}: fallbacks"
-        );
-        assert_eq!(
-            json!(config.prefix_default),
-            expected["prefixDefault"],
-            "{name}: prefixDefault"
-        );
-        let lazy = match config.lazy {
-            Lazy::Off => json!(false),
-            Lazy::On => json!(true),
-            Lazy::PerLocale => json!("locale"),
-        };
-        assert_eq!(lazy, expected["lazy"], "{name}: lazy");
-        assert_eq!(json!(notes), entry["notes"], "{name}: notes");
     }
 }

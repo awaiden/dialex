@@ -5,6 +5,7 @@
 //   DIALEX_NATIVE=0   always use the Node CLI
 //   DIALEX_NATIVE=1   native only: fail instead of falling back to Node for a command
 //   DIALEX_BINARY     path of a binary to use instead of the installed package
+//   DIALEX_CONFIG_RESOLVER   is set for the binary: the `@dialexjs/config` script it runs to resolve the config
 //
 // The native binary handles `generate` and `check` itself and hands every other command back to
 // the Node CLI (`dist/index.mjs`), so behavior and output stay the same.
@@ -49,12 +50,28 @@ function findBinary() {
   }
 }
 
+/**
+ * The script of `@dialexjs/config` that writes `.dialex/config.json`. The binary does not read
+ * `dialex.config.*` itself; it runs this when the resolved file is missing or stale.
+ */
+function findConfigResolver() {
+  try {
+    return createRequire(import.meta.url).resolve("@dialexjs/config/cli");
+  } catch {
+    return undefined;
+  }
+}
+
 const binary = process.env.DIALEX_NATIVE === "0" ? undefined : findBinary();
 
 if (binary) {
   const result = spawnSync(binary, process.argv.slice(2), {
     stdio: "inherit",
-    env: { ...process.env, DIALEX_NODE_CLI: nodeCli },
+    env: {
+      ...process.env,
+      DIALEX_NODE_CLI: nodeCli,
+      ...(findConfigResolver() ? { DIALEX_CONFIG_RESOLVER: findConfigResolver() } : {}),
+    },
   });
   if (result.error) {
     // The binary could not be started (wrong architecture, missing permissions): use Node

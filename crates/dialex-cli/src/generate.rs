@@ -6,7 +6,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use dialex_icu::message_type;
-use dialex_syntax::{parse_static_config, Dictionary, Lazy, LeafKind, ParseError};
+use dialex_syntax::{Dictionary, Lazy, LeafKind, ParseError};
 use serde_json::{json, Value};
 
 use crate::adapters::detect_adapters;
@@ -42,23 +42,6 @@ pub struct Rendered {
     pub notes: Vec<String>,
 }
 
-const CONFIG_NAMES: [&str; 2] = ["dialex.config", "i18n.config"];
-const EXTENSIONS: [&str; 7] = ["ts", "mts", "cts", "js", "mjs", "cjs", "json"];
-
-fn config_candidates(root: &Path, config: &Option<String>) -> Vec<PathBuf> {
-    match config {
-        Some(file) => vec![resolve(root, file)],
-        None => CONFIG_NAMES
-            .iter()
-            .flat_map(|name| {
-                EXTENSIONS
-                    .iter()
-                    .map(move |ext| root.join(format!("{name}.{ext}")))
-            })
-            .collect(),
-    }
-}
-
 fn json_string(text: &str) -> String {
     serde_json::to_string(text).unwrap()
 }
@@ -75,49 +58,24 @@ fn import_path(dir: &Path, file: &Path, extension: &str) -> String {
     relative
 }
 
-/// Reads the settings from the syntax tree of `dialex.config.*`, never running it. Anything that
-/// might need running the config is left to the Node CLI.
+/// The settings of `dialex.config.*`, from the file `@dialexjs/config` resolved (it is run again
+/// when that file is stale). The config may be run, so spreads and computed values are resolved.
 pub fn load_config(
     root: &Path,
     config: &Option<String>,
 ) -> Result<(dialex_syntax::StaticConfig, Vec<String>, Option<PathBuf>), Fallback> {
-    load_config_with(root, config, false)
+    let resolved = crate::resolved::load(root, config, crate::resolved::Mode::Run)?;
+    Ok((resolved.config, resolved.notes, resolved.file))
 }
 
-/// Like [`load_config`], but a config with spreads or computed keys is read as far as it goes
-/// (with a note) instead of handing over to Node. For editors, which never run project code.
+/// Like [`load_config`], but never runs project code: a config with spreads or computed keys is
+/// read as far as its syntax tree goes (with a note). For editors, which never run project code.
 pub fn load_config_lenient(
     root: &Path,
     config: &Option<String>,
 ) -> Result<(dialex_syntax::StaticConfig, Vec<String>, Option<PathBuf>), Fallback> {
-    load_config_with(root, config, true)
-}
-
-fn load_config_with(
-    root: &Path,
-    config: &Option<String>,
-    lenient: bool,
-) -> Result<(dialex_syntax::StaticConfig, Vec<String>, Option<PathBuf>), Fallback> {
-    for candidate in config_candidates(root, config) {
-        if !candidate.is_file() {
-            continue;
-        }
-        let text = fs::read_to_string(&candidate)
-            .map_err(|e| Fallback(format!("cannot read config: {e}")))?;
-        let result = parse_static_config(&candidate.to_string_lossy(), &text)
-            .map_err(|e| Fallback(format!("config syntax: {e}")))?;
-        if result.opaque && !lenient {
-            return Err(Fallback("config has spreads or computed keys".into()));
-        }
-        let (resolved, mut notes) = result.resolve();
-        if result.opaque {
-            notes.push(
-                "The config has spreads or computed keys; only literal settings are used.".into(),
-            );
-        }
-        return Ok((resolved, notes, Some(candidate)));
-    }
-    Ok((dialex_syntax::StaticConfig::default(), Vec::new(), None))
+    let resolved = crate::resolved::load(root, config, crate::resolved::Mode::Static)?;
+    Ok((resolved.config, resolved.notes, resolved.file))
 }
 
 pub fn render(root: &Path, options: &Options) -> Result<Rendered, Fallback> {

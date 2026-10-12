@@ -4,11 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import {
-  DEFAULT_STATIC_CONFIG,
-  parseStaticConfig,
-  readStaticConfig,
-} from "../src/utils/static-config.js";
+import { DEFAULT_STATIC_CONFIG, parseStaticConfig, readStaticConfig } from "../src/index.js";
 
 describe("parseStaticConfig", () => {
   it("reads defineConfig calls", () => {

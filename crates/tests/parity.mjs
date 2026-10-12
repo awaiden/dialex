@@ -12,6 +12,8 @@ import { buildFixtures } from "./fixtures.mjs";
 const root = path.resolve(import.meta.dirname, "../..");
 const node = path.join(root, "packages/cli/dist/index.mjs");
 const native = path.join(root, "crates/target/release/dx");
+// The binary does not read `dialex.config.*`; it runs this to write `.dialex/config.json`
+const resolver = path.join(root, "packages/config/dist/cli.mjs");
 const argv = process.argv.slice(2);
 if (argv.length === 0) throw new Error("usage: parity.mjs <command...>");
 
@@ -27,6 +29,8 @@ const SKIP = new Set([
   "build",
   ".expo",
   ".intlayer",
+  // written by the native binary only, and not a result of the command
+  ".dialex",
 ]);
 
 function copy(from, to) {
@@ -56,7 +60,7 @@ function run(bin, cwd, extraEnv = {}) {
   const result = spawnSync(command[0], [...command.slice(1), ...argv], {
     cwd,
     encoding: "utf-8",
-    env: { ...process.env, NO_COLOR: "1", ...extraEnv },
+    env: { ...process.env, NO_COLOR: "1", DIALEX_CONFIG_RESOLVER: resolver, ...extraEnv },
   });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }

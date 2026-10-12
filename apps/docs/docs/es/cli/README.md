@@ -23,7 +23,7 @@ Un flujo de trabajo típico: `dialex check --fix` para crear marcadores de posic
 
 En Linux, macOS y Windows (x64 y arm64) `dialex` y `dx` ejecutan un binario nativo escrito en Rust, que se instala con el paquete como dependencia opcional (`@dialexjs/cli-<platform>`). `generate` y `check` son entre 25 y 40 veces más rápidos que la implementación en Node en un proyecto con 1.000 diccionarios, y producen los mismos archivos y la misma salida byte a byte.
 
-El binario nativo lee los diccionarios y la configuración desde el árbol de sintaxis. Cuando un comando necesita ejecutar el código de tu proyecto (una configuración que no es solo datos, un proveedor de `translate`, `runtime: true`, carga diferida, `--fix`, `--watch`) o no está implementado de forma nativa (`init`, `export`, `import`, `lock`, `translate`), entrega todo el comando a la CLI de Node, así que para ti nada cambia. Dos variables de entorno lo controlan:
+El binario nativo lee los diccionarios desde su árbol de sintaxis y la configuración desde `.dialex/config.json`. Cuando un comando necesita ejecutar el código de tu proyecto (una configuración que no es solo datos, un proveedor de `translate`, `runtime: true`, carga diferida, `--fix`, `--watch`) o no está implementado de forma nativa (`init`, `export`, `import`, `lock`, `translate`), entrega todo el comando a la CLI de Node, así que para ti nada cambia. Dos variables de entorno lo controlan:
 
 ```bash
 DIALEX_NATIVE=0 dx check   # always use the Node implementation

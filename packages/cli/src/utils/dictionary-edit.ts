@@ -1,5 +1,11 @@
 import fs from "node:fs";
 
+import {
+  findProperty as findProp,
+  isObjectNode as isObject,
+  propertyKeyName as keyName,
+  unwrapNode as unwrap,
+} from "@dialexjs/config";
 import { loadFile, writeFile, generateCode, parseExpression, parseModule } from "magicast";
 
 /**
@@ -53,37 +59,8 @@ export interface Leaf {
   value?: string;
 }
 
-function unwrap(node: Node): Node {
-  while (
-    node &&
-    (node.type === "TSAsExpression" ||
-      node.type === "TSSatisfiesExpression" ||
-      node.type === "ParenthesizedExpression")
-  ) {
-    node = node.expression;
-  }
-  return node;
-}
-
-const isObject = (node: Node) => node?.type === "ObjectExpression";
-
-function keyName(prop: Node): string | undefined {
-  const key = prop?.key;
-  if (!key || prop.computed) return undefined;
-  if (key.type === "Identifier") return key.name;
-  if (key.type === "StringLiteral" || (key.type === "Literal" && typeof key.value === "string")) {
-    return key.value;
-  }
-  if (key.type === "NumericLiteral") return String(key.value);
-  return undefined;
-}
-
 const isPropLike = (p: Node) =>
   p?.type === "ObjectProperty" || p?.type === "Property" || p?.type === "ObjectMethod";
-
-function findProp(obj: Node, key: string): Node | undefined {
-  return obj.properties.find((p: Node) => isPropLike(p) && keyName(p) === key);
-}
 
 function stringValue(node: Node): string | undefined {
   node = unwrap(node);
@@ -402,12 +379,3 @@ export function getLeafSource(
   if (!prop) return undefined;
   return generateCode((prop.type === "ObjectMethod" ? prop : prop.value) as any).code;
 }
-
-// AST helpers shared with the static config reader.
-export {
-  unwrap as unwrapNode,
-  isObject as isObjectNode,
-  keyName as propertyKeyName,
-  findProp as findProperty,
-};
-export type { Node as AstNode };

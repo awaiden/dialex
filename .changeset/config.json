@@ -6,6 +6,7 @@
       "dialexjs",
       "@dialexjs/cli",
       "@dialexjs/mcp",
+      "@dialexjs/config",
       "@dialexjs/eslint-plugin",
       "@dialexjs/language-server",
       "@dialexjs/cli-linux-x64",

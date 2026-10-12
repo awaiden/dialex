@@ -37,13 +37,15 @@ The tools look in the project root (the folder you run `dialex` from, or the fol
 
 ## How the tools read it
 
-| Tool                                                        | Reads the config by                                                          |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)        |
-| The native `dx`                                             | Reading its syntax tree. Anything computed hands the command to the Node CLI |
-| The editor extension and language server                    | Reading its syntax tree, and never running it                                |
+| Tool                                                        | Reads the config by                                                                                      |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)                                    |
+| The native `dx`                                             | Reading `.dialex/config.json`, which `@dialexjs/config` writes, and writes again when the config changes |
+| The editor extension and language server                    | Reading its syntax tree, and never running it                                                            |
 
 A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out. See [Native binaries](./native.md).
+
+`.dialex/config.json` is generated, like `dialex.generated.ts`: add `.dialex/` to your `.gitignore`. A config made only of literals is read from its syntax tree and is not run. One with spreads, imports or computed values is run once by `@dialexjs/config`, which records the files it imported and the environment variables it read, and the native tools check that record on every run. Node is needed only for that step.
 
 ## Examples
 

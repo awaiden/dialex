@@ -1,5 +1,6 @@
 // Writes tests/golden/syntax.json: how the TypeScript reader sees dictionary files. Covers odd
-// shapes written by hand and every `*.content.ts` file in the repository.
+// shapes written by hand and every `*.content.ts` file in the repository. The config is not here:
+// the Rust side reads the file `@dialexjs/config` writes, not the source of `dialex.config.*`.
 //
 //   bun run crates/tests/gen-syntax-golden.mjs
 import { execSync } from "node:child_process";
@@ -66,33 +67,8 @@ const entries = samples.map(({ name, source }) => {
   }
 });
 
-const configs = {
-  literal: `import { defineConfig } from "dialexjs";\nexport default defineConfig({ defaultLocale: "en", locales: ["en", "tr"], lazy: true, prefixDefault: false, include: ["src/**/*.content.ts"], exclude: ["**/legacy/**"], fallbacks: { "tr-TR": ["tr"] }, output: "src/dialex.generated.ts" });`,
-  plainObject: `export default { defaultLocale: "tr", locales: ["tr", "en"] };`,
-  satisfies: `export default { defaultLocale: "tr" } satisfies Config;`,
-  lazyLocale: `export default defineConfig({ lazy: "locale", locales: ["en"] });`,
-  nonLiteral: `import { getLocales } from "./l";\nexport default defineConfig({ locales: getLocales(), defaultLocale: "en" });`,
-  spread: `export default defineConfig({ ...base, defaultLocale: "en" });`,
-  template: "export default defineConfig({ defaultLocale: `en` });",
-  withTranslate: `export default defineConfig({ defaultLocale: "en", translate: { provider: deepl() } });`,
-  invalidTypes: `export default defineConfig({ defaultLocale: "", locales: "en", prefixDefault: "yes", lazy: "maybe" });`,
-  noDefault: `export const config = { defaultLocale: "en" };`,
-  empty: `export default defineConfig({});`,
-  syntaxErr: `export default defineConfig({ defaultLocale: });`,
-  json: JSON.stringify({ defaultLocale: "de", locales: ["de", "en"], lazy: false }),
-};
-const configEntries = Object.entries(configs).map(([name, source]) => {
-  const file = name === "json" ? "dialex.config.json" : "dialex.config.ts";
-  try {
-    const result = parseStaticConfig(source, file);
-    return { name, source, file, config: result.config, notes: result.notes };
-  } catch (error) {
-    return { name, source, file, error: String(error.message).slice(0, 120) };
-  }
-});
-
 fs.writeFileSync(
   new URL("./golden/syntax.json", import.meta.url),
-  JSON.stringify({ dictionaries: entries, configs: configEntries }, null, 1) + "\n",
+  JSON.stringify({ dictionaries: entries }, null, 1) + "\n",
 );
-console.log(`Wrote ${entries.length} dictionaries and ${configEntries.length} configs`);
+console.log(`Wrote ${entries.length} dictionaries`);
