@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/cli-linux-arm64",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "The native dialex binaries for linux-arm64. Installed by @dialexjs/cli, not used directly.",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
