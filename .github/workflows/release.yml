@@ -37,39 +37,10 @@ jobs:
 
   # One native build per platform, on a runner of that platform (no cross toolchains).
   native:
-    name: Native ${{ matrix.target }}
+    name: Native binaries
     needs: plan
     if: needs.plan.outputs.publish == 'true'
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - { target: linux-x64, runner: ubuntu-latest }
-          - { target: linux-arm64, runner: ubuntu-24.04-arm }
-          - { target: darwin-x64, runner: macos-15-intel }
-          - { target: darwin-arm64, runner: macos-latest }
-          - { target: win32-x64, runner: windows-latest }
-          - { target: win32-arm64, runner: windows-11-arm }
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Build
-        working-directory: crates
-        shell: bash
-        run: cargo build --release --locked -p dialex-cli -p dialex-lsp
-
-      - name: Upload the binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: native-${{ matrix.target }}
-          path: |
-            crates/target/release/dx
-            crates/target/release/dx.exe
-            crates/target/release/dialex-language-server
-            crates/target/release/dialex-language-server.exe
-          if-no-files-found: error
+    uses: ./.github/workflows/native-build.yml
 
   release:
     name: Version PR or publish
