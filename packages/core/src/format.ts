@@ -1,3 +1,11 @@
+import {
+  dateTimeFormat,
+  listFormat,
+  numberFormat,
+  pluralRules,
+  relativeTimeFormat,
+} from "./intl.js";
+
 export type PluralCategory = "zero" | "one" | "two" | "few" | "many" | "other";
 
 export type PluralForms<T = string> = { other: T } & Partial<
@@ -13,12 +21,12 @@ export type PluralForms<T = string> = { other: T } & Partial<
  * ```
  */
 export function plural<T = string>(locale: string, count: number, forms: PluralForms<T>): T {
-  const category = new Intl.PluralRules(locale).select(count) as PluralCategory;
+  const category = pluralRules(locale).select(count) as PluralCategory;
   return forms[category] ?? forms.other;
 }
 
 export function number(locale: string, value: number, options?: Intl.NumberFormatOptions): string {
-  return new Intl.NumberFormat(locale, options).format(value);
+  return numberFormat(locale, options).format(value);
 }
 
 export function date(
@@ -26,7 +34,7 @@ export function date(
   value: Date | number | string,
   options?: Intl.DateTimeFormatOptions,
 ): string {
-  return new Intl.DateTimeFormat(locale, options).format(new Date(value));
+  return dateTimeFormat(locale, options).format(new Date(value));
 }
 
 export function relativeTime(
@@ -35,7 +43,7 @@ export function relativeTime(
   unit: Intl.RelativeTimeFormatUnit,
   options?: Intl.RelativeTimeFormatOptions,
 ): string {
-  return new Intl.RelativeTimeFormat(locale, options).format(value, unit);
+  return relativeTimeFormat(locale, options).format(value, unit);
 }
 
 export function list(
@@ -43,7 +51,7 @@ export function list(
   values: Iterable<string>,
   options?: Intl.ListFormatOptions,
 ): string {
-  return new Intl.ListFormat(locale, options).format(values);
+  return listFormat(locale, options).format(values);
 }
 
 export interface Formatters {

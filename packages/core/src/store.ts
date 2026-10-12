@@ -28,7 +28,10 @@ function localeToLoad(
   locale: string | undefined,
   config: DialexClientConfig,
 ): string {
-  const chain = resolveFallbackChain(locale ?? config.defaultLocale, {
+  // The chain starts with the locale itself, so a loader for exactly that locale needs no chain.
+  const requested = locale ?? config.defaultLocale;
+  if (requested && locales.includes(requested)) return requested;
+  const chain = resolveFallbackChain(requested, {
     fallbacks: config.fallbacks,
     defaultLocale: config.defaultLocale,
   });

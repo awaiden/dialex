@@ -91,6 +91,10 @@ export function lookupLocale<T = any>(
   locale: string | null | undefined,
   options: { fallbacks?: Record<string, string[]>; defaultLocale?: string } = {},
 ): { content: T; locale: string } | undefined {
+  // The chain starts with `locale` itself, so the common case needs no chain at all.
+  if (locale && dictionary[locale] !== undefined) {
+    return { content: dictionary[locale], locale };
+  }
   for (const candidate of resolveFallbackChain(locale, options)) {
     if (dictionary[candidate] !== undefined) {
       return { content: dictionary[candidate], locale: candidate };

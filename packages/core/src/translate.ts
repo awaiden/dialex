@@ -75,17 +75,16 @@ const isValues = (value: unknown): value is IcuValues =>
  */
 export function createT(getDictionary: (name: any) => any, locale = "en"): Translate {
   return ((path: string, ...args: any[]) => {
-    const dot = path.indexOf(".");
-    const name = dot === -1 ? path : path.slice(0, dot);
-    const rest = dot === -1 ? [] : path.slice(dot + 1).split(".");
+    const parsed = parsePath(path);
 
-    let value: any = getDictionary(name);
-    for (const segment of rest) {
+    let value: any = getDictionary(parsed.name);
+    const segments = parsed.segments;
+    for (let i = 0; i < segments.length; i++) {
       if (value == null || typeof value !== "object") {
         value = undefined;
         break;
       }
-      value = value[segment];
+      value = value[segments[i]];
     }
 
     if (value === undefined) {
@@ -93,7 +92,7 @@ export function createT(getDictionary: (name: any) => any, locale = "en"): Trans
       return path;
     }
     if (typeof value === "function") return value(...args);
-    if (typeof value === "string" && isValues(args[0])) {
+    if (typeof value === "string" && args.length > 0 && isValues(args[0])) {
       try {
         return formatMessage(locale, value, args[0]);
       } catch (error) {
@@ -103,4 +102,27 @@ export function createT(getDictionary: (name: any) => any, locale = "en"): Trans
     }
     return value;
   }) as Translate;
+}
+
+interface ParsedPath {
+  name: string;
+  segments: string[];
+}
+
+const PATH_CACHE_LIMIT = 500;
+const pathCache = new Map<string, ParsedPath>();
+
+/** `"home.cart.items"` as the dictionary name and the keys below it, cached by path. */
+function parsePath(path: string): ParsedPath {
+  let parsed = pathCache.get(path);
+  if (!parsed) {
+    const dot = path.indexOf(".");
+    parsed = {
+      name: dot === -1 ? path : path.slice(0, dot),
+      segments: dot === -1 ? [] : path.slice(dot + 1).split("."),
+    };
+    if (pathCache.size >= PATH_CACHE_LIMIT) pathCache.clear();
+    pathCache.set(path, parsed);
+  }
+  return parsed;
 }

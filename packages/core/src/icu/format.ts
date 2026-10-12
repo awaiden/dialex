@@ -1,3 +1,4 @@
+import { dateTimeFormat, numberFormat, pluralRules } from "../intl.js";
 import { parseMessage, type IcuNode } from "./parse.js";
 
 export type IcuValue = string | number | boolean | Date | null | undefined;
@@ -10,116 +11,154 @@ export class IcuFormatError extends Error {
   }
 }
 
-const CACHE_LIMIT = 500;
-const cache = new Map<string, IcuNode[]>();
+/**
+ * A message turned into a function once, so formatting does not walk the syntax tree again.
+ * `usesPound` tells whether the `#` of the enclosing plural appears in it.
+ */
+type Run = ((locale: string, values: IcuValues, pound?: string) => string) & {
+  usesPound?: boolean;
+};
 
-function parseCached(message: string): IcuNode[] {
-  let nodes = cache.get(message);
-  if (!nodes) {
-    if (cache.size >= CACHE_LIMIT) cache.clear();
-    nodes = parseMessage(message);
-    cache.set(message, nodes);
-  }
-  return nodes;
-}
+const CACHE_LIMIT = 500;
+const cache = new Map<string, Run>();
+const compiledNodes = new WeakMap<IcuNode[], Run>();
 
 const DATE_STYLES = new Set(["short", "medium", "long", "full"]);
+const INTEGER: Intl.NumberFormatOptions = Object.freeze({ maximumFractionDigits: 0 });
+const PERCENT: Intl.NumberFormatOptions = Object.freeze({ style: "percent" });
+const CARDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "cardinal" });
+const ORDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "ordinal" });
 
-function formatNumber(locale: string, value: number, style: string | undefined): string {
-  if (style === "integer")
-    return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
-  if (style === "percent" || style === "::percent") {
-    return new Intl.NumberFormat(locale, { style: "percent" }).format(value);
-  }
-  if (style?.startsWith("::currency/")) {
-    const currency = style.slice("::currency/".length).toUpperCase();
-    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(value);
-  }
-  return new Intl.NumberFormat(locale).format(value);
+/** The value of an argument; a missing one is an error. */
+function valueOf(values: IcuValues, name: string): NonNullable<IcuValue> {
+  const value = values[name];
+  if (value === undefined) throw new IcuFormatError(`Missing value for "${name}"`);
+  return value as NonNullable<IcuValue>;
 }
 
-function formatDateTime(
-  locale: string,
-  value: Date,
-  kind: "date" | "time",
-  style: string | undefined,
-): string {
-  const chosen = style && DATE_STYLES.has(style) ? (style as "short") : "medium";
-  return new Intl.DateTimeFormat(
-    locale,
-    kind === "date" ? { dateStyle: chosen } : { timeStyle: chosen },
-  ).format(value);
-}
-
-function requireValue(values: IcuValues, name: string): IcuValue {
-  if (!(name in values) || values[name] === undefined) {
-    throw new IcuFormatError(`Missing value for "${name}"`);
-  }
-  return values[name];
-}
-
-function requireNumber(values: IcuValues, name: string): number {
-  const value = Number(requireValue(values, name));
+function numberOf(values: IcuValues, name: string): number {
+  const value = Number(valueOf(values, name));
   if (!Number.isFinite(value)) throw new IcuFormatError(`"${name}" must be a number`);
   return value;
 }
 
-function render(
-  nodes: IcuNode[],
-  locale: string,
-  values: IcuValues,
-  pound: string | undefined,
-): string {
-  let out = "";
+/** The `Intl.NumberFormat` options of a `{n, number, style}` argument. */
+function numberOptions(style: string | undefined): Intl.NumberFormatOptions | undefined {
+  if (style === "integer") return INTEGER;
+  if (style === "percent" || style === "::percent") return PERCENT;
+  if (style?.startsWith("::currency/")) {
+    return Object.freeze({ style: "currency", currency: style.slice(11).toUpperCase() });
+  }
+  return undefined;
+}
 
-  for (const node of nodes) {
-    switch (node.type) {
-      case "literal":
-        out += node.value;
-        break;
-      case "pound":
-        out += pound ?? "#";
-        break;
-      case "argument":
-        out += String(requireValue(values, node.name));
-        break;
-      case "number":
-        out += formatNumber(locale, requireNumber(values, node.name), node.style);
-        break;
-      case "date":
-      case "time": {
-        const date = new Date(requireValue(values, node.name) as string | number | Date);
-        if (Number.isNaN(date.getTime())) throw new IcuFormatError(`"${node.name}" must be a date`);
-        out += formatDateTime(locale, date, node.type, node.style);
-        break;
+/** Branches by selector. */
+function branches(options: Record<string, IcuNode[]>): Map<string, Run> {
+  return new Map(Object.entries(options).map(([key, nodes]) => [key, compileNodes(nodes)]));
+}
+
+function compileNode(node: IcuNode): Run {
+  switch (node.type) {
+    case "literal":
+      return () => node.value;
+    case "pound": {
+      const run: Run = (_locale, _values, pound) => pound ?? "#";
+      run.usesPound = true;
+      return run;
+    }
+    case "argument":
+      return (_locale, values) => String(valueOf(values, node.name));
+    case "number": {
+      const options = numberOptions(node.style);
+      return (locale, values) => numberFormat(locale, options).format(numberOf(values, node.name));
+    }
+    case "date":
+    case "time": {
+      const chosen = node.style && DATE_STYLES.has(node.style) ? (node.style as "short") : "medium";
+      const options: Intl.DateTimeFormatOptions = Object.freeze(
+        node.type === "date" ? { dateStyle: chosen } : { timeStyle: chosen },
+      );
+      return (locale, values) => {
+        const date = new Date(valueOf(values, node.name) as string | number | Date);
+        if (Number.isNaN(date.getTime())) {
+          throw new IcuFormatError(`"${node.name}" must be a date`);
+        }
+        return dateTimeFormat(locale, options).format(date);
+      };
+    }
+    case "select": {
+      const options = branches(node.options);
+      const other = options.get("other")!;
+      const run: Run = (locale, values, pound) =>
+        (options.get(String(valueOf(values, node.name))) ?? other)(locale, values, pound);
+      // a select passes the `#` of its plural through to its branches
+      run.usesPound = [...options.values()].some((branch) => branch.usesPound);
+      return run;
+    }
+    case "plural": {
+      const rules = node.ordinal ? ORDINAL : CARDINAL;
+      const exact = new Map<number, Run>();
+      const options = new Map<string, Run>();
+      for (const [key, nodes] of Object.entries(node.options)) {
+        const branch = compileNodes(nodes);
+        if (!key.startsWith("=")) options.set(key, branch);
+        // only the canonical spelling matches (`=1`, not `=1.0`), as the key `=${n}` always did
+        else if (String(Number(key.slice(1))) === key.slice(1))
+          exact.set(Number(key.slice(1)), branch);
       }
-      case "select": {
-        const key = String(requireValue(values, node.name));
-        out += render(node.options[key] ?? node.options.other, locale, values, pound);
-        break;
-      }
-      case "plural": {
-        const n = requireNumber(values, node.name);
+      const other = options.get("other")!;
+      // the branches get the `#` of this plural, so it adds none to an enclosing one
+      return (locale, values) => {
+        const n = numberOf(values, node.name);
+        const shifted = n - node.offset;
         const branch =
-          node.options[`=${n}`] ??
-          node.options[
-            new Intl.PluralRules(locale, { type: node.ordinal ? "ordinal" : "cardinal" }).select(
-              n - node.offset,
-            )
-          ] ??
-          node.options.other;
-        out += render(
-          branch,
-          locale,
-          values,
-          new Intl.NumberFormat(locale).format(n - node.offset),
-        );
-        break;
-      }
+          exact.get(n) ?? options.get(pluralRules(locale, rules).select(shifted)) ?? other;
+        // `#` is formatted only when the chosen branch uses it
+        return branch(locale, values, branch.usesPound ? numberFormat(locale).format(shifted) : "");
+      };
     }
   }
+}
 
-  return out;
+function compileNodes(nodes: IcuNode[]): Run {
+  // adjacent literals become one string
+  const parts: (string | Run)[] = [];
+  for (const node of nodes) {
+    const last = parts[parts.length - 1];
+    if (node.type === "literal" && typeof last === "string")
+      parts[parts.length - 1] = last + node.value;
+    else parts.push(node.type === "literal" ? node.value : compileNode(node));
+  }
+
+  const usesPound = parts.some((part) => typeof part !== "string" && part.usesPound);
+  let run: Run;
+  if (parts.length === 0) {
+    run = () => "";
+  } else if (parts.length === 1) {
+    const only = parts[0];
+    if (typeof only !== "string") return only;
+    run = () => only;
+  } else {
+    run = (locale, values, pound) => {
+      let out = "";
+      for (const part of parts)
+        out += typeof part === "string" ? part : part(locale, values, pound);
+      return out;
+    };
+  }
+  run.usesPound = usesPound;
+  return run;
+}
+
+function compileCached(message: string): Run {
+  let run = cache.get(message);
+  if (!run) {
+    // a syntax error is thrown here, and nothing is cached for it
+    run = compileNodes(parseMessage(message));
+    if (cache.size >= CACHE_LIMIT) cache.clear();
+    cache.set(message, run);
+  }
+  return run;
 }
 
 /**
@@ -137,6 +176,11 @@ export function formatMessage(
   message: string | IcuNode[],
   values: IcuValues = {},
 ): string {
-  const nodes = typeof message === "string" ? parseCached(message) : message;
-  return render(nodes, locale, values, undefined);
+  if (typeof message === "string") return compileCached(message)(locale, values, undefined);
+  let run = compiledNodes.get(message);
+  if (!run) {
+    run = compileNodes(message);
+    compiledNodes.set(message, run);
+  }
+  return run(locale, values, undefined);
 }

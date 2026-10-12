@@ -6,6 +6,8 @@ import {
   extractCookieLocale,
   extractPathLocale,
   resolveLocaleFromCandidates,
+  lookupLocale,
+  resolveFallbackChain,
 } from "../src/resolver.js";
 
 describe("resolver utilities", () => {
@@ -96,5 +98,74 @@ describe("resolver utilities", () => {
       const resolved = resolveLocaleFromCandidates(candidates, ["en", "tr"], "en");
       expect(resolved).toBe("en");
     });
+  });
+});
+
+describe("lookupLocale fast path", () => {
+  it("returns the exact locale without consulting fallbacks", () => {
+    const dictionary = { en: "Hello", "tr-TR": "Merhaba (TR)", tr: "Merhaba" };
+    const options = { fallbacks: { "tr-TR": ["en"] }, defaultLocale: "en" };
+    expect(lookupLocale(dictionary, "tr-TR", options)).toEqual({
+      content: "Merhaba (TR)",
+      locale: "tr-TR",
+    });
+  });
+
+  it("still walks the chain when the exact locale is missing", () => {
+    const dictionary = { en: "Hello", tr: "Merhaba" };
+    expect(lookupLocale(dictionary, "tr-TR", { defaultLocale: "en" })).toEqual({
+      content: "Merhaba",
+      locale: "tr",
+    });
+    expect(lookupLocale(dictionary, "fr", { defaultLocale: "en" })).toEqual({
+      content: "Hello",
+      locale: "en",
+    });
+    expect(lookupLocale(dictionary, undefined, { defaultLocale: "tr" })).toEqual({
+      content: "Merhaba",
+      locale: "tr",
+    });
+  });
+});
+
+describe("lookupLocale against the plain fallback-chain walk", () => {
+  const reference = (
+    dictionary: Record<string, string>,
+    locale: string | null | undefined,
+    options: { fallbacks?: Record<string, string[]>; defaultLocale?: string },
+  ) => {
+    for (const candidate of resolveFallbackChain(locale, options)) {
+      if (dictionary[candidate] !== undefined)
+        return { content: dictionary[candidate], locale: candidate };
+    }
+    const first = Object.keys(dictionary)[0];
+    return first !== undefined ? { content: dictionary[first], locale: first } : undefined;
+  };
+
+  it("returns the same result for every combination", () => {
+    const dictionaries: Record<string, string>[] = [
+      {},
+      { en: "e" },
+      { tr: "t", en: "e" },
+      { "tr-TR": "tt", tr: "t" },
+      { pt: "p", es: "s" },
+      { "pt-BR": "pb", en: "e" },
+    ];
+    const locales = ["en", "tr", "tr-TR", "pt-BR", "pt", "fr", "zh-Hans-CN", "", null, undefined];
+    const optionSets = [
+      {},
+      { defaultLocale: "en" },
+      { defaultLocale: "tr" },
+      { defaultLocale: "en", fallbacks: { "pt-BR": ["es"], fr: ["en"], "tr-TR": ["en"] } },
+    ];
+    for (const dictionary of dictionaries) {
+      for (const locale of locales) {
+        for (const options of optionSets) {
+          expect(lookupLocale(dictionary, locale, options)).toEqual(
+            reference(dictionary, locale, options),
+          );
+        }
+      }
+    }
   });
 });
