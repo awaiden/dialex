@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/config",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Reads dialex.config.* and writes the static .dialex/config.json that the native CLI and language server run from",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {

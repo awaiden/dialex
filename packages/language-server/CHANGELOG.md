@@ -1,5 +1,24 @@
 # @dialexjs/language-server
 
+## 0.9.0
+
+### Minor Changes
+
+- 4b70e2e: Add `@dialexjs/eslint-plugin`, ESLint and oxlint rules for unknown dictionaries and keys, dynamic keys, hard-coded text and dictionary files.
+
+  Checks are configured once in `dialex.config.ts` under `lint.rules` (level and options per diagnostic code), and `dialex check`, the editors and the plugin all read it. The analyzer skips comments, understands dictionaries registered inline with `dictionaries: { name: ... }`, and honours `dialex-ignore` / `dialex-ignore-next-line` comments. `@dialexjs/cli/api` gains `analyzeProjectSync`, and editors get a `dialex.diagnostics` setting for use with the plugin.
+
+- 3de2c53: Add `@dialexjs/config`. It reads `dialex.config.*` (running it only when its syntax tree is not enough) and writes `.dialex/config.json` before every `dialex generate` and `dialex check`. The native `dx` and language server read that file instead of parsing the config themselves, so a config with spreads, imports or computed values no longer hands the whole command to the Node CLI, and there is one reader of the config instead of two.
+
+  The language server resolves the config with the package of its own install and never runs a script it finds inside the workspace. Add `.dialex/` to your `.gitignore`.
+
+### Patch Changes
+
+- Updated dependencies [4b70e2e]
+- Updated dependencies [3de2c53]
+  - @dialexjs/cli@0.9.0
+  - @dialexjs/config@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes
