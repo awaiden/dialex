@@ -170,6 +170,32 @@ export default component$(() => {
 | `useDictionary(name)`                  | 当前 locale 词典的访问器，遵循回退链。在 JSX 中调用它：`home().title` |
 | `useT()`                               | 绑定到当前 locale 的 `t("dictionary.key", values?)` 函数              |
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 Qwik City 的链接组件：自己写的几行代码就能让 `useNavigate()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { Link, useNavigate } from "@builder.io/qwik-city";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+import { useDialex } from "./i18n";
+
+export const Nav = component$(() => {
+  const dialex = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string) => localizePath(path, dialex.locale, config);
+
+  return (
+    <>
+      <Link href={localize("/about")}>About</Link>
+      <button onClick$={() => navigate(localizePath("/cart", dialex.locale, config))}>Cart</button>
+    </>
+  );
+});
+```
+
 ## 最佳实践
 
 - 在一个模块中用 `createDialexQwik` 创建 hooks，并从该模块导入。不要在组件内部调用 `createDialexQwik`，因为词典不能成为组件状态的一部分。

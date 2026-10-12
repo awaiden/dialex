@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | Explizite [Fallback-Ketten](./fallbacks.md) pro Locale                                                                                                                     |
 | `prefixDefault` | `boolean`                     | `true`              | Ob auch das Standard-Locale ein URL-Präfix erhält. Wird von `DialexLink` und den [Routing-Helfern](./routing.md) gelesen                                                   |
 | `lazy`          | `boolean \| "locale"`         | `false`             | Wörterbücher bei Bedarf laden (Client-Bundles): `true` teilt pro Wörterbuch, `"locale"` pro Wörterbuch und Locale. Siehe [Lazy Loading](./lazy-loading.md)                 |
+| `lint`          | `{ rules }`                   | —                   | Prüfungen abschalten oder Stufe und Optionen ändern, für `dialex check`, die Editoren und die [ESLint- und oxlint-Regeln](./linting.md)                                    |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | Provider für [`dialex translate`](../cli/translate.md)                                                                                                                     |
 
 Dialex überspringt `node_modules`, Build-Ausgaben und alles, was deine `.gitignore`-Dateien ausschließen (bei einem Paket in einem Monorepo auch die des Repositorys). Nutze `exclude` für alles andere, etwa einen mitversionierten Vendor-Ordner.
@@ -39,10 +40,12 @@ Die Werkzeuge suchen im Projektstamm (dem Ordner, aus dem du `dialex` ausführst
 | Werkzeug                                                    | Liest die Konfiguration durch                                                     |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `dialex generate`, `check`, `export`, `import`, `translate` | Ausführen der Datei, sodass Werte berechnet sein dürfen (`locales: getLocales()`) |
-| Das native `dx`                                             | Lesen ihres Syntaxbaums. Alles Berechnete übergibt den Befehl an die Node-CLI     |
+| Das native `dx`                                             | Lesen von `.dialex/config.json`, das `@dialexjs/config` vor jedem Befehl schreibt |
 | Die Editor-Erweiterung und der Language Server              | Lesen ihres Syntaxbaums, ohne sie je auszuführen                                  |
 
 Eine Konfiguration aus Literalen (Strings, Arrays, Booleans) wird überall verstanden. Eine berechnete Einstellung ist für den Editor unsichtbar, der dann dafür den Standardwert nutzt und einen Hinweis protokolliert. Muss ein Editor `locales` kennen, schreibe sie aus. Siehe [Native Binärdateien](./native.md).
+
+`.dialex/config.json` wird wie `dialex.generated.ts` erzeugt: Tragen Sie `.dialex/` in Ihre `.gitignore` ein. Die Datei wird vor jedem `dialex generate` und `dialex check` neu geschrieben und ist daher nie veraltet. Eine Konfiguration nur aus Literalen wird aus dem Syntaxbaum gelesen und nicht ausgeführt. Eine mit Spreads, Importen oder berechneten Werten führt `@dialexjs/config` aus; das ist der einzige Schritt, der Node braucht.
 
 ## Beispiele
 

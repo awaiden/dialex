@@ -139,6 +139,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in Solid Router için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `useNavigate()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```tsx
+import { A, useNavigate } from "@solidjs/router";
+import { localizePath } from "dialexjs/routing";
+import { useDialex } from "dialexjs/solid";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string, to = locale()) => localizePath(path, to, config);
+
+  return (
+    <>
+      <A href={localize("/about")}>About</A>
+      <button onClick={() => navigate(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## En iyi uygulamalar
 
 - Erişimciyi kullandığınız yerde okuyun (`{home().title}`); bileşenin başında bir kez düz bir değişkene okumayın. Erişimciden kopyalanan bir değer yerel ayar değiştiğinde güncellenmez.

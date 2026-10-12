@@ -1,11 +1,11 @@
-//! Reads Dialex dictionary files and `dialex.config.*` from their syntax tree, without running
-//! them. It mirrors `packages/cli/src/utils/dictionary-edit.ts` and `static-config.ts`.
+//! Reads Dialex dictionary files from their syntax tree, without running them. It mirrors
+//! `packages/cli/src/utils/dictionary-edit.ts`.
 
 mod config;
 mod dictionary;
 mod edit;
 
-pub use config::{parse_static_config, ConfigValue, Lazy, StaticConfig, StaticConfigResult};
+pub use config::{Lazy, LintLevel, StaticConfig};
 pub use dictionary::{
     parse_dictionary, Dictionary, Leaf, LeafKind, Locale, Member, Object, ParseError, Property,
     Value,

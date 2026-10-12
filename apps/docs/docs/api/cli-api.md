@@ -16,25 +16,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 Finds the dictionaries of a project, checks locale parity, ICU messages, lock-file staleness and references from source code, and returns the issues. `dialex check` is a thin layer over it.
 
-| Option    | Type             | Default               | Description                                                                                                                     |
-| --------- | ---------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | The project folder. Required                                                                                                    |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Required                                                                      |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | Source globs to scan for references. Pass `[]` to skip scanning                                                                 |
-| `runtime` | `boolean`        | `false`               | **Runs project code.** Imports dictionaries the syntax tree cannot describe (spreads, computed keys). Editors must leave it off |
-| `ignore`  | `string[]`       | —                     | More ignore globs, relative to `root` (nested projects)                                                                         |
-| `unused`  | `boolean`        | `true`                | Report possibly unused keys and dictionaries                                                                                    |
-| `lock`    | `boolean`        | `true`                | Report translations whose source text changed since `dialex.lock.json`                                                          |
-| `cache`   | `AnalysisCache`  | —                     | Reuse parsed dictionaries and scanned sources between calls. Ignored with `runtime`                                             |
+| Option     | Type                  | Default               | Description                                                                                                                     |
+| ---------- | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | The project folder. Required                                                                                                    |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Required                                                                      |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | Source globs to scan for references. Pass `[]` to skip scanning                                                                 |
+| `runtime`  | `boolean`             | `false`               | **Runs project code.** Imports dictionaries the syntax tree cannot describe (spreads, computed keys). Editors must leave it off |
+| `ignore`   | `string[]`            | —                     | More ignore globs, relative to `root` (nested projects)                                                                         |
+| `unused`   | `boolean`             | `true`                | Report possibly unused keys and dictionaries                                                                                    |
+| `lock`     | `boolean`             | `true`                | Report translations whose source text changed since `dialex.lock.json`                                                          |
+| `cache`    | `AnalysisCache`       | —                     | Reuse parsed dictionaries and scanned sources between calls. Ignored with `runtime`                                             |
+| `contents` | `Map<string, string>` | —                     | Unsaved text of files by absolute path, read instead of the file on disk. For linters and editors                               |
 
 The result:
 
-| Field                | Type                   | Description                                          |
-| -------------------- | ---------------------- | ---------------------------------------------------- |
-| `issues`             | `AnalysisIssue[]`      | Everything found. See the table below                |
-| `dictionaries`       | `AnalyzedDictionary[]` | One entry per readable dictionary                    |
-| `files`              | `string[]`             | Absolute paths of every dictionary file that matched |
-| `sourceFilesScanned` | `number`               | How many source files were scanned for references    |
+| Field                | Type                   | Description                                                                           |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------- |
+| `issues`             | `AnalysisIssue[]`      | Everything found. See the table below                                                 |
+| `dictionaries`       | `AnalyzedDictionary[]` | One entry per readable dictionary                                                     |
+| `files`              | `string[]`             | Absolute paths of every dictionary file that matched                                  |
+| `sourceFilesScanned` | `number`               | How many source files were scanned for references                                     |
+| `inlineDictionaries` | `string[]`             | Names registered in code with `dictionaries: { name: ... }`. Empty when `src` is `[]` |
 
 An `AnalysisIssue` has `file`, `level` (`"error" \| "warning" \| "info"`), `code` ([see the codes](../guide/diagnostics.md)), `message`, and, when known, `range` (zero-based `{ start, end }` of `{ line, column }`), `dictionary`, `locale`, `path`, and `sourceLocale` (for `missing-key`: a locale to copy the key from).
 
@@ -42,13 +44,15 @@ An `AnalyzedDictionary` has `name`, `file`, `locales`, `leaves` (`locale -> dott
 
 ### Other analysis exports
 
-| Export                     | Description                                                                                                          |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `createAnalysisCache()`    | An `AnalysisCache` for a long-lived caller. It reuses what has not changed (keyed by modification time and size)     |
-| `clearGitignore(cache)`    | Forgets the cached `.gitignore` rules, for example after a `.gitignore` changed                                      |
-| `scanReferences(text)`     | Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. Returns `{ kind, value, start, end }[]` |
-| `relativeFile(root, file)` | A root-relative path with forward slashes, for display                                                               |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                  |
+| Export                        | Description                                                                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createAnalysisCache()`       | An `AnalysisCache` for a long-lived caller. It reuses what has not changed (keyed by modification time and size)                                                   |
+| `analyzeProjectSync(options)` | `analyzeProject` for callers that cannot await, such as lint rules. Reads dictionaries from the syntax tree only: `runtime` is ignored, so project code never runs |
+| `clearGitignore(cache)`       | Forgets the cached `.gitignore` rules, for example after a `.gitignore` changed                                                                                    |
+| `scanReferences(text)`        | Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. Returns `{ kind, value, start, end }[]`                                               |
+| `scanText(text)`              | Like `scanReferences`, and also returns the dictionary names the text registers inline. Returns `{ references, inline }`                                           |
+| `relativeFile(root, file)`    | A root-relative path with forward slashes, for display                                                                                                             |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                                                                |
 
 ## Scanning files
 

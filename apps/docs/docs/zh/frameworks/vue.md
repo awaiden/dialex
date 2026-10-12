@@ -57,6 +57,40 @@ export default defineNuxtConfig({
 Nuxt 模块目前只有针对其 setup 调用的单元测试。它尚未在完整的 Nuxt 应用中运行过。
 :::
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 Vue Router and Nuxt 的链接组件：自己写的几行代码就能让 `router.push()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```ts
+import { localizePath } from "dialexjs/routing";
+// src/composables/useLocalizedPath.ts
+import { useDialex } from "dialexjs/vue";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale.value) => localizePath(path, to, config);
+}
+```
+
+```vue
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+import { useLocalizedPath } from "./composables/useLocalizedPath";
+
+const localize = useLocalizedPath();
+const router = useRouter();
+// In Nuxt: <NuxtLink :to="localize('/about')"> and navigateTo(localize("/cart"))
+</script>
+
+<template>
+  <RouterLink :to="localize('/about')">About</RouterLink>
+  <button @click="router.push(localize('/cart'))">Cart</button>
+</template>
+```
+
 ## 最佳实践
 
 - 在纯 Vue 中自行记住选择：`createDialex` 不提供持久化，所以传入 `onLocaleChange` 来写入 cookie 或 `localStorage`，并在启动时作为 `defaultLocale` 读回。

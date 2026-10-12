@@ -116,7 +116,16 @@ const DEFAULT_CONFIG: {
 | `fallbacks`     | `Record<string, string[]>` | —                   | 显式的[回退链](../guide/fallbacks.md)                            |
 | `prefixDefault` | `boolean`                  | `true`              | 默认 locale 是否也带 URL 前缀                                    |
 | `lazy`          | `boolean \| "locale"`      | `false`             | 按需加载词典。参见[懒加载](../guide/lazy-loading.md)             |
+| `lint`          | `LintConfig`               | —                   | 每项检查的级别和选项。参见 [Lint](../guide/linting.md)           |
 | `translate`     | `TranslateConfig`          | —                   | [`dialex translate`](../cli/translate.md) 的设置                 |
+
+### `LintConfig`
+
+| 字段    | 类型                              | 说明                                                               |
+| ------- | --------------------------------- | ------------------------------------------------------------------ |
+| `rules` | `Record<string, LintRuleSetting>` | 按诊断代码给出的级别和选项，另有 `dynamic-key` 和 `literal-string` |
+
+`LintRuleSetting` 是一个 `LintSeverity`（`"off"`、`"warn"` 或 `"error"`），对接受选项的检查则是 `[LintSeverity, options]`。`dialex check`、编辑器和 [`@dialexjs/eslint-plugin`](../guide/linting.md) 都会读取它。
 
 ### `TranslateConfig`
 

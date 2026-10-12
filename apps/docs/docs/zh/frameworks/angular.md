@@ -117,6 +117,47 @@ TestBed.configureTestingModule({
 
 对于不需要 Angular 的代码，请使用 [`createTestDialex`](../guide/testing.md)。
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 the Angular router 的链接组件：自己写的几行代码就能让 `Router.navigateByUrl()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```ts
+// src/app/localized-path.ts
+import { injectDialex } from "dialexjs/angular";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated";
+
+export function injectLocalizedPath() {
+  const { locale } = injectDialex();
+  return (path: string, to = locale()) => localizePath(path, to, config);
+}
+```
+
+```ts
+import { Component, inject } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+
+import { injectLocalizedPath } from "./localized-path";
+
+@Component({
+  selector: "app-nav",
+  imports: [RouterLink],
+  template: `
+    <a [routerLink]="localize('/about')">About</a>
+    <button (click)="cart()">Cart</button>
+  `,
+})
+export class NavComponent {
+  private readonly router = inject(Router);
+  protected readonly localize = injectLocalizedPath();
+
+  protected cart() {
+    void this.router.navigateByUrl(this.localize("/cart"));
+  }
+}
+```
+
 ## 最佳实践
 
 - 在 `app.config.ts` 中用 `provideDialex({ ...dialex })` 配置一次 Dialex，并在组件中用 `injectDictionary` 和 `injectT` 读取。它们返回 signal，所以模板会自动更新。

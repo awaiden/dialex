@@ -139,6 +139,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 Solid Router 的链接组件：自己写的几行代码就能让 `useNavigate()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```tsx
+import { A, useNavigate } from "@solidjs/router";
+import { localizePath } from "dialexjs/routing";
+import { useDialex } from "dialexjs/solid";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string, to = locale()) => localizePath(path, to, config);
+
+  return (
+    <>
+      <A href={localize("/about")}>About</A>
+      <button onClick={() => navigate(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## 最佳实践
 
 - 在使用处读取访问器（`{home().title}`），不要在组件顶部读取一次存入普通变量。从访问器中复制出来的值在 locale 变化时不会更新。

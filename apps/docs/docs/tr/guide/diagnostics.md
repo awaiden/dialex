@@ -45,6 +45,15 @@ Bunlar taranacak kaynak dosyaları gerektirir; hiç yoksa atlanırlar. Nelerin t
 | `unused-key`         | warning | `Key "only_en" is possibly unused`   | Hiçbir kaynak dosya, anahtarın son bölümünü bir sözcük olarak içermiyor. Bir sezgiseldir: dinamik erişim hiç bildirilmez ve bazı kullanılmayan anahtarlar fark edilmez |
 | `unused-dictionary`  | warning | `Dictionary "c" is never referenced` | Hiçbir kaynak dosya sözlüğün adını içermiyor                                                                                                                           |
 
+Yorumlar hiç denetlenmez. Koda bir nesne değişmeziyle, `dictionaries: { name: ... }`, kaydedilen sözlük bilinen sayılır; bu yüzden `getDictionary("name")` ile okunması hata değildir. Sorun olmayan bir başvuruyu susturmak için, bir üstteki satıra `dialex-ignore-next-line` içeren bir yorum ya da aynı satıra `dialex-ignore` içeren bir yorum yazın:
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+Aynı denetimler için ESLint ve oxlint tarafında [Lint](./linting.md) sayfasına bakın.
+
 ## Üretilen dosyalar
 
 `dialex check` ayrıca `dialex.generated.ts` ve `dialex-env.d.ts` dosyalarını, biçimlendirmeyi yok sayarak, `dialex generate`'in yazacağıyla karşılaştırır. Bunun kodu yoktur:

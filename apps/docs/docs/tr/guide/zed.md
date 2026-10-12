@@ -19,6 +19,7 @@ Ayarlar Zed'in ayarlarında `lsp.dialex` altına yazılır:
   "lsp": {
     "dialex": {
       "settings": {
+        "diagnostics": true,
         "unusedKeys": false,
         "autoGenerate": true,
         "configPath": ""

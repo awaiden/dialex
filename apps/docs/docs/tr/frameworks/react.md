@@ -73,6 +73,63 @@ Provider önce varsayılan yerel ayarı render eder, ardından mount sonrasında
 
 `useT(...dictionaryNames)` bir [`t` fonksiyonu](../guide/key-paths.md) döndürür. [Tembel yükleme](../guide/lazy-loading.md) ile `useDictionary`, sözlüğü yüklenene kadar askıya alır.
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in React için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `useNavigate()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```tsx
+// src/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+const localize = useLocalizedPath();
+
+<a href={localize("/about")}>About</a>;
+<a href={localize("/about", "en")}>English</a>;
+```
+
+TanStack Router ile locale'i isteğe bağlı bir yol parametresi, `{-$locale}`, yapın ve `params` içinde verin. `prefixDefault` `false` iken varsayılan locale atlanır:
+
+```tsx
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useDialex } from "dialexjs/react";
+
+import { config } from "./dialex.generated";
+
+function localeParam(locale: string) {
+  return locale === config.defaultLocale && !config.prefixDefault ? undefined : locale;
+}
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to="/{-$locale}/about" params={{ locale: localeParam(locale) }}>
+        About
+      </Link>
+      <button
+        onClick={() =>
+          navigate({ to: "/{-$locale}/cart", params: { locale: localeParam(locale) } })
+        }
+      >
+        Cart
+      </button>
+    </>
+  );
+}
+```
+
 ## En iyi uygulamalar
 
 - Kökte tek bir `DialexProvider` oluşturun. İç içe sağlayıcılar bağımsız yerel ayarlar başlatır, bu nadiren istenir.

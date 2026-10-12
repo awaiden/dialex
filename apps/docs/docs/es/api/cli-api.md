@@ -16,25 +16,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 Encuentra los diccionarios de un proyecto, comprueba la paridad de locales, los mensajes ICU, lo obsoleto según el archivo de bloqueo y las referencias del código fuente, y devuelve los problemas. `dialex check` es una capa fina sobre ella.
 
-| Opción    | Tipo             | Por defecto           | Descripción                                                                                                                                                            |
-| --------- | ---------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | La carpeta del proyecto. Obligatorio                                                                                                                                   |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Obligatorio                                                                                                          |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | Globs de código fuente donde buscar referencias. Pasa `[]` para omitir la búsqueda                                                                                     |
-| `runtime` | `boolean`        | `false`               | **Ejecuta código del proyecto.** Importa diccionarios que el árbol de sintaxis no puede describir (spreads, claves calculadas). Los editores deben dejarlo desactivado |
-| `ignore`  | `string[]`       | —                     | Más globs de exclusión, relativos a `root` (proyectos anidados)                                                                                                        |
-| `unused`  | `boolean`        | `true`                | Informar de claves y diccionarios posiblemente sin usar                                                                                                                |
-| `lock`    | `boolean`        | `true`                | Informar de traducciones cuyo texto de origen cambió desde `dialex.lock.json`                                                                                          |
-| `cache`   | `AnalysisCache`  | —                     | Reutiliza diccionarios analizados y fuentes escaneadas entre llamadas. Se ignora con `runtime`                                                                         |
+| Opción     | Tipo                  | Por defecto           | Descripción                                                                                                                                                            |
+| ---------- | --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | La carpeta del proyecto. Obligatorio                                                                                                                                   |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Obligatorio                                                                                                          |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | Globs de código fuente donde buscar referencias. Pasa `[]` para omitir la búsqueda                                                                                     |
+| `runtime`  | `boolean`             | `false`               | **Ejecuta código del proyecto.** Importa diccionarios que el árbol de sintaxis no puede describir (spreads, claves calculadas). Los editores deben dejarlo desactivado |
+| `ignore`   | `string[]`            | —                     | Más globs de exclusión, relativos a `root` (proyectos anidados)                                                                                                        |
+| `unused`   | `boolean`             | `true`                | Informar de claves y diccionarios posiblemente sin usar                                                                                                                |
+| `lock`     | `boolean`             | `true`                | Informar de traducciones cuyo texto de origen cambió desde `dialex.lock.json`                                                                                          |
+| `cache`    | `AnalysisCache`       | —                     | Reutiliza diccionarios analizados y fuentes escaneadas entre llamadas. Se ignora con `runtime`                                                                         |
+| `contents` | `Map<string, string>` | —                     | Texto sin guardar de archivos por ruta absoluta, que se lee en lugar del archivo en disco. Para linters y editores                                                     |
 
 El resultado:
 
-| Campo                | Tipo                   | Descripción                                                   |
-| -------------------- | ---------------------- | ------------------------------------------------------------- |
-| `issues`             | `AnalysisIssue[]`      | Todo lo encontrado. Consulta la tabla de abajo                |
-| `dictionaries`       | `AnalyzedDictionary[]` | Una entrada por diccionario legible                           |
-| `files`              | `string[]`             | Rutas absolutas de cada archivo de diccionario que coincidió  |
-| `sourceFilesScanned` | `number`               | Cuántos archivos fuente se escanearon en busca de referencias |
+| Campo                | Tipo                   | Descripción                                                                                |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------ |
+| `issues`             | `AnalysisIssue[]`      | Todo lo encontrado. Consulta la tabla de abajo                                             |
+| `dictionaries`       | `AnalyzedDictionary[]` | Una entrada por diccionario legible                                                        |
+| `files`              | `string[]`             | Rutas absolutas de cada archivo de diccionario que coincidió                               |
+| `sourceFilesScanned` | `number`               | Cuántos archivos fuente se escanearon en busca de referencias                              |
+| `inlineDictionaries` | `string[]`             | Nombres registrados en el código con `dictionaries: { name: ... }`. Vacío si `src` es `[]` |
 
 Una `AnalysisIssue` tiene `file`, `level` (`"error" \| "warning" \| "info"`), `code` ([consulta los códigos](../guide/diagnostics.md)), `message` y, cuando se conocen, `range` (`{ start, end }` base cero de `{ line, column }`), `dictionary`, `locale`, `path` y `sourceLocale` (para `missing-key`: un locale desde el que copiar la clave).
 
@@ -42,13 +44,15 @@ Un `AnalyzedDictionary` tiene `name`, `file`, `locales`, `leaves` (`locale -> ru
 
 ### Otros exports de análisis
 
-| Export                     | Descripción                                                                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `createAnalysisCache()`    | Un `AnalysisCache` para quien llama durante mucho tiempo. Reutiliza lo que no ha cambiado (por fecha de modificación y tamaño) |
-| `clearGitignore(cache)`    | Olvida las reglas de `.gitignore` en caché, por ejemplo tras cambiar un `.gitignore`                                           |
-| `scanReferences(text)`     | Encuentra referencias del estilo `getDictionary("x")` y `t("x.y.z")` en texto fuente. Devuelve `{ kind, value, start, end }[]` |
-| `relativeFile(root, file)` | Una ruta relativa a la raíz con barras normales, para mostrar                                                                  |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                            |
+| Export                        | Descripción                                                                                                                                                                                    |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createAnalysisCache()`       | Un `AnalysisCache` para quien llama durante mucho tiempo. Reutiliza lo que no ha cambiado (por fecha de modificación y tamaño)                                                                 |
+| `analyzeProjectSync(options)` | `analyzeProject` para quien no puede usar await, como las reglas de lint. Lee los diccionarios solo del árbol sintáctico: `runtime` se ignora, así que el código del proyecto nunca se ejecuta |
+| `clearGitignore(cache)`       | Olvida las reglas de `.gitignore` en caché, por ejemplo tras cambiar un `.gitignore`                                                                                                           |
+| `scanReferences(text)`        | Encuentra referencias del estilo `getDictionary("x")` y `t("x.y.z")` en texto fuente. Devuelve `{ kind, value, start, end }[]`                                                                 |
+| `scanText(text)`              | Como `scanReferences`, y además devuelve los nombres de diccionario que el texto registra en línea. Devuelve `{ references, inline }`                                                          |
+| `relativeFile(root, file)`    | Una ruta relativa a la raíz con barras normales, para mostrar                                                                                                                                  |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                                                                                            |
 
 ## Escanear archivos
 

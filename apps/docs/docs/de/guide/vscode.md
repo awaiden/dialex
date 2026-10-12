@@ -65,12 +65,13 @@ Korrekturen ersetzen den Text der Datei im Editor, sodass sie sich rückgängig 
 
 ## Einstellungen
 
-| Einstellung           | Standard | Beschreibung                                                                                                                                                                  |
-| --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dialex.enable`       | `true`   | Schaltet alle Funktionen ein oder aus                                                                                                                                         |
-| `dialex.unusedKeys`   | `false`  | Graut möglicherweise ungenutzte Schlüssel und Wörterbücher aus. Es ist eine Heuristik auf Basis von Wortübereinstimmung und daher standardmäßig aus                           |
-| `dialex.autoGenerate` | `true`   | Erzeugt `dialex.generated.ts` und `dialex-env.d.ts` neu, wenn sich ein Wörterbuch oder eine Konfigurationsdatei ändert, in Projekten, die bereits eine generierte Datei haben |
-| `dialex.configPath`   | `""`     | Pfad der Konfigurationsdatei relativ zum Stamm jedes Projekts                                                                                                                 |
+| Einstellung           | Standard | Beschreibung                                                                                                                                                                    |
+| --------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`   | Schaltet alle Funktionen ein oder aus                                                                                                                                           |
+| `dialex.diagnostics`  | `true`   | Dialex-Probleme anzeigen. Ausschalten, wenn ein [ESLint- oder oxlint-Plugin](./linting.md) sie meldet; Hover, Autovervollständigung und Schnellkorrekturen funktionieren weiter |
+| `dialex.unusedKeys`   | `false`  | Graut möglicherweise ungenutzte Schlüssel und Wörterbücher aus. Es ist eine Heuristik auf Basis von Wortübereinstimmung und daher standardmäßig aus                             |
+| `dialex.autoGenerate` | `true`   | Erzeugt `dialex.generated.ts` und `dialex-env.d.ts` neu, wenn sich ein Wörterbuch oder eine Konfigurationsdatei ändert, in Projekten, die bereits eine generierte Datei haben   |
+| `dialex.configPath`   | `""`     | Pfad der Konfigurationsdatei relativ zum Stamm jedes Projekts                                                                                                                   |
 
 Der Befehl **Dialex: Refresh Diagnostics** analysiert alles neu. Diagnosen werden auch aktualisiert, wenn du eine Datei speicherst oder sich ein Wörterbuch oder eine Konfigurationsdatei ändert.
 

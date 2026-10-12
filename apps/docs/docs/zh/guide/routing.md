@@ -44,6 +44,24 @@ localeFromPath("/about", options); // "en"
 isLocale("tr", options.locales); // true
 ```
 
+## 配合你的路由器
+
+`localizePath` 需要两样东西：应用当前显示的 locale，以及你的路由器自己的导航函数。每个框架页面都有完整的写法；各框架获取它们的方式如下：
+
+| 框架                        | 当前 locale                  | 导航                                          |
+| --------------------------- | ---------------------------- | --------------------------------------------- |
+| React Router                | `useDialex().locale`         | `useNavigate()`                               |
+| TanStack Router             | `useDialex().locale`         | `useNavigate()`, `{-$locale}` route parameter |
+| Next.js                     | `useDialex().locale`         | `useRouter().push()`, `DialexLink`            |
+| Vue Router, Nuxt            | `useDialex().locale.value`   | `router.push()`, `navigateTo()`               |
+| SvelteKit                   | `$locale` from `useDialex()` | `goto()`, `redirect()`                        |
+| Solid Router                | `useDialex().locale()`       | `useNavigate()`                               |
+| Preact (preact-iso)         | `useDialex().locale`         | `useLocation().route()`                       |
+| Qwik City                   | `useDialex().locale`         | `useNavigate()`                               |
+| Angular                     | `injectDialex().locale()`    | `Router.navigateByUrl()`                      |
+| Astro                       | `Astro.locals.locale`        | `Astro.redirect()`                            |
+| Express, Fastify, Koa, Hono | `req.locale`, `c.var.locale` | `res.redirect()`, `c.redirect()`              |
+
 ## hreflang 与站点地图
 
 ```ts

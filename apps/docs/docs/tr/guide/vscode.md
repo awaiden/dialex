@@ -65,12 +65,13 @@ Düzeltmeler dosyanın metnini editörde değiştirir; bu yüzden geri alınabil
 
 ## Ayarlar
 
-| Ayar                  | Varsayılan | Açıklama                                                                                                                                                         |
-| --------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dialex.enable`       | `true`     | Tüm özellikleri açar veya kapatır                                                                                                                                |
-| `dialex.unusedKeys`   | `false`    | Büyük olasılıkla kullanılmayan anahtarları ve sözlükleri soluklaştırır. Kelime eşleştirmeye dayalı bir sezgisel yöntem olduğu için varsayılan olarak kapalıdır   |
-| `dialex.autoGenerate` | `true`     | Bir sözlük veya yapılandırma dosyası değiştiğinde, zaten üretilmiş dosyası olan projelerde `dialex.generated.ts` ve `dialex-env.d.ts` dosyalarını yeniden üretir |
-| `dialex.configPath`   | `""`       | Her proje köküne göre yapılandırma dosyası yolu                                                                                                                  |
+| Ayar                  | Varsayılan | Açıklama                                                                                                                                                                      |
+| --------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`     | Tüm özellikleri açar veya kapatır                                                                                                                                             |
+| `dialex.diagnostics`  | `true`     | Dialex sorunlarını göster. Bunları bir [ESLint ya da oxlint eklentisi](./linting.md) bildiriyorsa kapatın; üzerine gelme, tamamlama ve hızlı düzeltmeler çalışmaya devam eder |
+| `dialex.unusedKeys`   | `false`    | Büyük olasılıkla kullanılmayan anahtarları ve sözlükleri soluklaştırır. Kelime eşleştirmeye dayalı bir sezgisel yöntem olduğu için varsayılan olarak kapalıdır                |
+| `dialex.autoGenerate` | `true`     | Bir sözlük veya yapılandırma dosyası değiştiğinde, zaten üretilmiş dosyası olan projelerde `dialex.generated.ts` ve `dialex-env.d.ts` dosyalarını yeniden üretir              |
+| `dialex.configPath`   | `""`       | Her proje köküne göre yapılandırma dosyası yolu                                                                                                                               |
 
 **Dialex: Refresh Diagnostics** komutu her şeyi yeniden analiz eder. Tanılamalar ayrıca bir dosyayı kaydettiğinizde ya da bir sözlük veya yapılandırma dosyası değiştiğinde yenilenir.
 

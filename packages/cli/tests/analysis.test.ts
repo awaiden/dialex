@@ -4,7 +4,13 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { analyzeProject, scanReferences, type AnalysisIssue } from "../src/analysis.js";
+import {
+  analyzeProject,
+  analyzeProjectSync,
+  scanReferences,
+  scanText,
+  type AnalysisIssue,
+} from "../src/analysis.js";
 
 const dirs: string[] = [];
 afterEach(() => {
@@ -54,6 +60,113 @@ describe("scanReferences", () => {
       scanReferences(`obj.t("a.b"); sort("a.b"); format("a.b"); @t("a.b")`).map((r) => r.value),
     ).toEqual(["a.b"]);
     expect(scanReferences(`foo.t("home.title")`)).toEqual([]);
+  });
+
+  it("ignores references inside comments but not in strings that contain //", () => {
+    const text = [
+      '// `getDictionary("bench").lookup` is plain text',
+      '/* t("a.b") */',
+      '<!-- t("c.d") -->',
+      'const u = "http://x"; const d = getDictionary("real"); // t("e.f")',
+    ].join("\n");
+    expect(scanReferences(text).map((r) => r.value)).toEqual(["real"]);
+  });
+
+  it("skips references covered by dialex-ignore comments", () => {
+    const text = [
+      "// dialex-ignore-next-line",
+      'getDictionary("a");',
+      'getDictionary("b"); // dialex-ignore',
+      '/* dialex-ignore-next-line */ getDictionary("c");',
+      'getDictionary("d");',
+      "/* dialex-ignore-next-line-ish */",
+      'getDictionary("e");',
+    ].join("\n");
+    expect(scanReferences(text).map((r) => r.value)).toEqual(["c", "e"]);
+  });
+
+  it("collects dictionaries registered inline", () => {
+    const text = `createDialexServer({
+      dictionaries: { bench: { en: { a: "x" } }, "kebab-name": {}, shorthand, /* c: 1, */ list: [1, { z: 2 }] },
+      config: { defaultLocale: "en" },
+    });`;
+    expect(scanText(text).inline).toEqual(["bench", "kebab-name", "shorthand", "list"]);
+    expect(scanText(`// dictionaries: { ghost: {} }`).inline).toEqual([]);
+  });
+});
+
+describe("analyzeProjectSync", () => {
+  it("returns what analyzeProject returns for the same project", async () => {
+    const dir = project({
+      "src/home.content.ts": home,
+      "src/app.ts": `const a = getDictionary("nope");\nconst b = t("home.nav.missing");\n`,
+    });
+    const options = { root: dir, config };
+    const sync = analyzeProjectSync(options);
+    const async_ = await analyzeProject(options);
+    expect(sync.issues).toEqual(async_.issues);
+    expect(sync.files).toEqual(async_.files);
+    expect(sync.sourceFilesScanned).toBe(async_.sourceFilesScanned);
+  });
+
+  it("reads unsaved contents instead of the file on disk", () => {
+    const dir = project({ "src/home.content.ts": home });
+    const file = path.join(dir, "src/home.content.ts");
+    const fixed = home.replace(
+      '      title: "Hoş Geldiniz",\n',
+      '      title: "Hoş Geldiniz",\n      nav: { about: "Hakkında" },\n',
+    );
+    expect(analyzeProjectSync({ root: dir, config, src: [] }).issues).toHaveLength(1);
+    const { issues } = analyzeProjectSync({
+      root: dir,
+      config,
+      src: [],
+      contents: new Map([[file, fixed]]),
+    });
+    expect(issues).toEqual([]);
+  });
+});
+
+describe("lint rules in the config", () => {
+  const files = {
+    "src/home.content.ts": home,
+    "src/app.ts": `getDictionary("nope");\n`,
+  };
+
+  it("turns checks off and changes their level", async () => {
+    const dir = project(files);
+    const base = await analyzeProject({ root: dir, config, unused: false });
+    expect(base.issues.map((i) => [i.code, i.level])).toEqual([
+      ["missing-key", "error"],
+      ["unknown-dictionary", "error"],
+    ]);
+
+    const raw = await analyzeProject({
+      root: dir,
+      unused: false,
+      config: {
+        ...config,
+        lint: { rules: { "missing-key": "warn", "unknown-dictionary": "off" } },
+      },
+    });
+    expect(raw.issues.map((i) => [i.code, i.level])).toEqual([["missing-key", "warning"]]);
+
+    const off = analyzeProjectSync({
+      root: dir,
+      unused: false,
+      config: { ...config, lint: { rules: { "missing-key": ["off"] } } },
+    });
+    expect(off.issues.map((i) => i.code)).toEqual(["unknown-dictionary"]);
+
+    const tuple = analyzeProjectSync({
+      root: dir,
+      unused: false,
+      config: { ...config, lint: { rules: { "unknown-dictionary": ["warn", { x: 1 }] } } },
+    });
+    expect(tuple.issues.map((i) => [i.code, i.level])).toEqual([
+      ["missing-key", "error"],
+      ["unknown-dictionary", "warning"],
+    ]);
   });
 });
 

@@ -6,10 +6,12 @@
  */
 export {
   analyzeProject,
+  analyzeProjectSync,
   createAnalysisCache,
   clearGitignore,
   type AnalysisCache,
   scanReferences,
+  scanText,
   relativeFile,
   DEFAULT_SOURCE_GLOB,
   type AnalysisConfig,

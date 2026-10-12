@@ -14,6 +14,7 @@ pub mod paths;
 pub mod plural;
 pub mod plural_data;
 pub mod refs;
+pub mod resolved;
 pub mod scan;
 pub mod sources;
 pub mod tsconfig;

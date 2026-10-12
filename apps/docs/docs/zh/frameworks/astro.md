@@ -43,6 +43,25 @@ npx dialex generate
 
 `dialex generate` 会写出 `dialex-env.d.ts`。把它包含进 `tsconfig.json`（并把 `moduleResolution` 设为 `"bundler"` 或 `"nodenext"`）之后，`Astro.locals.getDictionary("home")` 会自动补全词典名称并为内容提供类型，`locale` 则是你配置的 locale 的联合类型。
 
+## 链接和导航
+
+如果 URL 带有 locale（`/tr/about`），请用 [路由辅助函数](../guide/routing.md) 中的 `localizePath` 和应用当前显示的 locale 来构建链接。Dialex 没有提供适用于 Astro 的链接组件：自己写的几行代码就能让 `Astro.redirect()` 和重定向以同样的方式工作，也能让你清楚看到路径发生了什么。生成的 `config` 已包含 `locales`、`defaultLocale` 和 `prefixDefault`，无需重复。
+
+```astro
+---
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated.js";
+
+const { locale } = Astro.locals;
+const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+// In a page that must send the visitor elsewhere: return Astro.redirect(localize("/login"));
+---
+
+<a href={localize("/about")}>About</a>
+```
+
 ## 最佳实践
 
 - 把 `dialex.generated.ts` 中的 `{ ...dialex }` 传给适配器。它同时带有词典和 locale 配置，因此 `defaultLocale`、`locales` 和 `fallbacks` 只需在 `dialex.config.ts` 中写一次。

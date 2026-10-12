@@ -19,6 +19,7 @@ Settings go under `lsp.dialex` in Zed's settings:
   "lsp": {
     "dialex": {
       "settings": {
+        "diagnostics": true,
         "unusedKeys": false,
         "autoGenerate": true,
         "configPath": ""

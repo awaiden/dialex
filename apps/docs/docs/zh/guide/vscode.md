@@ -65,12 +65,13 @@ code --install-extension dialex-vscode-<version>.vsix
 
 ## 设置
 
-| 设置                  | 默认值  | 说明                                                                                              |
-| --------------------- | ------- | ------------------------------------------------------------------------------------------------- |
-| `dialex.enable`       | `true`  | 开启或关闭所有功能                                                                                |
-| `dialex.unusedKeys`   | `false` | 淡化显示可能未使用的键和词典。它是基于单词匹配的启发式方法，因此默认关闭                          |
-| `dialex.autoGenerate` | `true`  | 当词典或配置文件变化时，在已有生成文件的项目中重新生成 `dialex.generated.ts` 和 `dialex-env.d.ts` |
-| `dialex.configPath`   | `""`    | 配置文件路径，相对于每个项目根目录                                                                |
+| 设置                  | 默认值  | 说明                                                                                                     |
+| --------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`  | 开启或关闭所有功能                                                                                       |
+| `dialex.diagnostics`  | `true`  | 显示 Dialex 问题。当 [ESLint 或 oxlint 插件](./linting.md)报告它们时请关闭；悬停、补全和快速修复仍然可用 |
+| `dialex.unusedKeys`   | `false` | 淡化显示可能未使用的键和词典。它是基于单词匹配的启发式方法，因此默认关闭                                 |
+| `dialex.autoGenerate` | `true`  | 当词典或配置文件变化时，在已有生成文件的项目中重新生成 `dialex.generated.ts` 和 `dialex-env.d.ts`        |
+| `dialex.configPath`   | `""`    | 配置文件路径，相对于每个项目根目录                                                                       |
 
 命令 **Dialex: Refresh Diagnostics** 会重新分析所有内容。保存文件，或词典、配置文件发生变化时，诊断也会刷新。
 

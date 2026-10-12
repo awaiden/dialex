@@ -1,6 +1,6 @@
 # Yerel ikili dosyalar
 
-`dialex generate`, `dialex check` ve dil sunucusunun Rust ile yazılmış yerel bir uygulaması vardır. Aynı sözlükleri ve yapılandırmaları sözdizimi ağacından okur ve **aynı dosyaları ve çıktıyı bayt bayt aynı** üretir; yalnızca daha hızlıdır. Diğer tüm komutlar ve yerel kodun kendi başına karar veremediği her durum, eskisi gibi Node CLI'da çalışır. Seçim yapmanız gerekmez: `@dialexjs/cli` kurun, doğru olan gerçekleşir.
+`dialex generate`, `dialex check` ve dil sunucusunun Rust ile yazılmış yerel bir uygulaması vardır. Aynı sözlükleri sözdizimi ağacından, yapılandırmayı `.dialex/config.json` dosyasından okur ve **aynı dosyaları ve çıktıyı bayt bayt aynı** üretir; yalnızca daha hızlıdır. Diğer tüm komutlar ve yerel kodun kendi başına karar veremediği her durum, eskisi gibi Node CLI'da çalışır. Seçim yapmanız gerekmez: `@dialexjs/cli` kurun, doğru olan gerçekleşir.
 
 ## Hız
 

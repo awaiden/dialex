@@ -1,4 +1,4 @@
-// Packs dialexjs, @dialexjs/cli and @dialexjs/mcp, installs the tarballs into an empty project and
+// Packs dialexjs, @dialexjs/config, @dialexjs/cli, @dialexjs/mcp and the editor and lint packages, installs the tarballs into an empty project and
 // runs them, so a broken `exports` map, a missing file or a stale internal version fails here
 // instead of after publishing. Used by CI and the Release workflow.
 import { execFileSync, spawn } from "node:child_process";
@@ -27,7 +27,7 @@ try {
   // The packages depend on each other by exact version. Overrides make npm use the tarballs built
   // here for those dependencies too, even when the same version is already on the registry.
   const overrides = {};
-  for (const dir of ["core", "cli", "mcp", "language-server"]) {
+  for (const dir of ["core", "config", "cli", "mcp", "language-server", "eslint-plugin"]) {
     const pkg = JSON.parse(readFileSync(join(root, "packages", dir, "package.json"), "utf8"));
     run("bun", ["pm", "pack", "--destination", packs], join(root, "packages", dir));
     const tarball = join(
@@ -75,6 +75,22 @@ try {
       app,
     );
   }
+
+  // The resolver the native binary runs: it must write the resolved config of an empty project
+  const resolved = JSON.parse(run(bin("dialex-config"), ["--print"], app));
+  if (resolved.config?.defaultLocale !== "en") {
+    throw new Error("@dialexjs/config did not resolve the defaults of an empty project");
+  }
+
+  const plugin = run(
+    "node",
+    [
+      "-e",
+      'import("@dialexjs/eslint-plugin").then((m) => console.log(Object.keys(m.default.rules).length))',
+    ],
+    app,
+  ).trim();
+  if (plugin !== "5") throw new Error(`@dialexjs/eslint-plugin has ${plugin} rules, expected 5`);
 
   const reply = run(
     "node",
@@ -172,6 +188,33 @@ try {
       if (out !== version) throw new Error(`native dx printed "${out}", expected "${version}"`);
       // a command the native binary hands to the Node CLI still works from either layout
       run(join(dir, "node_modules", ".bin", "dx"), ["export", "--help"], dir);
+
+      // `check` reads the config the binary has `@dialexjs/config` write, found next to the
+      // binary in this install layout, with nothing in the environment to point at it
+      mkdirSync(join(dir, "src"), { recursive: true });
+      writeFileSync(
+        join(dir, "dialex.config.ts"),
+        'export default { defaultLocale: "en", locales: ["en", "tr"] };\n',
+      );
+      writeFileSync(
+        join(dir, "src", "a.content.ts"),
+        'export default { name: "a", dictionary: { en: { title: "T" }, tr: { title: "B" } } };\n',
+      );
+      // DIALEX_NATIVE=1: fail instead of quietly handing the command to the Node CLI
+      const checked = JSON.parse(
+        execFileSync(join(dir, "node_modules", ".bin", "dx"), ["check", "--json"], {
+          cwd: dir,
+          encoding: "utf8",
+          stdio: ["pipe", "pipe", "inherit"],
+          env: { ...process.env, DIALEX_NATIVE: "1" },
+        }),
+      );
+      if (checked.success !== true) throw new Error("native `dx check` reported problems");
+      if (!existsSync(join(dir, ".dialex", "config.json"))) {
+        throw new Error(
+          `native \`dx check\` did not write .dialex/config.json in ${dir}: ${JSON.stringify(checked)}`,
+        );
+      }
     }
     if (!["win32"].includes(process.platform) && isScript(launcherOf(withScripts))) {
       throw new Error("npm install did not put the native binary in place of the launcher");

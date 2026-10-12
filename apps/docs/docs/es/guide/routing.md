@@ -44,6 +44,24 @@ localeFromPath("/about", options); // "en"
 isLocale("tr", options.locales); // true
 ```
 
+## Con su router
+
+`localizePath` necesita dos cosas: la locale que muestra la aplicación y la función de navegación de su propio router. Cada página de framework tiene la receta completa; así obtiene cada una ambas:
+
+| Framework                   | Locale actual                | Navegación                                    |
+| --------------------------- | ---------------------------- | --------------------------------------------- |
+| React Router                | `useDialex().locale`         | `useNavigate()`                               |
+| TanStack Router             | `useDialex().locale`         | `useNavigate()`, `{-$locale}` route parameter |
+| Next.js                     | `useDialex().locale`         | `useRouter().push()`, `DialexLink`            |
+| Vue Router, Nuxt            | `useDialex().locale.value`   | `router.push()`, `navigateTo()`               |
+| SvelteKit                   | `$locale` from `useDialex()` | `goto()`, `redirect()`                        |
+| Solid Router                | `useDialex().locale()`       | `useNavigate()`                               |
+| Preact (preact-iso)         | `useDialex().locale`         | `useLocation().route()`                       |
+| Qwik City                   | `useDialex().locale`         | `useNavigate()`                               |
+| Angular                     | `injectDialex().locale()`    | `Router.navigateByUrl()`                      |
+| Astro                       | `Astro.locals.locale`        | `Astro.redirect()`                            |
+| Express, Fastify, Koa, Hono | `req.locale`, `c.var.locale` | `res.redirect()`, `c.redirect()`              |
+
 ## hreflang y sitemaps
 
 ```ts

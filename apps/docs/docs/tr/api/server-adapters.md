@@ -24,10 +24,10 @@ Her adaptör yerel ayar algılama seçeneklerini ve, Next.js'in `createDialexMid
 
 ### Temel adaptör seçenekleri (`BaseAdapterOptions`)
 
-| Seçenek        | Tip               | Varsayılan | Açıklama                                                                                                                                                     |
-| -------------- | ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `dictionaries` | `DictionaryInput` | —          | `{ name: { locale: content } }` haritası ya da `defineDictionary` sonuçlarının dizisi. Olmazsa yalnızca `defineDictionary` ile kaydedilmiş sözlükler bulunur |
-| `setHeader`    | `boolean`         | `true`     | Çözümlenen yerel ayarı `Content-Language` olarak gönder                                                                                                      |
+| Seçenek        | Tip               | Varsayılan | Açıklama                                                                                                                                                                                                                                                                              |
+| -------------- | ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dictionaries` | `DictionaryInput` | —          | Üretilen `dictionaries`; `{ ...dialex }` bunu ayarlar. Kendi `{ name: { locale: content } }` haritanızı ya da `defineDictionary` sonuçlarının dizisini yalnızca üretilen dosyayı kullanmıyorsanız verin. İkisi de yoksa yalnızca `defineDictionary` ile kaydedilmiş sözlükler bulunur |
+| `setHeader`    | `boolean`         | `true`     | Çözümlenen yerel ayarı `Content-Language` olarak gönder                                                                                                                                                                                                                               |
 
 ## Her adaptör ne ekler
 

@@ -68,6 +68,7 @@ Fixes replace the file's text in the editor, so they can be undone, and nothing 
 | Setting               | Default | Description                                                                                                                                     |
 | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dialex.enable`       | `true`  | Turn all features on or off                                                                                                                     |
+| `dialex.diagnostics`  | `true`  | Show Dialex problems. Turn off when an [ESLint or oxlint plugin](./linting.md) reports them; hover, completion and quick fixes keep working     |
 | `dialex.unusedKeys`   | `false` | Fade out possibly unused keys and dictionaries. It is a word-match heuristic, so it is off by default                                           |
 | `dialex.autoGenerate` | `true`  | Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file changes, in projects that already have a generated file |
 | `dialex.configPath`   | `""`    | Config file path relative to each project root                                                                                                  |

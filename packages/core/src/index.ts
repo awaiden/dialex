@@ -84,6 +84,21 @@ export interface DialexSource {
   loaders?: DictionaryLoaders;
 }
 
+/** How loudly a lint rule reports. `"off"` silences it. */
+export type LintSeverity = "off" | "warn" | "error";
+
+/** A severity, or `[severity, options]` for rules that take options. */
+export type LintRuleSetting = LintSeverity | [LintSeverity, Record<string, unknown>?];
+
+/**
+ * Which checks run and how loudly, shared by `dialex check`, the editor extensions and the
+ * `@dialexjs/eslint-plugin` rules. Keys are diagnostic codes such as `"unknown-dictionary"` or
+ * `"missing-key"`, plus the lint-only `"dynamic-key"` and `"literal-string"`.
+ */
+export interface LintConfig {
+  rules?: Record<string, LintRuleSetting>;
+}
+
 /**
  * The shape of `dialex.config.ts`. Every field is optional. The CLI and the language server read the
  * file from its syntax tree, so use literal values where you can.
@@ -142,6 +157,12 @@ export interface DialexConfig {
    * @default false
    */
   lazy?: boolean | "locale";
+  /**
+   * Severity (`"off"`, `"warn"`, `"error"`) and options of each check, for `dialex check`, the
+   * editors and the ESLint/oxlint plugin. Read without running the file.
+   * @example { rules: { "unused-key": "off", "missing-key": "warn" } }
+   */
+  lint?: LintConfig;
   /**
    * Settings for `dialex translate`. Nothing is sent anywhere unless a provider is configured.
    */

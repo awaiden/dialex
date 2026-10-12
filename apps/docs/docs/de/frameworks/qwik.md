@@ -170,6 +170,32 @@ export default component$(() => {
 | `useDictionary(name)`                  | Ein Accessor für das Wörterbuch des aktuellen Locale, entlang der Fallback-Kette. Rufe ihn in JSX auf: `home().title` |
 | `useT()`                               | Eine Funktion `t("dictionary.key", values?)`, die an das aktuelle Locale gebunden ist                                 |
 
+## Links und Navigation
+
+Wenn Ihre URLs die Locale tragen (`/tr/about`), bauen Sie Links mit `localizePath` aus [Routing-Helfer](../guide/routing.md) und der Locale, die die App gerade zeigt. Dialex liefert keine Link-Komponente für Qwik City: ein paar eigene Zeilen halten `useNavigate()` und Weiterleitungen gleich und zeigen genau, was mit einem Pfad geschieht. Die generierte `config` enthält bereits `locales`, `defaultLocale` und `prefixDefault`, nichts wird wiederholt.
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { Link, useNavigate } from "@builder.io/qwik-city";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+import { useDialex } from "./i18n";
+
+export const Nav = component$(() => {
+  const dialex = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string) => localizePath(path, dialex.locale, config);
+
+  return (
+    <>
+      <Link href={localize("/about")}>About</Link>
+      <button onClick$={() => navigate(localizePath("/cart", dialex.locale, config))}>Cart</button>
+    </>
+  );
+});
+```
+
 ## Bewährte Vorgehensweisen
 
 - Erzeuge die Hooks mit `createDialexQwik` in einem Modul und importiere sie von dort. Rufe `createDialexQwik` nicht in einer Komponente auf, denn die Wörterbücher dürfen nicht Teil des Komponentenzustands sein.

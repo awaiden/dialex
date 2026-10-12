@@ -10,13 +10,13 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::sync::{Mutex, OnceLock};
 
-use dialex_syntax::{Dictionary, LeafKind, ParseError};
+use dialex_syntax::{Dictionary, LeafKind, LintLevel, ParseError};
 use rayon::prelude::*;
 
 use crate::generate::Fallback;
 use crate::icu_check::{check_icu, LocaleStrings};
 use crate::lockfile::{read_lock, Lockfile};
-use crate::refs::{scan_references, tokens, RefKind, Reference};
+use crate::refs::{scan_text, tokens, RefKind, Reference};
 use crate::scan::{scan, Kind};
 use crate::sources::{settled, stamp_of, Loaded, Stamp};
 
@@ -65,6 +65,8 @@ pub struct AnalysisConfig {
     pub locales: Vec<String>,
     pub include: Vec<String>,
     pub exclude: Vec<String>,
+    /// `lint.rules`: `Off` drops an issue, `Warn` and `Error` set its level.
+    pub lint: Vec<(String, LintLevel)>,
 }
 
 pub struct AnalysisOptions<'a> {
@@ -281,6 +283,8 @@ struct IssueEntry {
 struct FileScan {
     tokens: Vec<String>,
     refs: Vec<(Reference, Range)>,
+    /// Dictionary names registered inline with `dictionaries: { name: ... }`.
+    inline: Vec<String>,
 }
 
 #[derive(Default)]
@@ -442,6 +446,23 @@ pub fn analyze_project(
     issues = ordered;
 
     source_issues(root, config, options, &files, &data, &exclude, &mut issues)?;
+
+    if !config.lint.is_empty() {
+        issues.retain_mut(
+            |issue| match config.lint.iter().find(|(code, _)| *code == issue.code) {
+                Some((_, LintLevel::Off)) => false,
+                Some((_, LintLevel::Warn)) => {
+                    issue.level = Level::Warning;
+                    true
+                }
+                Some((_, LintLevel::Error)) => {
+                    issue.level = Level::Error;
+                    true
+                }
+                None => true,
+            },
+        );
+    }
 
     Ok(Analysis {
         issues,
@@ -667,7 +688,9 @@ fn source_issues(
             }
             let bytes = fs::read(file).ok()?;
             let text = String::from_utf8_lossy(&bytes);
-            let refs = scan_references(&text)
+            let found = scan_text(&text);
+            let refs = found
+                .references
                 .into_iter()
                 .map(|r| {
                     let range = range_of(&text, (r.start as u32, r.end as u32));
@@ -677,6 +700,7 @@ fn source_issues(
             let scan = Arc::new(FileScan {
                 tokens: tokens(&text).into_iter().map(String::from).collect(),
                 refs,
+                inline: found.inline,
             });
             caches()
                 .lock()
@@ -696,12 +720,19 @@ fn source_issues(
     for scanned in &scanned {
         all_tokens.extend(scanned.scan.tokens.iter().map(String::as_str));
     }
+    // dictionaries registered in code are known project-wide, wherever they are read
+    let inline: std::collections::HashSet<&str> = scanned
+        .iter()
+        .flat_map(|s| s.scan.inline.iter().map(String::as_str))
+        .collect();
     for scanned in &scanned {
         let Scanned { file, scan } = scanned;
         for (reference, range) in &scan.refs {
             let (reference, range) = (reference.clone(), range.clone());
             if reference.kind == RefKind::Dictionary {
-                if !known.contains_key(reference.value.as_str()) {
+                if !known.contains_key(reference.value.as_str())
+                    && !inline.contains(reference.value.as_str())
+                {
                     let mut issue = plain(
                         file,
                         Level::Error,

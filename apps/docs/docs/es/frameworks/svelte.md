@@ -188,6 +188,26 @@ it("switches to Turkish", () => {
 });
 ```
 
+## Enlaces y navegación
+
+Si sus URL llevan la locale (`/tr/about`), construya los enlaces con `localizePath` de [Helpers de enrutamiento](../guide/routing.md) y la locale que muestra la aplicación. Dialex no incluye un componente de enlace para SvelteKit: unas pocas líneas propias mantienen `goto()` y las redirecciones funcionando igual, y muestran exactamente qué le pasa a una ruta. El `config` generado ya contiene `locales`, `defaultLocale` y `prefixDefault`, así que no se repite nada.
+
+```svelte
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { useDialex } from "dialexjs/svelte";
+  import { localizePath } from "dialexjs/routing";
+
+  import { config } from "../dialex.generated";
+
+  const { locale } = useDialex();
+  const localize = (path: string, to = $locale) => localizePath(path, to, config);
+</script>
+
+<a href={localize("/about")}>About</a>
+<button onclick={() => goto(localize("/cart"))}>Cart</button>
+```
+
 ## Buenas prácticas
 
 - Llama a `provideDialex` solo en el componente raíz. Los componentes inferiores usan `useDictionary` y `useT`; un segundo `provideDialex` inicia un locale independiente.

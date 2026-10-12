@@ -1,36 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import { loadConfigObject } from "@dialexjs/config";
 import { DEFAULT_CONFIG, type DialexConfig } from "dialexjs";
-import { loadConfigSync } from "unconfig";
 
 export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
   let loadedConfig: DialexConfig = {};
   try {
-    const sources: any[] = [];
-    if (inlineConfig.configFile) {
-      sources.push({ files: inlineConfig.configFile });
-    }
-    sources.push(
-      {
-        files: "dialex.config",
-        extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
-      },
-      {
-        files: "i18n.config",
-        extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
-      },
-    );
-
-    const result = loadConfigSync<DialexConfig>({
-      sources,
-      merge: false,
-      defaults: {},
-      cwd: root,
-    });
-    if (result && result.config) {
-      loadedConfig = result.config;
-    }
+    const loaded = loadConfigObject(root, inlineConfig.configFile);
+    if (loaded) loadedConfig = loaded.config as DialexConfig;
   } catch {
     // Config fallback
   }

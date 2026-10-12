@@ -115,7 +115,9 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
     collection.clear();
     const byFile = new Map<string, vscode.Diagnostic[]>();
 
-    for (const { issues } of states.values()) {
+    // Off when an ESLint or oxlint plugin reports the same problems
+    const show = settings().get<boolean>("diagnostics", true);
+    for (const { issues } of show ? states.values() : []) {
       for (const issue of issues) {
         const range = issue.range
           ? new vscode.Range(

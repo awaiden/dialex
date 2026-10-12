@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | [Cadenas de fallback](./fallbacks.md) explícitas por locale                                                                                                                                |
 | `prefixDefault` | `boolean`                     | `true`              | Indica si el locale por defecto también lleva prefijo en la URL. Lo leen `DialexLink` y los [helpers de enrutamiento](./routing.md)                                                        |
 | `lazy`          | `boolean \| "locale"`         | `false`             | Carga los diccionarios bajo demanda (bundles de cliente): `true` divide por diccionario, `"locale"` por diccionario y locale. Consulta [Carga diferida](./lazy-loading.md)                 |
+| `lint`          | `{ rules }`                   | —                   | Desactiva comprobaciones o cambia su nivel y opciones, para `dialex check`, los editores y las [reglas de ESLint y oxlint](./linting.md)                                                   |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | Proveedor para [`dialex translate`](../cli/translate.md)                                                                                                                                   |
 
 Dialex omite `node_modules`, la salida de compilación y todo lo que ignoren tus archivos `.gitignore` (incluido el del repositorio, para un paquete dentro de un monorepo). Usa `exclude` para cualquier otra cosa, como una carpeta vendorizada que sí subes.
@@ -39,10 +40,12 @@ Las herramientas buscan en la raíz del proyecto (la carpeta desde la que ejecut
 | Herramienta                                                 | Lee la configuración                                                                   |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `dialex generate`, `check`, `export`, `import`, `translate` | Ejecutando el archivo, así que los valores pueden calcularse (`locales: getLocales()`) |
-| El `dx` nativo                                              | Leyendo su árbol de sintaxis. Todo lo calculado entrega el comando a la CLI de Node    |
+| El `dx` nativo                                              | Leyendo `.dialex/config.json`, que `@dialexjs/config` escribe antes de cada comando    |
 | La extensión del editor y el servidor de lenguaje           | Leyendo su árbol de sintaxis, y nunca ejecutándola                                     |
 
 Una configuración hecha de literales (cadenas, arrays, booleanos) se entiende en todas partes. Un ajuste calculado es invisible para el editor, que entonces usa el valor por defecto y registra una nota. Si un editor debe conocer `locales`, escríbelos. Consulta [Binarios nativos](./native.md).
+
+`.dialex/config.json` se genera, como `dialex.generated.ts`: añada `.dialex/` a su `.gitignore`. Se escribe de nuevo antes de cada `dialex generate` y `dialex check`, así que nunca está desactualizado. Una configuración hecha solo de literales se lee de su árbol de sintaxis y no se ejecuta. Una con spreads, imports o valores calculados la ejecuta `@dialexjs/config`, que es el único paso que necesita Node.
 
 ## Ejemplos
 

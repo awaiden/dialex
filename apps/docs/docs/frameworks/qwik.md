@@ -170,6 +170,32 @@ export default component$(() => {
 | `useDictionary(name)`                  | An accessor for the dictionary of the current locale, following the fallback chain. Call it in JSX: `home().title` |
 | `useT()`                               | A `t("dictionary.key", values?)` function bound to the current locale                                              |
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Qwik City: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { Link, useNavigate } from "@builder.io/qwik-city";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+import { useDialex } from "./i18n";
+
+export const Nav = component$(() => {
+  const dialex = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string) => localizePath(path, dialex.locale, config);
+
+  return (
+    <>
+      <Link href={localize("/about")}>About</Link>
+      <button onClick$={() => navigate(localizePath("/cart", dialex.locale, config))}>Cart</button>
+    </>
+  );
+});
+```
+
 ## Best practices
 
 - Create the hooks with `createDialexQwik` in one module and import from it. Do not call `createDialexQwik` inside a component, because the dictionaries must not be part of the component state.

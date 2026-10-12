@@ -3,7 +3,7 @@ resolver = "2"
 members = ["dialex-icu", "dialex-syntax", "dialex-cli", "dialex-lsp"]
 
 [workspace.package]
-version = "0.7.2"
+version = "0.8.0"
 edition = "2021"
 license = "MIT"
 publish = false

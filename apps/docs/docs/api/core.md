@@ -116,7 +116,16 @@ The shape of `dialex.config.ts`. Every field is optional.
 | `fallbacks`     | `Record<string, string[]>` | —                   | Explicit [fallback chains](../guide/fallbacks.md)                                     |
 | `prefixDefault` | `boolean`                  | `true`              | Whether the default locale also gets a URL prefix                                     |
 | `lazy`          | `boolean \| "locale"`      | `false`             | Load dictionaries on demand. See [Lazy Loading](../guide/lazy-loading.md)             |
+| `lint`          | `LintConfig`               | —                   | Level and options of each check. See [Linting](../guide/linting.md)                   |
 | `translate`     | `TranslateConfig`          | —                   | Settings of [`dialex translate`](../cli/translate.md)                                 |
+
+### `LintConfig`
+
+| Field   | Type                              | Description                                                                    |
+| ------- | --------------------------------- | ------------------------------------------------------------------------------ |
+| `rules` | `Record<string, LintRuleSetting>` | Level and options per diagnostic code, plus `dynamic-key` and `literal-string` |
+
+A `LintRuleSetting` is a `LintSeverity` (`"off"`, `"warn"` or `"error"`), or `[LintSeverity, options]` for checks that take options. `dialex check`, the editors and [`@dialexjs/eslint-plugin`](../guide/linting.md) all read it.
 
 ### `TranslateConfig`
 

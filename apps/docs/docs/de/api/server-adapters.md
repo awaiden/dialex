@@ -24,10 +24,10 @@ Jeder Adapter nimmt die Optionen zur Locale-Erkennung und, außer `createDialexM
 
 ### Basis-Adapteroptionen (`BaseAdapterOptions`)
 
-| Option         | Typ               | Standard | Beschreibung                                                                                                                                                               |
-| -------------- | ----------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dictionaries` | `DictionaryInput` | —        | Eine Map `{ name: { locale: content } }` oder ein Array von `defineDictionary`-Ergebnissen. Ohne sie werden nur über `defineDictionary` registrierte Wörterbücher gefunden |
-| `setHeader`    | `boolean`         | `true`   | Die aufgelöste Locale als `Content-Language` senden                                                                                                                        |
+| Option         | Typ               | Standard | Beschreibung                                                                                                                                                                                                                                                                                                     |
+| -------------- | ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dictionaries` | `DictionaryInput` | —        | Die generierten `dictionaries`; `{ ...dialex }` setzt sie. Übergeben Sie eine eigene Map `{ name: { locale: content } }` oder ein Array von `defineDictionary`-Ergebnissen nur, wenn Sie die generierte Datei nicht verwenden. Ohne beides werden nur über `defineDictionary` registrierte Wörterbücher gefunden |
+| `setHeader`    | `boolean`         | `true`   | Die aufgelöste Locale als `Content-Language` senden                                                                                                                                                                                                                                                              |
 
 ## Was jeder Adapter hinzufügt
 

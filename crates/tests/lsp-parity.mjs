@@ -31,7 +31,17 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class Client {
   constructor(command, args) {
-    this.child = spawn(command, args, { stdio: ["pipe", "pipe", "pipe"] });
+    this.child = spawn(command, args, {
+      stdio: ["pipe", "pipe", "pipe"],
+      // the native server runs this to write `.dialex/config.json`; the Node one ignores it
+      env: {
+        ...process.env,
+        DIALEX_CONFIG_RESOLVER: path.resolve(
+          import.meta.dirname,
+          "../../packages/config/dist/cli.mjs",
+        ),
+      },
+    });
     this.buffer = Buffer.alloc(0);
     this.nextId = 1;
     this.pending = new Map();

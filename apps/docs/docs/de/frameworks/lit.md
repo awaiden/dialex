@@ -177,6 +177,25 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links und Navigation
+
+Wenn Ihre URLs die Locale tragen (`/tr/about`), bauen Sie Links mit `localizePath` aus [Routing-Helfer](../guide/routing.md) und der Locale, die die App gerade zeigt. Dialex liefert keine Link-Komponente für Lit: ein paar eigene Zeilen halten `location.assign()` und Weiterleitungen gleich und zeigen genau, was mit einem Pfad geschieht. Die generierte `config` enthält bereits `locales`, `defaultLocale` und `prefixDefault`, nichts wird wiederholt.
+
+```ts
+import { localizePath } from "dialexjs/routing";
+import { html } from "lit";
+
+import { config } from "./dialex.generated";
+import { i18n } from "./i18n";
+
+const localize = (path: string, to = i18n.locale) => localizePath(path, to, config);
+
+html`<a href=${localize("/about")}>About</a>`;
+
+// Programmatic navigation without a router:
+location.assign(localize("/cart"));
+```
+
 ## Bewährte Vorgehensweisen
 
 - Erzeuge pro App eine `createDialex`-Instanz und importiere sie. Zwei Instanzen teilen ihr Locale nicht.

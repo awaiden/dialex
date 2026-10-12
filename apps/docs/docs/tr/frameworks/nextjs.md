@@ -83,6 +83,29 @@ import { DialexLink } from "dialexjs/next/link";
 
 `locales`, `defaultLocale` ve `prefixDefault` değerlerini üretilen yapılandırmadan okur; bu yüzden `<DialexProvider {...dialex}>` içinde oluşturun. Harici URL'lere ve `#parçalara` dokunmaz. Ayrıca bkz. [Yönlendirme yardımcıları](../guide/routing.md).
 
+`DialexLink`, `next/link`'in yerini alır. `router.push` ve `router.replace` için `localizePath`'i aynı şekilde, uygulamanın gösterdiği locale ile uygulayın:
+
+```tsx
+"use client";
+
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+import { useRouter } from "next/navigation";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedRouter() {
+  const router = useRouter();
+  const { locale } = useDialex();
+  const localize = (path: string) => localizePath(path, locale, config);
+
+  return {
+    push: (path: string) => router.push(localize(path)),
+    replace: (path: string) => router.replace(localize(path)),
+  };
+}
+```
+
 ## Server Components
 
 ```tsx

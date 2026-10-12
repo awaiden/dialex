@@ -62,6 +62,11 @@
           "default": true,
           "description": "Enable Dialex diagnostics, hover, definitions, completion and quick fixes."
         },
+        "dialex.diagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Dialex problems in the editor. Turn this off if you report them with the ESLint or oxlint plugin (@dialexjs/eslint-plugin); hover, completion and quick fixes keep working."
+        },
         "dialex.unusedKeys": {
           "type": "boolean",
           "default": false,

@@ -134,6 +134,15 @@ describe("diagnostics", () => {
     expect(hints[0].tags).toEqual([fake.DiagnosticTag.Unnecessary]);
   });
 
+  it("keeps hover but shows no problems when dialex.diagnostics is false", async () => {
+    await start({ "src/app.ts": `getDictionary("nope");\n` }, { diagnostics: false });
+    expect(state.collection.entries.size).toBe(0);
+
+    const app = doc("src/app.ts");
+    expect(state.hover).toBeDefined();
+    expect(app).toBeDefined();
+  });
+
   it("does nothing when disabled", async () => {
     await start({}, { enable: false });
     expect(state.collection.entries.size).toBe(0);

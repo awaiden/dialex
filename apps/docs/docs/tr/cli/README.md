@@ -23,7 +23,7 @@ Tipik bir iş akışı: yeni anahtarlar için yer tutucular oluşturmak üzere `
 
 Linux, macOS ve Windows'ta (x64 ve arm64) `dialex` ve `dx`, Rust ile derlenmiş yerel bir ikili dosya çalıştırır; paketle birlikte isteğe bağlı bağımlılık olarak kurulur (`@dialexjs/cli-<platform>`). 1.000 sözlüklü bir projede `generate` ve `check`, Node uygulamasından 25 ila 40 kat daha hızlıdır ve aynı dosyaları ve çıktıyı bayt bayt aynı üretir.
 
-Yerel ikili dosya sözlükleri ve yapılandırmayı sözdizimi ağacından okur. Bir komutun projenizin kodunu çalıştırması gerekiyorsa (salt veri olmayan bir yapılandırma, bir `translate` sağlayıcısı, `runtime: true`, tembel yükleme, `--fix`, `--watch`) ya da yerel olarak uygulanmamışsa (`init`, `export`, `import`, `lock`, `translate`), komutun tamamını Node CLI'ye devreder; yani sizin için hiçbir şey değişmez. İki ortam değişkeni bunu denetler:
+Yerel ikili dosya sözlükleri sözdizimi ağacından, yapılandırmayı `.dialex/config.json` dosyasından okur. Bir komutun projenizin kodunu çalıştırması gerekiyorsa (salt veri olmayan bir yapılandırma, bir `translate` sağlayıcısı, `runtime: true`, tembel yükleme, `--fix`, `--watch`) ya da yerel olarak uygulanmamışsa (`init`, `export`, `import`, `lock`, `translate`), komutun tamamını Node CLI'ye devreder; yani sizin için hiçbir şey değişmez. İki ortam değişkeni bunu denetler:
 
 ```bash
 DIALEX_NATIVE=0 dx check   # always use the Node implementation

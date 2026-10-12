@@ -27,6 +27,7 @@ const PAGES = {
     "benchmarks",
     "native",
     "diagnostics",
+    "linting",
     "troubleshooting",
     "faq",
     "glossary",

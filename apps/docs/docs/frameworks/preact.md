@@ -163,6 +163,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for preact-iso: a few lines of your own keep `route()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { useDialex } from "dialexjs/preact";
+import { localizePath } from "dialexjs/routing";
+import { useLocation } from "preact-iso";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const { route } = useLocation();
+  const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+  return (
+    <>
+      <a href={localize("/about")}>About</a>
+      <button onClick={() => route(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## Best practices
 
 - Render `DialexProvider` once, at the root. Every component below it shares the same locale and the same loaded dictionaries.

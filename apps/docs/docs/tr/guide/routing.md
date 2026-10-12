@@ -44,6 +44,24 @@ localeFromPath("/about", options); // "en"
 isLocale("tr", options.locales); // true
 ```
 
+## Router'ınızla
+
+`localizePath` iki şeye ihtiyaç duyar: uygulamanın gösterdiği locale ve router'ınızın kendi gezinme fonksiyonu. Tam tarif her framework sayfasındadır; her birinin bunları nereden aldığı şöyledir:
+
+| Framework                   | Geçerli locale               | Gezinme                                       |
+| --------------------------- | ---------------------------- | --------------------------------------------- |
+| React Router                | `useDialex().locale`         | `useNavigate()`                               |
+| TanStack Router             | `useDialex().locale`         | `useNavigate()`, `{-$locale}` route parameter |
+| Next.js                     | `useDialex().locale`         | `useRouter().push()`, `DialexLink`            |
+| Vue Router, Nuxt            | `useDialex().locale.value`   | `router.push()`, `navigateTo()`               |
+| SvelteKit                   | `$locale` from `useDialex()` | `goto()`, `redirect()`                        |
+| Solid Router                | `useDialex().locale()`       | `useNavigate()`                               |
+| Preact (preact-iso)         | `useDialex().locale`         | `useLocation().route()`                       |
+| Qwik City                   | `useDialex().locale`         | `useNavigate()`                               |
+| Angular                     | `injectDialex().locale()`    | `Router.navigateByUrl()`                      |
+| Astro                       | `Astro.locals.locale`        | `Astro.redirect()`                            |
+| Express, Fastify, Koa, Hono | `req.locale`, `c.var.locale` | `res.redirect()`, `c.redirect()`              |
+
 ## hreflang ve site haritaları
 
 ```ts

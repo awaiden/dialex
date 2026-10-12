@@ -1,6 +1,6 @@
 # Binarios nativos
 
-`dialex generate`, `dialex check` y el servidor de lenguaje tienen una implementación nativa escrita en Rust. Lee los mismos diccionarios y configuraciones, desde el árbol de sintaxis, y produce **los mismos archivos y la misma salida byte a byte**; solo es más rápida. Todos los demás comandos, y todo caso que el código nativo no puede decidir por sí solo, se ejecutan en la CLI de Node como siempre. No tienes que elegir: instala `@dialexjs/cli` y ocurre lo correcto.
+`dialex generate`, `dialex check` y el servidor de lenguaje tienen una implementación nativa escrita en Rust. Lee los mismos diccionarios desde el árbol de sintaxis y la configuración desde `.dialex/config.json`, y produce **los mismos archivos y la misma salida byte a byte**; solo es más rápida. Todos los demás comandos, y todo caso que el código nativo no puede decidir por sí solo, se ejecutan en la CLI de Node como siempre. No tienes que elegir: instala `@dialexjs/cli` y ocurre lo correcto.
 
 ## Velocidad
 

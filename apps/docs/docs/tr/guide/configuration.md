@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | Yerel ayar başına açık [yedek zincirleri](./fallbacks.md)                                                                                                                       |
 | `prefixDefault` | `boolean`                     | `true`              | Varsayılan yerel ayarın da URL öneki alıp almayacağı. `DialexLink` ve [yönlendirme yardımcıları](./routing.md) tarafından okunur                                                |
 | `lazy`          | `boolean \| "locale"`         | `false`             | Sözlükleri isteğe bağlı yükler (istemci paketleri): `true` sözlük başına, `"locale"` sözlük ve dil başına böler. Bkz. [Tembel Yükleme](./lazy-loading.md)                       |
+| `lint`          | `{ rules }`                   | —                   | Denetimleri kapatır ya da seviyesini ve seçeneklerini değiştirir; `dialex check`, editörler ve [ESLint ile oxlint kuralları](./linting.md) için                                 |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | [`dialex translate`](../cli/translate.md) için sağlayıcı                                                                                                                        |
 
 Dialex `node_modules` klasörünü, derleme çıktısını ve `.gitignore` dosyalarınızın yok saydığı her şeyi atlar (bir monorepo içindeki paket için deponun `.gitignore` dosyası da dahil). Başka her şey için, örneğin commit ettiğiniz bir vendor klasörü için, `exclude` kullanın.
@@ -36,13 +37,15 @@ Araçlar proje kökünde (`dialex` komutunu çalıştırdığınız klasör ya d
 
 ## Araçlar onu nasıl okur
 
-| Araç                                                        | Yapılandırmayı şöyle okur                                                       |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Dosyayı çalıştırarak; böylece değerler hesaplanabilir (`locales: getLocales()`) |
-| Yerel `dx`                                                  | Sözdizimi ağacını okuyarak. Hesaplanan her şey komutu Node CLI'ya devreder      |
-| Editör eklentisi ve dil sunucusu                            | Sözdizimi ağacını okuyarak; asla çalıştırmaz                                    |
+| Araç                                                        | Yapılandırmayı şöyle okur                                                                |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Dosyayı çalıştırarak; böylece değerler hesaplanabilir (`locales: getLocales()`)          |
+| Yerel `dx`                                                  | `@dialexjs/config`'in her komuttan önce yazdığı `.dialex/config.json` dosyasını okuyarak |
+| Editör eklentisi ve dil sunucusu                            | Sözdizimi ağacını okuyarak; asla çalıştırmaz                                             |
 
 Sabit değerlerden (dizeler, diziler, boolean'lar) oluşan bir yapılandırma her yerde anlaşılır. Hesaplanan bir ayar editöre görünmez; editör onun için varsayılanı kullanır ve bir not düşer. Bir editörün `locales` bilmesi gerekiyorsa onları açıkça yazın. Bkz. [Yerel ikili dosyalar](./native.md).
+
+`.dialex/config.json` `dialex.generated.ts` gibi üretilir: `.dialex/` dizinini `.gitignore` dosyanıza ekleyin. Her `dialex generate` ve `dialex check` öncesinde yeniden yazılır, bu yüzden hiçbir zaman eski kalmaz. Yalnızca literallerden oluşan bir yapılandırma sözdizimi ağacından okunur ve çalıştırılmaz. Spread, import ya da hesaplanan değer içeren bir yapılandırmayı `@dialexjs/config` çalıştırır; Node'a ihtiyaç duyan tek adım budur.
 
 ## Örnekler
 

@@ -187,7 +187,7 @@ impl zed::Extension for DialexExtension {
         _language_server_id: &LanguageServerId,
         worktree: &Worktree,
     ) -> Result<Option<Value>> {
-        // The server asks for the `dialex` section: unusedKeys, autoGenerate, configPath, enable.
+        // The server asks for the `dialex` section: diagnostics, unusedKeys, autoGenerate, configPath, enable.
         let settings = LspSettings::for_worktree(SERVER_ID, worktree)?
             .settings
             .unwrap_or_else(|| json!({}));

@@ -45,7 +45,9 @@ export const DIALEX_OPTIONS = Symbol("DIALEX_OPTIONS");
  */
 export interface NestDialexOptions extends LocaleResolverOptions {
   /**
-   * Optional direct dictionary map or array of defineDictionary definitions.
+   * The dictionaries to read. `{ ...dialex }` from the generated file sets this, so pass your own
+   * map or array of `defineDictionary` definitions only when you do not use that file.
+   * If neither is given, only dictionaries already registered through `defineDictionary` are found.
    */
   dictionaries?:
     | Record<string, Record<string, any>>

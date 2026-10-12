@@ -170,6 +170,32 @@ export default component$(() => {
 | `useDictionary(name)`                  | Geçerli yerel ayarın sözlüğü için bir erişimci, yedek zincirini izleyerek. JSX içinde çağır: `home().title` |
 | `useT()`                               | Geçerli yerel ayara bağlı bir `t("dictionary.key", values?)` fonksiyonu                                     |
 
+## Bağlantılar ve gezinme
+
+URL'leriniz locale taşıyorsa (`/tr/about`), bağlantıları [Yönlendirme Yardımcıları](../guide/routing.md) sayfasındaki `localizePath` ve uygulamanın gösterdiği locale ile oluşturun. Dialex'in Qwik City için hazır bir bağlantı bileşeni yoktur: kendi yazacağınız birkaç satır `useNavigate()` ve yönlendirmelerin aynı şekilde çalışmasını sağlar ve bir yola tam olarak ne olduğunu gösterir. Üretilen `config` zaten `locales`, `defaultLocale` ve `prefixDefault` değerlerini taşır, bu yüzden hiçbir şey tekrar yazılmaz.
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { Link, useNavigate } from "@builder.io/qwik-city";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+import { useDialex } from "./i18n";
+
+export const Nav = component$(() => {
+  const dialex = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string) => localizePath(path, dialex.locale, config);
+
+  return (
+    <>
+      <Link href={localize("/about")}>About</Link>
+      <button onClick$={() => navigate(localizePath("/cart", dialex.locale, config))}>Cart</button>
+    </>
+  );
+});
+```
+
 ## En iyi uygulamalar
 
 - Hook'ları `createDialexQwik` ile tek bir modülde oluştur ve oradan içe aktar. `createDialexQwik`'i bir bileşenin içinde çağırma; çünkü sözlükler bileşen durumunun parçası olmamalıdır.

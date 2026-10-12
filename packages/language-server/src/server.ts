@@ -54,6 +54,11 @@ import {
 export interface Settings {
   /** Turn diagnostics, hover and the other features off. */
   enable: boolean;
+  /**
+   * Publish problems. Turn off when the ESLint or oxlint plugin reports them, to avoid showing
+   * each twice; hover, completion and quick fixes keep working.
+   */
+  diagnostics: boolean;
   /** Fade out keys and dictionaries that no source file seems to use. */
   unusedKeys: boolean;
   /**
@@ -65,7 +70,12 @@ export interface Settings {
   configPath?: string;
 }
 
-const DEFAULT_SETTINGS: Settings = { enable: true, unusedKeys: false, autoGenerate: true };
+const DEFAULT_SETTINGS: Settings = {
+  enable: true,
+  diagnostics: true,
+  unusedKeys: false,
+  autoGenerate: true,
+};
 
 /** Files whose creation or removal can change the set of Dialex projects or what is scanned. */
 const WATCHED_GLOBS = [
@@ -200,6 +210,7 @@ export function createServer(connection: Connection): DialexServer {
         | undefined;
       if (value && typeof value === "object") {
         if (typeof value.enable === "boolean") settings.enable = value.enable;
+        if (typeof value.diagnostics === "boolean") settings.diagnostics = value.diagnostics;
         if (typeof value.unusedKeys === "boolean") settings.unusedKeys = value.unusedKeys;
         if (typeof value.autoGenerate === "boolean") settings.autoGenerate = value.autoGenerate;
         if (typeof value.configPath === "string" && value.configPath) {
@@ -213,7 +224,7 @@ export function createServer(connection: Connection): DialexServer {
 
   function publish(): void {
     const byFile = new Map<string, Diagnostic[]>();
-    for (const { issues } of states.values()) {
+    for (const { issues } of settings.diagnostics ? states.values() : []) {
       for (const issue of issues) {
         const list = byFile.get(issue.file) ?? [];
         list.push(toDiagnostic(issue));

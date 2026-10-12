@@ -45,6 +45,15 @@ Dialex 报告的每个问题都有代码、严重程度和消息。同样的检�
 | `unused-key`         | warning  | `Key "only_en" is possibly unused`   | 没有任何源文件把该键的最后一段当作单词包含。这是启发式判断：动态访问不会被报告，部分未使用的键也可能漏报 |
 | `unused-dictionary`  | warning  | `Dictionary "c" is never referenced` | 没有任何源文件包含该词典的名称                                                                           |
 
+注释从不会被检查。在代码中用对象字面量 `dictionaries: { name: ... }` 注册的字典视为已知，因此用 `getDictionary("name")` 读取它不算错误。要让某个没有问题的引用不再报错，请在上一行的注释中写 `dialex-ignore-next-line`，或在同一行的注释中写 `dialex-ignore`：
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+要在 ESLint 和 oxlint 中使用相同的检查，请参阅 [Lint](./linting.md)。
+
 ## 生成的文件
 
 `dialex check` 还会忽略格式，把 `dialex.generated.ts` 和 `dialex-env.d.ts` 与 `dialex generate` 将要写出的内容进行比较。这一项没有代码：

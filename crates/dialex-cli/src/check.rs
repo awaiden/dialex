@@ -181,6 +181,7 @@ pub fn run(root: &Path, options: &CheckOptions, logger: &Logger) -> Result<u8, F
             locales: config.locales.clone(),
             include: config.include.clone(),
             exclude: config.exclude.clone(),
+            lint: config.lint.clone(),
         },
         &AnalysisOptions {
             src: options.src.as_deref().filter(|s| !s.is_empty()),

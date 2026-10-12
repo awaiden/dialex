@@ -24,6 +24,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | 每个 locale 显式的[回退链](./fallbacks.md)                                                                             |
 | `prefixDefault` | `boolean`                     | `true`              | 默认 locale 是否也带 URL 前缀。由 `DialexLink` 和[路由辅助函数](./routing.md)读取                                      |
 | `lazy`          | `boolean \| "locale"`         | `false`             | 按需加载词典（客户端包）：`true` 按词典拆分，`"locale"` 按词典和 locale 拆分。参见[懒加载](./lazy-loading.md)          |
+| `lint`          | `{ rules }`                   | —                   | 关闭检查或更改其级别和选项，适用于 `dialex check`、编辑器以及 [ESLint 和 oxlint 规则](./linting.md)                    |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | [`dialex translate`](../cli/translate.md) 使用的提供者                                                                 |
 
 Dialex 会跳过 `node_modules`、构建输出以及 `.gitignore` 文件忽略的所有内容（对于 monorepo 中的包，也包括仓库根目录的 `.gitignore`）。其他情况请使用 `exclude`，例如你提交的 vendor 目录。
@@ -36,13 +37,15 @@ Dialex 会跳过 `node_modules`、构建输出以及 `.gitignore` 文件忽略�
 
 ## 工具如何读取它
 
-| 工具                                                        | 读取配置的方式                                                |
-| ----------------------------------------------------------- | ------------------------------------------------------------- |
-| `dialex generate`、`check`、`export`、`import`、`translate` | 运行该文件，因此值可以是计算出来的（`locales: getLocales()`） |
-| 原生 `dx`                                                   | 读取其语法树。任何计算出来的内容都会把命令交给 Node CLI       |
-| 编辑器扩展和语言服务器                                      | 读取其语法树，从不运行它                                      |
+| 工具                                                        | 读取配置的方式                                                     |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| `dialex generate`、`check`、`export`、`import`、`translate` | 运行该文件，因此值可以是计算出来的（`locales: getLocales()`）      |
+| 原生 `dx`                                                   | 读取 `@dialexjs/config` 在每条命令之前写出的 `.dialex/config.json` |
+| 编辑器扩展和语言服务器                                      | 读取其语法树，从不运行它                                           |
 
 由字面量（字符串、数组、布尔值）组成的配置在任何地方都能被理解。计算出来的设置对编辑器不可见，编辑器会对它使用默认值并记录一条说明。如果编辑器必须知道 `locales`，请把它们直接写出来。参见[原生二进制](./native.md)。
+
+`.dialex/config.json` 与 `dialex.generated.ts` 一样是生成的：请把 `.dialex/` 加入 `.gitignore`。每次运行 `dialex generate` 和 `dialex check` 之前都会重新写出，因此不会过期。只由字面量组成的配置会从语法树读取，不会被执行。含有展开、import 或计算值的配置由 `@dialexjs/config` 运行，这是唯一需要 Node 的步骤。
 
 ## 示例
 

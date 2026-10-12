@@ -202,6 +202,26 @@ describe("language server", () => {
     expect(client.published).toEqual([]);
   });
 
+  it("publishes nothing but keeps hover when dialex.diagnostics is false", async () => {
+    const dir = writeProject({
+      "dialex.config.ts": CONFIG,
+      "src/home.content.ts": HOME,
+      "src/app.ts": `const title = t("home.title");\ngetDictionary("nope");\n`,
+    });
+    const client = await start(dir, { diagnostics: false });
+    await client.refresh();
+    const appFile = path.join(dir, "src/app.ts");
+    await open(client, appFile);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(client.published).toEqual([]);
+    const hover = await client.connection.sendRequest("textDocument/hover", {
+      textDocument: { uri: pathToFileURL(appFile).href },
+      position: { line: 0, character: 20 },
+    });
+    expect(hover).not.toBeNull();
+  });
+
   it("keeps working when the client cannot register file watchers", async () => {
     const dir = writeProject({ "dialex.config.ts": CONFIG, "src/home.content.ts": HOME });
     const client = await start(dir, {}, false);

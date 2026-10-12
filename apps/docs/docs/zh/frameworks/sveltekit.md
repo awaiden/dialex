@@ -35,6 +35,24 @@ export const load = ({ locals }) => {
 
 除非 `setHeader` 为 `false`，否则会设置 `Content-Language`。所有 [locale 检测选项](../guide/locale-detection.md#options)均适用，`custom` 会接收到请求事件。
 
+## 链接和导航
+
+要在 hook 或端点中把访问者送到本地化页面，请用适配器解析出的 locale 配合 `localizePath`：
+
+```ts
+// src/routes/account/+page.server.ts
+import { redirect } from "@sveltejs/kit";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../../dialex.generated.js";
+
+export function load({ locals, cookies }) {
+  if (!cookies.get("session")) {
+    redirect(302, localizePath("/login", locals.locale, config));
+  }
+}
+```
+
 ## 最佳实践
 
 - 在服务端用 `dialexHandle` 解析 locale，并从根 `+layout.server.ts` 传给浏览器。在组件中配合 `initialLocale` 使用 [`dialexjs/svelte`](./svelte.md)，使客户端首次渲染与 HTML 一致。

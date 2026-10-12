@@ -21,7 +21,7 @@ export function buildFixtures(tmp) {
   }
 
   // Projects that are full of problems, to compare the diagnostics and not just the happy path
-  function issuesProject(dir, { formatted = false } = {}) {
+  function issuesProject(dir, { formatted = false, lint = false } = {}) {
     fs.rmSync(dir, { recursive: true, force: true });
     const write = (file, text) => {
       fs.mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
@@ -34,8 +34,33 @@ export function buildFixtures(tmp) {
     write("tsconfig.json", JSON.stringify({ compilerOptions: { moduleResolution: "bundler" } }));
     write(
       "dialex.config.ts",
-      `import { defineConfig } from "dialexjs";\nexport default defineConfig({ defaultLocale: "en", locales: ["en", "tr", "de"] });\n`,
+      lint
+        ? `import { defineConfig } from "dialexjs";
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr", "de"],
+  lint: { rules: { "missing-key": "warn", "unused-key": "off", "unknown-dictionary": ["warn", {}] } },
+});
+`
+        : `import { defineConfig } from "dialexjs";\nexport default defineConfig({ defaultLocale: "en", locales: ["en", "tr", "de"] });\n`,
     );
+    if (lint) {
+      // comments, `dialex-ignore` directives and a dictionary registered in code
+      write(
+        "src/comments.ts",
+        `import { getDictionary } from "./i18n";
+// getDictionary("commented-out")
+/* t("a.commented") */
+// dialex-ignore-next-line
+getDictionary("ignored-next");
+getDictionary("ignored-same"); // dialex-ignore
+const url = "http://example.com"; getDictionary("after-url");
+createDialexServer({ dictionaries: { inline_dict: {}, "kebab-dict": {} } });
+getDictionary("inline_dict");
+getDictionary("kebab-dict");
+`,
+      );
+    }
     write(
       "src/features/a/a.content.ts",
       `import { defineDictionary } from "dialexjs";
@@ -149,6 +174,32 @@ export const x = [
   const formatted = path.join(tmp, "issues-formatted");
   issuesProject(formatted, { formatted: true });
   fixtures.push(["issues-formatted", formatted]);
+  const linted = path.join(tmp, "issues-lint");
+  issuesProject(linted, { lint: true });
+  fixtures.push(["issues-lint", linted]);
+
+  // A config the syntax tree cannot read: the native binary has to get it from `@dialexjs/config`
+  const computed = path.join(tmp, "computed-config");
+  fs.rmSync(computed, { recursive: true, force: true });
+  const put = (file, text) => {
+    fs.mkdirSync(path.dirname(path.join(computed, file)), { recursive: true });
+    fs.writeFileSync(path.join(computed, file), text);
+  };
+  put("package.json", JSON.stringify({ name: "computed-config", dependencies: { hono: "^4" } }));
+  put("helpers.ts", `export const getLocales = () => ["en", "tr"];\n`);
+  put(
+    "dialex.config.ts",
+    `import { getLocales } from "./helpers";\nexport default { defaultLocale: "en", locales: getLocales(), lint: { rules: { "unused-key": "off" } } };\n`,
+  );
+  put(
+    "src/a.content.ts",
+    `export default { name: "a", dictionary: { en: { title: "Title", only_en: "x" }, tr: { title: "Başlık" } } };\n`,
+  );
+  put(
+    "src/page.ts",
+    `export const x = [getDictionary("a"), getDictionary("nope"), t("a.title")];\n`,
+  );
+  fixtures.push(["computed-config", computed]);
 
   return fixtures;
 }
