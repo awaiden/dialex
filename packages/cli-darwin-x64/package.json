@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/cli-darwin-x64",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "The native dialex binaries for darwin-x64. Installed by @dialexjs/cli, not used directly.",
   "homepage": "https://github.com/awaiden/dialex#readme",
   "bugs": {
