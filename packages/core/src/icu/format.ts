@@ -1,4 +1,4 @@
-import { dateTimeFormat, numberFormat, pluralRules } from "../intl.js";
+import { dateTimeFormat, formatNumber, numberFormat, pluralCategory } from "../intl.js";
 import { parseMessage, type IcuNode } from "./parse.js";
 
 export type IcuValue = string | number | boolean | Date | null | undefined;
@@ -26,8 +26,6 @@ const compiledNodes = new WeakMap<IcuNode[], Run>();
 const DATE_STYLES = new Set(["short", "medium", "long", "full"]);
 const INTEGER: Intl.NumberFormatOptions = Object.freeze({ maximumFractionDigits: 0 });
 const PERCENT: Intl.NumberFormatOptions = Object.freeze({ style: "percent" });
-const CARDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "cardinal" });
-const ORDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "ordinal" });
 
 /** The value of an argument; a missing one is an error. */
 function valueOf(values: IcuValues, name: string): NonNullable<IcuValue> {
@@ -66,8 +64,14 @@ function compileNode(node: IcuNode): Run {
       run.usesPound = true;
       return run;
     }
-    case "argument":
-      return (_locale, values) => String(valueOf(values, node.name));
+    case "argument": {
+      const name = node.name;
+      return (_locale, values) => {
+        const value = values[name];
+        if (typeof value === "string") return value;
+        return String(valueOf(values, name));
+      };
+    }
     case "number": {
       const options = numberOptions(node.style);
       return (locale, values) => numberFormat(locale, options).format(numberOf(values, node.name));
@@ -96,7 +100,7 @@ function compileNode(node: IcuNode): Run {
       return run;
     }
     case "plural": {
-      const rules = node.ordinal ? ORDINAL : CARDINAL;
+      const ordinal = node.ordinal === true;
       const exact = new Map<number, Run>();
       const options = new Map<string, Run>();
       for (const [key, nodes] of Object.entries(node.options)) {
@@ -107,14 +111,17 @@ function compileNode(node: IcuNode): Run {
           exact.set(Number(key.slice(1)), branch);
       }
       const other = options.get("other")!;
+      const hasExact = exact.size > 0;
       // the branches get the `#` of this plural, so it adds none to an enclosing one
       return (locale, values) => {
         const n = numberOf(values, node.name);
         const shifted = n - node.offset;
         const branch =
-          exact.get(n) ?? options.get(pluralRules(locale, rules).select(shifted)) ?? other;
+          (hasExact ? exact.get(n) : undefined) ??
+          options.get(pluralCategory(locale, ordinal, shifted)) ??
+          other;
         // `#` is formatted only when the chosen branch uses it
-        return branch(locale, values, branch.usesPound ? numberFormat(locale).format(shifted) : "");
+        return branch(locale, values, branch.usesPound ? formatNumber(locale, shifted) : "");
       };
     }
   }
@@ -138,6 +145,22 @@ function compileNodes(nodes: IcuNode[]): Run {
     const only = parts[0];
     if (typeof only !== "string") return only;
     run = () => only;
+  } else if (parts.length === 2) {
+    // two parts are never two literals (adjacent ones were merged), so one of them is a function
+    const [a, b] = parts;
+    if (typeof a === "string")
+      run = (locale, values, pound) => a + (b as Run)(locale, values, pound);
+    else if (typeof b === "string") run = (locale, values, pound) => a(locale, values, pound) + b;
+    else run = (locale, values, pound) => a(locale, values, pound) + b(locale, values, pound);
+  } else if (
+    parts.length === 3 &&
+    typeof parts[0] === "string" &&
+    typeof parts[1] !== "string" &&
+    typeof parts[2] === "string"
+  ) {
+    // `Hello, {name}!`
+    const [head, middle, tail] = parts as [string, Run, string];
+    run = (locale, values, pound) => head + middle(locale, values, pound) + tail;
   } else {
     run = (locale, values, pound) => {
       let out = "";

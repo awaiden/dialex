@@ -74,7 +74,9 @@ const isValues = (value: unknown): value is IcuValues =>
  * crashes a page). Unknown paths warn and return the path itself.
  */
 export function createT(getDictionary: (name: any) => any, locale = "en"): Translate {
-  return ((path: string, ...args: any[]) => {
+  // `arguments` instead of a rest parameter: the common call has one or two arguments, and a rest
+  // array would be allocated on each of them.
+  return function t(path: string): unknown {
     const parsed = parsePath(path);
 
     let value: any = getDictionary(parsed.name);
@@ -87,21 +89,37 @@ export function createT(getDictionary: (name: any) => any, locale = "en"): Trans
       value = value[segments[i]];
     }
 
-    if (value === undefined) {
-      console.warn(`[dialex] Translation path "${path}" not found.`);
-      return path;
-    }
-    if (typeof value === "function") return value(...args);
-    if (typeof value === "string" && args.length > 0 && isValues(args[0])) {
+    if (typeof value === "string") {
+      // oxlint-disable-next-line prefer-rest-params
+      const values = arguments.length > 1 ? arguments[1] : undefined;
+      if (values === undefined || !isValues(values)) return value;
       try {
-        return formatMessage(locale, value, args[0]);
+        return formatMessage(locale, value, values);
       } catch (error) {
         console.warn(`[dialex] Could not format "${path}": ${(error as Error).message}`);
         return value;
       }
     }
+    if (typeof value === "function") {
+      /* oxlint-disable prefer-rest-params */
+      switch (arguments.length) {
+        case 1:
+          return value();
+        case 2:
+          return value(arguments[1]);
+        case 3:
+          return value(arguments[1], arguments[2]);
+        default:
+          return value.apply(undefined, Array.prototype.slice.call(arguments, 1));
+      }
+      /* oxlint-enable prefer-rest-params */
+    }
+    if (value === undefined) {
+      console.warn(`[dialex] Translation path "${path}" not found.`);
+      return path;
+    }
     return value;
-  }) as Translate;
+  } as Translate;
 }
 
 interface ParsedPath {
