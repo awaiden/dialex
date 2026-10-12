@@ -1,103 +1,26 @@
 # API Başvurusu
 
-## `dialexjs`
+Dialex'in dışa aktardığı her şey, giriş noktasına göre. Her giriş noktası `dialexjs` paketinin bir alt yoludur (`import { DialexProvider } from "dialexjs/react"`); CLI'nin programatik API'si `@dialexjs/cli/api`'dir. Paket kökünden yalnızca [Core](./core.md) sayfasında listelenenler dışa aktarılır, bu yüzden bir framework adaptörü ancak içe aktardığınızda yüklenir.
 
-### `defineConfig(config)`
+## Giriş noktaları
 
-`dialex.config.ts` dosyasını tiplemek için özdeşlik yardımcısı. Bkz. [Yapılandırma](../guide/configuration.md).
+| Giriş noktası                                                                            | Ne sağlar                                                                         | Başvuru                                                                   |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `dialexjs`                                                                               | Yapılandırma, sözlükler, `createT`, biçimlendirme yardımcıları, ICU, tipler       | [Core](./core.md), [Biçimlendirme](./formatting.md), [Tipler](./types.md) |
+| `dialexjs/icu`                                                                           | Çalışma zamanının geri kalanı olmadan ICU mesaj ayrıştırıcısı ve biçimlendiricisi | [ICU mesajları](./icu.md)                                                 |
+| `dialexjs/server`                                                                        | Sunucu kodu için `getDictionary` ve `getT`                                        | [Sunucu adaptörleri](./server-adapters.md#dialexjs-server)                |
+| `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `h3`, `hapi`, `adonis`, `nestjs` | İstek middleware'leri, eklentiler ve modüller                                     | [Sunucu adaptörleri](./server-adapters.md)                                |
+| `dialexjs/sveltekit`, `astro`, `trpc`, `web`                                             | Hook, middleware, bağlam ve Fetch API işleyicisi                                  | [Sunucu adaptörleri](./server-adapters.md)                                |
+| `dialexjs/react`, `preact`, `solid`, `vue`, `nuxt`, `svelte`, `qwik`, `lit`, `angular`   | İstemci framework'lerinin provider, hook ve store'ları                            | [İstemci framework'leri](./client-frameworks.md)                          |
+| `dialexjs/react-native`                                                                  | Cihaz dilleri ve depolama ile `DialexProvider`                                    | [İstemci framework'leri](./client-frameworks.md#dialexjs-react-native)    |
+| `dialexjs/next/middleware`, `dialexjs/next/link`                                         | Next.js middleware'i ve `DialexLink`                                              | [İstemci framework'leri](./client-frameworks.md#next-js)                  |
+| `dialexjs/routing`                                                                       | Yerel ayar önekli yollar, `hreflang` bağlantıları ve sitemap girdileri            | [Yönlendirme](./routing.md)                                               |
+| `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                     | Test bağlamları, sahte istekler ve test provider'ları                             | [Test](./testing.md)                                                      |
+| `@dialexjs/cli/api`                                                                      | Proje analizi ve sözlük düzenleme yardımcıları                                    | [CLI API](./cli-api.md)                                                   |
 
-### `defineDictionary(name, dictionary)` / `defineDictionary({ name, dictionary })`
+## Kurallar
 
-Bir sözlük tanımlar ve kaydeder. `DictionaryDefinition<N, T>` döndürür: `{ name, dictionary }`.
-
-### Biçimlendirme yardımcıları
-
-`plural`, `number`, `date`, `relativeTime`, `list` ve `formatters(locale)`. Bkz. [Biçimlendirme ve Çoğullar](../guide/formatting.md).
-
-### `formatMessage(locale, message, values?)`, `parseMessage(message)`
-
-Bir [ICU mesajını](../guide/icu.md) biçimlendirir veya ayrıştırır. Çalışma zamanının geri kalanı olmadan, `getArguments` ve `isIcuStructured` ile birlikte `dialexjs/icu` üzerinden de kullanılabilir.
-
-### `createT(getDictionary, locale?)`
-
-Tip güvenli bir `t("dictionary.key.path", ...args)` oluşturur. Bkz. [Anahtar Yolları](../guide/key-paths.md).
-
-### Tipler
-
-| Tip                                                       | Açıklama                                                                                                            |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `DialexConfig`                                            | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate`              |
-| `DEFAULT_CONFIG`                                          | Bir ayar ya da yapılandırma dosyasının tamamı eksik olduğunda kullanılan varsayılanlar                              |
-| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | Üretilen `dialex` dışa aktarımı ve parçaları: `dictionaries`, istemci için güvenli bir `config` ve tembel `loaders` |
-| `Translate`, `TranslationPath`                            | `t` işlevinin tipleri ve geçerli yolları                                                                            |
-| `Register`                                                | Üretilen bildirimlerle genişletilir (`locales`)                                                                     |
-| `Locales`                                                 | Yapılandırılmış yerel ayarların birleşimi veya `string`                                                             |
-| `DictionaryRegistry`                                      | Sözlük adlarınız ve içerik tiplerinizle genişletilir                                                                |
-| `DictionaryKey`, `ResolveDictionaryType<K>`               | Anahtar ve içerik tipleme yardımcıları                                                                              |
-| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                                |
-| `DictionaryDefinition<N, T>`                              | `defineDictionary` dönüş tipi                                                                                       |
-| `globalDictionaries`                                      | `defineDictionary` ile doldurulan işlem içi kayıt defteri                                                           |
-
-## `dialexjs/server`
-
-`createDialexServer(dialex)`, üretilen `dialex` dışa aktarımını bağlar ve `{ getDictionary, getT }` döndürür: `getDictionary(name, locale?)` bir yerel ayar için sözlük içeriğini, `getT(locale?)` ise bir `t` işlevini döndürür. Bkz. [Next.js](../frameworks/nextjs.md).
-
-## `dialexjs/react`
-
-`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React / Vite](../frameworks/react.md).
-
-## `dialexjs/vue` ve `dialexjs/nuxt`
-
-`createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries` ve Nuxt modülü. Bkz. [Vue / Nuxt](../frameworks/vue.md).
-
-## `dialexjs/svelte`
-
-`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. Bkz. [Svelte](../frameworks/svelte.md).
-
-## `dialexjs/solid`
-
-`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [Solid](../frameworks/solid.md).
-
-## `dialexjs/preact`
-
-`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [Preact](../frameworks/preact.md).
-
-## `dialexjs/qwik`
-
-`createDialexQwik`, `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` ve `useT` değerlerini döndürür; ayrıca `preloadDictionaries` vardır. Bkz. [Qwik](../frameworks/qwik.md).
-
-## `dialexjs/lit`
-
-`createDialex`, `DialexController`, `preloadDictionaries`. Bkz. [Lit](../frameworks/lit.md).
-
-## `dialexjs/react-native`
-
-`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. Bkz. [React Native](../frameworks/react-native.md).
-
-## Sunucu adaptörleri
-
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` ve ilgili parçalar), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Ortak seçenekler [Yerel Ayar Algılama](../guide/locale-detection.md#options) sayfasındadır.
-
-## `dialexjs/routing`
-
-`localizePath`, `stripLocale`, `alternateLinks`, `alternateLanguages`, `sitemapEntries`. Bkz. [Yönlendirme Yardımcıları](../guide/routing.md).
-
-## `dialexjs/next/middleware` ve `dialexjs/next/link`
-
-`createDialexMiddleware(options)` ve `DialexLink`. Bkz. [Next.js](../frameworks/nextjs.md).
-
-## `dialexjs/angular`
-
-`provideDialex`, `injectDialex`, `injectDictionary`, `injectT`, `DIALEX`. Bkz. [Angular](../frameworks/angular.md).
-
-## `dialexjs/web` ve `dialexjs/h3`
-
-Herhangi bir `Request` için `createDialexHandler(options)` ve h3 1.x `dialex(options)` middleware'i. Bkz. [Fetch API](../frameworks/web.md) ve [h3 / Nitro](../frameworks/h3.md).
-
-## `dialexjs/testing`
-
-`createTestDialex`, `mockRequest` ve çerçeve sarmalayıcıları: `TestDialexProvider` (`dialexjs/testing/react`) ile `createTestDialex` (`dialexjs/testing/vue`). Bkz. [Test Etme](../guide/testing.md).
-
-## `@dialexjs/cli/api`
-
-`analyzeProject`, `readStaticConfig`, `scanReferences` ve [VS Code eklentisinin](../guide/vscode.md) üzerine kurulduğu sözlük düzenleme yardımcıları. Sözlükleri ve yapılandırmaları proje kodunu çalıştırmadan sözdizimi ağacından okurlar.
+- **Tipli adlar ve yollar.** `DictionaryRegistry`, `Register` ve `MessageArguments`, `dialex generate`'in `dialex-env.d.ts` içinde genişlettiği boş arayüzlerdir. O çalışana kadar sözlük adları ve `t()` yolları düz `string`'dir; sonrasında otomatik tamamlanır ve denetlenir. Bkz. [Tipler](./types.md).
+- **Üretilen `dialex` nesnesi.** Provider'lar, adaptörler ve `createDialexServer`, `dialex.generated.ts` içindeki `{ ...dialex }` değerini kabul eder. Sözlükleri, istemci için güvenli yapılandırmayı ve tembel yüklemede loader'ları taşır; böylece yerel ayar ayarları yalnızca bir kez, `dialex.config.ts` içinde yazılır.
+- **Hatalar.** Eksik bir sözlük, yerel ayar ya da yol üretim kodunda asla istisna fırlatmaz: `[dialex]` önekiyle `console.warn` yazar ve boş bir nesne ya da yolun kendisini döndürür. Geçersiz ICU mesajlarını `t()` bildirir ve değiştirmeden döndürür; `formatMessage` istisna fırlatır. Bir provider'a ihtiyaç duyan hook'lar, provider yoksa istisna fırlatır.
+- **Kararlılık.** Dialex 1.0'ın altındadır. Uyumsuz değişiklikler minor sürümlerle gelir ve [değişiklik günlüğünde](../guide/changelog.md) listelenir.

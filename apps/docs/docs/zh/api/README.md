@@ -1,103 +1,26 @@
 # API 参考
 
-## `dialexjs`
+Dialex 导出的全部内容，按入口点划分。每个入口点都是 `dialexjs` 包的子路径（`import { DialexProvider } from "dialexjs/react"`）；CLI 的编程 API 是 `@dialexjs/cli/api`。包根只导出 [Core](./core.md) 列出的内容，因此框架适配器只有在你导入时才会被加载。
 
-### `defineConfig(config)`
+## 入口点
 
-用于为 `dialex.config.ts` 提供类型的恒等辅助函数。参见[配置](../guide/configuration.md)。
+| 入口点                                                                                   | 提供的内容                                           | 参考                                                             |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
+| `dialexjs`                                                                               | 配置、词典、`createT`、格式化辅助函数、ICU 与类型    | [Core](./core.md)、[格式化](./formatting.md)、[类型](./types.md) |
+| `dialexjs/icu`                                                                           | 不含其余运行时的 ICU 消息解析器与格式化器            | [ICU 消息](./icu.md)                                             |
+| `dialexjs/server`                                                                        | 用于服务端代码的 `getDictionary` 与 `getT`           | [服务端适配器](./server-adapters.md#dialexjs-server)             |
+| `dialexjs/express`、`fastify`、`koa`、`hono`、`elysia`、`h3`、`hapi`、`adonis`、`nestjs` | 请求中间件、插件与模块                               | [服务端适配器](./server-adapters.md)                             |
+| `dialexjs/sveltekit`、`astro`、`trpc`、`web`                                             | 钩子、中间件、上下文与 Fetch API 处理器              | [服务端适配器](./server-adapters.md)                             |
+| `dialexjs/react`、`preact`、`solid`、`vue`、`nuxt`、`svelte`、`qwik`、`lit`、`angular`   | 客户端框架的 Provider、Hook 与 Store                 | [客户端框架](./client-frameworks.md)                             |
+| `dialexjs/react-native`                                                                  | 带设备语言与存储的 `DialexProvider`                  | [客户端框架](./client-frameworks.md#dialexjs-react-native)       |
+| `dialexjs/next/middleware`、`dialexjs/next/link`                                         | Next.js 中间件与 `DialexLink`                        | [客户端框架](./client-frameworks.md#next-js)                     |
+| `dialexjs/routing`                                                                       | 带 locale 前缀的路径、`hreflang` 链接与 sitemap 条目 | [路由](./routing.md)                                             |
+| `dialexjs/testing`、`dialexjs/testing/react`、`dialexjs/testing/vue`                     | 测试上下文、模拟请求与测试 Provider                  | [测试](./testing.md)                                             |
+| `@dialexjs/cli/api`                                                                      | 项目分析与词典编辑辅助函数                           | [CLI API](./cli-api.md)                                          |
 
-### `defineDictionary(name, dictionary)` / `defineDictionary({ name, dictionary })`
+## 约定
 
-定义并注册一个词典。返回 `DictionaryDefinition<N, T>`：`{ name, dictionary }`。
-
-### 格式化辅助函数
-
-`plural`、`number`、`date`、`relativeTime`、`list` 和 `formatters(locale)`。参见[格式化与复数](../guide/formatting.md)。
-
-### `formatMessage(locale, message, values?)`、`parseMessage(message)`
-
-格式化或解析 [ICU 消息](../guide/icu.md)。也可以不引入运行时的其余部分，从 `dialexjs/icu` 使用，同时提供 `getArguments` 和 `isIcuStructured`。
-
-### `createT(getDictionary, locale?)`
-
-构建带类型的 `t("dictionary.key.path", ...args)`。参见[键路径](../guide/key-paths.md)。
-
-### 类型
-
-| 类型                                                      | 说明                                                                                                   |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `DialexConfig`                                            | `defaultLocale`、`locales`、`include`、`configFile`、`fallbacks`、`prefixDefault`、`lazy`、`translate` |
-| `DEFAULT_CONFIG`                                          | 某项设置或整个配置文件缺失时使用的默认值                                                               |
-| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | 生成的 `dialex` 导出及其组成部分：`dictionaries`、可安全用于客户端的 `config` 和懒加载的 `loaders`     |
-| `Translate`、`TranslationPath`                            | `t` 及其有效路径的类型                                                                                 |
-| `Register`                                                | 由生成的声明扩展（`locales`）                                                                          |
-| `Locales`                                                 | 已配置 locale 的联合类型，或 `string`                                                                  |
-| `DictionaryRegistry`                                      | 以你的词典名称和内容类型进行扩展                                                                       |
-| `DictionaryKey`、`ResolveDictionaryType<K>`               | 键和内容的类型辅助工具                                                                                 |
-| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                   |
-| `DictionaryDefinition<N, T>`                              | `defineDictionary` 的返回类型                                                                          |
-| `globalDictionaries`                                      | 由 `defineDictionary` 填充的进程内注册表                                                               |
-
-## `dialexjs/server`
-
-`createDialexServer(dialex)` 绑定生成的 `dialex` 导出并返回 `{ getDictionary, getT }`：`getDictionary(name, locale?)` 返回某个 locale 的词典内容，`getT(locale?)` 返回 `t` 函数。参见 [Next.js](../frameworks/nextjs.md)。
-
-## `dialexjs/react`
-
-`DialexProvider`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries`。参见 [React / Vite](../frameworks/react.md)。
-
-## `dialexjs/vue` 和 `dialexjs/nuxt`
-
-`createDialex`、`useDialex`、`useDictionary`、`useT`、`preloadDictionaries` 以及 Nuxt 模块。参见 [Vue / Nuxt](../frameworks/vue.md)。
-
-## `dialexjs/svelte`
-
-`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. 参见 [Svelte](../frameworks/svelte.md)。
-
-## `dialexjs/solid`
-
-`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [Solid](../frameworks/solid.md)。
-
-## `dialexjs/preact`
-
-`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [Preact](../frameworks/preact.md)。
-
-## `dialexjs/qwik`
-
-`createDialexQwik` 返回 `useDialexProvider`、`useDialex`、`setLocale`、`useDictionary` 和 `useT`；另有 `preloadDictionaries`。 参见 [Qwik](../frameworks/qwik.md)。
-
-## `dialexjs/lit`
-
-`createDialex`, `DialexController`, `preloadDictionaries`. 参见 [Lit](../frameworks/lit.md)。
-
-## `dialexjs/react-native`
-
-`DialexProvider` (`deviceLocales`, `storage`), `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. 参见 [React Native](../frameworks/react-native.md)。
-
-## 服务端适配器
-
-`dialexjs/express`（`dialex`）、`dialexjs/fastify`（`dialexPlugin`）、`dialexjs/koa`（`dialex`）、`dialexjs/hono`（`dialex`）、`dialexjs/nestjs`（`DialexModule` 及相关项）、`dialexjs/elysia`（`dialex`）、`dialexjs/sveltekit`（`dialexHandle`）、`dialexjs/astro`（`dialex`）、`dialexjs/hapi`（`dialexPlugin`）、`dialexjs/adonis`（`createDialexMiddleware`）、`dialexjs/trpc`（`createDialexContext`）。共享的选项见 [Locale 检测](../guide/locale-detection.md#options)。
-
-## `dialexjs/routing`
-
-`localizePath`、`stripLocale`、`alternateLinks`、`alternateLanguages`、`sitemapEntries`。参见[路由辅助函数](../guide/routing.md)。
-
-## `dialexjs/next/middleware` 和 `dialexjs/next/link`
-
-`createDialexMiddleware(options)` 和 `DialexLink`。参见 [Next.js](../frameworks/nextjs.md)。
-
-## `dialexjs/angular`
-
-`provideDialex`、`injectDialex`、`injectDictionary`、`injectT`、`DIALEX`。参见 [Angular](../frameworks/angular.md)。
-
-## `dialexjs/web` 和 `dialexjs/h3`
-
-适用于任意 `Request` 的 `createDialexHandler(options)`，以及 h3 1.x 的 `dialex(options)` 中间件。参见 [Fetch API](../frameworks/web.md) 和 [h3 / Nitro](../frameworks/h3.md)。
-
-## `dialexjs/testing`
-
-`createTestDialex`、`mockRequest`，以及框架封装 `TestDialexProvider`（`dialexjs/testing/react`）和 `createTestDialex`（`dialexjs/testing/vue`）。参见[测试](../guide/testing.md)。
-
-## `@dialexjs/cli/api`
-
-`analyzeProject`、`readStaticConfig`、`scanReferences` 以及 [VS Code 扩展](../guide/vscode.md)所基于的词典编辑辅助函数。它们从语法树读取词典和配置，不会运行项目代码。
+- **带类型的名称与路径。** `DictionaryRegistry`、`Register` 和 `MessageArguments` 是空接口，`dialex generate` 会在 `dialex-env.d.ts` 中扩充它们。在它运行之前，词典名称和 `t()` 路径只是普通的 `string`；运行之后它们可以自动补全并受到检查。参见[类型](./types.md)。
+- **生成的 `dialex` 对象。** Provider、适配器和 `createDialexServer` 接受 `dialex.generated.ts` 中的 `{ ...dialex }`。它携带词典、可安全用于客户端的配置，以及懒加载时的 loader，因此 locale 设置只需在 `dialex.config.ts` 中写一次。
+- **失败情形。** 缺少词典、locale 或路径时，生产代码绝不会抛出异常：它会以 `[dialex]` 前缀调用 `console.warn`，并返回空对象或路径本身。无效的 ICU 消息会由 `t()` 报告并原样返回；`formatMessage` 会抛出异常。需要 Provider 的 Hook 在缺少 Provider 时会抛出异常。
+- **稳定性。** Dialex 尚未到 1.0。不兼容的更改会随次版本发布，并列在[更新日志](../guide/changelog.md)中。

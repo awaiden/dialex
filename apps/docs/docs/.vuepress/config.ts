@@ -56,7 +56,18 @@ const PAGES = {
     "web",
   ],
   cli: ["README", "init", "generate", "check", "export", "import", "translate"],
-  api: ["README"],
+  api: [
+    "README",
+    "core",
+    "formatting",
+    "icu",
+    "types",
+    "server-adapters",
+    "client-frameworks",
+    "routing",
+    "testing",
+    "cli-api",
+  ],
 } as const;
 
 function navbarFor(locale: SiteLocale) {

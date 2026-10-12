@@ -1,103 +1,26 @@
 # API Reference
 
-## `dialexjs`
+Everything Dialex exports, by entry point. Every entry point is a subpath of the `dialexjs` package (`import { DialexProvider } from "dialexjs/react"`); the programmatic API of the CLI is `@dialexjs/cli/api`. Nothing is exported from the package root other than what [Core](./core.md) lists, so a framework adapter is only loaded when you import it.
 
-### `defineConfig(config)`
+## Entry points
 
-Identity helper for typing `dialex.config.ts`. See [Configuration](../guide/configuration.md).
+| Entry point                                                                              | What it provides                                                     | Reference                                                             |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `dialexjs`                                                                               | Config, dictionaries, `createT`, formatting helpers, ICU and types   | [Core](./core.md), [Formatting](./formatting.md), [Types](./types.md) |
+| `dialexjs/icu`                                                                           | The ICU message parser and formatter without the rest of the runtime | [ICU messages](./icu.md)                                              |
+| `dialexjs/server`                                                                        | `getDictionary` and `getT` for server code                           | [Server adapters](./server-adapters.md#dialexjs-server)               |
+| `dialexjs/express`, `fastify`, `koa`, `hono`, `elysia`, `h3`, `hapi`, `adonis`, `nestjs` | Request middleware, plugins and modules                              | [Server adapters](./server-adapters.md)                               |
+| `dialexjs/sveltekit`, `astro`, `trpc`, `web`                                             | Hook, middleware, context and Fetch API handler                      | [Server adapters](./server-adapters.md)                               |
+| `dialexjs/react`, `preact`, `solid`, `vue`, `nuxt`, `svelte`, `qwik`, `lit`, `angular`   | Providers, hooks and stores of the client frameworks                 | [Client frameworks](./client-frameworks.md)                           |
+| `dialexjs/react-native`                                                                  | `DialexProvider` with device locales and storage                     | [Client frameworks](./client-frameworks.md#dialexjs-react-native)     |
+| `dialexjs/next/middleware`, `dialexjs/next/link`                                         | Next.js middleware and `DialexLink`                                  | [Client frameworks](./client-frameworks.md#next-js)                   |
+| `dialexjs/routing`                                                                       | Locale-prefixed paths, `hreflang` links and sitemap entries          | [Routing](./routing.md)                                               |
+| `dialexjs/testing`, `dialexjs/testing/react`, `dialexjs/testing/vue`                     | Test contexts, mock requests and test providers                      | [Testing](./testing.md)                                               |
+| `@dialexjs/cli/api`                                                                      | Project analysis and the dictionary editing helpers                  | [CLI API](./cli-api.md)                                               |
 
-### `defineDictionary(name, dictionary)` / `defineDictionary({ name, dictionary })`
+## Conventions
 
-Defines and registers a dictionary. Returns `DictionaryDefinition<N, T>`: `{ name, dictionary }`.
-
-### Formatting helpers
-
-`plural`, `number`, `date`, `relativeTime`, `list`, and `formatters(locale)`. See [Formatting & Plurals](../guide/formatting.md).
-
-### `formatMessage(locale, message, values?)`, `parseMessage(message)`
-
-Format or parse an [ICU message](../guide/icu.md). Also available, without the rest of the runtime, from `dialexjs/icu` together with `getArguments` and `isIcuStructured`.
-
-### `createT(getDictionary, locale?)`
-
-Builds a typed `t("dictionary.key.path", ...args)`. See [Key Paths](../guide/key-paths.md).
-
-### Types
-
-| Type                                                      | Description                                                                                             |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `DialexConfig`                                            | `defaultLocale`, `locales`, `include`, `configFile`, `fallbacks`, `prefixDefault`, `lazy`, `translate`  |
-| `DEFAULT_CONFIG`                                          | Defaults used when a setting, or the whole config file, is missing                                      |
-| `DialexSource`, `DialexClientConfig`, `DictionaryLoaders` | The generated `dialex` export and its parts: `dictionaries`, a client-safe `config`, and lazy `loaders` |
-| `Translate`, `TranslationPath`                            | Types of `t` and its valid paths                                                                        |
-| `Register`                                                | Augmented by generated declarations (`locales`)                                                         |
-| `Locales`                                                 | Union of configured locales, or `string`                                                                |
-| `DictionaryRegistry`                                      | Augmented with your dictionary names and content types                                                  |
-| `DictionaryKey`, `ResolveDictionaryType<K>`               | Key and content typing helpers                                                                          |
-| `Dictionary<T>`                                           | `Record<Locales, T>`                                                                                    |
-| `DictionaryDefinition<N, T>`                              | Return type of `defineDictionary`                                                                       |
-| `globalDictionaries`                                      | In-process registry populated by `defineDictionary`                                                     |
-
-## `dialexjs/server`
-
-`createDialexServer(dialex)` binds the generated `dialex` export and returns `{ getDictionary, getT }`: `getDictionary(name, locale?)` returns the dictionary content for a locale and `getT(locale?)` returns a `t` function. See [Next.js](../frameworks/nextjs.md).
-
-## `dialexjs/react`
-
-`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. See [React / Vite](../frameworks/react.md).
-
-## `dialexjs/vue` and `dialexjs/nuxt`
-
-`createDialex`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`, and the Nuxt module. See [Vue / Nuxt](../frameworks/vue.md).
-
-## `dialexjs/svelte`
-
-`provideDialex`, `useDialex`, `useDictionary`, `useT`, `createSvelteDialex`, `preloadDictionaries`. See [Svelte](../frameworks/svelte.md).
-
-## `dialexjs/solid`
-
-`DialexProvider`, `useDialex`, `useDictionary`, `useT`, `preloadDictionaries`. See [Solid](../frameworks/solid.md).
-
-## `dialexjs/preact`
-
-`DialexProvider`, `useDialex`, `useDialexConfig`, `useDictionary`, `useT`, `preloadDictionaries`. See [Preact](../frameworks/preact.md).
-
-## `dialexjs/qwik`
-
-`createDialexQwik` returns `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` and `useT`; `preloadDictionaries`. See [Qwik](../frameworks/qwik.md).
-
-## `dialexjs/lit`
-
-`createDialex`, `DialexController`, `preloadDictionaries`. See [Lit](../frameworks/lit.md).
-
-## `dialexjs/react-native`
-
-`DialexProvider` (with `deviceLocales` and `storage`), and the `useDialex`, `useDialexConfig`, `useDictionary`, `useT` and `preloadDictionaries` hooks of `dialexjs/react`. See [React Native](../frameworks/react-native.md).
-
-## Server adapters
-
-`dialexjs/express` (`dialex`), `dialexjs/fastify` (`dialexPlugin`), `dialexjs/koa` (`dialex`), `dialexjs/hono` (`dialex`), `dialexjs/nestjs` (`DialexModule` and friends), `dialexjs/elysia` (`dialex`), `dialexjs/sveltekit` (`dialexHandle`), `dialexjs/astro` (`dialex`), `dialexjs/hapi` (`dialexPlugin`), `dialexjs/adonis` (`createDialexMiddleware`), `dialexjs/trpc` (`createDialexContext`). Shared options are in [Locale Detection](../guide/locale-detection.md#options).
-
-## `dialexjs/routing`
-
-`localizePath`, `stripLocale`, `alternateLinks`, `alternateLanguages`, `sitemapEntries`. See [Routing Helpers](../guide/routing.md).
-
-## `dialexjs/next/middleware` and `dialexjs/next/link`
-
-`createDialexMiddleware(options)` and `DialexLink`. See [Next.js](../frameworks/nextjs.md).
-
-## `dialexjs/angular`
-
-`provideDialex`, `injectDialex`, `injectDictionary`, `injectT`, `DIALEX`. See [Angular](../frameworks/angular.md).
-
-## `dialexjs/web` and `dialexjs/h3`
-
-`createDialexHandler(options)` for any `Request`, and the h3 1.x `dialex(options)` middleware. See [Fetch API](../frameworks/web.md) and [h3 / Nitro](../frameworks/h3.md).
-
-## `dialexjs/testing`
-
-`createTestDialex`, `mockRequest`, and the framework wrappers `TestDialexProvider` (`dialexjs/testing/react`) and `createTestDialex` (`dialexjs/testing/vue`). See [Testing](../guide/testing.md).
-
-## `@dialexjs/cli/api`
-
-`analyzeProject`, `readStaticConfig`, `scanReferences` and the dictionary editing helpers the [VS Code extension](../guide/vscode.md) is built on. They read dictionaries and configs from the syntax tree without running project code.
+- **Typed names and paths.** `DictionaryRegistry`, `Register` and `MessageArguments` are empty interfaces that `dialex generate` augments in `dialex-env.d.ts`. Until it has run, dictionary names and `t()` paths are plain `string`; afterwards they autocomplete and are checked. See [Types](./types.md).
+- **The generated `dialex` object.** Providers, adapters and `createDialexServer` accept `{ ...dialex }` from `dialex.generated.ts`. It carries the dictionaries, the client-safe config and, with lazy loading, the loaders, so locale settings are written once, in `dialex.config.ts`.
+- **Failures.** A missing dictionary, locale or path never throws in production code: it logs `console.warn` with a `[dialex]` prefix and returns an empty object or the path itself. Invalid ICU messages are reported and returned unchanged by `t()`; `formatMessage` throws. Hooks that need a provider throw when it is missing.
+- **Stability.** Dialex is below 1.0. Breaking changes ship in minor releases and are listed in the [changelog](../guide/changelog.md).
