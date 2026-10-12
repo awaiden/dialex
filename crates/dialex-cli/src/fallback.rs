@@ -10,6 +10,11 @@ fn find_node_cli(cwd: &std::path::Path) -> Option<PathBuf> {
     let mut starts: Vec<PathBuf> = vec![cwd.to_path_buf()];
     if let Ok(exe) = std::env::current_exe() {
         if let Some(dir) = exe.parent() {
+            // installed in place of the launcher: `node_modules/@dialexjs/cli/bin/<this file>`
+            let beside = dir.join("../dist/index.mjs");
+            if beside.is_file() {
+                return Some(beside);
+            }
             starts.push(dir.to_path_buf());
         }
     }

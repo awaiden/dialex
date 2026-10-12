@@ -13,12 +13,13 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "dialex": "./bin/launcher.mjs",
-    "dx": "./bin/launcher.mjs"
+    "dialex": "./dist/index.mjs",
+    "dx": "./dist/index.mjs"
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "scripts/install.mjs"
   ],
   "type": "module",
   "exports": {
@@ -31,6 +32,7 @@
     "access": "public"
   },
   "scripts": {
+    "postinstall": "node scripts/install.mjs",
     "build": "vp pack",
     "dev": "vp pack --watch",
     "test": "vp test",
