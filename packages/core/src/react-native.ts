@@ -19,6 +19,9 @@ export interface LocaleStorage {
   setItem(key: string, value: string): void | Promise<void>;
 }
 
+/**
+ * Props of the React Native `DialexProvider`: the generated `dialex` object, the device's languages and an async storage for the user's choice.
+ */
 export interface DialexProviderProps extends DialexSource {
   children?: ReactNode;
   /**

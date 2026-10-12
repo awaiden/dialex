@@ -13,6 +13,11 @@ import { getDictionaryStore, readDictionary, type DictionaryStore } from "./stor
 export { preloadDictionaries } from "./store.js";
 
 // This interface can be augmented by the generated .d.ts file
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
@@ -20,6 +25,9 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
+/**
+ * Options of `provideDialex` and `createSvelteDialex`: the starting locale, where the choice is remembered and a change callback.
+ */
 export interface DialexOptions {
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
   defaultLocale?: string;
@@ -43,6 +51,9 @@ export interface DialexOptions {
   onLocaleChange?: (locale: string) => void;
 }
 
+/**
+ * The reactive locale state of the Svelte adapter: the locale store, `setLocale`, and stores for a dictionary or a `t` function.
+ */
 export interface DialexSvelte {
   /** The active locale. Use it as `$locale` in components. */
   locale: Readable<string>;

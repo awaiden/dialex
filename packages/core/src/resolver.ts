@@ -9,6 +9,11 @@ export interface GeneratedConfig {
   [key: string]: unknown;
 }
 
+/**
+ * Options that decide a request's locale, shared by every server adapter. The sources are checked
+ * in this order: `custom`, the first path segment, query parameters, cookies, then the `Accept-Language`
+ * header (`headerKey`). The first match against `locales` wins, otherwise `defaultLocale`.
+ */
 export interface LocaleResolverOptions {
   /**
    * The generated config from `dialex.generated.ts` (`{ ...dialex }` sets this together with

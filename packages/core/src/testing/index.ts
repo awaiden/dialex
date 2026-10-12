@@ -1,6 +1,9 @@
 import { createT, type Locales, type Translate } from "../index.js";
 import { createGetDictionary, normalizeDictionaries, type DictionaryInput } from "../shared.js";
 
+/**
+ * Options of `createTestDialex`: the dictionaries to serve and the locale to render with.
+ */
 export interface TestDialexOptions {
   /** Dictionaries to serve: `defineDictionary` results or a `{ name: { locale: content } }` map. */
   dictionaries: DictionaryInput;
@@ -12,6 +15,9 @@ export interface TestDialexOptions {
   fallbacks?: Record<string, string[]>;
 }
 
+/**
+ * The test context `createTestDialex` returns: the locale, `getDictionary`, `t`, and `withLocale` to switch locale.
+ */
 export interface TestDialex {
   locale: Locales;
   getDictionary: (name: string) => any;
@@ -50,6 +56,9 @@ export function createTestDialex(options: TestDialexOptions): TestDialex {
   };
 }
 
+/**
+ * Options of `mockRequest`: the locale to resolve to, how it is conveyed (header, cookie, query or path) and the usual request parts.
+ */
 export interface MockRequestOptions {
   /** Locale the request should resolve to. */
   locale?: string;

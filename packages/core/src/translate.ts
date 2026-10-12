@@ -20,6 +20,9 @@ export type PathsOf<T> = T extends Leaf
 
 // With an empty registry (before `dialex generate`) every path is a plain string.
 // oxlint-disable-next-line typescript(no-redundant-type-constituents)
+/**
+ * Every valid `t()` path: `dictionary.key.path` for each leaf of each registered dictionary, or any `string` before `dialex generate` has run.
+ */
 export type TranslationPath = [keyof DictionaryRegistry] extends [never]
   ? string
   : // oxlint-disable-next-line typescript(no-redundant-type-constituents)
@@ -55,9 +58,15 @@ export type TranslationArgs<P extends string> =
       ? [values: MessageArguments[P]]
       : [values?: IcuValues];
 
+/**
+ * What `t(path)` returns: the string, or the return type of a function leaf.
+ */
 export type TranslationResult<P extends string> =
   LeafOf<P> extends (...args: any[]) => infer R ? R : LeafOf<P>;
 
+/**
+ * The `t("dictionary.key.path", ...args)` function: typed paths, typed arguments and a typed result.
+ */
 export type Translate = <P extends TranslationPath>(
   path: P,
   ...args: TranslationArgs<P>

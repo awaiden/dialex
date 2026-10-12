@@ -8,6 +8,9 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
+/**
+ * The helpers `createDialexServer` returns: `getDictionary(name, locale?)` for server code and `getT(locale?)` for a bound `t` function.
+ */
 export interface DialexServer {
   /**
    * Retrieves a dictionary for Server Components or Node.js servers.
@@ -67,4 +70,7 @@ export function createDialexServer(source: DialexSource): DialexServer {
   return { getDictionary, getT } as DialexServer;
 }
 
+/**
+ * Re-exported so `dialexjs/server` users can see the registry that `dialex generate` augments.
+ */
 export type { DictionaryRegistry } from "./react.js";

@@ -7,6 +7,11 @@ import {
   type BaseAdapterOptions,
 } from "./shared.js";
 
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
@@ -14,8 +19,14 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
+/**
+ * Options of `createDialexHandler`: the shared locale detection options plus `dictionaries` and `setHeader`.
+ */
 export type WebDialexOptions = BaseAdapterOptions;
 
+/**
+ * What `createDialexHandler` resolves for one `Request`: the locale, the typed `getDictionary` and `t`, and the headers to send.
+ */
 export interface WebDialex {
   locale: Locales;
   getDictionary: <K extends DictionaryKey>(name: K) => ResolveDictionaryType<K>;

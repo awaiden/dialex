@@ -19,6 +19,11 @@ import {
 import { withConfig, type GeneratedConfig } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries, type DictionaryInput } from "./shared.js";
 
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
@@ -26,6 +31,9 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
+/**
+ * Options of `provideDialex`: the generated dictionaries and config, the locale to start with and where the choice is remembered.
+ */
 export interface AngularDialexOptions {
   /**
    * The dictionaries, usually the output of `dialex generate`:
@@ -55,6 +63,9 @@ export interface AngularDialexOptions {
   storageKey?: string;
 }
 
+/**
+ * The locale state of an Angular app. Everything on it is a signal, so templates and `computed` values update when the locale changes.
+ */
 export interface DialexStore {
   /** The active locale. Read it in a template or `computed` to react to changes. */
   readonly locale: Signal<string>;
@@ -68,6 +79,9 @@ export interface DialexStore {
   readonly t: Translate;
 }
 
+/**
+ * Injection token under which `provideDialex` provides its options.
+ */
 export const DIALEX_OPTIONS = new InjectionToken<AngularDialexOptions>("DIALEX_OPTIONS");
 
 function createStore(rawOptions: AngularDialexOptions): DialexStore {

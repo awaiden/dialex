@@ -1,9 +1,18 @@
 import { dateTimeFormat, formatNumber, numberFormat, pluralCategory } from "../intl.js";
 import { parseMessage, type IcuNode } from "./parse.js";
 
+/**
+ * A value an ICU argument can take.
+ */
 export type IcuValue = string | number | boolean | Date | null | undefined;
+/**
+ * The values passed to `formatMessage`, by argument name.
+ */
 export type IcuValues = Record<string, IcuValue>;
 
+/**
+ * Thrown by `formatMessage` when a value is missing or has the wrong type (for example a non-number for a `plural`).
+ */
 export class IcuFormatError extends Error {
   constructor(message: string) {
     super(message);

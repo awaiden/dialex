@@ -5,6 +5,9 @@ import { addImports, addPluginTemplate, defineNuxtModule } from "@nuxt/kit";
 
 import type { DialexConfig } from "./index.js";
 
+/**
+ * Options of the Nuxt module, set under the `dialex` key of `nuxt.config.ts`. They extend `DialexConfig`; locales and defaults normally come from `dialex.config.ts`.
+ */
 export interface NuxtDialexOptions extends DialexConfig {
   /**
    * Cookie used to persist the selected locale.

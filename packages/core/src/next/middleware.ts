@@ -4,6 +4,9 @@ import type { LocaleResolverOptions } from "../resolver.js";
 import { localizePath, stripLocale, type RoutingOptions } from "../routing.js";
 import { resolveRequestLocale } from "../shared.js";
 
+/**
+ * Options of `createDialexMiddleware`: the routing settings, the cookie that remembers the locale, and which paths to skip.
+ */
 export interface DialexMiddlewareOptions
   extends RoutingOptions, Omit<LocaleResolverOptions, "locales" | "defaultLocale" | "usePath"> {
   /**

@@ -13,6 +13,9 @@ import { localizePath } from "../routing.js";
 const Link: ComponentType<any> =
   (LinkModule as any).default?.default ?? (LinkModule as any).default ?? LinkModule;
 
+/**
+ * Props of `DialexLink`: everything `next/link` and an anchor take, plus an optional target `locale`.
+ */
 export interface DialexLinkProps
   extends
     Omit<LinkProps<any>, "locale" | "href">,

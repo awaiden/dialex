@@ -11,6 +11,11 @@ import {
 } from "./resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "./shared.js";
 
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
@@ -18,6 +23,9 @@ type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
 
+/**
+ * Options of the Fastify plugin: the shared locale detection options, the dictionaries to read and whether to send `Content-Language`.
+ */
 export interface FastifyDialexOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
@@ -137,6 +145,9 @@ const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify,
   });
 };
 
+/**
+ * The Fastify plugin. Register it with `app.register(dialexPlugin, { ...dialex })`; it decorates every request with `locale` and `getDictionary(name)` and sets `Content-Language`.
+ */
 export const dialexPlugin = fp(dialexPluginFn, {
   name: "dialex-fastify",
   fastify: ">=4.0.0",

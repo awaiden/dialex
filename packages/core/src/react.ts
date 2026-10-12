@@ -30,6 +30,9 @@ interface DialexContextType {
 
 const DialexContext = createContext<DialexContextType | undefined>(undefined);
 
+/**
+ * Props of the React `DialexProvider`: spread the generated `dialex` object into it, then optionally set the starting locale and persistence.
+ */
 export interface DialexProviderProps extends DialexSource {
   children: ReactNode;
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
@@ -54,6 +57,18 @@ export interface DialexProviderProps extends DialexSource {
   onLocaleChange?: (locale: string) => void;
 }
 
+/**
+ * Provides the active locale, `setLocale` and the dictionaries to the tree below it.
+ *
+ * ```tsx
+ * import { DialexProvider } from "dialexjs/react";
+ * import { dialex } from "./dialex.generated";
+ *
+ * <DialexProvider {...dialex}>
+ *   <App />
+ * </DialexProvider>;
+ * ```
+ */
 export function DialexProvider({
   children,
   dictionaries,
@@ -105,6 +120,9 @@ export function DialexProvider({
   return React.createElement(DialexContext.Provider, { value }, children);
 }
 
+/**
+ * The active locale, `setLocale` and the dictionary store of the nearest `DialexProvider`. Throws outside a provider.
+ */
 export function useDialex() {
   const context = useContext(DialexContext);
   if (!context) {
@@ -114,6 +132,11 @@ export function useDialex() {
 }
 
 // This interface can be augmented by the generated .d.ts file
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;

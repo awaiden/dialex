@@ -31,6 +31,9 @@ export interface TranslateProvider {
   translate(texts: string[], from: string, to: string): Promise<string[]>;
 }
 
+/**
+ * Settings of `dialex translate`. Nothing is sent anywhere unless a `provider` is set.
+ */
 export interface TranslateConfig {
   /** Backend used to fill missing translations. */
   provider: TranslateProvider;
@@ -81,6 +84,16 @@ export interface DialexSource {
   loaders?: DictionaryLoaders;
 }
 
+/**
+ * The shape of `dialex.config.ts`. Every field is optional. The CLI and the language server read the
+ * file from its syntax tree, so use literal values where you can.
+ *
+ * ```ts
+ * import { defineConfig } from "dialexjs";
+ *
+ * export default defineConfig({ defaultLocale: "en", locales: ["en", "tr"] });
+ * ```
+ */
 export interface DialexConfig {
   /**
    * The default locale to use.
@@ -135,10 +148,20 @@ export interface DialexConfig {
   translate?: TranslateConfig;
 }
 
+/**
+ * Gives `dialex.config.ts` its types. It returns the object unchanged.
+ *
+ * ```ts
+ * export default defineConfig({ defaultLocale: "en", locales: ["en", "tr"] });
+ * ```
+ */
 export function defineConfig(config: DialexConfig): DialexConfig {
   return config;
 }
 
+/**
+ * Augmented in `dialex-env.d.ts` with `locales`, a tuple of your configured locales, which narrows the `Locales` type.
+ */
 export interface Register {}
 
 /**
@@ -147,37 +170,73 @@ export interface Register {}
  */
 export interface MessageArguments {}
 
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in `dialex-env.d.ts`,
+ * which types `getDictionary("home")` and `t("home.title")`. Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
+/**
+ * A dictionary name: the registered names with autocomplete, or any `string` before `dialex generate` has run.
+ */
 export type DictionaryKey = [keyof DictionaryRegistry] extends [never]
   ? string
   : // oxlint-disable-next-line typescript(no-redundant-type-constituents)
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     keyof DictionaryRegistry | (string & {});
 
+/**
+ * The content type of the dictionary named `K`, or `any` when it is not registered.
+ */
 export type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry
   ? DictionaryRegistry[K]
   : any;
 
+/**
+ * The union of your configured locales (from `dialex-env.d.ts`), or `string` before `dialex generate` has run.
+ */
 export type Locales = Register extends { locales: infer L }
   ? L extends string
     ? L
     : string
   : string;
 
+/**
+ * A dictionary's content for every configured locale, keyed by locale.
+ */
 export type Dictionary<T extends Record<string, any>> = Record<Locales, T>;
 
+/**
+ * What `defineDictionary` returns: the dictionary's `name` and its content by locale.
+ */
 export interface DictionaryDefinition<N extends string, T extends Record<string, any>> {
   name: N;
   dictionary: Record<string, T>;
 }
 
+/**
+ * The registry that `defineDictionary` fills in the current process. Adapters read it when you do not pass `dictionaries` to them.
+ */
 export const globalDictionaries: Record<string, Record<string, any>> = {};
 
+/**
+ * Defines a dictionary and registers it in `globalDictionaries`. Put each one in a `*.content.ts`
+ * file; `dialex generate` finds it, compiles it and types it.
+ *
+ * ```ts
+ * export default defineDictionary("home", {
+ *   en: { title: "Welcome" },
+ *   tr: { title: "Hoş geldiniz" },
+ * });
+ * ```
+ */
 export function defineDictionary<N extends string, D extends Record<string, any>>(
   name: N,
   dictionary: D,
 ): DictionaryDefinition<N, D[keyof D]>;
+/**
+ * The object form of `defineDictionary`: `defineDictionary({ name: "home", dictionary: { en: {...} } })`.
+ */
 export function defineDictionary<N extends string, D extends Record<string, any>>(config: {
   name: N;
   dictionary: D;

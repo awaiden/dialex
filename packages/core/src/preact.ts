@@ -13,6 +13,11 @@ import { getDictionaryStore, readDictionary, type DictionaryStore } from "./stor
 export { preloadDictionaries } from "./store.js";
 
 // This interface can be augmented by the generated .d.ts file
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
@@ -20,6 +25,9 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
+/**
+ * Props of the Preact `DialexProvider`: spread the generated `dialex` object into it, then optionally set the starting locale and persistence.
+ */
 export interface DialexProviderProps extends DialexSource {
   children?: ComponentChildren;
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
@@ -44,6 +52,9 @@ export interface DialexProviderProps extends DialexSource {
   onLocaleChange?: (locale: string) => void;
 }
 
+/**
+ * What `useDialex()` returns: the active locale, `setLocale` and the dictionary store.
+ */
 export interface DialexContext {
   locale: string;
   setLocale: (locale: string) => void;
@@ -137,6 +148,9 @@ export function DialexProvider({
   return createElement(DialexPreactContext.Provider, { value }, children);
 }
 
+/**
+ * The active locale, `setLocale` and the dictionary store of the nearest `DialexProvider`. Throws outside a provider.
+ */
 export function useDialex(): DialexContext {
   const context = useContext(DialexPreactContext);
   if (!context) {

@@ -1,3 +1,6 @@
+/**
+ * The locale settings every routing helper needs.
+ */
 export interface RoutingOptions {
   /** Supported locales. */
   locales: string[];
@@ -84,12 +87,18 @@ export function localizePath(path: string, locale: string, options: RoutingOptio
   return prefixed + suffix;
 }
 
+/**
+ * One `hreflang` alternate of a page.
+ */
 export interface AlternateLink {
   /** Locale tag, or `"x-default"`. */
   locale: string;
   href: string;
 }
 
+/**
+ * Options of `alternateLinks`: the routing settings plus the site origin.
+ */
 export interface AlternateLinksOptions extends RoutingOptions {
   /** Origin used to build absolute URLs, e.g. `https://example.com`. */
   baseUrl: string;
@@ -127,6 +136,9 @@ export function alternateLanguages(
   return Object.fromEntries(alternateLinks(path, options).map((l) => [l.locale, l.href]));
 }
 
+/**
+ * One sitemap URL with its `hreflang` alternates, in the shape of Next.js `MetadataRoute.Sitemap`.
+ */
 export interface SitemapEntry {
   url: string;
   lastModified?: string | Date;

@@ -1,3 +1,6 @@
+/**
+ * A node of a parsed ICU message: literal text, an argument, a formatted argument, a `plural` or `select`, or `#`.
+ */
 export type IcuNode =
   | { type: "literal"; value: string }
   | { type: "argument"; name: string }
@@ -16,6 +19,9 @@ export type IcuNode =
   /** `#` inside a plural branch. */
   | { type: "pound" };
 
+/**
+ * Thrown by `parseMessage` and `formatMessage` for an invalid ICU message. `position` is the zero-based offset of the problem.
+ */
 export class IcuSyntaxError extends Error {
   constructor(
     message: string,

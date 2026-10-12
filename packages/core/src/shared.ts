@@ -8,10 +8,16 @@ import {
   type LocaleResolverOptions,
 } from "./resolver.js";
 
+/**
+ * Dictionaries as a map `{ name: { locale: content } }` or as an array of `defineDictionary` results.
+ */
 export type DictionaryInput =
   | Record<string, Record<string, any>>
   | (DictionaryDefinition<any, any> | Record<string, any>)[];
 
+/**
+ * The options every server adapter accepts: the locale detection options, the dictionaries to read and whether to send `Content-Language`.
+ */
 export interface BaseAdapterOptions extends LocaleResolverOptions {
   /**
    * Optional direct dictionary map or array of defineDictionary definitions.
@@ -71,6 +77,9 @@ export function createGetDictionary(params: {
   };
 }
 
+/**
+ * The parts of a request that decide its locale, read out of any framework's request object.
+ */
 export interface RequestParts {
   /** Result of the user-supplied `custom` extractor, if any. */
   custom?: string | null;

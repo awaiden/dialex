@@ -1,5 +1,8 @@
 import type { IcuNode } from "./parse.js";
 
+/**
+ * The kinds of ICU argument `getArguments` reports.
+ */
 export type IcuArgumentType =
   | "argument"
   | "number"
@@ -9,6 +12,9 @@ export type IcuArgumentType =
   | "selectordinal"
   | "select";
 
+/**
+ * One argument of an ICU message: its name, its kind and, for `plural` and `select`, the selectors in source order.
+ */
 export interface IcuArgument {
   name: string;
   type: IcuArgumentType;

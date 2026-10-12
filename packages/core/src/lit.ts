@@ -12,6 +12,11 @@ import { getDictionaryStore, readDictionary, type DictionaryStore } from "./stor
 export { preloadDictionaries } from "./store.js";
 
 // This interface can be augmented by the generated .d.ts file
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
@@ -19,6 +24,9 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
 
+/**
+ * Options of `createDialex`: the generated dictionaries and config, the locale to start with and where the choice is remembered.
+ */
 export interface CreateDialexOptions extends DialexSource {
   /** Locale used when nothing else decides. Falls back to the config, then `"en"`. */
   defaultLocale?: string;

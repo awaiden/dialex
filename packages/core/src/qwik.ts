@@ -18,6 +18,11 @@ import { getDictionaryStore, readDictionary } from "./store.js";
 export { preloadDictionaries } from "./store.js";
 
 // This interface can be augmented by the generated .d.ts file
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
 export interface DictionaryRegistry {}
 
 type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
@@ -32,6 +37,9 @@ export interface DialexState {
   loaded: number;
 }
 
+/**
+ * Options of `createDialexQwik`: the generated dictionaries and config and where `setLocale` remembers the choice.
+ */
 export interface CreateDialexQwikOptions extends DialexSource {
   /**
    * Where `setLocale` remembers the choice. Reading it back is up to the server, which passes the
@@ -46,6 +54,9 @@ export interface CreateDialexQwikOptions extends DialexSource {
   storageKey?: string;
 }
 
+/**
+ * Options of `useDialexProvider`: the locale to start with, usually the one the server resolved.
+ */
 export interface UseDialexProviderOptions {
   /** The locale to start with, for example the one the server resolved from the request. */
   initialLocale?: string;

@@ -3,6 +3,9 @@ import { createElement, type ReactNode } from "react";
 import type { DialexSource } from "../index.js";
 import { DialexProvider } from "../react.js";
 
+/**
+ * Props of `TestDialexProvider`: the generated `dialex` object (or your own dictionaries) and the locale to render with.
+ */
 export interface TestDialexProviderProps extends DialexSource {
   /** Locale to render with. @default the configured default locale */
   locale?: string;
