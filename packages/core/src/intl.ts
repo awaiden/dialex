@@ -36,72 +36,65 @@ function memoize<O extends object | undefined, T>(
   };
 }
 
-export const numberFormat = memoize<Intl.NumberFormatOptions | undefined, Intl.NumberFormat>(
-  (locale, options) => new Intl.NumberFormat(locale, options),
-);
+export const numberFormat = /* @__PURE__ */ memoize<
+  Intl.NumberFormatOptions | undefined,
+  Intl.NumberFormat
+>((locale, options) => new Intl.NumberFormat(locale, options));
 
-export const pluralRules = memoize<Intl.PluralRulesOptions | undefined, Intl.PluralRules>(
-  (locale, options) => new Intl.PluralRules(locale, options),
-);
+export const pluralRules = /* @__PURE__ */ memoize<
+  Intl.PluralRulesOptions | undefined,
+  Intl.PluralRules
+>((locale, options) => new Intl.PluralRules(locale, options));
 
-export const dateTimeFormat = memoize<Intl.DateTimeFormatOptions | undefined, Intl.DateTimeFormat>(
-  (locale, options) => new Intl.DateTimeFormat(locale, options),
-);
+export const dateTimeFormat = /* @__PURE__ */ memoize<
+  Intl.DateTimeFormatOptions | undefined,
+  Intl.DateTimeFormat
+>((locale, options) => new Intl.DateTimeFormat(locale, options));
 
-export const relativeTimeFormat = memoize<
+export const relativeTimeFormat = /* @__PURE__ */ memoize<
   Intl.RelativeTimeFormatOptions | undefined,
   Intl.RelativeTimeFormat
 >((locale, options) => new Intl.RelativeTimeFormat(locale, options));
 
-export const listFormat = memoize<Intl.ListFormatOptions | undefined, Intl.ListFormat>(
-  (locale, options) => new Intl.ListFormat(locale, options),
-);
+export const listFormat = /* @__PURE__ */ memoize<
+  Intl.ListFormatOptions | undefined,
+  Intl.ListFormat
+>((locale, options) => new Intl.ListFormat(locale, options));
 
 // The two Intl calls a plural message makes on every call (`PluralRules.select` and the
 // `NumberFormat.format` of `#`) cost far more than the rest of the message. Their results for small
 // non-negative integers are memoized per locale: the stored value is whatever Intl returned, so it
 // is exact for every locale and numbering system, and anything else still goes to Intl.
 
-const SMALL = 256;
-const CARDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "cardinal" });
-const ORDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "ordinal" });
-
-interface Small {
-  cardinal: (string | undefined)[];
-  ordinal: (string | undefined)[];
-  integers: (string | undefined)[];
-}
-
-const small = new Map<string, Small>();
-
-function smallFor(locale: string): Small {
-  let state = small.get(locale);
-  if (!state) {
-    if (small.size >= LIMIT) small.clear();
-    state = { cardinal: [], ordinal: [], integers: [] };
-    small.set(locale, state);
-  }
-  return state;
-}
+/** Per locale: the cardinal categories, the ordinal ones and the formatted integers, by number. */
+const small = new Map<string, (string | undefined)[][]>();
 
 /** Whether `n` is 0 to 255 (`-0` is not: Intl may tell it apart from 0). */
 const isSmall = (n: number): boolean =>
-  n >= 0 && n < SMALL && (n | 0) === n && (n !== 0 || 1 / n > 0);
+  n >= 0 && n < 256 && (n | 0) === n && (n !== 0 || 1 / n > 0);
 
 /** `new Intl.PluralRules(locale, { type }).select(n)`, memoized for small integers. */
 export function pluralCategory(locale: string, ordinal: boolean, n: number): string {
-  if (isSmall(n)) {
-    const table = ordinal ? smallFor(locale).ordinal : smallFor(locale).cardinal;
-    return (table[n] ??= pluralRules(locale, ordinal ? ORDINAL : CARDINAL).select(n));
-  }
-  return pluralRules(locale, ordinal ? ORDINAL : CARDINAL).select(n);
+  const options = ordinal ? ORDINAL : CARDINAL;
+  if (!isSmall(n)) return pluralRules(locale, options).select(n);
+  const table = tables(locale)[+ordinal];
+  return (table[n] ??= pluralRules(locale, options).select(n));
 }
 
 /** `new Intl.NumberFormat(locale).format(n)`, memoized for small integers. */
 export function formatNumber(locale: string, n: number): string {
-  if (isSmall(n)) {
-    const table = smallFor(locale).integers;
-    return (table[n] ??= numberFormat(locale).format(n));
+  if (!isSmall(n)) return numberFormat(locale).format(n);
+  return (tables(locale)[2][n] ??= numberFormat(locale).format(n));
+}
+
+const CARDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "cardinal" });
+const ORDINAL: Intl.PluralRulesOptions = Object.freeze({ type: "ordinal" });
+
+function tables(locale: string): (string | undefined)[][] {
+  let found = small.get(locale);
+  if (!found) {
+    if (small.size >= LIMIT) small.clear();
+    small.set(locale, (found = [[], [], []]));
   }
-  return numberFormat(locale).format(n);
+  return found;
 }
