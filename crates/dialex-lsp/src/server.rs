@@ -1,7 +1,7 @@
 //! The LSP loop (a port of `server.ts`): one thread, whole-file analysis from disk, debounced
 //! refreshes, and the same request/response shapes as the Node server.
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant, SystemTime};
@@ -72,7 +72,10 @@ struct Server {
     documents: HashMap<String, String>,
     projects: Vec<Project>,
     layout: HashMap<PathBuf, Vec<ProjectRoot>>,
-    published: HashSet<String>,
+    /// Files may have appeared or gone since the tree was last walked.
+    layout_dirty: bool,
+    /// What each file's diagnostics were when last sent, so only changes are sent again.
+    published: HashMap<String, Vec<Value>>,
     refresh_at: Option<Instant>,
     generate_at: Option<Instant>,
     next_poll: Instant,
@@ -106,7 +109,8 @@ impl Server {
             documents: HashMap::new(),
             projects: Vec::new(),
             layout: HashMap::new(),
-            published: HashSet::new(),
+            layout_dirty: true,
+            published: HashMap::new(),
             refresh_at: None,
             generate_at: None,
             next_poll: Instant::now() + POLL_EVERY,
@@ -354,6 +358,7 @@ impl Server {
             }
         }
         self.settings = settings;
+        self.layout_dirty = true;
         self.schedule_refresh();
         self.schedule_generate();
     }
@@ -369,8 +374,18 @@ impl Server {
             .collect()
     }
 
+    /// Forgets the walked tree when files may have appeared or gone. A client that sends file
+    /// events says so; without them every pass has to look again.
+    fn forget_layout(&mut self) {
+        if self.layout_dirty || !self.client_watches {
+            forget_walks();
+            self.layout_dirty = false;
+        }
+    }
+
     fn refresh(&mut self) {
-        forget_walks();
+        let started = Instant::now();
+        self.forget_layout();
         let mut projects: Vec<Project> = Vec::new();
 
         if self.settings.enable {
@@ -419,9 +434,17 @@ impl Server {
                 }
             }
         }
+        let dictionaries: usize = projects.iter().map(|p| p.analysis.dictionaries.len()).sum();
         self.projects = projects;
         self.publish();
         self.watch_state = self.disk_signature();
+        self.log(
+            4,
+            format!(
+                "analyzed {dictionaries} dictionaries in {} ms",
+                started.elapsed().as_millis()
+            ),
+        );
     }
 
     fn publish(&mut self) {
@@ -435,18 +458,20 @@ impl Server {
             }
         }
 
-        let mut next: HashSet<String> = HashSet::new();
+        let mut next: HashMap<String, Vec<Value>> = HashMap::new();
         for (file, diagnostics) in by_file {
             let uri = path_to_uri(&file);
-            next.insert(uri.clone());
-            self.notify(
-                "textDocument/publishDiagnostics",
-                json!({ "uri": uri, "diagnostics": diagnostics }),
-            );
+            if self.published.get(&uri) != Some(&diagnostics) {
+                self.notify(
+                    "textDocument/publishDiagnostics",
+                    json!({ "uri": uri, "diagnostics": diagnostics }),
+                );
+            }
+            next.insert(uri, diagnostics);
         }
         // Files that had problems before and have none now need an explicit empty list.
-        for uri in &self.published {
-            if !next.contains(uri) {
+        for uri in self.published.keys() {
+            if !next.contains_key(uri) {
                 self.notify(
                     "textDocument/publishDiagnostics",
                     json!({ "uri": uri, "diagnostics": [] }),
@@ -456,21 +481,21 @@ impl Server {
         self.published = next;
     }
 
-    /// The projects whose generated file exists; the others do not use one.
-    fn generated_projects(&mut self) -> Vec<(PathBuf, Options)> {
-        let mut found = Vec::new();
+    /// Keeps `dialex.generated.ts` and `dialex-env.d.ts` current in the projects that already
+    /// have one, reading the config from its syntax tree so no project code runs.
+    fn regenerate(&mut self) {
+        if !self.settings.auto_generate || !self.settings.enable {
+            return;
+        }
+        self.forget_layout();
         for folder in self.folders.clone() {
             for (root, _) in self.projects_in(&folder) {
                 let options = Options {
                     config: self.settings.config_path.clone(),
                     output: None,
                 };
-                match render(&root, &options) {
-                    Ok(rendered) => {
-                        if rendered.output_path.exists() {
-                            found.push((root, options));
-                        }
-                    }
+                let rendered = match render(&root, &options) {
+                    Ok(rendered) => rendered,
                     Err(error) => {
                         self.log(
                             3,
@@ -480,45 +505,36 @@ impl Server {
                                 error.0
                             ),
                         );
+                        continue;
+                    }
+                };
+                // projects without a generated file do not use one
+                let Ok(before) = fs::read_to_string(&rendered.output_path) else {
+                    continue;
+                };
+                match write(&rendered) {
+                    Ok(()) => {
+                        if before != rendered.content {
+                            let relative = rendered
+                                .output_path
+                                .strip_prefix(&root)
+                                .unwrap_or(&rendered.output_path)
+                                .display()
+                                .to_string();
+                            self.log(
+                                3,
+                                format!(
+                                    "[{}] regenerated {relative} ({} dictionaries)",
+                                    root.display(),
+                                    rendered.files.len()
+                                ),
+                            );
+                        }
+                    }
+                    Err(error) => {
+                        self.log(1, format!("[{}] generate failed: {error}", root.display()))
                     }
                 }
-            }
-        }
-        found
-    }
-
-    /// Keeps `dialex.generated.ts` and `dialex-env.d.ts` current, reading the config from its
-    /// syntax tree so no project code runs.
-    fn regenerate(&mut self) {
-        if !self.settings.auto_generate || !self.settings.enable {
-            return;
-        }
-        forget_walks();
-        for (root, options) in self.generated_projects() {
-            let Ok(rendered) = render(&root, &options) else {
-                continue;
-            };
-            let before = fs::read_to_string(&rendered.output_path).unwrap_or_default();
-            match write(&rendered) {
-                Ok(()) => {
-                    if before != rendered.content {
-                        let relative = rendered
-                            .output_path
-                            .strip_prefix(&root)
-                            .unwrap_or(&rendered.output_path)
-                            .display()
-                            .to_string();
-                        self.log(
-                            3,
-                            format!(
-                                "[{}] regenerated {relative} ({} dictionaries)",
-                                root.display(),
-                                rendered.files.len()
-                            ),
-                        );
-                    }
-                }
-                Err(error) => self.log(1, format!("[{}] generate failed: {error}", root.display())),
             }
         }
     }

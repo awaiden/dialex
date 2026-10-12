@@ -23,8 +23,8 @@ impl Project {
         let mut out: Vec<&AnalyzedDictionary> = Vec::new();
         for d in &self.analysis.dictionaries {
             match out.iter_mut().find(|e| e.name == d.name) {
-                Some(slot) => *slot = d,
-                None => out.push(d),
+                Some(slot) => *slot = &**d,
+                None => out.push(&**d),
             }
         }
         out
@@ -36,6 +36,7 @@ impl Project {
             .iter()
             .rev()
             .find(|d| d.name == name)
+            .map(|d| &**d)
     }
 
     /// Locales with the default locale first.

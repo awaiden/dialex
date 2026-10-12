@@ -9,9 +9,21 @@ use dialex_syntax::{parse_dictionary, Dictionary, ParseError};
 use rayon::prelude::*;
 
 /// Modification time and size, to tell whether a file changed since it was read.
-type Stamp = (Option<std::time::SystemTime>, u64);
+pub type Stamp = (Option<std::time::SystemTime>, u64);
 
-fn stamp_of(file: &std::path::Path) -> Option<Stamp> {
+/// Whether a file with this stamp was last modified long enough ago that an equal stamp means an
+/// equal file. A file written again within the timestamp's resolution, with the same size, would
+/// look unchanged, so a recently modified file is never trusted (the same "racy" rule as git).
+pub fn settled(stamp: &Option<Stamp>) -> bool {
+    let Some((Some(modified), _)) = stamp else {
+        return false;
+    };
+    std::time::SystemTime::now()
+        .duration_since(*modified)
+        .is_ok_and(|age| age > std::time::Duration::from_secs(2))
+}
+
+pub fn stamp_of(file: &std::path::Path) -> Option<Stamp> {
     let meta = fs::metadata(file).ok()?;
     Some((meta.modified().ok(), meta.len()))
 }
@@ -36,7 +48,10 @@ pub fn load_dictionaries(files: &[PathBuf]) -> Vec<Result<Arc<Loaded>, String>> 
         files
             .iter()
             .filter(|file| match known.get(*file) {
-                Some(loaded) => loaded.stamp != stamp_of(file),
+                Some(loaded) => {
+                    let now = stamp_of(file);
+                    loaded.stamp != now || !settled(&now)
+                }
                 None => true,
             })
             .collect()
