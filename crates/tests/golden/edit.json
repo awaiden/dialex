@@ -1,0 +1,926 @@
+[
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["title"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["title"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    title: \"[TODO] Welcome\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["nav", "home"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["nav", "home"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    nav: {\n      home: \"[TODO] Home\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["nav", "about"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["nav", "about"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    nav: {\n      about: \"[TODO] About\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["nav", "contact"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n      contact: \"[TODO] Contact\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["nav", "contact"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    nav: {\n      contact: \"[TODO] Contact\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["greeting"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["greeting"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    greeting: (name: string) => `Hello, ${name}!`,\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["items"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["items"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    items: \"[TODO] {count, plural, one {# item} other {# items}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["note"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n    note: \"[TODO] Pipes | and *stars*\\nsecond line\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["note"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    note: \"[TODO] Pipes | and *stars*\\nsecond line\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["method"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n\n    method(n: number) {\n      return n * 2;\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["method"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    method(n: number) {\n      return n * 2;\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["title"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["title"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    title: \"[TODO] Hoş Geldiniz\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["nav", "home"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["nav", "home"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    nav: {\n      home: \"[TODO] Ana sayfa\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["nav", "about"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["nav", "about"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    nav: {\n      about: \"[TODO] Hakkında\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["greeting"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["greeting"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    greeting: (name: string) => `Merhaba, ${name}!`,\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["items"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["items"],
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    items: \"[TODO] {count, plural, other {# ürün}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "updated",
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Changed\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n      pricing: \"[TODO] pricing\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n      pricing: \"[TODO] pricing\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n\n    brand: {\n      new: {\n        deep: \"[TODO] deep\",\n      },\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n\n  de: {\n    a: \"[TODO] a\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "home",
+    "source": "import { defineDictionary } from \"dialexjs\";\n\nexport default defineDictionary(\"home\", {\n  en: {\n    title: \"Welcome\",\n    nav: {\n      home: \"Home\",\n      about: \"About\",\n      contact: \"Contact\",\n    },\n    greeting: (name: string) => `Hello, ${name}!`,\n    items: \"{count, plural, one {# item} other {# items}}\",\n    note: \"Pipes | and *stars*\\nsecond line\",\n    method(n: number) {\n      return n * 2;\n    },\n  },\n  tr: {\n    title: \"Hoş Geldiniz\",\n    nav: {\n      home: \"Ana sayfa\",\n      about: \"Hakkında\",\n    },\n    greeting: (name: string) => `Merhaba, ${name}!`,\n    items: \"{count, plural, other {# ürün}}\",\n  },\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "skipped",
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", b: \"B\" },\n  tr: { a: \"a\" },\n\n  de: {\n    a: \"[TODO] A\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: {\n  a: \"a\",\n  b: \"[TODO] B\"\n} });\n"
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "en",
+    "to": "de",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", b: \"B\" },\n  tr: { a: \"a\" },\n\n  de: {\n    b: \"[TODO] B\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", b: \"B\" },\n  tr: { a: \"a\" },\n\n  de: {\n    a: \"[TODO] a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", { en: {\n  a: \"A\",\n  b: \"B\",\n  title: \"Changed\"\n}, tr: { a: \"a\" } });\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", { en: {\n  a: \"A\",\n  b: \"B\",\n\n  nav: {\n    pricing: \"[TODO] pricing\"\n  }\n}, tr: { a: \"a\" } });\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: {\n  a: \"a\",\n\n  nav: {\n    pricing: \"[TODO] pricing\"\n  }\n} });\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: {\n  a: \"a\",\n\n  brand: {\n    new: {\n      deep: \"[TODO] deep\"\n    }\n  }\n} });\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", b: \"B\" },\n  tr: { a: \"a\" },\n\n  de: {\n    a: \"[TODO] a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "singleLine",
+    "source": "export default defineDictionary(\"x\", { en: { a: \"A\", b: \"B\" }, tr: { a: \"a\" } });\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", { en: {\n  a: \"A\",\n  b: \"B\",\n  greeting: \"x\"\n}, tr: { a: \"a\" } });\n"
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n\n  tr: {\n    a: \"a\"\n  },\n\n  de: {\n    a: \"[TODO] A\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\",\n    b: \"[TODO] B\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n\n  tr: {\n    a: \"a\"\n  },\n\n  de: {\n    b: \"[TODO] B\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n\n  tr: {\n    a: \"a\"\n  },\n\n  de: {\n    a: \"[TODO] a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\",\n    title: \"Changed\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\",\n\n    nav: {\n      pricing: \"[TODO] pricing\"\n    }\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\",\n\n    nav: {\n      pricing: \"[TODO] pricing\"\n    }\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\",\n\n    brand: {\n      new: {\n        deep: \"[TODO] deep\"\n      }\n    }\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n\n  tr: {\n    a: \"a\"\n  },\n\n  de: {\n    a: \"[TODO] a\"\n  }\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "noTrailingComma",
+    "source": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    b: \"B\",\n    greeting: \"x\"\n  },\n  tr: {\n    a: \"a\"\n  }\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {\n    a: \"[TODO] A\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n\n  de: {\n    a: \"[TODO] A\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    title: \"Changed\",\n  },\n  tr: {},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n  tr: {},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {\n    brand: {\n      new: {\n        deep: \"[TODO] deep\",\n      },\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n\n  de: {\n    a: \"[TODO] a\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "emptyLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\" },\n  tr: {},\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    greeting: \"x\",\n  },\n  tr: {},\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n\n  de: {\n    a: \"[TODO] A\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["n", "deep", "er"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n\n  de: {\n    n: {\n      deep: {\n        er: \"[TODO] D\",\n      },\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    n: { deep: { er: \"D\" } },\n    title: \"Changed\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    n: { deep: { er: \"D\" } },\n\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n\n  tr: {\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n\n  tr: {\n    brand: {\n      new: {\n        deep: \"[TODO] deep\",\n      },\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n\n  de: {\n    a: \"[TODO] a\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "missingLocale",
+    "source": "export default defineDictionary(\"x\", {\n  en: { a: \"A\", n: { deep: { er: \"D\" } } },\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    a: \"A\",\n    n: { deep: { er: \"D\" } },\n    greeting: \"x\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n en: {\n\t\t\t\t\ta: \"A\",\n\t\t\t\t\tb: \"B\",\n\t},\n\n tr: {\n\t\t\t\t\ta: \"a\",\n\t},\n\n de: {\n\t a: \"[TODO] A\",\n\t},\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t\t\t\t\ta: \"A\",\n\t\t\t\t\t\t\t\tb: \"B\",\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t a: \"a\",\n\t\t\t\t b: \"[TODO] B\",\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["b"],
+    "result": "export default defineDictionary(\"x\", {\n en: {\n\t\t\t\t\ta: \"A\",\n\t\t\t\t\tb: \"B\",\n\t},\n\n tr: {\n\t\t\t\t\ta: \"a\",\n\t},\n\n de: {\n\t b: \"[TODO] B\",\n\t},\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["a"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["a"],
+    "result": "export default defineDictionary(\"x\", {\n en: {\n\t\t\t\t\ta: \"A\",\n\t\t\t\t\tb: \"B\",\n\t},\n\n tr: {\n\t\t\t\t\ta: \"a\",\n\t},\n\n de: {\n\t a: \"[TODO] a\",\n\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t a: \"A\",\n\t\t\t\t b: \"B\",\n\t\t\t\t title: \"Changed\",\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t\t\t\t\ta: \"a\",\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t a: \"A\",\n\t\t\t\t b: \"B\",\n\n\t\t\t\t nav: {\n\t\t\t\t\t pricing: \"[TODO] pricing\",\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t\t\t\t\ta: \"a\",\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t\t\t\t\ta: \"A\",\n\t\t\t\t\t\t\t\tb: \"B\",\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t a: \"a\",\n\n\t\t\t\t nav: {\n\t\t\t\t\t pricing: \"[TODO] pricing\",\n\t\t\t\t\t},\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t\t\t\t\ta: \"A\",\n\t\t\t\t\t\t\t\tb: \"B\",\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t a: \"a\",\n\n\t\t\t\t brand: {\n\t\t\t\t\t new: {\n\t\t\t\t\t\t deep: \"[TODO] deep\",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n en: {\n\t\t\t\t\ta: \"A\",\n\t\t\t\t\tb: \"B\",\n\t},\n\n tr: {\n\t\t\t\t\ta: \"a\",\n\t},\n\n de: {\n\t a: \"[TODO] a\",\n\t},\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "tabs",
+    "source": "export default defineDictionary(\"x\", {\n\ten: {\n\t\ta: \"A\",\n\t\tb: \"B\",\n\t},\n\ttr: {\n\t\ta: \"a\",\n\t},\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n\t\t\t\ten: {\n\t\t\t\t a: \"A\",\n\t\t\t\t b: \"B\",\n\t\t\t\t greeting: \"x\",\n\t\t\t\t},\n\t\t\t\ttr: {\n\t\t\t\t\t\t\t\ta: \"a\",\n\t\t\t\t},\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["a-b"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: {\n    e: \"e\",\n    \"a-b\": \"[TODO] A\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["a-b"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n\n  de: {\n    \"a-b\": \"[TODO] A\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["c.d"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: {\n    e: \"e\",\n    \"c.d\": \"[TODO] C\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["c.d"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n\n  de: {\n    \"c.d\": \"[TODO] C\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "tr",
+    "path": ["e"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "en",
+    "to": "de",
+    "path": ["e"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n\n  de: {\n    e: \"[TODO] E\",\n  },\n});\n"
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "tr",
+    "to": "en",
+    "path": ["e"],
+    "result": null
+  },
+  {
+    "kind": "copy",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "from": "tr",
+    "to": "de",
+    "path": ["e"],
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n\n  de: {\n    e: \"[TODO] e\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "en",
+    "path": ["title"],
+    "value": "Changed",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    \"a-b\": \"A\",\n    \"c.d\": \"C\",\n    e: \"E\",\n    title: \"Changed\",\n  },\n  tr: { e: \"e\" },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "en",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    \"a-b\": \"A\",\n    \"c.d\": \"C\",\n    e: \"E\",\n\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n  tr: { e: \"e\" },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "tr",
+    "path": ["nav", "pricing"],
+    "value": "[TODO] pricing",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: {\n    e: \"e\",\n\n    nav: {\n      pricing: \"[TODO] pricing\",\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "tr",
+    "path": ["brand", "new", "deep"],
+    "value": "[TODO] deep",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: {\n    e: \"e\",\n\n    brand: {\n      new: {\n        deep: \"[TODO] deep\",\n      },\n    },\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "de",
+    "path": ["a"],
+    "value": "[TODO] a",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n\n  de: {\n    a: \"[TODO] a\",\n  },\n});\n"
+  },
+  {
+    "kind": "set",
+    "name": "quotedKeys",
+    "source": "export default defineDictionary(\"x\", {\n  en: { \"a-b\": \"A\", \"c.d\": \"C\", e: \"E\" },\n  tr: { e: \"e\" },\n});\n",
+    "locale": "en",
+    "path": ["greeting"],
+    "value": "x",
+    "status": "created",
+    "result": "export default defineDictionary(\"x\", {\n  en: {\n    \"a-b\": \"A\",\n    \"c.d\": \"C\",\n    e: \"E\",\n    greeting: \"x\",\n  },\n  tr: { e: \"e\" },\n});\n"
+  }
+]

@@ -1,0 +1,9544 @@
+[
+  {
+    "message": "Hello, world",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello, world"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "",
+    "structured": false,
+    "nodes": [],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "Hello, {name}!",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello, "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "!"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{a}{b}{c}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "a"
+      },
+      {
+        "type": "argument",
+        "name": "b"
+      },
+      {
+        "type": "argument",
+        "name": "c"
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "argument"
+      },
+      {
+        "name": "b",
+        "type": "argument"
+      },
+      {
+        "name": "c",
+        "type": "argument"
+      }
+    ],
+    "type": "{ a: string | number | boolean | Date; b: string | number | boolean | Date; c: string | number | boolean | Date }",
+    "signature": "a:any,b:any,c:any",
+    "plurals": []
+  },
+  {
+    "message": "{a} and {b}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "a"
+      },
+      {
+        "type": "literal",
+        "value": " and "
+      },
+      {
+        "type": "argument",
+        "name": "b"
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "argument"
+      },
+      {
+        "name": "b",
+        "type": "argument"
+      }
+    ],
+    "type": "{ a: string | number | boolean | Date; b: string | number | boolean | Date }",
+    "signature": "a:any,b:any",
+    "plurals": []
+  },
+  {
+    "message": "'{'literal'}' {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{literal} "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "It''s {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "It's "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "don't {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "don't "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "'{' '}' ''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{ } '"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{ name }",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "=0": [
+            {
+              "type": "literal",
+              "value": "No items"
+            }
+          ],
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["=0", "one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["=0", "one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count,plural,one{# item}other{# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, offset:1 =0 {Nobody} =1 {Just you} one {You and # other} other {You and # others}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 1,
+        "options": {
+          "=0": [
+            {
+              "type": "literal",
+              "value": "Nobody"
+            }
+          ],
+          "=1": [
+            {
+              "type": "literal",
+              "value": "Just you"
+            }
+          ],
+          "one": [
+            {
+              "type": "literal",
+              "value": "You and "
+            },
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " other"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "You and "
+            },
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " others"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["=0", "=1", "one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["=0", "=1", "one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{rank, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "rank",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "two": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "nd"
+            }
+          ],
+          "few": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "rd"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "rank",
+        "type": "selectordinal",
+        "selectors": ["one", "two", "few", "other"]
+      }
+    ],
+    "type": "{ rank: number }",
+    "signature": "rank:selectordinal",
+    "plurals": [
+      {
+        "name": "rank",
+        "ordinal": true,
+        "options": ["one", "two", "few", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{gender, select, female {She} male {He} other {They}} has {count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "gender",
+        "options": {
+          "female": [
+            {
+              "type": "literal",
+              "value": "She"
+            }
+          ],
+          "male": [
+            {
+              "type": "literal",
+              "value": "He"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "They"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " has "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "gender",
+        "type": "select",
+        "selectors": ["female", "male", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ gender: \"female\" | \"male\" | (string & {}); count: number }",
+    "signature": "count:plural,gender:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{gender, select, female {{count, plural, one {She has # item} other {She has # items}}} male {{count, plural, one {He has # item} other {He has # items}}} other {{count, plural, one {They have # item} other {They have # items}}}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "gender",
+        "options": {
+          "female": [
+            {
+              "type": "plural",
+              "name": "count",
+              "ordinal": false,
+              "offset": 0,
+              "options": {
+                "one": [
+                  {
+                    "type": "literal",
+                    "value": "She has "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " item"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "literal",
+                    "value": "She has "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " items"
+                  }
+                ]
+              }
+            }
+          ],
+          "male": [
+            {
+              "type": "plural",
+              "name": "count",
+              "ordinal": false,
+              "offset": 0,
+              "options": {
+                "one": [
+                  {
+                    "type": "literal",
+                    "value": "He has "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " item"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "literal",
+                    "value": "He has "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " items"
+                  }
+                ]
+              }
+            }
+          ],
+          "other": [
+            {
+              "type": "plural",
+              "name": "count",
+              "ordinal": false,
+              "offset": 0,
+              "options": {
+                "one": [
+                  {
+                    "type": "literal",
+                    "value": "They have "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " item"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "literal",
+                    "value": "They have "
+                  },
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " items"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "gender",
+        "type": "select",
+        "selectors": ["female", "male", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ gender: \"female\" | \"male\" | (string & {}); count: number }",
+    "signature": "count:plural,gender:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{n, number, integer}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n",
+        "style": "integer"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{n, number, percent}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n",
+        "style": "percent"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{n, number, ::currency/EUR}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n",
+        "style": "::currency/EUR"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{d, date}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "{d, time, medium}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "time",
+        "name": "d",
+        "style": "medium"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "time"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:time",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {{kind, select, a {# apple} other {# fruit}}} other {{kind, select, a {# apples} other {# fruits}}}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "select",
+              "name": "kind",
+              "options": {
+                "a": [
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " apple"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " fruit"
+                  }
+                ]
+              }
+            }
+          ],
+          "other": [
+            {
+              "type": "select",
+              "name": "kind",
+              "options": {
+                "a": [
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " apples"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "pound"
+                  },
+                  {
+                    "type": "literal",
+                    "value": " fruits"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "kind",
+        "type": "select",
+        "selectors": ["a", "other"]
+      }
+    ],
+    "type": "{ count: number; kind: \"a\" | (string & {}) }",
+    "signature": "count:plural,kind:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{1, select, 1 {one} 2 {two} other {many}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "1",
+        "options": {
+          "1": [
+            {
+              "type": "literal",
+              "value": "one"
+            }
+          ],
+          "2": [
+            {
+              "type": "literal",
+              "value": "two"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "many"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "1",
+        "type": "select",
+        "selectors": ["1", "2", "other"]
+      }
+    ],
+    "type": "{ \"1\": \"1\" | \"2\" | (string & {}) }",
+    "signature": "1:select",
+    "plurals": []
+  },
+  {
+    "message": "{k, select, b {B} 10 {ten} 2 {two} a {A} other {O}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "k",
+        "options": {
+          "2": [
+            {
+              "type": "literal",
+              "value": "two"
+            }
+          ],
+          "10": [
+            {
+              "type": "literal",
+              "value": "ten"
+            }
+          ],
+          "b": [
+            {
+              "type": "literal",
+              "value": "B"
+            }
+          ],
+          "a": [
+            {
+              "type": "literal",
+              "value": "A"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "O"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "k",
+        "type": "select",
+        "selectors": ["2", "10", "b", "a", "other"]
+      }
+    ],
+    "type": "{ k: \"2\" | \"10\" | \"b\" | \"a\" | (string & {}) }",
+    "signature": "k:select",
+    "plurals": []
+  },
+  {
+    "message": "{k, select, b {{x} {n, plural, one {#} other {#}}} 10 {{y, number}} 2 {{z, date}} other {{w}}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "k",
+        "options": {
+          "2": [
+            {
+              "type": "date",
+              "name": "z"
+            }
+          ],
+          "10": [
+            {
+              "type": "number",
+              "name": "y"
+            }
+          ],
+          "b": [
+            {
+              "type": "argument",
+              "name": "x"
+            },
+            {
+              "type": "literal",
+              "value": " "
+            },
+            {
+              "type": "plural",
+              "name": "n",
+              "ordinal": false,
+              "offset": 0,
+              "options": {
+                "one": [
+                  {
+                    "type": "pound"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "pound"
+                  }
+                ]
+              }
+            }
+          ],
+          "other": [
+            {
+              "type": "argument",
+              "name": "w"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "k",
+        "type": "select",
+        "selectors": ["2", "10", "b", "other"]
+      },
+      {
+        "name": "z",
+        "type": "date"
+      },
+      {
+        "name": "y",
+        "type": "number"
+      },
+      {
+        "name": "x",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "w",
+        "type": "argument"
+      }
+    ],
+    "type": "{ k: \"2\" | \"10\" | \"b\" | (string & {}); z: Date | number; y: number; x: string | number | boolean | Date; n: number; w: string | number | boolean | Date }",
+    "signature": "k:select,n:plural,w:any,x:any,y:number,z:date",
+    "plurals": [
+      {
+        "name": "n",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{p, plural, other {{k, select, 3 {{a}} 1 {{b}} other {{c}}}}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "p",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "other": [
+            {
+              "type": "select",
+              "name": "k",
+              "options": {
+                "1": [
+                  {
+                    "type": "argument",
+                    "name": "b"
+                  }
+                ],
+                "3": [
+                  {
+                    "type": "argument",
+                    "name": "a"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "argument",
+                    "name": "c"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "p",
+        "type": "plural",
+        "selectors": ["other"]
+      },
+      {
+        "name": "k",
+        "type": "select",
+        "selectors": ["1", "3", "other"]
+      },
+      {
+        "name": "b",
+        "type": "argument"
+      },
+      {
+        "name": "a",
+        "type": "argument"
+      },
+      {
+        "name": "c",
+        "type": "argument"
+      }
+    ],
+    "type": "{ p: number; k: \"1\" | \"3\" | (string & {}); b: string | number | boolean | Date; a: string | number | boolean | Date; c: string | number | boolean | Date }",
+    "signature": "a:any,b:any,c:any,k:select,p:plural",
+    "plurals": [
+      {
+        "name": "p",
+        "ordinal": false,
+        "options": ["other"]
+      }
+    ]
+  },
+  {
+    "message": "{ k , select , other { { n , plural , one {#} other {#} } } }",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "k",
+        "options": {
+          "other": [
+            {
+              "type": "literal",
+              "value": " "
+            },
+            {
+              "type": "plural",
+              "name": "n",
+              "ordinal": false,
+              "offset": 0,
+              "options": {
+                "one": [
+                  {
+                    "type": "pound"
+                  }
+                ],
+                "other": [
+                  {
+                    "type": "pound"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "literal",
+              "value": " "
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "k",
+        "type": "select",
+        "selectors": ["other"]
+      },
+      {
+        "name": "n",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ k: string; n: number }",
+    "signature": "k:select,n:plural",
+    "plurals": [
+      {
+        "name": "n",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count,plural,one{# item}other{# items}} {x,number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "number",
+        "name": "x"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "type": "number"
+      }
+    ],
+    "type": "{ count: number; x: number }",
+    "signature": "count:plural,x:number",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinalx, other {y}}",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 4: Unknown argument type \"selectordinalx\"",
+      "position": 4
+    }
+  },
+  {
+    "message": "{ plural, plural, other {x}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "plural",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "other": [
+            {
+              "type": "literal",
+              "value": "x"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "plural",
+        "type": "plural",
+        "selectors": ["other"]
+      }
+    ],
+    "type": "{ plural: number }",
+    "signature": "plural:plural",
+    "plurals": [
+      {
+        "name": "plural",
+        "ordinal": false,
+        "options": ["other"]
+      }
+    ]
+  },
+  {
+    "message": "a { b, date}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "a "
+      },
+      {
+        "type": "date",
+        "name": "b"
+      }
+    ],
+    "args": [
+      {
+        "name": "b",
+        "type": "date"
+      }
+    ],
+    "type": "{ b: Date | number }",
+    "signature": "b:date",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, =1.0 {never} =2 {two} other {#}}",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 16: Invalid plural selector \"=1.0\"",
+      "position": 16
+    }
+  },
+  {
+    "message": "{ unclosed",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 10: Unclosed { at 0",
+      "position": 10
+    }
+  },
+  {
+    "message": "{count, plural, one {# item}}",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 28: Missing required \"other\" option",
+      "position": 28
+    }
+  },
+  {
+    "message": "{count, plural, few {x} other {y} few {z}}",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 34: Duplicate selector \"few\"",
+      "position": 34
+    }
+  },
+  {
+    "message": "{count, plural, nope {x} other {y}}",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 16: Invalid plural selector \"nope\"",
+      "position": 16
+    }
+  },
+  {
+    "message": "{x, bogus, y}",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 4: Unknown argument type \"bogus\"",
+      "position": 4
+    }
+  },
+  {
+    "message": "{count, plural, offset: other {x}}",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 24: Expected a number after offset:",
+      "position": 24
+    }
+  },
+  {
+    "message": "}",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 0: Unexpected }",
+      "position": 0
+    }
+  },
+  {
+    "message": "{a",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 2: Unclosed { at 0",
+      "position": 2
+    }
+  },
+  {
+    "message": "{a,",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 3: Expected an argument type",
+      "position": 3
+    }
+  },
+  {
+    "message": "{a, number",
+    "structured": true,
+    "error": {
+      "message": "ICU syntax error at 10: Expected } but the message ended",
+      "position": 10
+    }
+  },
+  {
+    "message": "{,}",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 1: Expected an argument name",
+      "position": 1
+    }
+  },
+  {
+    "message": "{a b}",
+    "structured": false,
+    "error": {
+      "message": "ICU syntax error at 3: Expected , or }",
+      "position": 3
+    }
+  },
+  {
+    "message": "日本語 {名前} です",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "日本語 "
+      },
+      {
+        "type": "argument",
+        "name": "名前"
+      },
+      {
+        "type": "literal",
+        "value": " です"
+      }
+    ],
+    "args": [
+      {
+        "name": "名前",
+        "type": "argument"
+      }
+    ],
+    "type": "{ \"名前\": string | number | boolean | Date }",
+    "signature": "名前:any",
+    "plurals": []
+  },
+  {
+    "message": "emoji 😀 {name} 😀 {n, plural, one {# 😀} other {# 😀s}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "emoji 😀 "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " 😀 "
+      },
+      {
+        "type": "plural",
+        "name": "n",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " 😀"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " 😀s"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; n: number }",
+    "signature": "n:plural,name:any",
+    "plurals": [
+      {
+        "name": "n",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "tab\t{a}\n{b}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "tab\t"
+      },
+      {
+        "type": "argument",
+        "name": "a"
+      },
+      {
+        "type": "literal",
+        "value": "\n"
+      },
+      {
+        "type": "argument",
+        "name": "b"
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "argument"
+      },
+      {
+        "name": "b",
+        "type": "argument"
+      }
+    ],
+    "type": "{ a: string | number | boolean | Date; b: string | number | boolean | Date }",
+    "signature": "a:any,b:any",
+    "plurals": []
+  },
+  {
+    "message": "{a, select, other {x}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "a",
+        "options": {
+          "other": [
+            {
+              "type": "literal",
+              "value": "x"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "select",
+        "selectors": ["other"]
+      }
+    ],
+    "type": "{ a: string }",
+    "signature": "a:select",
+    "plurals": []
+  },
+  {
+    "message": "{a, select, x {} other {}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "a",
+        "options": {
+          "x": [],
+          "other": []
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "select",
+        "selectors": ["x", "other"]
+      }
+    ],
+    "type": "{ a: \"x\" | (string & {}) }",
+    "signature": "a:select",
+    "plurals": []
+  },
+  {
+    "message": "{ a , plural , one { # } other { # } }",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "a",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "literal",
+              "value": " "
+            },
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " "
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": " "
+            },
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " "
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "a",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ a: number }",
+    "signature": "a:plural",
+    "plurals": [
+      {
+        "name": "a",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{a-b} {a.b} {$x}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "a-b"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "argument",
+        "name": "a.b"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "argument",
+        "name": "$x"
+      }
+    ],
+    "args": [
+      {
+        "name": "a-b",
+        "type": "argument"
+      },
+      {
+        "name": "a.b",
+        "type": "argument"
+      },
+      {
+        "name": "$x",
+        "type": "argument"
+      }
+    ],
+    "type": "{ \"a-b\": string | number | boolean | Date; \"a.b\": string | number | boolean | Date; $x: string | number | boolean | Date }",
+    "signature": "$x:any,a-b:any,a.b:any",
+    "plurals": []
+  },
+  {
+    "message": "{n, plural, =0 {none} other {{m, number} of #}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "n",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "=0": [
+            {
+              "type": "literal",
+              "value": "none"
+            }
+          ],
+          "other": [
+            {
+              "type": "number",
+              "name": "m"
+            },
+            {
+              "type": "literal",
+              "value": " of "
+            },
+            {
+              "type": "pound"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "plural",
+        "selectors": ["=0", "other"]
+      },
+      {
+        "name": "m",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number; m: number }",
+    "signature": "m:number,n:plural",
+    "plurals": [
+      {
+        "name": "n",
+        "ordinal": false,
+        "options": ["=0", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{when, date, long} at {when, time, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "when",
+        "style": "long"
+      },
+      {
+        "type": "literal",
+        "value": " at "
+      },
+      {
+        "type": "time",
+        "name": "when",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "when",
+        "type": "date"
+      },
+      {
+        "name": "when",
+        "type": "time"
+      }
+    ],
+    "type": "{ when: Date | number }",
+    "signature": "when:date,when:time",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{n, number}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ count: number; n: number }",
+    "signature": "count:plural,n:number",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}{x, selectordinal, one {#st} other {#th}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ n: number; x: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": " ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "Hello {role, select, admin {Admin} other {User}}Hello Hello ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "text{d, date, short}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "'{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": " {x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}{x, selectordinal, one {#st} other {#th}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; x: number }",
+    "signature": "d:date,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short}Hello {count, plural, one {# item} other {# items}}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ d: Date | number; count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,d:date,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{count, plural, one {# item} other {# items}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); count: number; d: Date | number }",
+    "signature": "count:plural,d:date,role:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{count, plural, one {# item} other {# items}}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); count: number; x: number }",
+    "signature": "count:plural,role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}'''{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'{"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{' ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{ "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{count, plural, one {# item} other {# items}}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ n: number; count: number; role: \"admin\" | (string & {}) }",
+    "signature": "count:plural,n:number,role:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "'{''{'text ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{'{text "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "  '{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "  {"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}{role, select, admin {Admin} other {User}}{role, select, admin {Admin} other {User}}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}); n: number }",
+    "signature": "d:date,n:number,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number; x: number }",
+    "signature": "count:plural,x:selectordinal",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{Hello "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "''{role, select, admin {Admin} other {User}}{name}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); name: string | number | boolean | Date; x: number }",
+    "signature": "name:any,role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": " {n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}Hello {role, select, admin {Admin} other {User}}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); name: string | number | boolean | Date }",
+    "signature": "name:any,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}'{''{'{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{'{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number; x: number }",
+    "signature": "count:plural,x:selectordinal",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "text  ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text  "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); d: Date | number }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "text{d, date, short}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ d: Date | number; n: number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}'{'{x, selectordinal, one {#st} other {#th}}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); x: number; n: number }",
+    "signature": "n:number,role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; x: number }",
+    "signature": "d:date,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name} {count, plural, one {# item} other {# items}}Hello ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": " '{'{count, plural, one {# item} other {# items}} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " {"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''texttext",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'texttext"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{text"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "textHello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "textHello "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "''{name}'{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "'{'Hello {x, selectordinal, one {#st} other {#th}}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{Hello "
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ x: number; n: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ x: number; d: Date | number }",
+    "signature": "d:date,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name} ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "'{'Hello {role, select, admin {Admin} other {User}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); d: Date | number }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "  ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "  "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}''{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name}text{name} ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "''Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'Hello "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "'''{'{name}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'{"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short}{n, number}Hello ''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "Hello '"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ d: Date | number; n: number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "Hello {name}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{x, selectordinal, one {#st} other {#th}}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ x: number; n: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}{name}''{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ n: number; name: string | number | boolean | Date }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}text'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "text{"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}{count, plural, one {# item} other {# items}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number; count: number }",
+    "signature": "count:plural,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}'{'Hello ''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{Hello '"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello {role, select, admin {Admin} other {User}}{name}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); name: string | number | boolean | Date; n: number }",
+    "signature": "n:number,name:any,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}text{count, plural, one {# item} other {# items}}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; count: number; x: number }",
+    "signature": "count:plural,d:date,x:selectordinal",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}{name}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ n: number; name: string | number | boolean | Date }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name} Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "'{'{x, selectordinal, one {#st} other {#th}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{d, date, short}Hello {name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ d: Date | number; name: string | number | boolean | Date }",
+    "signature": "d:date,name:any",
+    "plurals": []
+  },
+  {
+    "message": "text''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text'"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}''{d, date, short}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}) }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "''{role, select, admin {Admin} other {User}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{name}{role, select, admin {Admin} other {User}}{count, plural, one {# item} other {# items}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; role: \"admin\" | (string & {}); count: number; d: Date | number }",
+    "signature": "count:plural,d:date,name:any,role:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name} {name}''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "text'''''{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text''{"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "'''{'{d, date, short}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'{"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ d: Date | number; n: number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}text''{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text'"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ x: number; name: string | number | boolean | Date }",
+    "signature": "name:any,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": " text'{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " text{"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{name}{d, date, short}Hello ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; d: Date | number }",
+    "signature": "d:date,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short}{name}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ d: Date | number; name: string | number | boolean | Date }",
+    "signature": "d:date,name:any",
+    "plurals": []
+  },
+  {
+    "message": "'{'{name}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; n: number }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name}''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name}{name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{x, selectordinal, one {#st} other {#th}}{x, selectordinal, one {#st} other {#th}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ n: number; x: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "''Hello '{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'Hello {"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": " {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "Hello '{'{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello {"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{name} ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name}{n, number}Hello ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; n: number }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name}{count, plural, one {# item} other {# items}}{name}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello {role, select, admin {Admin} other {User}}{x, selectordinal, one {#st} other {#th}} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); x: number }",
+    "signature": "role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}{d, date, short}'{'{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ n: number; d: Date | number; x: number }",
+    "signature": "d:date,n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{count, plural, one {# item} other {# items}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ count: number; d: Date | number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "text{count, plural, one {# item} other {# items}}{name}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{role, select, admin {Admin} other {User}}''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "'{'{x, selectordinal, one {#st} other {#th}}''{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ x: number; n: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{d, date, short} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "'{'{role, select, admin {Admin} other {User}}Hello  ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello  "
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}''text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'text"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "Hello {role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{name}{name}'{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "text{d, date, short}{role, select, admin {Admin} other {User}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}) }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "''''''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'''"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "text{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}{role, select, admin {Admin} other {User}}'' ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "' "
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ x: number; role: \"admin\" | (string & {}) }",
+    "signature": "role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{n, number}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ n: number; role: \"admin\" | (string & {}) }",
+    "signature": "n:number,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello text{d, date, short}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello text"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "Hello '{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello {"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{name}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; n: number }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "text{count, plural, one {# item} other {# items}}{name} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{count, plural, one {# item} other {# items}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}Hello {d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ count: number; d: Date | number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; role: \"admin\" | (string & {}) }",
+    "signature": "name:any,role:select",
+    "plurals": []
+  },
+  {
+    "message": "''{role, select, admin {Admin} other {User}}{count, plural, one {# item} other {# items}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); count: number }",
+    "signature": "count:plural,role:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'''Hello  ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{'Hello  "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{d, date, short}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ count: number; d: Date | number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": " {n, number}{count, plural, one {# item} other {# items}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ n: number; count: number }",
+    "signature": "count:plural,n:number",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''text{role, select, admin {Admin} other {User}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'text"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "Hello {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "''{count, plural, one {# item} other {# items}}text",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short} {role, select, admin {Admin} other {User}}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}) }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "Hello {d, date, short}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello "
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}) }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "'{'{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{name}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}} ''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " '"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{d, date, short} '{'{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": " {"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; role: \"admin\" | (string & {}) }",
+    "signature": "d:date,role:select",
+    "plurals": []
+  },
+  {
+    "message": "'{'{d, date, short}Hello  ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "Hello  "
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "''{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ d: Date | number }",
+    "signature": "d:date",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{n, number}{n, number}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); n: number }",
+    "signature": "n:number,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{d, date, short}''{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ n: number; d: Date | number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{count, plural, one {# item} other {# items}} {n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ count: number; n: number }",
+    "signature": "count:plural,n:number",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello Hello "
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}''''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "''"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ x: number; n: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{n, number}{role, select, admin {Admin} other {User}}'{''{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{'{"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ n: number; role: \"admin\" | (string & {}) }",
+    "signature": "n:number,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}'{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}''text{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'text"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); n: number }",
+    "signature": "n:number,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "texttext'{'text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "texttext{text"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "'{'{x, selectordinal, one {#st} other {#th}}{d, date, short} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ x: number; d: Date | number }",
+    "signature": "d:date,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "text'{'",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text{"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{n, number} {d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ n: number; d: Date | number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "{name}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; d: Date | number }",
+    "signature": "d:date,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{name}{count, plural, one {# item} other {# items}}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date; count: number }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": " {count, plural, one {# item} other {# items}}{name}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ count: number; name: string | number | boolean | Date }",
+    "signature": "count:plural,name:any",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}'{'{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); x: number }",
+    "signature": "role:select,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ d: Date | number; name: string | number | boolean | Date }",
+    "signature": "d:date,name:any",
+    "plurals": []
+  },
+  {
+    "message": "Hello text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello text"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "  {count, plural, one {# item} other {# items}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "  "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ count: number; d: Date | number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "  text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "  text"
+      }
+    ],
+    "args": [],
+    "type": null,
+    "signature": "",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}}{x, selectordinal, one {#st} other {#th}}{x, selectordinal, one {#st} other {#th}}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ x: number; name: string | number | boolean | Date }",
+    "signature": "name:any,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{d, date, short}{count, plural, one {# item} other {# items}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "d",
+        "type": "date"
+      },
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ d: Date | number; count: number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "'{'{n, number}{d, date, short}''",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ n: number; d: Date | number }",
+    "signature": "d:date,n:number",
+    "plurals": []
+  },
+  {
+    "message": "'' Hello {name}",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "' Hello "
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "text{role, select, admin {Admin} other {User}}{name}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "text"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); name: string | number | boolean | Date }",
+    "signature": "name:any,role:select",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{name}'{'{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "{"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ n: number; name: string | number | boolean | Date }",
+    "signature": "n:number,name:any",
+    "plurals": []
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{role, select, admin {Admin} other {User}}{role, select, admin {Admin} other {User}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ count: number; role: \"admin\" | (string & {}) }",
+    "signature": "count:plural,role:select",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''Hello {count, plural, one {# item} other {# items}}Hello ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'Hello "
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ count: number }",
+    "signature": "count:plural",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{name}Hello ",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "Hello "
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": " text{name}''",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": " text"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "'"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "{n, number}{x, selectordinal, one {#st} other {#th}}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "number",
+        "name": "n"
+      },
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      },
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ n: number; x: number }",
+    "signature": "n:number,x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "{count, plural, one {# item} other {# items}}{count, plural, one {# item} other {# items}}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "plural",
+        "name": "count",
+        "ordinal": false,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " item"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": " items"
+            }
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "count",
+        "type": "plural",
+        "selectors": ["one", "other"]
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ count: number; d: Date | number }",
+    "signature": "count:plural,d:date",
+    "plurals": [
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      },
+      {
+        "name": "count",
+        "ordinal": false,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "Hello text{name}text",
+    "structured": false,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "Hello text"
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "literal",
+        "value": "text"
+      }
+    ],
+    "args": [
+      {
+        "name": "name",
+        "type": "argument"
+      }
+    ],
+    "type": "{ name: string | number | boolean | Date }",
+    "signature": "name:any",
+    "plurals": []
+  },
+  {
+    "message": "''''{n, number}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "''"
+      },
+      {
+        "type": "number",
+        "name": "n"
+      }
+    ],
+    "args": [
+      {
+        "name": "n",
+        "type": "number"
+      }
+    ],
+    "type": "{ n: number }",
+    "signature": "n:number",
+    "plurals": []
+  },
+  {
+    "message": "{x, selectordinal, one {#st} other {#th}} '{'",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "plural",
+        "name": "x",
+        "ordinal": true,
+        "offset": 0,
+        "options": {
+          "one": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "st"
+            }
+          ],
+          "other": [
+            {
+              "type": "pound"
+            },
+            {
+              "type": "literal",
+              "value": "th"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " {"
+      }
+    ],
+    "args": [
+      {
+        "name": "x",
+        "type": "selectordinal",
+        "selectors": ["one", "other"]
+      }
+    ],
+    "type": "{ x: number }",
+    "signature": "x:selectordinal",
+    "plurals": [
+      {
+        "name": "x",
+        "ordinal": true,
+        "options": ["one", "other"]
+      }
+    ]
+  },
+  {
+    "message": "''{role, select, admin {Admin} other {User}} ",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "literal",
+        "value": "'"
+      },
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "literal",
+        "value": " "
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}) }",
+    "signature": "role:select",
+    "plurals": []
+  },
+  {
+    "message": "{role, select, admin {Admin} other {User}}{name}{d, date, short}",
+    "structured": true,
+    "nodes": [
+      {
+        "type": "select",
+        "name": "role",
+        "options": {
+          "admin": [
+            {
+              "type": "literal",
+              "value": "Admin"
+            }
+          ],
+          "other": [
+            {
+              "type": "literal",
+              "value": "User"
+            }
+          ]
+        }
+      },
+      {
+        "type": "argument",
+        "name": "name"
+      },
+      {
+        "type": "date",
+        "name": "d",
+        "style": "short"
+      }
+    ],
+    "args": [
+      {
+        "name": "role",
+        "type": "select",
+        "selectors": ["admin", "other"]
+      },
+      {
+        "name": "name",
+        "type": "argument"
+      },
+      {
+        "name": "d",
+        "type": "date"
+      }
+    ],
+    "type": "{ role: \"admin\" | (string & {}); name: string | number | boolean | Date; d: Date | number }",
+    "signature": "d:date,name:any,role:select",
+    "plurals": []
+  }
+]

@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["dialex-icu", "dialex-syntax", "dialex-cli", "dialex-lsp"]
+
+[workspace.package]
+version = "0.7.2"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+strip = true
+opt-level = 3
