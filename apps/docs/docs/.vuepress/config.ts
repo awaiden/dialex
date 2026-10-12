@@ -9,6 +9,8 @@ import { LOCALES, type SiteLocale } from "./locales.js";
 const PAGES = {
   guide: [
     "getting-started",
+    "concepts",
+    "requirements",
     "dictionaries",
     "type-safety",
     "locale-detection",
@@ -20,14 +22,21 @@ const PAGES = {
     "lazy-loading",
     "testing",
     "best-practices",
+    "migration",
     "comparison",
     "benchmarks",
+    "native",
+    "diagnostics",
+    "troubleshooting",
+    "faq",
+    "glossary",
     "vscode",
     "zed",
     "ai",
     "configuration",
     "changelog",
   ],
+
   frameworks: [
     "README",
     "nextjs",
@@ -55,7 +64,7 @@ const PAGES = {
     "h3",
     "web",
   ],
-  cli: ["README", "init", "generate", "check", "export", "import", "translate"],
+  cli: ["README", "init", "generate", "check", "export", "import", "translate", "lock"],
   api: [
     "README",
     "core",

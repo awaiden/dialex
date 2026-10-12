@@ -10,6 +10,8 @@ dialex check --fix
 dialex lint -c ./dialex.config.ts
 ```
 
+<a id="what-it-checks"></a>
+
 ## Qué comprueba
 
 **Errores**
