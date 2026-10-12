@@ -72,6 +72,7 @@
     "@nestjs/common": "^12.1.2",
     "@nestjs/core": "^12.1.2",
     "@nuxt/kit": "^4.6.0",
+    "@sinclair/typebox": "^0.34.52",
     "@types/express": "^5.0.6",
     "@types/koa": "^3.0.3",
     "@types/node": "^26.1.1",
