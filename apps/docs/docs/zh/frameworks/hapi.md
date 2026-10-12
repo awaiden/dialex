@@ -24,6 +24,24 @@ await server.start();
 
 在路由之前注册 `dialexPlugin`。它为每个请求添加 `request.locale` 和 `request.getDictionary(name)`，并设置 `Content-Language` 响应头，错误响应也不例外。所有 [locale 检测选项](../guide/locale-detection.md#options)均适用。
 
+## 安装
+
+把你已在使用的框架包与 Dialex 一起安装，然后编译词典：
+
+```bash
+npm install dialexjs @hapi/hapi
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## 选项
+
+适配器接受 [locale 检测选项](../guide/locale-detection.md)、`dictionaries` 和 `setHeader`。每个适配器的全部选项见[服务端适配器](../api/server-adapters.md)。
+
+## TypeScript
+
+`dialex generate` 会写出 `dialex-env.d.ts`。把它包含进 `tsconfig.json`（并把 `moduleResolution` 设为 `"bundler"` 或 `"nodenext"`）之后，`request.getDictionary("home")` 会自动补全词典名称并为内容提供类型，`locale` 则是你配置的 locale 的联合类型。
+
 ## 最佳实践
 
 - 把 `dialex.generated.ts` 中的 `{ ...dialex }` 作为插件选项传入。它同时带有词典和 locale 配置，因此 `defaultLocale`、`locales` 和 `fallbacks` 只需在 `dialex.config.ts` 中写一次。

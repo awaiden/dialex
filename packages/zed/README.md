@@ -18,6 +18,10 @@ In order:
 The server only starts in projects that look like Dialex projects: a `dialex.config.*` file, or
 `dialexjs` / `@dialexjs/cli` in `package.json`.
 
+## Native server
+
+The server also exists as a native binary (`dialex-language-server`, built from Rust), which analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s. Point `lsp.dialex.binary.path` at it, or put it on your `PATH`; the binary comes with the `@dialexjs/cli-<platform>` packages. See [Native binaries](https://dialex.awaiden.com/guide/native.html).
+
 ## Settings
 
 ```json

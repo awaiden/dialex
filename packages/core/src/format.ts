@@ -47,7 +47,7 @@ export function number(locale: string, value: number, options?: Intl.NumberForma
  * Formats a date with `Intl.DateTimeFormat`. `value` may be a `Date`, a timestamp or a date string.
  *
  * ```ts
- * date("en", "2026-03-01", { dateStyle: "medium" }); // "Mar 1, 2026"
+ * date("en", new Date(2026, 2, 1), { dateStyle: "medium" }); // "Mar 1, 2026"
  * ```
  */
 export function date(

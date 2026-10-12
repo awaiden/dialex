@@ -25,6 +25,24 @@ const dict = Astro.locals.getDictionary("home");
 
 Middleware istek URL'sini, başlıkları ve çerezleri okur; bu yüzden isteğe bağlı (SSR) rotalar için geçerlidir. Statik olarak önceden render edilen sayfaların derleme sırasında inceleyecek bir isteği yoktur. `setHeader` `false` olmadıkça `Content-Language` ayarlanır. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir ve `custom`, Astro bağlamını alır.
 
+## Kurulum
+
+Zaten kullandığınız framework paketini Dialex ile birlikte kurun, sonra sözlükleri derleyin:
+
+```bash
+npm install dialexjs astro
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Seçenekler
+
+Adaptör [yerel ayar algılama seçeneklerini](../guide/locale-detection.md), `dictionaries` ve `setHeader` değerlerini alır. Her seçenek, adaptör adaptör, [Sunucu adaptörleri](../api/server-adapters.md) sayfasındadır.
+
+## TypeScript
+
+`dialex generate` `dialex-env.d.ts` dosyasını yazar. Bu dosya `tsconfig.json` içine dahil edildiğinde (ve `moduleResolution` `"bundler"` ya da `"nodenext"` olduğunda), `Astro.locals.getDictionary("home")` sözlük adlarını otomatik tamamlar, içeriği tipler ve `locale`, yapılandırılmış yerel ayarlarınızın birleşimi olur.
+
 ## En iyi uygulamalar
 
 - `dialex.generated.ts` içindeki `{ ...dialex }` değerini adaptöre geçirin. Sözlükleri ve yerel ayar yapılandırmasını taşır; böylece `defaultLocale`, `locales` ve `fallbacks` yalnızca bir kez, `dialex.config.ts` içinde yazılır.

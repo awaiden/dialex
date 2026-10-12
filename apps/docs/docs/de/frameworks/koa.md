@@ -23,6 +23,24 @@ app.listen(3000);
 
 Registriere `dialexKoa()` vor deinen Routen. Es fügt `ctx.locale` und `ctx.getDictionary(name)` hinzu. Alle [Optionen der Locale-Erkennung](../guide/locale-detection.md#options) gelten.
 
+## Installation
+
+Installiere das Framework-Paket, das du ohnehin nutzt, zusammen mit Dialex und kompiliere dann die Wörterbücher:
+
+```bash
+npm install dialexjs koa
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Optionen
+
+Der Adapter nimmt die [Optionen zur Locale-Erkennung](../guide/locale-detection.md), `dictionaries` und `setHeader`. Jede Option, Adapter für Adapter, steht unter [Server-Adapter](../api/server-adapters.md).
+
+## TypeScript
+
+`dialex generate` schreibt `dialex-env.d.ts`. Ist sie in `tsconfig.json` eingebunden (und `moduleResolution` auf `"bundler"` oder `"nodenext"` gesetzt), vervollständigt `ctx.getDictionary("home")` die Wörterbuchnamen und typisiert den Inhalt, und `locale` ist die Union deiner konfigurierten Locales.
+
 ## Bewährte Vorgehensweisen
 
 - Übergib `{ ...dialex }` aus `dialex.generated.ts` an den Adapter. Es enthält die Wörterbücher und die Locale-Konfiguration, sodass `defaultLocale`, `locales` und `fallbacks` nur einmal in `dialex.config.ts` stehen.

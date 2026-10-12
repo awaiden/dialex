@@ -19,6 +19,24 @@ app.listen(3000);
 
 El middleware añade `req.locale` y `req.getDictionary(name)` (también en `res.locals`). Las cookies se leen de `req.cookies` cuando `cookie-parser` está instalado y, si no, de la cabecera `Cookie`. Se aplican todas las [opciones de detección de locale](../guide/locale-detection.md#options).
 
+## Instalación
+
+Instala el paquete del framework que ya usas junto con Dialex y luego compila los diccionarios:
+
+```bash
+npm install dialexjs express
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Opciones
+
+El adaptador acepta las [opciones de detección de locale](../guide/locale-detection.md), `dictionaries` y `setHeader`. Cada opción, adaptador por adaptador, está en [Adaptadores de servidor](../api/server-adapters.md).
+
+## TypeScript
+
+`dialex generate` escribe `dialex-env.d.ts`. Con ese archivo incluido en `tsconfig.json` (y `moduleResolution` en `"bundler"` o `"nodenext"`), `req.getDictionary("home")` autocompleta los nombres de diccionario, tipa el contenido, y `locale` es la unión de tus locales configurados.
+
 ## Buenas prácticas
 
 - Pasa `{ ...dialex }` de `dialex.generated.ts` al adaptador. Lleva los diccionarios y la configuración de locales, así que `defaultLocale`, `locales` y `fallbacks` se escriben una sola vez, en `dialex.config.ts`.

@@ -25,6 +25,24 @@ const dict = Astro.locals.getDictionary("home");
 
 该中间件读取请求 URL、请求头和 Cookie，因此适用于按需渲染（SSR）的路由。静态预渲染的页面在构建时没有可检查的请求。除非 `setHeader` 为 `false`，否则会设置 `Content-Language`。所有 [locale 检测选项](../guide/locale-detection.md#options)均适用，`custom` 会接收到 Astro 上下文。
 
+## 安装
+
+把你已在使用的框架包与 Dialex 一起安装，然后编译词典：
+
+```bash
+npm install dialexjs astro
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## 选项
+
+适配器接受 [locale 检测选项](../guide/locale-detection.md)、`dictionaries` 和 `setHeader`。每个适配器的全部选项见[服务端适配器](../api/server-adapters.md)。
+
+## TypeScript
+
+`dialex generate` 会写出 `dialex-env.d.ts`。把它包含进 `tsconfig.json`（并把 `moduleResolution` 设为 `"bundler"` 或 `"nodenext"`）之后，`Astro.locals.getDictionary("home")` 会自动补全词典名称并为内容提供类型，`locale` 则是你配置的 locale 的联合类型。
+
 ## 最佳实践
 
 - 把 `dialex.generated.ts` 中的 `{ ...dialex }` 传给适配器。它同时带有词典和 locale 配置，因此 `defaultLocale`、`locales` 和 `fallbacks` 只需在 `dialex.config.ts` 中写一次。

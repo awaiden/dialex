@@ -47,6 +47,24 @@ router.get("/:locale", ({ locale, getDictionary }) => {
 
 El middleware también establece la cabecera de respuesta `Content-Language`. Todas las [opciones de detección de locale](../guide/locale-detection.md#options) se aplican.
 
+## Instalación
+
+Instala el paquete del framework que ya usas junto con Dialex y luego compila los diccionarios:
+
+```bash
+npm install dialexjs @adonisjs/core
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Opciones
+
+El adaptador acepta las [opciones de detección de locale](../guide/locale-detection.md), `dictionaries` y `setHeader`. Cada opción, adaptador por adaptador, está en [Adaptadores de servidor](../api/server-adapters.md).
+
+## TypeScript
+
+`dialex generate` escribe `dialex-env.d.ts`. Con ese archivo incluido en `tsconfig.json` (y `moduleResolution` en `"bundler"` o `"nodenext"`), `ctx.getDictionary("home")` autocompleta los nombres de diccionario, tipa el contenido, y `locale` es la unión de tus locales configurados.
+
 ## Buenas prácticas
 
 - Pasa `{ ...dialex }` de `dialex.generated.ts` a `createDialexMiddleware`. Lleva los diccionarios y la configuración de locales, así que `defaultLocale`, `locales` y `fallbacks` se escriben una sola vez, en `dialex.config.ts`.

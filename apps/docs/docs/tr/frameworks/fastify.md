@@ -20,6 +20,24 @@ await app.listen({ port: 3000 });
 
 `dialexPlugin`, `fastify-plugin` ile sarılmıştır (ad `dialex-fastify`, Fastify `>=4`); bu yüzden istek dekoratörleri kapsülleme bağlamları arasında görünür. Aynı zamanda varsayılan dışa aktarımdır. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.
 
+## Kurulum
+
+Zaten kullandığınız framework paketini Dialex ile birlikte kurun, sonra sözlükleri derleyin:
+
+```bash
+npm install dialexjs fastify
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Seçenekler
+
+Adaptör [yerel ayar algılama seçeneklerini](../guide/locale-detection.md), `dictionaries` ve `setHeader` değerlerini alır. Her seçenek, adaptör adaptör, [Sunucu adaptörleri](../api/server-adapters.md) sayfasındadır.
+
+## TypeScript
+
+`dialex generate` `dialex-env.d.ts` dosyasını yazar. Bu dosya `tsconfig.json` içine dahil edildiğinde (ve `moduleResolution` `"bundler"` ya da `"nodenext"` olduğunda), `request.getDictionary("home")` sözlük adlarını otomatik tamamlar, içeriği tipler ve `locale`, yapılandırılmış yerel ayarlarınızın birleşimi olur.
+
 ## En iyi uygulamalar
 
 - `dialex.generated.ts` içindeki `{ ...dialex }` değerini adaptöre geçirin. Sözlükleri ve yerel ayar yapılandırmasını taşır; böylece `defaultLocale`, `locales` ve `fallbacks` yalnızca bir kez, `dialex.config.ts` içinde yazılır.

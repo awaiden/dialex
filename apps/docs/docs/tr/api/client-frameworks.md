@@ -90,7 +90,7 @@ Hook'lar ve store'lar etkin yerel ayarın sözlüğünü [yedek zincirini](../gu
 
 ```ts
 function createDialexQwik(options?: CreateDialexQwikOptions): {
-  useDialexProvider(options?: { initialLocale?: string }): DialexState;
+  useDialexProvider(options?: UseDialexProviderOptions): DialexState;
   useDialex(): DialexState;
   setLocale(state: DialexState, locale: string): void;
   useDictionary<K>(name: K): () => ResolveDictionaryType<K>;
@@ -155,6 +155,23 @@ function createDialexQwik(options?: CreateDialexQwikOptions): {
 | `cookieName` | `string`                        | `"locale"`                         | Ziyaretçinin yerel ayarını hatırlayan çerez            |
 | `setCookie`  | `boolean`                       | `true`                             | URL'nin yerel ayarı saklanandan farklıysa çerezi yazar |
 | `ignore`     | `(pathname: string) => boolean` | `/_next`, `/api`, dosya uzantıları | Yerel ayar işlemesini atlayan yollar                   |
+
+## Tipler
+
+Seçenek ve prop tipleri ile hangi giriş noktasının onları kullandığı:
+
+| Tip                                                                  | Kullanan                                                                        |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `DialexProviderProps`                                                | `dialexjs/react`, `preact`, `solid` ve `react-native` içindeki `DialexProvider` |
+| `DialexContext`                                                      | `dialexjs/react`, `preact`, `solid` ve `vue` içindeki `useDialex()`             |
+| `CreateDialexOptions`                                                | `dialexjs/vue` ve `dialexjs/lit` içindeki `createDialex`                        |
+| `Dialex`                                                             | `dialexjs/lit` içindeki `createDialex`'in döndürdüğü durum                      |
+| `DialexOptions`, `DialexSvelte`                                      | `dialexjs/svelte` içindeki `provideDialex` ve `createSvelteDialex`              |
+| `CreateDialexQwikOptions`, `UseDialexProviderOptions`, `DialexState` | `createDialexQwik` ve hook'ları, `dialexjs/qwik`                                |
+| `AngularDialexOptions`, `DialexStore`                                | `dialexjs/angular` içindeki `provideDialex` ve `injectDialex`                   |
+| `NuxtDialexOptions`                                                  | `dialexjs/nuxt` modül seçenekleri                                               |
+| `DialexLinkProps`, `DialexMiddlewareOptions`                         | Next.js'in `DialexLink` ve `createDialexMiddleware`'i                           |
+| `LocaleStorage`                                                      | `dialexjs/react-native` içindeki `storage` prop'u                               |
 
 ## `preloadDictionaries`
 

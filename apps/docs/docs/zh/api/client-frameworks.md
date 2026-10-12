@@ -90,7 +90,7 @@ Hook 和 Store 沿[回退链](../guide/fallbacks.md)返回当前 locale 的词�
 
 ```ts
 function createDialexQwik(options?: CreateDialexQwikOptions): {
-  useDialexProvider(options?: { initialLocale?: string }): DialexState;
+  useDialexProvider(options?: UseDialexProviderOptions): DialexState;
   useDialex(): DialexState;
   setLocale(state: DialexState, locale: string): void;
   useDictionary<K>(name: K): () => ResolveDictionaryType<K>;
@@ -155,6 +155,23 @@ function createDialexQwik(options?: CreateDialexQwikOptions): {
 | `cookieName` | `string`                        | `"locale"`                           | 记住访问者 locale 的 Cookie               |
 | `setCookie`  | `boolean`                       | `true`                               | URL 的 locale 与已保存的不同时写入 Cookie |
 | `ignore`     | `(pathname: string) => boolean` | `/_next`、`/api`、带文件扩展名的路径 | 跳过 locale 处理的路径                    |
+
+## 类型
+
+选项和属性的类型，以及哪个入口点使用它们：
+
+| 类型                                                                 | 使用者                                                                    |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `DialexProviderProps`                                                | `dialexjs/react`、`preact`、`solid` 和 `react-native` 的 `DialexProvider` |
+| `DialexContext`                                                      | `dialexjs/react`、`preact`、`solid` 和 `vue` 的 `useDialex()`             |
+| `CreateDialexOptions`                                                | `dialexjs/vue` 和 `dialexjs/lit` 的 `createDialex`                        |
+| `Dialex`                                                             | `dialexjs/lit` 的 `createDialex` 返回的状态                               |
+| `DialexOptions`, `DialexSvelte`                                      | `dialexjs/svelte` 的 `provideDialex` 和 `createSvelteDialex`              |
+| `CreateDialexQwikOptions`, `UseDialexProviderOptions`, `DialexState` | `createDialexQwik` 及其 Hook，`dialexjs/qwik`                             |
+| `AngularDialexOptions`, `DialexStore`                                | `dialexjs/angular` 的 `provideDialex` 和 `injectDialex`                   |
+| `NuxtDialexOptions`                                                  | `dialexjs/nuxt` 的模块选项                                                |
+| `DialexLinkProps`, `DialexMiddlewareOptions`                         | Next.js 的 `DialexLink` 和 `createDialexMiddleware`                       |
+| `LocaleStorage`                                                      | `dialexjs/react-native` 的 `storage` 属性                                 |
 
 ## `preloadDictionaries`
 

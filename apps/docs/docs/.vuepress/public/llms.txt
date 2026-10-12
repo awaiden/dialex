@@ -6,12 +6,22 @@
 
 - [Dialex Documentation](/README.html): Dialex Documentation documentation and reference.
 - [API Reference](/api/README.html): API Reference documentation and reference.
+- [CLI API](/api/cli-api.html): CLI API documentation and reference.
+- [Client frameworks](/api/client-frameworks.html): Client frameworks documentation and reference.
+- [Core](/api/core.html): Core documentation and reference.
+- [Formatting](/api/formatting.html): Formatting documentation and reference.
+- [ICU messages](/api/icu.html): ICU messages documentation and reference.
+- [Routing](/api/routing.html): Routing documentation and reference.
+- [Server adapters](/api/server-adapters.html): Server adapters documentation and reference.
+- [Testing](/api/testing.html): Testing documentation and reference.
+- [Types](/api/types.html): Types documentation and reference.
 - [CLI](/cli/README.html): CLI documentation and reference.
 - [dialex check](/cli/check.html): dialex check documentation and reference.
 - [dialex export](/cli/export.html): dialex export documentation and reference.
 - [dialex generate](/cli/generate.html): dialex generate documentation and reference.
 - [dialex import](/cli/import.html): dialex import documentation and reference.
 - [dialex init](/cli/init.html): dialex init documentation and reference.
+- [dialex lock](/cli/lock.html): dialex lock documentation and reference.
 - [dialex translate](/cli/translate.html): dialex translate documentation and reference.
 - [Frameworks](/frameworks/README.html): Frameworks documentation and reference.
 - [AdonisJS](/frameworks/adonis.html): AdonisJS documentation and reference.
@@ -43,17 +53,25 @@
 - [Best practices](/guide/best-practices.html): Best practices documentation and reference.
 - [Changelog](/guide/changelog.html): Changelog documentation and reference.
 - [Comparison](/guide/comparison.html): Comparison documentation and reference.
+- [How Dialex works](/guide/concepts.html): How Dialex works documentation and reference.
 - [Configuration](/guide/configuration.html): Configuration documentation and reference.
+- [Diagnostics reference](/guide/diagnostics.html): Diagnostics reference documentation and reference.
 - [Dictionaries](/guide/dictionaries.html): Dictionaries documentation and reference.
 - [Locale Fallbacks](/guide/fallbacks.html): Locale Fallbacks documentation and reference.
+- [FAQ](/guide/faq.html): FAQ documentation and reference.
 - [Formatting & Plurals](/guide/formatting.html): Formatting & Plurals documentation and reference.
 - [Getting Started](/guide/getting-started.html): Getting Started documentation and reference.
+- [Glossary](/guide/glossary.html): Glossary documentation and reference.
 - [ICU Messages](/guide/icu.html): ICU Messages documentation and reference.
 - [Key Paths (`t`)](/guide/key-paths.html): Key Paths (`t`) documentation and reference.
 - [Lazy Loading](/guide/lazy-loading.html): Lazy Loading documentation and reference.
 - [Locale Detection](/guide/locale-detection.html): Locale Detection documentation and reference.
+- [Migrating to Dialex](/guide/migration.html): Migrating to Dialex documentation and reference.
+- [Native binaries](/guide/native.html): Native binaries documentation and reference.
+- [Requirements](/guide/requirements.html): Requirements documentation and reference.
 - [Routing Helpers](/guide/routing.html): Routing Helpers documentation and reference.
 - [Testing](/guide/testing.html): Testing documentation and reference.
+- [Troubleshooting](/guide/troubleshooting.html): Troubleshooting documentation and reference.
 - [Type Safety](/guide/type-safety.html): Type Safety documentation and reference.
 - [VS Code Extension](/guide/vscode.html): VS Code Extension documentation and reference.
 - [Zed and other editors](/guide/zed.html): Zed and other editors documentation and reference.

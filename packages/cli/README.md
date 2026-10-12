@@ -32,7 +32,7 @@ Binaries installed: `dialex` and the shorter alias `dx` (handy in package.json s
 
 Initialize or configure Dialex in any project:
 
-- **Automatic Framework Detection**: Identifies Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, Svelte, Solid, Preact, Qwik, Lit, React Native, Hapi, AdonisJS, tRPC, React Router, and React/Vite.
+- **Automatic Framework Detection**: Identifies Next.js, React Router, React/Vite, Preact, Solid, Svelte, SvelteKit, Vue, Nuxt, Qwik, Lit, React Native, Astro, Hono, Express, Fastify, Koa, NestJS, Elysia, Hapi, AdonisJS and tRPC from `package.json`.
 - **Magicast AST Injection**: Manipulates `dialex.config.ts` and registers the module in `nuxt.config.ts` (Nuxt) cleanly.
 - **Starter Dictionaries**: Emits typed starter dictionary and TypeScript declaration file.
 
@@ -70,6 +70,15 @@ dialex import translations/tr.xlf
 
 Fills missing (or `[TODO]`) strings with a provider you configure in `dialex.config.ts`. Built-in providers for Claude, OpenAI (ChatGPT), Gemini and DeepL are exported from `@dialexjs/cli/translate`. `--dry-run` lists what would be sent without calling anything.
 
+### `dialex lock`
+
+Records the translations you have as up to date with their current source text (`dialex.lock.json`), so a later edit of the source is noticed. `dialex translate` and `dialex import` record what they write; `dialex check` warns about translations whose source changed, and `--fail-on-stale` makes that an error.
+
+```bash
+dialex lock
+dialex lock --all   # also accept translations that are already out of date
+```
+
 ### `dialex check` (alias: `lint`)
 
 CI verification command:
@@ -83,6 +92,26 @@ CI verification command:
 ```bash
 dialex check
 ```
+
+---
+
+## 🦀 Native binary
+
+`dialex` and `dx` run a native binary (Rust) for `generate` and `check` on Linux, macOS and Windows (x64 and arm64). It is installed with this package as an optional dependency, writes the same files and prints the same output as the Node CLI, and is 20 to 40 times faster on large projects. Commands or projects it cannot decide on its own (a config with computed values, `translate`, `--fix`, `--watch`, lazy loading) run in Node as before.
+
+| Variable                    | Effect                                                                                         |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `DIALEX_NATIVE=0`           | Always use the Node implementation                                                             |
+| `DIALEX_NATIVE=1`           | Fail with a reason, instead of running in Node, when `generate` or `check` cannot run natively |
+| `DIALEX_BINARY=/path/to/dx` | Use this binary instead of the installed platform package                                      |
+
+## Exit codes
+
+`0` on success; `1` when the command fails. `dialex check` exits with `1` when it finds errors (warnings never fail it). `dialex import` exits with `0` even when it rejected values; read `success` in its `--json` output. Every command except `init` accepts `--json`.
+
+## Documentation
+
+[Commands and options](https://dialex.awaiden.com/cli/), [diagnostics reference](https://dialex.awaiden.com/guide/diagnostics.html), [native binaries](https://dialex.awaiden.com/guide/native.html).
 
 ---
 

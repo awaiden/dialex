@@ -47,6 +47,24 @@ router.get("/:locale", ({ locale, getDictionary }) => {
 
 Middleware ayrıca `Content-Language` yanıt başlığını ayarlar. Tüm [yerel ayar algılama seçenekleri](../guide/locale-detection.md#options) geçerlidir.
 
+## Kurulum
+
+Zaten kullandığınız framework paketini Dialex ile birlikte kurun, sonra sözlükleri derleyin:
+
+```bash
+npm install dialexjs @adonisjs/core
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Seçenekler
+
+Adaptör [yerel ayar algılama seçeneklerini](../guide/locale-detection.md), `dictionaries` ve `setHeader` değerlerini alır. Her seçenek, adaptör adaptör, [Sunucu adaptörleri](../api/server-adapters.md) sayfasındadır.
+
+## TypeScript
+
+`dialex generate` `dialex-env.d.ts` dosyasını yazar. Bu dosya `tsconfig.json` içine dahil edildiğinde (ve `moduleResolution` `"bundler"` ya da `"nodenext"` olduğunda), `ctx.getDictionary("home")` sözlük adlarını otomatik tamamlar, içeriği tipler ve `locale`, yapılandırılmış yerel ayarlarınızın birleşimi olur.
+
 ## En iyi uygulamalar
 
 - `dialex.generated.ts` içindeki `{ ...dialex }` nesnesini `createDialexMiddleware`'e ver. Sözlükleri ve yerel ayar yapılandırmasını taşır; böylece `defaultLocale`, `locales` ve `fallbacks` yalnızca bir kez, `dialex.config.ts` içinde yazılır.

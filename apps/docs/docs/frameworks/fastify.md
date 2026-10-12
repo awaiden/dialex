@@ -20,6 +20,24 @@ await app.listen({ port: 3000 });
 
 `dialexPlugin` is wrapped with `fastify-plugin` (name `dialex-fastify`, Fastify `>=4`), so the request decorators are visible across encapsulation contexts. It is also the default export. All [locale detection options](../guide/locale-detection.md#options) apply.
 
+## Install
+
+Install the framework package you already use together with Dialex, then compile the dictionaries:
+
+```bash
+npm install dialexjs fastify
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Options
+
+The adapter takes the [locale detection options](../guide/locale-detection.md), `dictionaries` and `setHeader`. Every option, adapter by adapter, is on [Server adapters](../api/server-adapters.md).
+
+## TypeScript
+
+`dialex generate` writes `dialex-env.d.ts`. With it included in `tsconfig.json` (and `moduleResolution` set to `"bundler"` or `"nodenext"`), `request.getDictionary("home")` autocompletes the dictionary names, types the content, and `locale` is the union of your configured locales.
+
 ## Best practices
 
 - Pass `{ ...dialex }` from `dialex.generated.ts` to the adapter. It carries the dictionaries and the locale config, so `defaultLocale`, `locales` and `fallbacks` are written once, in `dialex.config.ts`.

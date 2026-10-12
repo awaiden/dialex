@@ -25,6 +25,24 @@ const dict = Astro.locals.getDictionary("home");
 
 Die Middleware liest die Anfrage-URL, Header und Cookies, gilt also für On-Demand-Routen (SSR). Statisch vorgerenderte Seiten haben zur Build-Zeit keine Anfrage, die untersucht werden könnte. `Content-Language` wird gesetzt, sofern `setHeader` nicht `false` ist. Alle [Optionen der Locale-Erkennung](../guide/locale-detection.md#options) gelten, und `custom` erhält den Astro-Kontext.
 
+## Installation
+
+Installiere das Framework-Paket, das du ohnehin nutzt, zusammen mit Dialex und kompiliere dann die Wörterbücher:
+
+```bash
+npm install dialexjs astro
+npm install -D @dialexjs/cli
+npx dialex generate
+```
+
+## Optionen
+
+Der Adapter nimmt die [Optionen zur Locale-Erkennung](../guide/locale-detection.md), `dictionaries` und `setHeader`. Jede Option, Adapter für Adapter, steht unter [Server-Adapter](../api/server-adapters.md).
+
+## TypeScript
+
+`dialex generate` schreibt `dialex-env.d.ts`. Ist sie in `tsconfig.json` eingebunden (und `moduleResolution` auf `"bundler"` oder `"nodenext"` gesetzt), vervollständigt `Astro.locals.getDictionary("home")` die Wörterbuchnamen und typisiert den Inhalt, und `locale` ist die Union deiner konfigurierten Locales.
+
 ## Bewährte Vorgehensweisen
 
 - Übergib `{ ...dialex }` aus `dialex.generated.ts` an den Adapter. Es enthält die Wörterbücher und die Locale-Konfiguration, sodass `defaultLocale`, `locales` und `fallbacks` nur einmal in `dialex.config.ts` stehen.

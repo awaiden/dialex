@@ -8,8 +8,9 @@
     "build": "bun run scripts/generate-changelog.ts && bun run scripts/generate-llms.ts && vuepress build docs",
     "generate-llms": "bun run scripts/generate-llms.ts",
     "check-translations": "bun run scripts/check-translations.ts",
-    "test": "bun run scripts/generate-changelog.ts && bun run scripts/check-translations.ts",
-    "generate-changelog": "bun run scripts/generate-changelog.ts"
+    "test": "bun run scripts/generate-changelog.ts && bun run scripts/check-translations.ts && bun run scripts/check-api-coverage.ts",
+    "generate-changelog": "bun run scripts/generate-changelog.ts",
+    "check-api-coverage": "bun run scripts/check-api-coverage.ts"
   },
   "devDependencies": {
     "@mdit-vue/shared": "^3.0.2",

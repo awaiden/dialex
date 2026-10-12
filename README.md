@@ -12,7 +12,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-> **Status: pre-1.0.** The API can still change between minor versions. Breaking changes are listed in the [changelog](./CHANGELOG.md) and ship in a minor release; patch releases stay compatible. Pin the minor version (`~0.5.0`) if you need a stable surface.
+> **Status: pre-1.0.** The API can still change between minor versions. Breaking changes are listed in the [changelog](./CHANGELOG.md) and ship in a minor release; patch releases stay compatible. Pin the minor version (`~0.8.0`) if you need a stable surface.
 
 ---
 
@@ -23,9 +23,9 @@ Modern web development demands internationalization that doesn't compromise on r
 **Dialex** solves this with an Ahead-of-Time compiler model:
 
 - ⚡ **Zero Runtime Scanning**: Server and edge runtimes consume pre-compiled static dictionaries with zero disk I/O.
-- 📦 **Zero Dependencies**: `dialexjs` installs nothing else (about 0.5 MB); the scanning and code generation live in the CLI, which is a dev dependency.
+- 📦 **Zero Dependencies**: `dialexjs` installs nothing else (under 0.4 MB); the scanning and code generation live in the CLI, which is a dev dependency.
 - 🎯 **Total Type Safety**: Full autocomplete for dictionary names, keys, and locale signatures powered by automatic TypeScript interface augmentation.
-- 🛠️ **Universal Architecture**: One unified API across **Next.js**, **React 19**, **Hono**, **Fastify**, **Express**, **Koa**, **NestJS**, **Elysia**, **SvelteKit**, **Astro**, **Vue / Nuxt**, **Angular**, **h3 / Nitro**, and any **Fetch API** runtime.
+- 🛠️ **Universal Architecture**: One API across **Next.js**, **React 19**, **React Router**, **Preact**, **Solid**, **Svelte / SvelteKit**, **Vue / Nuxt**, **Qwik**, **Lit**, **Angular**, **React Native / Expo**, **Astro**, **Hono**, **Fastify**, **Express**, **Koa**, **NestJS**, **Elysia**, **Hapi**, **AdonisJS**, **tRPC**, **h3 / Nitro**, and any **Fetch API** runtime.
 - 🔢 **Plurals & Formatting**: Typed `plural`, `number`, `date`, `relativeTime`, and `list` helpers built on `Intl`.
 - 🪜 **Locale Fallbacks**: `tr-TR` → `tr` automatically, plus explicit chains via `fallbacks` in the config.
 - 🧭 **Routing**: Locale-prefixed URL helpers, hreflang and sitemap generation, a Next.js middleware and `DialexLink`.
@@ -33,16 +33,35 @@ Modern web development demands internationalization that doesn't compromise on r
 - 📝 **ICU Messages**: `{count, plural, one {# item} other {# items}}` strings, formatted by `t()` with CLDR plural rules for every language.
 - 🔑 **Key Paths**: A typed `t("home.nav.about")` alongside `getDictionary`.
 - 🧰 **Developer-First CLI**: [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) scaffolds projects with AST precision (**Magicast**), watches dictionary files with instantaneous codegen, and audits translation parity in CI.
+- 🦀 **Native Speed**: `dialex generate`, `dialex check` and the language server have a Rust implementation with identical output, 20 to 40 times faster on large projects, installed automatically and falling back to Node where it must ([details](https://dialex.awaiden.com/guide/native.html)).
 
 ---
 
 ## 📦 Packages
 
-| Package                           | Version                                                                                               | Description                                                                    |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [`dialexjs`](./packages/core)     | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)           | Core runtime library, framework adapters, and Vite plugin                      |
-| [`@dialexjs/cli`](./packages/cli) | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli) | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks |
-| [`@dialexjs/mcp`](./packages/mcp) | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp) | Model Context Protocol (MCP) server for AI assistants and agent skills         |
+| Package                                                   | Version                                                                                                                       | Description                                                                                                             |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [`dialexjs`](./packages/core)                             | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)                                   | Core runtime library and framework adapters                                                                             |
+| [`@dialexjs/cli`](./packages/cli)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)                         | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks                                          |
+| [`@dialexjs/mcp`](./packages/mcp)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp)                         | Model Context Protocol (MCP) server for AI assistants and agent skills                                                  |
+| [`@dialexjs/language-server`](./packages/language-server) | [![npm](https://img.shields.io/npm/v/@dialexjs/language-server.svg)](https://www.npmjs.com/package/@dialexjs/language-server) | LSP server: diagnostics, hover, go to definition, completion and quick fixes                                            |
+| [`@dialexjs/cli-<platform>`](./packages/cli-linux-x64)    | [![npm](https://img.shields.io/npm/v/@dialexjs/cli-linux-x64.svg)](https://www.npmjs.com/package/@dialexjs/cli-linux-x64)     | The native `dx` and language server binaries (Linux, macOS, Windows; x64 and arm64), installed as optional dependencies |
+
+---
+
+## 📚 Documentation
+
+Everything is documented at **[dialex.awaiden.com](https://dialex.awaiden.com)**, in English, Turkish, Spanish, German and Simplified Chinese:
+
+| Start here                                                               | When you need                                                                     |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [Getting Started](https://dialex.awaiden.com/guide/getting-started.html) | A first working project                                                           |
+| [How Dialex works](https://dialex.awaiden.com/guide/concepts.html)       | The whole pipeline in one page                                                    |
+| [Frameworks](https://dialex.awaiden.com/frameworks/)                     | Your framework's setup, options and troubleshooting                               |
+| [API reference](https://dialex.awaiden.com/api/)                         | Every export, with signatures, parameters and examples                            |
+| [CLI reference](https://dialex.awaiden.com/cli/)                         | Commands, options, exit codes and JSON output                                     |
+| [Migrating](https://dialex.awaiden.com/guide/migration.html)             | Moving from i18next, react-intl, next-intl or vue-i18n                            |
+| [Troubleshooting](https://dialex.awaiden.com/guide/troubleshooting.html) | Something does not work, and the [FAQ](https://dialex.awaiden.com/guide/faq.html) |
 
 ---
 
