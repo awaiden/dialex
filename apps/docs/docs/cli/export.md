@@ -15,6 +15,7 @@ dialex export -l tr de
 | `-o, --out <dir>`           | Output directory (default `dialex-export`)                     |
 | `-l, --locale <locales...>` | Limit to these locales (the default locale is always included) |
 | `-c, --config <path>`       | Custom config path                                             |
+| `--json`                    | Print machine-readable JSON and nothing else                   |
 
 ## Formats
 
@@ -27,3 +28,26 @@ Keys are dotted paths prefixed with the dictionary name, for example `home.nav.a
 Only plain string values are exported. Function values, such as `(name) => \`Hello ${name}\``, cannot be translated as text and are counted and reported as skipped. Keys cannot contain dots in their own names.
 
 Bring translations back with [`dialex import`](./import.md).
+
+## Output and exit code
+
+With `--json` it prints one object:
+
+```json
+{
+  "success": true,
+  "files": ["dialex-export/en.json", "dialex-export/tr.json"],
+  "keys": 15,
+  "skippedFunctions": 1,
+  "skippedFiles": []
+}
+```
+
+| Field              | Description                                       |
+| ------------------ | ------------------------------------------------- |
+| `files`            | The files written                                 |
+| `keys`             | How many keys were exported                       |
+| `skippedFunctions` | How many function values were left out (not text) |
+| `skippedFiles`     | Dictionary files that could not be read           |
+
+The exit code is `1` when the command fails, for example on an unknown `--format`.

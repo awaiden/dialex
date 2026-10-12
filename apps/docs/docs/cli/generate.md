@@ -18,7 +18,24 @@ dialex gen -o src/custom.generated.ts
 | `-w, --watch`         | Watch dictionary files and regenerate on change   |
 | `-o, --output <path>` | Custom output path for the generated dictionaries |
 | `-c, --config <path>` | Custom config path                                |
+| `--json`              | Print machine-readable JSON and nothing else      |
 
 Run it before building or starting any server-side app, typically via the `dx:generate` script that `init` adds.
 
 Nothing builds this file for you, so keep it current: run `dialex generate --watch` in a second terminal (it reacts to added, edited and removed dictionary files and to config changes), use the Dialex VS Code extension (it regenerates on save), or run `dx generate` before `dev` and `build`. [`dialex check`](./check.md) reports a stale file as an error, and `dialex check --fix` rewrites it. Without a `dialex.config.*` the defaults apply and `locales` come from your dictionaries. `check` compares the generated files ignoring formatting (whitespace, quotes, trailing commas), so a formatter such as Prettier, Biome or oxfmt may rewrite them. Adding them to its ignore list avoids noisy diffs.
+
+## Output and exit code
+
+With `--json` it prints one object: `success`, `files` (the dictionary files, relative to the project), `outputPath`, `dtsPath` and `notes` (things worth knowing, such as a dictionary that could not be split by locale).
+
+```json
+{
+  "success": true,
+  "files": ["src/home.content.ts"],
+  "outputPath": "src/dialex.generated.ts",
+  "dtsPath": "src/dialex-env.d.ts",
+  "notes": []
+}
+```
+
+The exit code is `0` on success and `1` when generation fails, for example on a dictionary with a syntax error. With `--watch` the command keeps running.

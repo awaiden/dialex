@@ -15,6 +15,7 @@ dialex export -l tr de
 | `-o, --out <dir>`           | Ausgabeverzeichnis (Standard `dialex-export`)                           |
 | `-l, --locale <locales...>` | Auf diese Locales beschränken (das Standard-Locale ist immer enthalten) |
 | `-c, --config <path>`       | Eigener Konfigurationspfad                                              |
+| `--json`                    | Gibt maschinenlesbares JSON und sonst nichts aus                        |
 
 ## Formate
 
@@ -27,3 +28,26 @@ Schlüssel sind Punktpfade mit dem Wörterbuchnamen als Präfix, zum Beispiel `h
 Exportiert werden nur einfache String-Werte. Funktionswerte wie `(name) => \`Hello ${name}\`` lassen sich nicht als Text übersetzen und werden gezählt und als übersprungen gemeldet. Schlüssel dürfen in ihren eigenen Namen keine Punkte enthalten.
 
 Hole die Übersetzungen mit [`dialex import`](./import.md) zurück.
+
+## Ausgabe und Exit-Code
+
+Mit `--json` gibt es ein Objekt aus:
+
+```json
+{
+  "success": true,
+  "files": ["dialex-export/en.json", "dialex-export/tr.json"],
+  "keys": 15,
+  "skippedFunctions": 1,
+  "skippedFiles": []
+}
+```
+
+| Feld               | Beschreibung                                            |
+| ------------------ | ------------------------------------------------------- |
+| `files`            | Die geschriebenen Dateien                               |
+| `keys`             | Wie viele Schlüssel exportiert wurden                   |
+| `skippedFunctions` | Wie viele Funktionswerte ausgelassen wurden (kein Text) |
+| `skippedFiles`     | Wörterbuchdateien, die sich nicht lesen ließen          |
+
+Der Exit-Code ist `1`, wenn der Befehl fehlschlägt, etwa bei einem unbekannten `--format`.

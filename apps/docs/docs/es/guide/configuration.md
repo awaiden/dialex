@@ -29,3 +29,43 @@ export default defineConfig({
 Dialex omite `node_modules`, la salida de compilación y todo lo que ignoren tus archivos `.gitignore` (incluido el del repositorio, para un paquete dentro de un monorepo). Usa `exclude` para cualquier otra cosa, como una carpeta vendorizada que sí subes.
 
 El archivo es opcional: sin él se aplican todos los valores por defecto de arriba. `dx generate` copia los ajustes que necesita el runtime (no `translate`) a `dialex.generated.ts`, así que vuelve a ejecutarlo tras cambiar el archivo.
+
+## Dónde se encuentra el archivo
+
+Las herramientas buscan en la raíz del proyecto (la carpeta desde la que ejecutas `dialex`, o la carpeta del proyecto en el editor) `dialex.config.<ext>` y luego `i18n.config.<ext>`, con `<ext>` uno de `ts`, `mts`, `cts`, `js`, `mjs`, `cjs` o `json`. Gana el primero que se encuentre. `-c, --config <path>` (o el ajuste del editor `dialex.configPath`) apunta a otro archivo. En un monorepo, cada paquete que tiene configuración es su propio proyecto, y un paquete con solo diccionarios usa los valores por defecto.
+
+## Cómo la leen las herramientas
+
+| Herramienta                                                 | Lee la configuración                                                                   |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Ejecutando el archivo, así que los valores pueden calcularse (`locales: getLocales()`) |
+| El `dx` nativo                                              | Leyendo su árbol de sintaxis. Todo lo calculado entrega el comando a la CLI de Node    |
+| La extensión del editor y el servidor de lenguaje           | Leyendo su árbol de sintaxis, y nunca ejecutándola                                     |
+
+Una configuración hecha de literales (cadenas, arrays, booleanos) se entiende en todas partes. Un ajuste calculado es invisible para el editor, que entonces usa el valor por defecto y registra una nota. Si un editor debe conocer `locales`, escríbelos. Consulta [Binarios nativos](./native.md).
+
+## Ejemplos
+
+Un proyecto con fallbacks regionales y el locale por defecto servido sin prefijo:
+
+```ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "pt", "pt-BR", "es"],
+  fallbacks: { "pt-BR": ["pt", "es"] },
+  prefixDefault: false,
+});
+```
+
+Un framework cuya carpeta de código no es `src/`, con una carpeta vendorizada excluida:
+
+```ts
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "app/dialex.generated.ts",
+  exclude: ["vendor/**"],
+});
+```

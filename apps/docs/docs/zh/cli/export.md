@@ -15,6 +15,7 @@ dialex export -l tr de
 | `-o, --out <dir>`           | 输出目录（默认 `dialex-export`）       |
 | `-l, --locale <locales...>` | 仅限这些 locale（始终包含默认 locale） |
 | `-c, --config <path>`       | 自定义配置路径                         |
+| `--json`                    | 只打印机器可读的 JSON，别无其他        |
 
 ## 格式
 
@@ -27,3 +28,26 @@ dialex export -l tr de
 只会导出普通字符串值。函数值（例如 `(name) => \`Hello ${name}\``）无法作为文本翻译，会被统计并报告为已跳过。键本身的名称中不能包含点号。
 
 使用 [`dialex import`](./import.md) 把翻译导回。
+
+## 输出与退出码
+
+使用 `--json` 时打印一个对象：
+
+```json
+{
+  "success": true,
+  "files": ["dialex-export/en.json", "dialex-export/tr.json"],
+  "keys": 15,
+  "skippedFunctions": 1,
+  "skippedFiles": []
+}
+```
+
+| 字段               | 说明                             |
+| ------------------ | -------------------------------- |
+| `files`            | 写出的文件                       |
+| `keys`             | 导出了多少个键                   |
+| `skippedFunctions` | 有多少个函数值被略过（不是文本） |
+| `skippedFiles`     | 无法读取的词典文件               |
+
+命令失败时（例如 `--format` 未知）退出码为 `1`。

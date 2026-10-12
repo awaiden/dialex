@@ -2,7 +2,7 @@
 
 Dialex'i geçerli projede başlatır.
 
-- Çerçeveyi algılar (Next.js, Fastify, Koa, Hono, Express, NestJS, Elysia, SvelteKit, Astro, Vue, Nuxt, React/Vite).
+- Çerçeveyi algılar (Next.js, React Router, React/Vite, Preact, Solid, Svelte, SvelteKit, Vue, Nuxt, Qwik, Lit, React Native, Astro, Hono, Express, Fastify, Koa, NestJS, Elysia, Hapi, AdonisJS, tRPC).
 - `dialex.config.ts` dosyasını Magicast AST dönüşümleriyle düzenler (her çerçeve için bir yapılandırma dosyası oluşturulur) ve Nuxt projelerinde `nuxt.config.ts` içine `dialexjs/nuxt` modülünü kaydeder.
 - Başlangıç sözlüğünü ve TypeScript bildirim dosyasını yazar.
 - `dialexjs` paketini ve `@dialexjs/cli` geliştirme bağımlılığını `package.json` dosyasına ekler (zaten listelenen paketlere dokunmaz) ve bir `dx:generate` betiği ekler. Ardından paket yöneticinizin install komutunu çalıştırın.
@@ -18,3 +18,5 @@ dialex init --framework fastify --default-locale en --locales en,tr -y
 | `-d, --default-locale <locale>` | Varsayılan yerel ayar, örn. `en`                                                                                                                                                                                        |
 | `-l, --locales <locales>`       | Virgülle ayrılmış yerel ayarlar, örn. `en,tr`                                                                                                                                                                           |
 | `-y, --yes`                     | Soruları atlar ve varsayılanları kullanır                                                                                                                                                                               |
+| `--ai`                          | Yapay zekâ asistanı desteğini yapılandırır: `.agents/skills/dialex/SKILL.md`, `.mcp.json` içinde bir `dialex` girdisi ve `AGENTS.md` içinde Dialex yönergeleri. `-y` ile, `--no-ai` vermedikçe açıktır                  |
+| `--no-ai`                       | Yapay zekâ asistanı dosyalarını atlar                                                                                                                                                                                   |

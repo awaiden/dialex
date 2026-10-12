@@ -15,6 +15,7 @@ dialex import --locale tr strings.json
 | `-l, --locale <locale>` | Locale for single-locale files                          |
 | `--allow-new`           | Add keys that do not exist in any locale yet            |
 | `-c, --config <path>`   | Custom config path                                      |
+| `--json`                | Print machine-readable JSON and nothing else            |
 
 ## How locales are found
 
@@ -29,3 +30,31 @@ dialex import --locale tr strings.json
 - Function values are never overwritten; they are reported as left unchanged.
 - Empty values are skipped.
 - [ICU](../guide/icu.md) messages are validated: a value that is not valid ICU, or that uses different arguments than the same key in another locale, is rejected and listed.
+
+## Output and exit code
+
+With `--json` it prints one object:
+
+```json
+{
+  "success": false,
+  "created": 0,
+  "updated": 8,
+  "skipped": [],
+  "rejected": ["tr:a.items (invalid ICU: ...)"],
+  "unknown": [],
+  "errors": []
+}
+```
+
+| Field      | Description                                                                                         |
+| ---------- | --------------------------------------------------------------------------------------------------- |
+| `success`  | `false` when at least one value was rejected                                                        |
+| `created`  | Values added                                                                                        |
+| `updated`  | Values changed                                                                                      |
+| `skipped`  | Function or other non-text values left unchanged                                                    |
+| `rejected` | Values refused, as `locale:key (reason)`: invalid ICU, or arguments that differ from another locale |
+| `unknown`  | Keys that exist in no locale and were ignored (add them with `--allow-new`)                         |
+| `errors`   | Problems reading the file                                                                           |
+
+The exit code is `1` when the command cannot run (a missing file, an unknown format). **A run that rejected values still exits with `0`**: check `success` or `rejected` in the JSON when a script must stop on rejected values.

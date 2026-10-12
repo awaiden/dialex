@@ -18,7 +18,24 @@ dialex gen -o src/custom.generated.ts
 | `-w, --watch`         | Vigila los archivos de diccionario y regenera al cambiar     |
 | `-o, --output <path>` | Ruta de salida personalizada para los diccionarios generados |
 | `-c, --config <path>` | Ruta de configuración personalizada                          |
+| `--json`              | Imprime JSON legible por máquina y nada más                  |
 
 Ejecútalo antes de compilar o iniciar cualquier aplicación de servidor, normalmente mediante el script `dx:generate` que añade `init`.
 
 Nada genera este archivo por ti, así que mantenlo al día: ejecuta `dialex generate --watch` en una segunda terminal (reacciona a diccionarios añadidos, editados y eliminados y a cambios de configuración), usa la extensión de VS Code de Dialex (regenera al guardar) o ejecuta `dx generate` antes de `dev` y `build`. [`dialex check`](./check.md) informa de un archivo desactualizado como error, y `dialex check --fix` lo reescribe. Sin `dialex.config.*` se aplican los valores por defecto y los `locales` salen de tus diccionarios. `check` compara los archivos generados ignorando el formato (espacios, comillas, comas finales), así que un formateador como Prettier, Biome u oxfmt puede reescribirlos. Añadirlos a su lista de ignorados evita diffs ruidosos.
+
+## Salida y código de salida
+
+Con `--json` imprime un objeto: `success`, `files` (los archivos de diccionario, relativos al proyecto), `outputPath`, `dtsPath` y `notes` (cosas que conviene saber, como un diccionario que no se pudo dividir por locale).
+
+```json
+{
+  "success": true,
+  "files": ["src/home.content.ts"],
+  "outputPath": "src/dialex.generated.ts",
+  "dtsPath": "src/dialex-env.d.ts",
+  "notes": []
+}
+```
+
+El código de salida es `0` si tiene éxito y `1` cuando la generación falla, por ejemplo con un diccionario con un error de sintaxis. Con `--watch` el comando sigue en ejecución.

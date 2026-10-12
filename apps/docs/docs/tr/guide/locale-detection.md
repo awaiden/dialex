@@ -1,6 +1,6 @@
 # Yerel Ayar Algılama
 
-Sunucu adaptörleri (Express, Fastify, Koa, Hono, NestJS) istek yerel ayarını birkaç kaynaktan şu sırayla çözer:
+Sunucu adaptörleri (Express, Fastify, Koa, Hono, Elysia, h3, Hapi, AdonisJS, NestJS, SvelteKit, Astro, tRPC ve Fetch API işleyicisi) istek yerel ayarını birkaç kaynaktan şu sırayla çözer:
 
 1. Özel bir çıkarıcı (`custom`)
 2. İlk yol segmenti (`/tr/...`); `usePath` doğruysa ve `locales` yapılandırılmışsa (`locales` yoksa yol yok sayılır; böylece `/api` gibi segmentler asla yerel ayar sanılmaz; sorgu dizeleri ve parça tanımlayıcıları eşleştirmeden önce atılır)
@@ -16,21 +16,27 @@ Desteklenen bir yerel ayarla eşleşen ilk aday kazanır; yoksa `defaultLocale` 
 
 Tüm adaptörler şunları kabul eder (`LocaleResolverOptions`):
 
-| Seçenek         | Tip                                    | Varsayılan           | Açıklama                          |
-| --------------- | -------------------------------------- | -------------------- | --------------------------------- |
-| `defaultLocale` | `string`                               | `"en"`               | Yedek yerel ayar                  |
-| `locales`       | `string[]`                             | —                    | Desteklenen yerel ayarlar         |
-| `queryKeys`     | `string \| string[]`                   | `["locale", "lang"]` | Sorgu parametresi adları          |
-| `cookieKeys`    | `string \| string[]`                   | `["locale", "lang"]` | Çerez adları                      |
-| `headerKey`     | `string`                               | `"Accept-Language"`  | Okunacak başlık                   |
-| `usePath`       | `boolean`                              | `true`               | İlk URL yol segmentini kontrol et |
-| `custom`        | `(req) => string \| null \| undefined` | —                    | Özel çıkarıcı                     |
+| Seçenek         | Tip                                    | Varsayılan           | Açıklama                                                                                           |
+| --------------- | -------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------- |
+| `defaultLocale` | `string`                               | `"en"`               | Yedek yerel ayar                                                                                   |
+| `locales`       | `string[]`                             | —                    | Desteklenen yerel ayarlar                                                                          |
+| `queryKeys`     | `string \| string[]`                   | `["locale", "lang"]` | Sorgu parametresi adları                                                                           |
+| `cookieKeys`    | `string \| string[]`                   | `["locale", "lang"]` | Çerez adları                                                                                       |
+| `headerKey`     | `string`                               | `"Accept-Language"`  | Okunacak başlık                                                                                    |
+| `usePath`       | `boolean`                              | `true`               | İlk URL yol segmentini kontrol et                                                                  |
+| `custom`        | `(req) => string \| null \| undefined` | —                    | Özel çıkarıcı                                                                                      |
+| `config`        | `GeneratedConfig`                      | —                    | Üretilen yapılandırma. Ayarlanmamış `defaultLocale`, `locales` ve `fallbacks` değerlerini doldurur |
+| `fallbacks`     | `Record<string, string[]>`             | —                    | Açık [yedek zincirleri](./fallbacks.md)                                                            |
 
-Buna ek olarak adaptöre göre: `config` (üretilen yapılandırma; ayarlanmamışsa `defaultLocale`, `locales` ve `fallbacks` değerlerini doldurur, `{ ...dialex }` bunu sağlar), `dictionaries` (`defineDictionary` sonuçlarından oluşan harita veya dizi; verilmezse `defineDictionary` ile kaydedilmiş sözlüklere döner) ve `setHeader` (varsayılan `true`, `Content-Language` başlığını ayarlar).
+Bunlara ek olarak her adaptör `dictionaries` (bir harita ya da `defineDictionary` sonuçlarının dizisi; olmazsa `defineDictionary` ile kaydedilen sözlükler kullanılır) ve `setHeader` (varsayılan `true`; `Content-Language` gönderir) alır. Açıkça verdiğiniz seçenekler üretilen `config`'e, üretilen `config` de varsayılanlara baskındır. Her seçenek, adaptör adaptör, [Sunucu adaptörleri](../api/server-adapters.md) sayfasındadır.
 
 ## Eşleştirme kuralları
 
 `matchLocale` büyük/küçük harfe duyarsızdır ve sırasıyla şunları dener: tam eşleşme, adayın dil öneki (`en-US` → `en`), ardından önek olarak eşleşen desteklenen yerel ayar (`en` → `en-US`).
+
+## Yanıt başlığı
+
+`setHeader` ile (varsayılan) çözümlenen yerel ayar `Content-Language` olarak gönderilir. Bir CDN ya da proxy `Accept-Language`'a bağlı sayfaları önbelleğe alıyorsa `Vary: Accept-Language` de gönderin.
 
 ## Yardımcılar
 

@@ -15,6 +15,7 @@ dialex export -l tr de
 | `-o, --out <dir>`           | Çıktı dizini (varsayılan `dialex-export`)                             |
 | `-l, --locale <locales...>` | Bu yerel ayarlarla sınırla (varsayılan yerel ayar her zaman dahildir) |
 | `-c, --config <path>`       | Özel yapılandırma yolu                                                |
+| `--json`                    | Makine tarafından okunabilir JSON yazdırır, başka bir şey yazdırmaz   |
 
 ## Biçimler
 
@@ -27,3 +28,26 @@ Anahtarlar, başına sözlük adı eklenmiş noktalı yollardır, örneğin `hom
 Yalnızca düz metin değerleri dışa aktarılır. `(name) => \`Hello ${name}\`` gibi fonksiyon değerleri metin olarak çevrilemez; sayılır ve atlanmış olarak raporlanır. Anahtarların kendi adlarında nokta bulunamaz.
 
 Çevirileri [`dialex import`](./import.md) ile geri getirin.
+
+## Çıktı ve çıkış kodu
+
+`--json` ile tek bir nesne yazdırır:
+
+```json
+{
+  "success": true,
+  "files": ["dialex-export/en.json", "dialex-export/tr.json"],
+  "keys": 15,
+  "skippedFunctions": 1,
+  "skippedFiles": []
+}
+```
+
+| Alan               | Açıklama                                                      |
+| ------------------ | ------------------------------------------------------------- |
+| `files`            | Yazılan dosyalar                                              |
+| `keys`             | Kaç anahtarın dışa aktarıldığı                                |
+| `skippedFunctions` | Kaç fonksiyon değerinin dışarıda bırakıldığı (metin değildir) |
+| `skippedFiles`     | Okunamayan sözlük dosyaları                                   |
+
+Komut başarısız olduğunda, örneğin bilinmeyen bir `--format` ile, çıkış kodu `1`'dir.

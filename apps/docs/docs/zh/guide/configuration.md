@@ -29,3 +29,43 @@ export default defineConfig({
 Dialex 会跳过 `node_modules`、构建输出以及 `.gitignore` 文件忽略的所有内容（对于 monorepo 中的包，也包括仓库根目录的 `.gitignore`）。其他情况请使用 `exclude`，例如你提交的 vendor 目录。
 
 该文件是可选的：没有它时，上面的所有默认值都会生效。`dx generate` 会把运行时需要的设置（不含 `translate`）复制到 `dialex.generated.ts`，因此修改文件后请重新运行。
+
+## 在哪里找到该文件
+
+工具会在项目根目录（你运行 `dialex` 的文件夹，或编辑器中项目所在的文件夹）中先查找 `dialex.config.<ext>`，再查找 `i18n.config.<ext>`，其中 `<ext>` 为 `ts`、`mts`、`cts`、`js`、`mjs`、`cjs` 或 `json` 之一。先找到的生效。`-c, --config <path>`（或编辑器设置 `dialex.configPath`）可指向另一个文件。在 monorepo 中，每个带有配置的包都是各自的项目，只有词典的包使用默认值。
+
+## 工具如何读取它
+
+| 工具                                                        | 读取配置的方式                                                |
+| ----------------------------------------------------------- | ------------------------------------------------------------- |
+| `dialex generate`、`check`、`export`、`import`、`translate` | 运行该文件，因此值可以是计算出来的（`locales: getLocales()`） |
+| 原生 `dx`                                                   | 读取其语法树。任何计算出来的内容都会把命令交给 Node CLI       |
+| 编辑器扩展和语言服务器                                      | 读取其语法树，从不运行它                                      |
+
+由字面量（字符串、数组、布尔值）组成的配置在任何地方都能被理解。计算出来的设置对编辑器不可见，编辑器会对它使用默认值并记录一条说明。如果编辑器必须知道 `locales`，请把它们直接写出来。参见[原生二进制](./native.md)。
+
+## 示例
+
+带有地区回退、且默认 locale 不带前缀的项目：
+
+```ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "pt", "pt-BR", "es"],
+  fallbacks: { "pt-BR": ["pt", "es"] },
+  prefixDefault: false,
+});
+```
+
+源码文件夹不是 `src/`、并排除了第三方文件夹的框架：
+
+```ts
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  output: "app/dialex.generated.ts",
+  exclude: ["vendor/**"],
+});
+```

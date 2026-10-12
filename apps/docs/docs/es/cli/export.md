@@ -15,6 +15,7 @@ dialex export -l tr de
 | `-o, --out <dir>`           | Directorio de salida (por defecto `dialex-export`)                               |
 | `-l, --locale <locales...>` | Limita la exportación a estos locales (el locale por defecto siempre se incluye) |
 | `-c, --config <path>`       | Ruta de configuración personalizada                                              |
+| `--json`                    | Imprime JSON legible por máquina y nada más                                      |
 
 ## Formatos
 
@@ -27,3 +28,26 @@ Las claves son rutas con puntos precedidas por el nombre del diccionario, por ej
 Solo se exportan valores de cadena simples. Los valores de tipo función, como `(name) => \`Hello ${name}\``, no se pueden traducir como texto y se cuentan y se informan como omitidos. Las claves no pueden contener puntos en sus propios nombres.
 
 Recupera las traducciones con [`dialex import`](./import.md).
+
+## Salida y código de salida
+
+Con `--json` imprime un objeto:
+
+```json
+{
+  "success": true,
+  "files": ["dialex-export/en.json", "dialex-export/tr.json"],
+  "keys": 15,
+  "skippedFunctions": 1,
+  "skippedFiles": []
+}
+```
+
+| Campo              | Descripción                                            |
+| ------------------ | ------------------------------------------------------ |
+| `files`            | Los archivos escritos                                  |
+| `keys`             | Cuántas claves se exportaron                           |
+| `skippedFunctions` | Cuántos valores de función se omitieron (no son texto) |
+| `skippedFiles`     | Archivos de diccionario que no se pudieron leer        |
+
+El código de salida es `1` cuando el comando falla, por ejemplo con un `--format` desconocido.

@@ -9,12 +9,13 @@ dialex import translations/tr.xlf
 dialex import --locale tr strings.json
 ```
 
-| Seçenek                 | Açıklama                                               |
-| ----------------------- | ------------------------------------------------------ |
-| `-f, --format <format>` | `json`, `csv` veya `xliff` (uzantıdan anlaşılır)       |
-| `-l, --locale <locale>` | Tek yerel ayarlı dosyalar için yerel ayar              |
-| `--allow-new`           | Henüz hiçbir yerel ayarda bulunmayan anahtarları ekler |
-| `-c, --config <path>`   | Özel yapılandırma yolu                                 |
+| Seçenek                 | Açıklama                                                            |
+| ----------------------- | ------------------------------------------------------------------- |
+| `-f, --format <format>` | `json`, `csv` veya `xliff` (uzantıdan anlaşılır)                    |
+| `-l, --locale <locale>` | Tek yerel ayarlı dosyalar için yerel ayar                           |
+| `--allow-new`           | Henüz hiçbir yerel ayarda bulunmayan anahtarları ekler              |
+| `-c, --config <path>`   | Özel yapılandırma yolu                                              |
+| `--json`                | Makine tarafından okunabilir JSON yazdırır, başka bir şey yazdırmaz |
 
 ## Yerel ayarlar nasıl bulunur
 
@@ -29,3 +30,31 @@ dialex import --locale tr strings.json
 - Fonksiyon değerlerinin üzerine asla yazılmaz; değiştirilmeden bırakıldıkları raporlanır.
 - Boş değerler atlanır.
 - [ICU](../guide/icu.md) mesajları doğrulanır: geçerli ICU olmayan ya da başka bir yerel ayardaki aynı anahtardan farklı argümanlar kullanan bir değer reddedilir ve listelenir.
+
+## Çıktı ve çıkış kodu
+
+`--json` ile tek bir nesne yazdırır:
+
+```json
+{
+  "success": false,
+  "created": 0,
+  "updated": 8,
+  "skipped": [],
+  "rejected": ["tr:a.items (invalid ICU: ...)"],
+  "unknown": [],
+  "errors": []
+}
+```
+
+| Alan       | Açıklama                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------- |
+| `success`  | En az bir değer reddedildiyse `false`                                                                         |
+| `created`  | Eklenen değerler                                                                                              |
+| `updated`  | Değiştirilen değerler                                                                                         |
+| `skipped`  | Değiştirilmeden bırakılan fonksiyon ya da metin olmayan değerler                                              |
+| `rejected` | `locale:key (neden)` olarak reddedilen değerler: geçersiz ICU ya da başka bir yerel ayardan farklı argümanlar |
+| `unknown`  | Hiçbir yerel ayarda bulunmayan ve yok sayılan anahtarlar (`--allow-new` ile ekleyin)                          |
+| `errors`   | Dosyayı okurken oluşan sorunlar                                                                               |
+
+Komut çalışamadığında (eksik dosya, bilinmeyen biçim) çıkış kodu `1`'dir. **Değer reddeden bir çalıştırma yine de `0` ile çıkar**: bir betiğin reddedilen değerlerde durması gerekiyorsa JSON'daki `success` ya da `rejected` alanına bakın.
