@@ -152,6 +152,10 @@ describe("runTranslate", () => {
       const jsonDry = JSON.parse(lines.join("\n"));
       expect(jsonDry.dryRun).toBe(true);
       expect(jsonDry.pending.length).toBe(3);
+      // only the documented fields: no parsed dictionary and no key path array
+      for (const item of jsonDry.pending) {
+        expect(Object.keys(item).sort()).toEqual(["file", "key", "locale", "source"]);
+      }
 
       lines.length = 0;
       const transResult = await runTranslate({ cwd: dir, provider, locale: ["tr"], json: true });

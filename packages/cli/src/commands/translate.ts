@@ -59,6 +59,18 @@ interface Task extends PendingTranslation {
   path: string[];
 }
 
+/**
+ * The JSON of a result. Tasks carry the parsed dictionary and the key path for the writing step;
+ * those are not part of the output (the parsed file is large and not meant to be read).
+ */
+function printable(result: TranslateResult): string {
+  return JSON.stringify(
+    result,
+    (key, value) => (key === "dict" || key === "path" ? undefined : value),
+    2,
+  );
+}
+
 export async function runTranslate(options: TranslateOptions = {}): Promise<TranslateResult> {
   const root = options.cwd || process.cwd();
   const project = await loadProject(root, options.config);
@@ -134,7 +146,7 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
 
   if (tasks.length === 0) {
     if (quiet) {
-      console.log(JSON.stringify(result, null, 2));
+      console.log(printable(result));
     } else {
       logger.success(`Nothing to translate from "${source}".`);
     }
@@ -143,7 +155,7 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
 
   if (options.dryRun) {
     if (quiet) {
-      console.log(JSON.stringify(result, null, 2));
+      console.log(printable(result));
     } else {
       logger.info(
         `Would translate ${tasks.length} string${tasks.length === 1 ? "" : "s"} from "${source}":`,
@@ -218,7 +230,7 @@ export async function runTranslate(options: TranslateOptions = {}): Promise<Tran
   }
 
   if (quiet) {
-    console.log(JSON.stringify(result, null, 2));
+    console.log(printable(result));
   } else {
     logger.success(
       `Translated ${result.translated} of ${tasks.length} string${tasks.length === 1 ? "" : "s"}.`,
