@@ -9,6 +9,7 @@ use std::time::{Duration, Instant, SystemTime};
 use crossbeam_channel::RecvTimeoutError;
 use dialex_cli::analysis::{analyze_project, AnalysisConfig, AnalysisOptions, Issue, Level, Range};
 use dialex_cli::generate::{load_config_lenient, render, write, Options};
+use dialex_cli::resolved;
 use dialex_cli::scan::forget_walks;
 use lsp_server::{Connection, ErrorCode, Message, Notification, Request, RequestId, Response};
 use serde_json::{json, Value};
@@ -77,6 +78,8 @@ struct Server {
     layout: HashMap<PathBuf, Vec<ProjectRoot>>,
     /// Files may have appeared or gone since the tree was last walked.
     layout_dirty: bool,
+    /// A config file or the settings changed: resolve the config again on the next refresh.
+    config_dirty: bool,
     /// What each file's diagnostics were when last sent, so only changes are sent again.
     published: HashMap<String, Vec<Value>>,
     refresh_at: Option<Instant>,
@@ -113,6 +116,7 @@ impl Server {
             projects: Vec::new(),
             layout: HashMap::new(),
             layout_dirty: true,
+            config_dirty: true,
             published: HashMap::new(),
             refresh_at: None,
             generate_at: None,
@@ -333,6 +337,16 @@ impl Server {
                 {
                     self.layout.clear();
                 }
+                let is_config = |uri: &str| {
+                    let name = uri.rsplit('/').next().unwrap_or("");
+                    name.starts_with("dialex.config.") || name.starts_with("i18n.config.")
+                };
+                if changes
+                    .iter()
+                    .any(|c| c["uri"].as_str().is_some_and(is_config))
+                {
+                    self.config_dirty = true;
+                }
                 self.schedule_refresh();
                 self.schedule_generate();
             }
@@ -365,6 +379,7 @@ impl Server {
         }
         self.settings = settings;
         self.layout_dirty = true;
+        self.config_dirty = true;
         self.schedule_refresh();
         self.schedule_generate();
     }
@@ -392,6 +407,12 @@ impl Server {
     fn refresh(&mut self) {
         let started = Instant::now();
         self.forget_layout();
+        // The config is written again whenever it may have changed. A client that sends no file
+        // events cannot say, so it is resolved on every pass.
+        if self.config_dirty || !self.client_watches {
+            resolved::invalidate();
+            self.config_dirty = false;
+        }
         let mut projects: Vec<Project> = Vec::new();
 
         if self.settings.enable {

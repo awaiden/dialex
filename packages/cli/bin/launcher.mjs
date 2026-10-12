@@ -5,7 +5,8 @@
 //   DIALEX_NATIVE=0   always use the Node CLI
 //   DIALEX_NATIVE=1   native only: fail instead of falling back to Node for a command
 //   DIALEX_BINARY     path of a binary to use instead of the installed package
-//   DIALEX_CONFIG_RESOLVER   is set for the binary: the `@dialexjs/config` script it runs to resolve the config
+//   DIALEX_CONFIG_RESOLVER / DIALEX_CONFIG_WRITTEN   are set for the binary: the `@dialexjs/config`
+//   script, and whether the resolved config was already written for this command
 //
 // The native binary handles `generate` and `check` itself and hands every other command back to
 // the Node CLI (`dist/index.mjs`), so behavior and output stay the same.
@@ -51,8 +52,8 @@ function findBinary() {
 }
 
 /**
- * The script of `@dialexjs/config` that writes `.dialex/config.json`. The binary does not read
- * `dialex.config.*` itself; it runs this when the resolved file is missing or stale.
+ * The script of `@dialexjs/config`, for a binary that is started without this launcher and has to
+ * write `.dialex/config.json` itself.
  */
 function findConfigResolver() {
   try {
@@ -62,15 +63,44 @@ function findConfigResolver() {
   }
 }
 
-const binary = process.env.DIALEX_NATIVE === "0" ? undefined : findBinary();
+/** The commands the binary runs itself; it reads `.dialex/config.json` for them. */
+const NATIVE_COMMANDS = new Set(["generate", "check"]);
+
+/**
+ * Writes `.dialex/config.json` for this run. It is written again every time, so the binary never
+ * has to ask whether it is up to date. Returns `false` when it could not be written (a read-only
+ * checkout): the Node CLI then runs the command.
+ */
+async function writeResolvedConfig(args) {
+  const at = args.findIndex((arg) => arg === "-c" || arg === "--config");
+  const configFile = at === -1 ? undefined : args[at + 1];
+  try {
+    const { writeConfig } = await import("@dialexjs/config");
+    writeConfig(process.cwd(), { mode: "run", configFile });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const args = process.argv.slice(2);
+let binary = process.env.DIALEX_NATIVE === "0" ? undefined : findBinary();
+let configWritten = false;
+if (binary && NATIVE_COMMANDS.has(args[0]) && !args.includes("--help") && !args.includes("-h")) {
+  configWritten = await writeResolvedConfig(args);
+  if (!configWritten) binary = undefined;
+}
 
 if (binary) {
-  const result = spawnSync(binary, process.argv.slice(2), {
+  const resolver = findConfigResolver();
+  const result = spawnSync(binary, args, {
     stdio: "inherit",
     env: {
       ...process.env,
       DIALEX_NODE_CLI: nodeCli,
-      ...(findConfigResolver() ? { DIALEX_CONFIG_RESOLVER: findConfigResolver() } : {}),
+      ...(resolver ? { DIALEX_CONFIG_RESOLVER: resolver } : {}),
+      // set when `.dialex/config.json` was just written for this command
+      ...(configWritten ? { DIALEX_CONFIG_WRITTEN: "1" } : {}),
     },
   });
   if (result.error) {

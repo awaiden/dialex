@@ -178,5 +178,28 @@ export const x = [
   issuesProject(linted, { lint: true });
   fixtures.push(["issues-lint", linted]);
 
+  // A config the syntax tree cannot read: the native binary has to get it from `@dialexjs/config`
+  const computed = path.join(tmp, "computed-config");
+  fs.rmSync(computed, { recursive: true, force: true });
+  const put = (file, text) => {
+    fs.mkdirSync(path.dirname(path.join(computed, file)), { recursive: true });
+    fs.writeFileSync(path.join(computed, file), text);
+  };
+  put("package.json", JSON.stringify({ name: "computed-config", dependencies: { hono: "^4" } }));
+  put("helpers.ts", `export const getLocales = () => ["en", "tr"];\n`);
+  put(
+    "dialex.config.ts",
+    `import { getLocales } from "./helpers";\nexport default { defaultLocale: "en", locales: getLocales(), lint: { rules: { "unused-key": "off" } } };\n`,
+  );
+  put(
+    "src/a.content.ts",
+    `export default { name: "a", dictionary: { en: { title: "Title", only_en: "x" }, tr: { title: "Başlık" } } };\n`,
+  );
+  put(
+    "src/page.ts",
+    `export const x = [getDictionary("a"), getDictionary("nope"), t("a.title")];\n`,
+  );
+  fixtures.push(["computed-config", computed]);
+
   return fixtures;
 }

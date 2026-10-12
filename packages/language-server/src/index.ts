@@ -39,11 +39,27 @@ function nativeServer(): string | undefined {
   }
 }
 
+/**
+ * The `@dialexjs/config` script the native server runs to resolve the config. It comes from this
+ * install, so the server never has to run something it found inside the workspace.
+ */
+function configResolver(): string | undefined {
+  try {
+    return createRequire(import.meta.url).resolve("@dialexjs/config/cli");
+  } catch {
+    return undefined;
+  }
+}
+
 const native = nativeServer();
 
 if (native) {
   // The native server speaks LSP on the same stdio
-  const child = spawn(native, process.argv.slice(2), { stdio: "inherit" });
+  const resolver = configResolver();
+  const child = spawn(native, process.argv.slice(2), {
+    stdio: "inherit",
+    env: { ...process.env, ...(resolver ? { DIALEX_CONFIG_RESOLVER: resolver } : {}) },
+  });
   child.on("error", () => void startNodeServer());
   child.on("exit", (code, signal) => {
     if (signal) process.kill(process.pid, signal);

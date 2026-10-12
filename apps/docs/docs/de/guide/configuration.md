@@ -37,15 +37,15 @@ Die Werkzeuge suchen im Projektstamm (dem Ordner, aus dem du `dialex` ausführst
 
 ## Wie die Werkzeuge sie lesen
 
-| Werkzeug                                                    | Liest die Konfiguration durch                                                                                           |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Ausführen der Datei, sodass Werte berechnet sein dürfen (`locales: getLocales()`)                                       |
-| Das native `dx`                                             | Lesen von `.dialex/config.json`, das `@dialexjs/config` schreibt, und bei einer Änderung der Konfiguration neu schreibt |
-| Die Editor-Erweiterung und der Language Server              | Lesen ihres Syntaxbaums, ohne sie je auszuführen                                                                        |
+| Werkzeug                                                    | Liest die Konfiguration durch                                                     |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Ausführen der Datei, sodass Werte berechnet sein dürfen (`locales: getLocales()`) |
+| Das native `dx`                                             | Lesen von `.dialex/config.json`, das `@dialexjs/config` vor jedem Befehl schreibt |
+| Die Editor-Erweiterung und der Language Server              | Lesen ihres Syntaxbaums, ohne sie je auszuführen                                  |
 
 Eine Konfiguration aus Literalen (Strings, Arrays, Booleans) wird überall verstanden. Eine berechnete Einstellung ist für den Editor unsichtbar, der dann dafür den Standardwert nutzt und einen Hinweis protokolliert. Muss ein Editor `locales` kennen, schreibe sie aus. Siehe [Native Binärdateien](./native.md).
 
-`.dialex/config.json` wird wie `dialex.generated.ts` erzeugt: Tragen Sie `.dialex/` in Ihre `.gitignore` ein. Eine Konfiguration nur aus Literalen wird aus dem Syntaxbaum gelesen und nicht ausgeführt. Eine mit Spreads, Importen oder berechneten Werten führt `@dialexjs/config` einmal aus; es merkt sich die importierten Dateien und die gelesenen Umgebungsvariablen, und die nativen Werkzeuge prüfen diese Aufzeichnung bei jedem Lauf. Node wird nur für diesen Schritt gebraucht.
+`.dialex/config.json` wird wie `dialex.generated.ts` erzeugt: Tragen Sie `.dialex/` in Ihre `.gitignore` ein. Die Datei wird vor jedem `dialex generate` und `dialex check` neu geschrieben und ist daher nie veraltet. Eine Konfiguration nur aus Literalen wird aus dem Syntaxbaum gelesen und nicht ausgeführt. Eine mit Spreads, Importen oder berechneten Werten führt `@dialexjs/config` aus; das ist der einzige Schritt, der Node braucht.
 
 ## Beispiele
 

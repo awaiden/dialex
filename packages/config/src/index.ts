@@ -14,22 +14,13 @@ export {
 export {
   ARTIFACT_PATH,
   ARTIFACT_VERSION,
-  hashBytes,
-  isFresh,
   readArtifact,
   writeArtifact,
-  type ArtifactInput,
   type ResolvedConfig,
 } from "./artifact.js";
 
-export { importedFiles, loadConfigObject, type LoadedConfig } from "./load.js";
+export { loadConfigObject, type LoadedConfig } from "./load.js";
 
-export {
-  ensureConfig,
-  resolveConfig,
-  satisfies,
-  type EnsureResult,
-  type ResolveOptions,
-} from "./resolve.js";
+export { resolveConfig, writeConfig, type ResolveOptions } from "./resolve.js";
 
 export { findProperty, isObjectNode, propertyKeyName, unwrapNode, type AstNode } from "./ast.js";

@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 // `dialex-config`: writes .dialex/config.json, the resolved config the native CLI and language
-// server read. Usage: dialex-config [root] [--static] [--config <file>] [--check] [--print]
+// server read. It is written again on every call, so it is never stale.
+//
+//   dialex-config [root] [--static] [--config <file>] [--print]
+//
+//   --static   read the syntax tree only; never execute project code
+//   --print    print the resolved config instead of writing it
 import path from "node:path";
 
-import { isFresh, readArtifact } from "./artifact.js";
-import { ensureConfig, resolveConfig } from "./resolve.js";
+import { resolveConfig, writeConfig } from "./resolve.js";
 
 const args = process.argv.slice(2);
 const flag = (name: string) => args.includes(name);
@@ -19,17 +23,11 @@ const mode = flag("--static") ? "static" : "run";
 const configFile = value("--config");
 
 try {
-  if (flag("--check")) {
-    const artifact = readArtifact(root);
-    const fresh = artifact !== undefined && isFresh(root, artifact);
-    process.stdout.write(fresh ? "fresh\n" : "stale\n");
-    process.exit(fresh ? 0 : 1);
-  }
   if (flag("--print")) {
     process.stdout.write(`${JSON.stringify(resolveConfig(root, { mode, configFile }), null, 2)}\n`);
   } else {
-    const { reused, file } = ensureConfig(root, { mode, configFile });
-    process.stdout.write(`${reused ? "up to date" : "wrote"} ${path.relative(root, file)}\n`);
+    const { file } = writeConfig(root, { mode, configFile });
+    process.stdout.write(`wrote ${path.relative(root, file)}\n`);
   }
 } catch (error) {
   process.stderr.write(`dialex-config: ${(error as Error).message}\n`);

@@ -1,23 +1,24 @@
 //! The resolved config: `.dialex/config.json`, written by `@dialexjs/config`.
 //!
 //! The native CLI and language server do not parse or run `dialex.config.*`. They read this file,
-//! which the Node package produced once. It records what it was made from (the config file, what
-//! that imported, the environment variables it read, and which config names did not exist), so it
-//! is checked again on every run with a hash per file. When it is stale or missing, the package is
-//! run to write it again; that is the only time Node is involved.
+//! which the Node package writes. It is written again before every command, so there is no
+//! question of it being stale and nothing here checks. The launcher writes it before it starts the
+//! binary (`DIALEX_CONFIG_WRITTEN`); a binary started without the launcher runs the package itself.
 
+use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::{Mutex, OnceLock};
 
 use dialex_syntax::{Lazy, LintLevel, StaticConfig};
 use serde_json::Value;
 
 use crate::generate::Fallback;
-use crate::paths::{relative, resolve};
 
 const ARTIFACT: &str = ".dialex/config.json";
 const VERSION: u64 = 1;
+const RESOLVER: &str = "node_modules/@dialexjs/config/dist/cli.mjs";
 
 /// What the caller needs from the config.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -29,6 +30,7 @@ pub enum Mode {
 }
 
 /// The config of a project, as the resolved file describes it.
+#[derive(Debug, Clone)]
 pub struct Resolved {
     pub config: StaticConfig,
     pub notes: Vec<String>,
@@ -36,60 +38,18 @@ pub struct Resolved {
     pub file: Option<PathBuf>,
 }
 
-/// FNV-1a, 64-bit, in 16 hex digits. The same function as `hashBytes` of `@dialexjs/config`.
-fn fnv1a(bytes: &[u8]) -> String {
-    let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
-    for byte in bytes {
-        hash ^= u64::from(*byte);
-        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
-    }
-    format!("{hash:016x}")
+type Key = (PathBuf, Option<String>);
+
+/// What a long-running process (the language server) has loaded. A one-shot CLI never reuses it.
+fn cache() -> &'static Mutex<HashMap<Key, Resolved>> {
+    static CACHE: OnceLock<Mutex<HashMap<Key, Resolved>>> = OnceLock::new();
+    CACHE.get_or_init(Default::default)
 }
 
-/// The file still describes the project: every input hashes the same, no missing config file
-/// appeared, and the environment variables it read have the same values.
-fn is_fresh(root: &Path, value: &Value) -> bool {
-    let inputs = &value["inputs"];
-    let Some(files) = inputs["files"].as_array() else {
-        return false;
-    };
-    for input in files {
-        let (Some(path), Some(hash)) = (input["path"].as_str(), input["hash"].as_str()) else {
-            return false;
-        };
-        match fs::read(root.join(path)) {
-            Ok(bytes) if fnv1a(&bytes) == hash => {}
-            _ => return false,
-        }
-    }
-    if let Some(missing) = inputs["missing"].as_array() {
-        for path in missing.iter().filter_map(Value::as_str) {
-            if root.join(path).exists() {
-                return false;
-            }
-        }
-    }
-    if let Some(env) = inputs["env"].as_object() {
-        for (name, expected) in env {
-            let actual = std::env::var(name).ok();
-            if actual.as_deref() != expected.as_str() {
-                return false;
-            }
-        }
-    }
-    true
-}
-
-/// Whether a (fresh) file can serve a caller that asked for `mode`.
-fn satisfies(value: &Value, mode: Mode) -> bool {
-    let made_by = value["mode"].as_str().unwrap_or("");
-    let complete = value["complete"].as_bool().unwrap_or(false);
-    match mode {
-        // A file made by running the config is as good as it gets; a static one only if complete
-        Mode::Run => made_by == "run" || complete,
-        // Editors take whatever was made: a run file came from a user action they trust
-        Mode::Static => made_by == "run" || made_by == "static",
-    }
+/// Forgets every loaded config, so the next [`load`] resolves it again. The language server calls
+/// this when a config file changes.
+pub fn invalidate() {
+    cache().lock().unwrap().clear();
 }
 
 fn read_artifact(root: &Path) -> Option<Value> {
@@ -98,23 +58,36 @@ fn read_artifact(root: &Path) -> Option<Value> {
     (value["version"].as_u64() == Some(VERSION)).then_some(value)
 }
 
-/// `node_modules/@dialexjs/config/dist/cli.mjs`: `DIALEX_CONFIG_RESOLVER` when set (the launcher
-/// sets it), otherwise the nearest one above the project.
-fn resolver_path(root: &Path) -> Option<PathBuf> {
+/// The `@dialexjs/config` script to run. `DIALEX_CONFIG_RESOLVER` when set, then the copy next to
+/// this binary. Only the CLI also looks in the project: it runs the config file anyway, whereas an
+/// editor must never run something it found inside the workspace.
+fn resolver_path(root: &Path, mode: Mode) -> Option<PathBuf> {
     if let Ok(path) = std::env::var("DIALEX_CONFIG_RESOLVER") {
         let path = PathBuf::from(path);
         return path.is_file().then_some(path);
     }
-    root.ancestors()
-        .map(|dir| dir.join("node_modules/@dialexjs/config/dist/cli.mjs"))
-        .find(|path| path.is_file())
+    if let Ok(exe) = std::env::current_exe() {
+        let beside = exe
+            .ancestors()
+            .map(|dir| dir.join(RESOLVER))
+            .find(|path| path.is_file());
+        if beside.is_some() {
+            return beside;
+        }
+    }
+    if mode == Mode::Run {
+        return root
+            .ancestors()
+            .map(|dir| dir.join(RESOLVER))
+            .find(|path| path.is_file());
+    }
+    None
 }
 
-/// Runs `@dialexjs/config` to write the file again.
+/// Runs `@dialexjs/config`, which writes the file.
 fn run_resolver(root: &Path, mode: Mode, config: &Option<String>) -> Result<(), Fallback> {
-    let resolver = resolver_path(root).ok_or_else(|| {
-        Fallback("the resolved config is stale and @dialexjs/config is not installed".into())
-    })?;
+    let resolver = resolver_path(root, mode)
+        .ok_or_else(|| Fallback("@dialexjs/config was not found to resolve the config".into()))?;
     let node = std::env::var("DIALEX_NODE").unwrap_or_else(|_| "node".into());
     let mut command = Command::new(node);
     command.arg(resolver).arg(root);
@@ -207,31 +180,7 @@ fn to_config(value: &Value) -> Result<StaticConfig, String> {
     Ok(config)
 }
 
-/// The config of `root`: from `.dialex/config.json` while it is fresh, otherwise after running
-/// `@dialexjs/config` to write it again. `config` is a `--config` path relative to the root.
-pub fn load(root: &Path, config: &Option<String>, mode: Mode) -> Result<Resolved, Fallback> {
-    let wanted_file = config
-        .as_ref()
-        .map(|file| relative(root, &resolve(root, file)));
-
-    let usable = |value: &Value| {
-        is_fresh(root, value)
-            && satisfies(value, mode)
-            && wanted_file
-                .as_deref()
-                .is_none_or(|file| value["file"].as_str() == Some(file))
-    };
-
-    let value = match read_artifact(root).filter(|v| usable(v)) {
-        Some(value) => value,
-        None => {
-            run_resolver(root, mode, config)?;
-            read_artifact(root)
-                .filter(|v| is_fresh(root, v))
-                .ok_or_else(|| Fallback("the resolved config could not be read".into()))?
-        }
-    };
-
+fn from_artifact(root: &Path, value: &Value, mode: Mode) -> Result<Resolved, Fallback> {
     let mut notes: Vec<String> = value["notes"]
         .as_array()
         .map(|items| {
@@ -248,6 +197,10 @@ pub fn load(root: &Path, config: &Option<String>, mode: Mode) -> Result<Resolved
             notes.push(note.into());
         }
     }
+    // The CLI only trusts a config it could read in full; otherwise Node reports what is wrong
+    if mode == Mode::Run && value["complete"].as_bool() != Some(true) && notes.is_empty() {
+        return Err(Fallback("the resolved config is incomplete".into()));
+    }
 
     let config = to_config(&value["config"]).map_err(Fallback)?;
     let file = value["file"].as_str().map(|path| root.join(path));
@@ -258,17 +211,64 @@ pub fn load(root: &Path, config: &Option<String>, mode: Mode) -> Result<Resolved
     })
 }
 
+/// The config of `root`. It is written first (by the launcher, which says so with
+/// `DIALEX_CONFIG_WRITTEN`, or by running `@dialexjs/config` here) and then read: it is never
+/// taken from an earlier run. `config` is a `--config` path relative to the root.
+///
+/// An editor, which cannot run what it finds in the workspace, falls back to the file of an
+/// earlier run, or to the defaults with a note, when the package is not available.
+pub fn load(root: &Path, config: &Option<String>, mode: Mode) -> Result<Resolved, Fallback> {
+    let key: Key = (root.to_path_buf(), config.clone());
+    if mode == Mode::Static {
+        if let Some(found) = cache().lock().unwrap().get(&key) {
+            return Ok(found.clone());
+        }
+    }
+
+    let written = mode == Mode::Run && std::env::var("DIALEX_CONFIG_WRITTEN").as_deref() == Ok("1");
+    let outcome = if written {
+        Ok(())
+    } else {
+        run_resolver(root, mode, config)
+    };
+
+    let resolved = match (outcome, mode) {
+        (Ok(()), _) => {
+            let value = read_artifact(root)
+                .ok_or_else(|| Fallback("the resolved config could not be read".into()))?;
+            from_artifact(root, &value, mode)?
+        }
+        (Err(error), Mode::Run) => return Err(error),
+        (Err(error), Mode::Static) => match read_artifact(root) {
+            Some(value) => {
+                let mut resolved = from_artifact(root, &value, mode)?;
+                resolved.notes.push(format!(
+                    "{} The config of the last `dialex` run is used.",
+                    error.0
+                ));
+                resolved
+            }
+            None => Resolved {
+                config: StaticConfig::default(),
+                notes: vec![format!(
+                    "{} Defaults are used until `dialex check` has run in this project.",
+                    error.0
+                )],
+                file: None,
+            },
+        },
+    };
+
+    if mode == Mode::Static {
+        cache().lock().unwrap().insert(key, resolved.clone());
+    }
+    Ok(resolved)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn fnv1a_matches_the_node_package() {
-        assert_eq!(fnv1a(b""), "cbf29ce484222325");
-        assert_eq!(fnv1a(b"a"), "af63dc4c8601ec8c");
-        assert_eq!(fnv1a(b"foobar"), "85944171f73967e8");
-    }
 
     #[test]
     fn reads_every_setting() {
@@ -315,40 +315,5 @@ mod tests {
         assert!(to_config(&json!({ "locales": "en" })).is_err());
         assert!(to_config(&json!({ "lazy": "sometimes" })).is_err());
         assert!(to_config(&json!({ "lint": { "rules": { "a": "loud" } } })).is_err());
-    }
-
-    #[test]
-    fn freshness_follows_the_inputs() {
-        let dir = tempfile::tempdir().unwrap();
-        let root = dir.path();
-        fs::write(root.join("dialex.config.ts"), "export default {};").unwrap();
-        let hash = fnv1a(b"export default {};");
-        let value = json!({
-            "inputs": {
-                "files": [{ "path": "dialex.config.ts", "hash": hash }],
-                "missing": ["i18n.config.ts"],
-                "env": {}
-            }
-        });
-        assert!(is_fresh(root, &value));
-
-        fs::write(root.join("i18n.config.ts"), "x").unwrap();
-        assert!(!is_fresh(root, &value), "a missing config file appeared");
-        fs::remove_file(root.join("i18n.config.ts")).unwrap();
-
-        fs::write(root.join("dialex.config.ts"), "export default { a: 1 };").unwrap();
-        assert!(!is_fresh(root, &value), "an input changed");
-    }
-
-    #[test]
-    fn static_files_serve_a_run_request_only_when_complete() {
-        let incomplete = json!({ "mode": "static", "complete": false });
-        let complete = json!({ "mode": "static", "complete": true });
-        let ran = json!({ "mode": "run", "complete": true });
-        assert!(!satisfies(&incomplete, Mode::Run));
-        assert!(satisfies(&complete, Mode::Run));
-        assert!(satisfies(&ran, Mode::Run));
-        assert!(satisfies(&incomplete, Mode::Static));
-        assert!(satisfies(&ran, Mode::Static));
     }
 }
