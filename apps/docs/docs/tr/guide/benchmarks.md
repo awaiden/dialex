@@ -20,6 +20,7 @@ Her kütüphane tarafından aynı değerlerle İngilizce biçimlendirilen dört 
 Her kütüphane, belgelerinin önerdiği biçimde kullanılır:
 
 - **dialexjs**: ICU dizeleri üzerinde `t("dictionary.key", values)`. `function messages` TypeScript fonksiyonlarıdır, `formatMessage` ise tek başına biçimlendiricidir.
+- **dialexjs dictionary object**: çözümlenmiş sözlüğü döndüren `getDictionary("home").title`. Yalnızca arama durumu geçerlidir, çünkü değer içeren bir mesaj `t()` üzerinden geçer. `dictionary object` bir kez alınmış sözlükten okur; `getDictionary per call` sözlüğü her çağrıda çözer.
 - **i18next**: kendi enterpolasyonu ve çoğul anahtarları (`items_one`, `items_other`). Satır içi `select` yoktur, bu yüzden iç içe durum çalıştırılmaz.
 - **intl-messageformat**: mesaj başına bir kez oluşturulup yeniden kullanılan biçimlendirici. `no cache` her çağrıda yeniden oluşturur; bir uygulama örneği saklamadığında olan budur.
 - **@lingui/core**: `lingui compile`'ın yaptığı gibi önceden derlenmiş mesajlar.
@@ -40,18 +41,20 @@ Dialex yeşil renktedir. Çubuklar bir grafik içinde ölçeklidir; uzunlukları
 
 <BenchmarkChart metric="lookup" title="Arama" subtitle="saniyedeki işlem, yüksek olan daha iyi" unsupported="desteklenmiyor" />
 
-| Kütüphane                       |      Arama | Enterpolasyon |      Çoğul | İç içe select ve çoğul |
-| ------------------------------- | ---------: | ------------: | ---------: | ---------------------: |
-| dialexjs                        | 46,707,541 |    14,051,921 |  1,406,051 |              1,376,668 |
-| dialexjs (function messages)    | 31,048,917 |    22,331,081 | 28,292,094 |             16,844,399 |
-| dialexjs formatMessage          | 43,237,670 |    18,950,435 |  1,493,870 |              1,453,541 |
-| i18next                         |    433,997 |       340,709 |    211,321 |                    n/a |
-| intl-messageformat              | 21,672,973 |     4,179,803 |    441,800 |                406,716 |
-| intl-messageformat (no cache)   |    215,188 |       172,955 |     23,179 |                 19,389 |
-| @lingui/core                    |  7,855,446 |     5,666,858 |    276,988 |                132,382 |
-| Paraglide JS                    | 23,386,911 |    16,831,905 |     89,624 |                 95,300 |
-| Intlayer                        | 68,713,663 |     2,262,200 |  1,419,100 |              1,278,051 |
-| Intlayer (getIntlayer per call) |    422,557 |       331,815 |    298,988 |                292,948 |
+| Kütüphane                         |      Arama | Enterpolasyon |      Çoğul | İç içe select ve çoğul |
+| --------------------------------- | ---------: | ------------: | ---------: | ---------------------: |
+| dialexjs                          | 43,519,557 |    12,182,375 |  1,314,654 |              1,224,797 |
+| dialexjs (function messages)      | 29,402,418 |    20,147,608 | 26,145,040 |             16,089,639 |
+| dialexjs formatMessage            | 39,919,266 |    17,307,720 |  1,411,691 |              1,383,457 |
+| dialexjs (dictionary object)      | 76,879,058 |           n/a |        n/a |                    n/a |
+| dialexjs (getDictionary per call) | 70,281,828 |           n/a |        n/a |                    n/a |
+| i18next                           |    409,982 |       308,147 |    186,193 |                    n/a |
+| intl-messageformat                | 18,011,740 |     4,011,251 |    431,958 |                394,071 |
+| intl-messageformat (no cache)     |    220,488 |       166,977 |     22,984 |                 18,178 |
+| @lingui/core                      |  7,520,241 |     5,259,893 |    269,471 |                127,467 |
+| Paraglide JS                      | 21,550,673 |    15,754,696 |     87,237 |                 90,820 |
+| Intlayer                          | 61,550,138 |     2,090,239 |  1,246,861 |              1,114,859 |
+| Intlayer (getIntlayer per call)   |    398,154 |       330,110 |    301,829 |                297,055 |
 
 Node v24.21.0 ile, Intel Core i5-11400H üzerinde, Linux x64, 2026-10-12 tarihinde ölçüldü.
 
@@ -76,12 +79,12 @@ Sürümler: dialexjs 0.7.2 ve çalışma zamanı performans değişiklikleri (de
 
 ## Bu sayılar nasıl okunur
 
-- **Kütüphanelerin ayrıştığı yer çoğullar ve sayılardır.** Bir çoğul, bir `PluralRules` ve bir sayı biçimlendirici gerektirir. Bunları her çağrıda oluşturmak yavaştır; bu yüzden Dialex yerel ayar ve seçenek başına birini tutar. Bu olmadan çoğul durumu saniyede yaklaşık 36.000 işlem ölçtü; bununla yaklaşık 1.400.000.
+- **Kütüphanelerin ayrıştığı yer çoğullar ve sayılardır.** Bir çoğul, bir `PluralRules` ve bir sayı biçimlendirici gerektirir. Bunları her çağrıda oluşturmak yavaştır; bu yüzden Dialex yerel ayar ve seçenek başına birini tutar. Bu olmadan çoğul durumu saniyede yaklaşık 36.000 işlem ölçtü; bununla yaklaşık 1.300.000.
 - **Fonksiyon mesajları ayrıştırıcıyı atlar.** TypeScript fonksiyonu olarak yazılan mesajı TypeScript derler; bu yüzden çoğul ve select, şablon dizesiyle aynı maliyettedir.
 - **`t()` biçimlendiriciden biraz fazlasını yapar.** `dialexjs`, biçimlendirmeden önce noktalı yolu böler ve anahtarı arar; bu yüzden tek başına `formatMessage` enterpolasyonda daha hızlıdır; aramada ikisi ölçüm gürültüsü içindedir.
 - **i18next çağrı başına daha fazlasını yapar.** Her `t()` için yedek zincirlerini, ad alanlarını ve eklentileri çözer; ödediğin özellik kümesi budur. ICU eklentisi sayılarını değiştirir; bu test onsuz çalışır.
-- **Paraglide JS diğer kütüphaneler arasında enterpolasyonda en hızlıdır.** Değer içeren bir mesaj şablon dizesine derlenir. Çoğul kodu her çağrıda yeni bir `Intl.PluralRules` oluşturur (sürüm 2.27.0); Dialex'in ortadan kaldırdığı maliyet budur, bu yüzden çoğul enterpolasyonundan çok daha yavaştır (saniyede yaklaşık 89.000'e karşı 17 milyon işlem).
-- **Intlayer'ın arama işlemi bir özellik okumasıdır.** Düz bir dizenin işlem yapması gerekmez; o sütunun çok önde olmasının nedeni budur. Enterpolasyon, çoğul ve select düğüm fonksiyonlarından geçer ve sözlüğü her çağrıda okumak, bir kez okumaktan çok daha yavaştır.
+- **Paraglide JS diğer kütüphaneler arasında enterpolasyonda en hızlıdır.** Değer içeren bir mesaj şablon dizesine derlenir. Çoğul kodu her çağrıda yeni bir `Intl.PluralRules` oluşturur (sürüm 2.27.0); Dialex'in ortadan kaldırdığı maliyet budur, bu yüzden çoğul enterpolasyonundan çok daha yavaştır (saniyede yaklaşık 87.000'e karşı 16 milyon işlem).
+- **Intlayer'ın arama işlemi bir özellik okumasıdır.** Düz bir dizenin işlem yapması gerekmez; bir yolu arayan ya da biçimlendiren kütüphanelerin çok önünde olmasının nedeni budur. Enterpolasyon, çoğul ve select düğüm fonksiyonlarından geçer ve sözlüğü her çağrıda okumak, bir kez okumaktan çok daha yavaştır. Bir Dialex sözlük nesnesini okumak aynı işlemdir ve aynı büyüklük mertebesindedir; değerler söz konusu olduğunda `t()` ve Intlayer'ın düğüm fonksiyonları gerçek iş yapar, sütunların ayrıştığı yer burasıdır.
 - **Boyut yalnızca çalışma zamanı içindir.** Lingui'nin rakamı önceden derlenmiş mesajlar içindir ve `lingui` araç zincirini içermez. Dialex ayrıştırıcısını çalışma zamanında taşır; bu yüzden ICU dizeleri derleme adımı olmadan çalışır.
 - **Paraglide JS ve Intlayer kendi derleme araçlarıyla ölçülür.** Paraglide'ın rakamı bir derlenmiş mesaj ve çalışma zamanıdır. Intlayer'ın tarayıcıda çalışması için paketleyici eklentisine ihtiyacı vardır; bu yüzden `vite-intlayer` ve `vanilla-intlayer` ile derlenir.
 

@@ -4,6 +4,7 @@ import { setupI18n } from "@lingui/core";
 import { compileMessage } from "@lingui/message-utils/compileMessage";
 import { createT } from "dialexjs";
 import { formatMessage } from "dialexjs/icu";
+import { createDialexServer } from "dialexjs/server";
 import i18next from "i18next";
 import { IntlMessageFormat } from "intl-messageformat";
 import { getIntlayer } from "intlayer";
@@ -80,6 +81,29 @@ libraries.push({
     ]),
   ),
 });
+
+// dialexjs, dictionary object: `getDictionary("bench").lookup`, how components and request handlers
+// read plain text. Only the lookup case applies: an ICU message with values goes through `t()`.
+{
+  const { getDictionary } = createDialexServer({
+    dictionaries: { bench: { en: { lookup: MESSAGES.lookup } } },
+    config: { defaultLocale: "en", locales: ["en"] },
+  });
+  const dictionary = getDictionary("bench");
+  libraries.push({
+    name: "dialexjs (dictionary object)",
+    run: { lookup: () => dictionary.lookup, interpolation: null, plural: null, nested: null },
+  });
+  libraries.push({
+    name: "dialexjs (getDictionary per call)",
+    run: {
+      lookup: () => getDictionary("bench").lookup,
+      interpolation: null,
+      plural: null,
+      nested: null,
+    },
+  });
+}
 
 // i18next: native interpolation and plural keys. It has no inline select, so `nested` is skipped.
 {
