@@ -103,3 +103,4 @@ Sunucu bunları editör yapılandırmasının `dialex` bölümünden okur:
 - Sözlükler ve yapılandırmalar sözdizimi ağacından okunur, bu yüzden sunucu projenizin kodunu asla çalıştırmaz. Spread veya hesaplanan anahtarlarla kurulmuş sözlükler analiz edilemez ve bilgilendirme notu gösterir; bunlar için `dialex check` çalıştırın.
 - Üretilen dosyalar yalnızca zaten bir tane olan projelerde güncellenir. Oluşturmak için bir kez `dialex generate` çalıştırın.
 - Editör komutları yoktur: yeniden üretim otomatiktir.
+- Yerel dil sunucusu (`dialex-language-server`, Rust ile derlenmiştir) 1.000 sözlüğü yaklaşık 2,7 s yerine yaklaşık 50 ms'de analiz eder. Şimdilik isteğe bağlıdır: sunucuyu başlatan ortamda `DIALEX_NATIVE=1` ayarlayın ya da `lsp.dialex.binary.path` ile ikili dosyayı gösterin. Tembel yükleme kullanan projelerde `dialex.generated.ts` dosyasını yeniden üretmez; bunlar için `dialex generate` çalıştırın.

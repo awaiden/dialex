@@ -18,3 +18,14 @@ npm install -g @dialexjs/cli   # or globally
 | [`dialex lock`](./translate.md#keeping-translations-in-sync) |        | 把翻译记录为与源文本一致                          |
 
 典型的工作流程：先用 `dialex check --fix` 为新键创建占位符，然后使用 `dialex translate`，或使用 `dialex export` / `dialex import` 交给人工翻译，最后在 CI 中运行 `dialex check`。
+
+## 原生二进制
+
+在 Linux、macOS 和 Windows（x64 与 arm64）上，`dialex` 和 `dx` 运行用 Rust 构建的原生二进制文件，它作为可选依赖（`@dialexjs/cli-<platform>`）随包一起安装。在包含 1,000 个字典的项目中，`generate` 和 `check` 比 Node 实现快 25 到 40 倍，并且生成的文件和输出逐字节一致。
+
+原生二进制从语法树读取字典和配置。当命令需要运行项目代码（不是纯数据的配置、`translate` 提供方、`runtime: true`、懒加载、`--fix`、`--watch`），或没有原生实现（`init`、`export`、`import`、`lock`、`translate`）时，它会把整个命令交给 Node CLI，因此对你来说没有任何变化。两个环境变量可以控制这一行为：
+
+```bash
+DIALEX_NATIVE=0 dx check   # always use the Node implementation
+DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
+```

@@ -103,3 +103,4 @@ El servidor los lee de la sección `dialex` de la configuración del editor:
 - Los diccionarios y las configuraciones se leen del árbol sintáctico, así que el servidor nunca ejecuta el código de tu proyecto. Los diccionarios con spreads o claves calculadas no se pueden analizar y muestran una nota informativa; ejecuta `dialex check` para esos.
 - Los archivos generados solo se actualizan en proyectos que ya tienen uno. Ejecuta `dialex generate` una vez para crearlo.
 - No hay comandos del editor: la regeneración es automática.
+- El servidor de lenguaje nativo (`dialex-language-server`, escrito en Rust) analiza 1.000 diccionarios en unos 50 ms en lugar de unos 2,7 s. Por ahora es opcional: define `DIALEX_NATIVE=1` en el entorno que inicia el servidor, o apunta `lsp.dialex.binary.path` al binario. No regenera `dialex.generated.ts` en proyectos con carga diferida; ejecuta `dialex generate` para ellos.

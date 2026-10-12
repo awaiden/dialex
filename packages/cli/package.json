@@ -13,10 +13,11 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "dialex": "./dist/index.mjs",
-    "dx": "./dist/index.mjs"
+    "dialex": "./bin/launcher.mjs",
+    "dx": "./bin/launcher.mjs"
   },
   "files": [
+    "bin",
     "dist"
   ],
   "type": "module",
@@ -50,5 +51,13 @@
     "@types/node": "^26.1.1",
     "typescript": "^7.0.2",
     "vite-plus": "catalog:"
+  },
+  "optionalDependencies": {
+    "@dialexjs/cli-darwin-arm64": "workspace:*",
+    "@dialexjs/cli-darwin-x64": "workspace:*",
+    "@dialexjs/cli-linux-arm64": "workspace:*",
+    "@dialexjs/cli-linux-x64": "workspace:*",
+    "@dialexjs/cli-win32-arm64": "workspace:*",
+    "@dialexjs/cli-win32-x64": "workspace:*"
   }
 }

@@ -49,3 +49,10 @@ graphify-out
 # VS Code extension packages
 *.vsix
 .vscode-install/
+
+# Native binaries are built in CI and copied into the platform packages
+packages/cli-*/bin/dx
+packages/cli-*/bin/dx.exe
+packages/cli-*/bin/dialex-language-server
+packages/cli-*/bin/dialex-language-server.exe
+crates/target

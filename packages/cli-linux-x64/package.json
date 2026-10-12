@@ -1,0 +1,27 @@
+{
+  "name": "@dialexjs/cli-linux-x64",
+  "version": "0.7.2",
+  "description": "The native dialex binaries for linux-x64. Installed by @dialexjs/cli, not used directly.",
+  "homepage": "https://github.com/awaiden/dialex#readme",
+  "bugs": {
+    "url": "https://github.com/awaiden/dialex/issues"
+  },
+  "license": "MIT",
+  "author": "awaiden",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaiden/dialex.git"
+  },
+  "files": [
+    "bin"
+  ],
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

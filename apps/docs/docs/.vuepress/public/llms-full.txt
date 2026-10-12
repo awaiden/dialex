@@ -141,6 +141,17 @@ npm install -g @dialexjs/cli   # or globally
 
 A typical workflow: `dialex check --fix` to create placeholders for new keys, then either `dialex translate` or `dialex export` / `dialex import` for human translators, then `dialex check` in CI.
 
+## Native binary
+
+On Linux, macOS and Windows (x64 and arm64) `dialex` and `dx` run a native binary built from Rust, installed with the package as an optional dependency (`@dialexjs/cli-<platform>`). `generate` and `check` are 25 to 40 times faster than the Node implementation on a project with 1,000 dictionaries, and produce the same files and output byte for byte.
+
+The native binary reads dictionaries and the config from the syntax tree. When a command needs your project's code to run (a config that is not plain data, a `translate` provider, `runtime: true`, lazy loading, `--fix`, `--watch`), or is not implemented natively (`init`, `export`, `import`, `lock`, `translate`), it hands the whole command to the Node CLI, so nothing changes for you. Two environment variables control this:
+
+```bash
+DIALEX_NATIVE=0 dx check   # always use the Node implementation
+DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
+```
+
 
 ---
 
@@ -2985,6 +2996,110 @@ Output is emitted to stdout as structured JSON, while logs and warnings are supp
 
 ---
 
+# File: guide/benchmarks.md
+
+# Benchmarks
+
+Numbers for the parts of an i18n library that run in your users' browsers and on your servers: how fast a message is formatted, and how many bytes the library adds to a bundle. They compare Dialex with [i18next](https://www.i18next.com), [intl-messageformat](https://formatjs.github.io) (the FormatJS core behind `react-intl`), [Lingui](https://lingui.dev), [Paraglide JS](https://paraglidejs.com) and [Intlayer](https://intlayer.org).
+
+::: tip Read them as a guide, not a verdict
+A micro-benchmark measures one thing on one machine. Your app's cost is usually somewhere else: rendering, network, data. Use these numbers to compare the libraries with each other, and run the benchmark on your own hardware before you rely on them.
+:::
+
+## What is measured
+
+Four messages, formatted in English by every library, with the same values. Before anything is timed, the runner checks that all libraries return the same text.
+
+| Case          | Message                                                       |
+| ------------- | ------------------------------------------------------------- |
+| Lookup        | `Hello, world`                                                |
+| Interpolation | `Hello, {name}!`                                              |
+| Plural        | `{count, plural, =0 {No items} one {# item} other {# items}}` |
+| Nested        | A `select` on `gender` that contains a `plural` on `count`    |
+
+Each library is used the way its documentation recommends:
+
+- **dialexjs**: `t("dictionary.key", values)` on ICU strings. `function messages` are TypeScript functions, `formatMessage` is the formatter on its own.
+- **i18next**: its own interpolation and plural keys (`items_one`, `items_other`). It has no inline `select`, so the nested case is not run.
+- **intl-messageformat**: a formatter created once per message and reused. `no cache` creates it on every call, which is what happens when an app does not keep the instance.
+- **@lingui/core**: messages compiled ahead of time, as `lingui compile` does.
+- **Paraglide JS**: messages compiled to functions by `paraglide-js compile` (`m.plural({ count })`), in the default inlang message format.
+- **Intlayer**: content declared in a `.content.ts` file and built by `intlayer build`. The dictionary is read once, as a component does with `useIntlayer`. `getIntlayer per call` reads it on every call.
+
+## Throughput
+
+Operations per second, higher is better. Median of 7 rounds of 400 ms after a 300 ms warm-up.
+
+Dialex is green. Bars are drawn to scale inside one chart, so compare lengths within a chart, not between charts.
+
+<BenchmarkChart metric="plural" title="Plural" subtitle="operations per second, higher is better" unsupported="not supported" />
+
+<BenchmarkChart metric="nested" title="Nested select and plural" subtitle="operations per second, higher is better" unsupported="not supported" />
+
+<BenchmarkChart metric="interpolation" title="Interpolation" subtitle="operations per second, higher is better" unsupported="not supported" />
+
+<BenchmarkChart metric="lookup" title="Lookup" subtitle="operations per second, higher is better" unsupported="not supported" />
+
+| Library                         |     Lookup | Interpolation |     Plural | Nested select and plural |
+| ------------------------------- | ---------: | ------------: | ---------: | -----------------------: |
+| dialexjs                        | 46,707,541 |    14,051,921 |  1,406,051 |                1,376,668 |
+| dialexjs (function messages)    | 31,048,917 |    22,331,081 | 28,292,094 |               16,844,399 |
+| dialexjs formatMessage          | 43,237,670 |    18,950,435 |  1,493,870 |                1,453,541 |
+| i18next                         |    433,997 |       340,709 |    211,321 |                      n/a |
+| intl-messageformat              | 21,672,973 |     4,179,803 |    441,800 |                  406,716 |
+| intl-messageformat (no cache)   |    215,188 |       172,955 |     23,179 |                   19,389 |
+| @lingui/core                    |  7,855,446 |     5,666,858 |    276,988 |                  132,382 |
+| Paraglide JS                    | 23,386,911 |    16,831,905 |     89,624 |                   95,300 |
+| Intlayer                        | 68,713,663 |     2,262,200 |  1,419,100 |                1,278,051 |
+| Intlayer (getIntlayer per call) |    422,557 |       331,815 |    298,988 |                  292,948 |
+
+Measured with Node v24.21.0 on an Intel Core i5-11400H, Linux x64, on 2026-10-12.
+
+## Bundle size
+
+The smallest useful program in each library: create it, load one plural message and format it. Bundled for the browser with esbuild and minified.
+
+<BenchmarkChart metric="size" title="Bundle size" subtitle="gzip bytes, lower is better" />
+
+| Program                      | Minified |     Gzip |   Brotli |
+| ---------------------------- | -------: | -------: | -------: |
+| dialexjs (t)                 |  7,227 B |  2,739 B |  2,486 B |
+| dialexjs/icu (formatMessage) |  6,479 B |  2,401 B |  2,175 B |
+| dialexjs (function messages) |  7,268 B |  2,757 B |  2,491 B |
+| i18next                      | 43,666 B | 14,043 B | 12,726 B |
+| intl-messageformat           | 33,567 B |  9,908 B |  8,883 B |
+| Paraglide JS                 | 10,702 B |  3,952 B |  3,528 B |
+| @lingui/core                 |  4,824 B |  2,087 B |  1,869 B |
+| Intlayer                     | 17,207 B |  4,901 B |  4,381 B |
+
+Versions: dialexjs 0.7.2 plus the runtime performance changes (compiled message formatting and shared `Intl` formatters), i18next 26.4.3, intl-messageformat 12.1.3, @lingui/core 6.9.1, @inlang/paraglide-js 2.27.0, intlayer 9.7.0, vite-intlayer 9.7.0.
+
+## How to read these numbers
+
+- **Plurals and numbers are where libraries differ.** A plural needs a `PluralRules` and a number formatter. Creating those on every call is slow, so Dialex keeps one per locale and options. Without it the plural case measured about 36,000 operations per second; with it, about 1,400,000.
+- **Function messages skip the parser.** A message written as a TypeScript function is compiled by TypeScript, so plural and select cost the same as a template string.
+- **`t()` does a little more than the formatter.** `dialexjs` splits the dotted path and looks the key up before it formats, which is why `formatMessage` alone is faster on interpolation; on lookup the two are within noise.
+- **i18next does more per call.** It resolves fallback chains, namespaces and plugins on every `t()`, which is the feature set you pay for. The ICU plugin changes its numbers; this benchmark runs it without one.
+- **Paraglide JS is the fastest other library at interpolation.** A message with a value is compiled to a template string. Its plural code creates a new `Intl.PluralRules` on every call (version 2.27.0), which is the cost Dialex removed, so plural is much slower than its interpolation (about 89,000 against 17 million operations per second).
+- **Intlayer's lookup is a property read.** A plain string needs no work, which is why that column is far ahead. Interpolation, plural and select go through node functions, and reading the dictionary on every call is much slower than reading it once.
+- **Size is for the runtime only.** Lingui's figure is for messages compiled ahead of time, and does not include its `lingui` toolchain. Dialex ships its parser in the runtime, so ICU strings work without a compile step.
+- **Paraglide JS and Intlayer are measured with their own build tools.** Paraglide's figure is one compiled message plus its runtime. Intlayer needs its bundler plugin to run in a browser, so it is built with `vite-intlayer` and `vanilla-intlayer`.
+
+## Run it yourself
+
+The benchmark lives in `apps/benchmarks`. Build the packages once, then run:
+
+```bash
+bun run build:packages
+bun run --cwd apps/benchmarks bench     # throughput
+bun run --cwd apps/benchmarks size      # bundle size
+```
+
+Results are written to `apps/benchmarks/results/` as JSON, with the Node version and CPU they were measured on.
+
+
+---
+
 # File: guide/best-practices.md
 
 # Best practices
@@ -3305,6 +3420,100 @@ First release.
 [0.2.1]: https://github.com/awaiden/dialex/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/awaiden/dialex/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/awaiden/dialex/releases/tag/v0.1.0
+
+
+---
+
+# File: guide/comparison.md
+
+# Comparison
+
+How Dialex differs from the libraries it is most often compared with: [i18next](https://www.i18next.com), [FormatJS](https://formatjs.github.io) (`react-intl` and `intl-messageformat`), [Lingui](https://lingui.dev), [Paraglide JS](https://paraglidejs.com) and [Intlayer](https://intlayer.org). All of them are good libraries, and the right one depends on how your team writes and translates text.
+
+For numbers on speed and size, see [Benchmarks](./benchmarks.md).
+
+## At a glance
+
+| Question             | Dialex                                      | i18next                              | FormatJS                            | Lingui                                                       |
+| -------------------- | ------------------------------------------- | ------------------------------------ | ----------------------------------- | ------------------------------------------------------------ |
+| Where the text lives | TypeScript dictionaries next to the code    | JSON resources, loaded by namespace  | Messages in the code, plus catalogs | Messages in the code, extracted to catalogs                  |
+| Message syntax       | ICU MessageFormat, or a TypeScript function | Its own `{{value}}` and plural keys  | ICU MessageFormat                   | ICU MessageFormat                                            |
+| Typed keys           | Generated from your dictionaries            | Through resource type declarations   | Message ids are strings             | No keys: the source text is the id                           |
+| Typed ICU arguments  | Generated from each message                 | Not part of the key types            | Not by default                      | Values come from the template, so TypeScript checks them     |
+| Missing translations | `dialex check` fails the build              | Reported at runtime, with fallbacks  | Reported through `onError`          | Counted by `lingui extract`; `lingui compile --strict` fails |
+| Extraction step      | None: the dictionaries are the source       | Optional tooling                     | `formatjs extract`                  | `lingui extract`                                             |
+| Translator hand-off  | JSON, CSV and XLIFF export and import       | JSON, with many services integrating | JSON, in several vendor formats     | PO and JSON catalogs                                         |
+| Lazy loading         | Per dictionary or per locale, generated     | Backends and namespaces              | Your own dynamic imports            | Your own dynamic imports                                     |
+
+The cells describe each library's documented defaults. Every one of them can be extended with plugins or your own code.
+
+## Dialex and i18next
+
+i18next is the most widely used i18n library for JavaScript, with a large ecosystem of backends, language detectors and framework bindings. It keeps translations as JSON resources and offers runtime features such as namespaces, fallbacks and plugins.
+
+Dialex makes a different trade. Dictionaries are TypeScript, compiled into one typed registry, so a wrong key or a wrong argument is a type error, and a missing locale fails `dialex check` before you ship. There is no runtime resource loading to configure; with [lazy loading](./lazy-loading.md) a dictionary is a code-split module.
+
+Choose i18next when you need its plugin ecosystem, backends that fetch translations at runtime, or a runtime that is not tied to TypeScript. Choose Dialex when you want the compiler to guard your text.
+
+## Dialex and FormatJS
+
+FormatJS is the reference implementation of ICU MessageFormat for JavaScript, and `react-intl` builds React components on it. Messages are defined in code with `defineMessages` or `formatMessage`, extracted with the `formatjs` CLI, and can be precompiled.
+
+Dialex uses the same message syntax, so ICU messages carry over. The difference is the surrounding workflow: Dialex does not need an extraction step, because the dictionary is the source, and it generates types for keys and arguments. The runtime is also smaller, as shown in [Benchmarks](./benchmarks.md).
+
+Choose FormatJS when you want the standard implementation and its React components, or when your translation process is built around `formatjs extract`.
+
+## Dialex and Lingui
+
+Lingui keeps the message in the source (`t` and `Trans` macros), extracts catalogs to PO or JSON, and compiles them into a small runtime. The result is a very small bundle and an authoring style where the English text is written in the component.
+
+Dialex keeps the text in dictionaries instead, so a key names its purpose and every locale sits beside the others in the file. Both approaches use ICU MessageFormat.
+
+Choose Lingui when you prefer writing messages inline and have a PO-based translation process. Choose Dialex when you prefer named keys, and want them checked by the type system.
+
+## Paraglide JS and Intlayer at a glance
+
+Two libraries that also work at build time, next to Dialex:
+
+| Question             | Dialex                                      | Paraglide JS                                                | Intlayer                                                    |
+| -------------------- | ------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| Where the text lives | TypeScript dictionaries next to the code    | JSON message files per locale                               | `.content` files next to the components                     |
+| Message syntax       | ICU MessageFormat, or a TypeScript function | Inlang format; ICU MessageFormat 1 and i18next by plugin    | Its own nodes (`t`, `plural`, `enu`, `select`), or ICU      |
+| Typed keys           | Generated from your dictionaries            | Each message is a generated function                        | Through a `Dictionary` type on each declaration             |
+| Typed ICU arguments  | Generated from each message                 | Parameters of the generated functions are typed             | Not covered in its documentation                            |
+| Missing translations | `dialex check` fails the build              | The inlang CLI checks translations in CI                    | `intlayer content test` checks for them                     |
+| Extraction step      | None: the dictionaries are the source       | None: messages are written in the JSON files                | `intlayer extract` moves strings out of components          |
+| Translator hand-off  | JSON, CSV and XLIFF export and import       | Fink editor for non-developers; import and export by plugin | CMS and editor, `fill` with AI, JSON and YAML files         |
+| Lazy loading         | Per dictionary or per locale, generated     | Unused messages are dropped by the bundler                  | `importMode`: `static`, `dynamic` or `fetch` per dictionary |
+
+## Dialex and Paraglide JS
+
+[Paraglide JS](https://paraglidejs.com) is a compiler from the inlang project. Messages live in JSON files, and the compiler turns each one into a function (`m.greeting({ name })`) with typed parameters, so a bundler can drop the messages you do not use. The message format is pluggable: the default is the inlang format, and plugins add ICU MessageFormat 1 and i18next files.
+
+Dialex also generates types from your messages, but it keeps the text of a feature together in one dictionary, with every locale side by side, and runs ICU strings in a small runtime. Paraglide's per-message functions give the finest tree-shaking; Dialex's [lazy loading](./lazy-loading.md) splits by dictionary or by locale.
+
+Choose Paraglide JS when per-message tree-shaking matters most, or when you want the inlang editor tools. Choose Dialex when you prefer dictionaries grouped by feature, ICU strings and function messages in one file, and a parity check across locales.
+
+## Dialex and Intlayer
+
+[Intlayer](https://intlayer.org) declares content in `.content` files next to each component (TypeScript, JSON, YAML or Markdown), each with a `key`, and builds them into dictionaries. Around that it offers a CMS and an editor, `fill` to complete translations with AI, `extract` to move strings out of components, and `content test` to find missing translations.
+
+Dialex also keeps text in `*.content.ts` files next to the code, but it stays a library and a command line tool: messages are plain ICU strings or functions, and the only service it talks to is the one you choose for `dialex translate`.
+
+Choose Intlayer when you want an editor for non-developers, per-component content with its own node types, and AI fill built into the workflow. Choose Dialex when you want standard ICU MessageFormat and no hosted service.
+
+## When Dialex is not the right fit
+
+- You need to load or change translations at runtime from a service, without a deploy.
+- Your translators work in a tool that only reads PO files, and you do not want a conversion step. Dialex exports JSON, CSV and XLIFF.
+- Your project is plain JavaScript. The main value of Dialex is the types it generates.
+- You depend on an ecosystem plugin that only i18next, FormatJS or Lingui provide.
+
+## Moving to Dialex
+
+- Keep your ICU messages as they are; the syntax is the same.
+- Turn each namespace or catalog into one `defineDictionary` file, and let `dialex check` find the keys that differ between locales.
+- Import existing translations with [`dialex import`](../cli/import.md) from JSON, CSV or XLIFF.
 
 
 ---
@@ -4213,4 +4422,5 @@ The server reads these from the `dialex` section of the editor's configuration:
 - Dictionaries and configs are read from the syntax tree, so the server never runs your project's code. Dictionaries built with spreads or computed keys cannot be analyzed and show an informational note; run `dialex check` for those.
 - Generated files are only updated in projects that already have one. Run `dialex generate` once to create it.
 - There are no editor commands: regeneration is automatic.
+- The native language server (`dialex-language-server`, built from Rust) analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s. It is opt-in for now: set `DIALEX_NATIVE=1` in the environment that starts the server, or point `lsp.dialex.binary.path` at the binary. It does not regenerate `dialex.generated.ts` for projects that use lazy loading; run `dialex generate` for those.
 

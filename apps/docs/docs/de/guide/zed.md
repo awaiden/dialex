@@ -103,3 +103,4 @@ Der Server liest diese aus dem Abschnitt `dialex` der Editorkonfiguration:
 - Wörterbücher und Konfigurationen werden aus dem Syntaxbaum gelesen, der Server führt also nie den Code deines Projekts aus. Wörterbücher mit Spreads oder berechneten Schlüsseln lassen sich nicht analysieren und zeigen einen Hinweis; führe dafür `dialex check` aus.
 - Generierte Dateien werden nur in Projekten aktualisiert, die bereits eine haben. Führe einmal `dialex generate` aus, um sie zu erstellen.
 - Es gibt keine Editorbefehle: Die Neuerzeugung läuft automatisch.
+- Der native Language Server (`dialex-language-server`, in Rust gebaut) analysiert 1.000 Wörterbücher in etwa 50 ms statt in etwa 2,7 s. Er ist vorerst optional: Setze `DIALEX_NATIVE=1` in der Umgebung, die den Server startet, oder verweise mit `lsp.dialex.binary.path` auf die Binärdatei. Für Projekte mit Lazy Loading erzeugt er `dialex.generated.ts` nicht neu; führe dafür `dialex generate` aus.

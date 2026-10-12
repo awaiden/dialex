@@ -103,3 +103,4 @@ language-servers = ["typescript-language-server", "dialex"]
 - 词典和配置从语法树读取，因此服务器永远不会运行你项目的代码。用展开（spread）或计算键构建的词典无法分析，会显示一条提示；请对它们运行 `dialex check`。
 - 生成的文件只会在已经有生成文件的项目中更新。运行一次 `dialex generate` 来创建它。
 - 没有编辑器命令：重新生成是自动的。
+- 原生语言服务器（`dialex-language-server`，用 Rust 构建）分析 1,000 个字典只需约 50 毫秒，而不是约 2.7 秒。目前它是可选的：在启动服务器的环境中设置 `DIALEX_NATIVE=1`，或让 `lsp.dialex.binary.path` 指向该二进制文件。对于使用懒加载的项目，它不会重新生成 `dialex.generated.ts`；请对这些项目运行 `dialex generate`。
