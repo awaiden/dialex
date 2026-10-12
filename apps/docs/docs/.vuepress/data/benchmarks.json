@@ -6,7 +6,7 @@
     "cpu": "11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz",
     "rounds": 7,
     "roundMs": 400,
-    "sink": 17981963212
+    "sink": 20470419394
   },
   "versions": {
     "i18next": "26.4.3",
@@ -20,93 +20,93 @@
   },
   "throughput": {
     "dialexjs": {
-      "lookup": 43519557,
-      "interpolation": 12182375,
-      "plural": 1314654,
-      "nested": 1224797
+      "lookup": 46266998,
+      "interpolation": 16938089,
+      "plural": 9917618,
+      "nested": 8535548
     },
     "dialexjs (function messages)": {
-      "lookup": 29402418,
-      "interpolation": 20147608,
-      "plural": 26145040,
-      "nested": 16089639
+      "lookup": 30714103,
+      "interpolation": 21162309,
+      "plural": 26238852,
+      "nested": 16211910
     },
     "dialexjs formatMessage": {
-      "lookup": 39919266,
-      "interpolation": 17307720,
-      "plural": 1411691,
-      "nested": 1383457
+      "lookup": 35208235,
+      "interpolation": 22909967,
+      "plural": 14132201,
+      "nested": 11197127
     },
     "dialexjs (dictionary object)": {
-      "lookup": 76879058,
+      "lookup": 85001512,
       "interpolation": null,
       "plural": null,
       "nested": null
     },
     "dialexjs (getDictionary per call)": {
-      "lookup": 70281828,
+      "lookup": 77576643,
       "interpolation": null,
       "plural": null,
       "nested": null
     },
     "i18next": {
-      "lookup": 409982,
-      "interpolation": 308147,
-      "plural": 186193,
+      "lookup": 425993,
+      "interpolation": 344288,
+      "plural": 215223,
       "nested": null
     },
     "intl-messageformat": {
-      "lookup": 18011740,
-      "interpolation": 4011251,
-      "plural": 431958,
-      "nested": 394071
+      "lookup": 19372016,
+      "interpolation": 4191336,
+      "plural": 441379,
+      "nested": 398668
     },
     "intl-messageformat (no cache)": {
-      "lookup": 220488,
-      "interpolation": 166977,
-      "plural": 22984,
-      "nested": 18178
+      "lookup": 220923,
+      "interpolation": 162267,
+      "plural": 22148,
+      "nested": 18346
     },
     "@lingui/core": {
-      "lookup": 7520241,
-      "interpolation": 5259893,
-      "plural": 269471,
-      "nested": 127467
+      "lookup": 7677169,
+      "interpolation": 5582960,
+      "plural": 268008,
+      "nested": 126476
     },
     "Paraglide JS": {
-      "lookup": 21550673,
-      "interpolation": 15754696,
-      "plural": 87237,
-      "nested": 90820
+      "lookup": 21495958,
+      "interpolation": 16618901,
+      "plural": 87101,
+      "nested": 91326
     },
     "Intlayer": {
-      "lookup": 61550138,
-      "interpolation": 2090239,
-      "plural": 1246861,
-      "nested": 1114859
+      "lookup": 63762365,
+      "interpolation": 2083863,
+      "plural": 1361079,
+      "nested": 1242438
     },
     "Intlayer (getIntlayer per call)": {
-      "lookup": 398154,
-      "interpolation": 330110,
-      "plural": 301829,
-      "nested": 297055
+      "lookup": 402101,
+      "interpolation": 320671,
+      "plural": 295293,
+      "nested": 284140
     }
   },
   "size": {
     "dialexjs (t)": {
-      "minified": 7227,
-      "gzip": 2739,
-      "brotli": 2486
+      "minified": 8025,
+      "gzip": 3029,
+      "brotli": 2760
     },
     "dialexjs/icu (formatMessage)": {
-      "minified": 6479,
-      "gzip": 2401,
-      "brotli": 2175
+      "minified": 7060,
+      "gzip": 2619,
+      "brotli": 2397
     },
     "dialexjs (function messages)": {
-      "minified": 7268,
-      "gzip": 2757,
-      "brotli": 2491
+      "minified": 8066,
+      "gzip": 3052,
+      "brotli": 2772
     },
     "i18next": {
       "minified": 43666,

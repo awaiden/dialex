@@ -29,3 +29,5 @@ npm install -g @dialexjs/cli   # or globally
 DIALEX_NATIVE=0 dx check   # always use the Node implementation
 DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
 ```
+
+在 Linux 和 macOS 上使用 npm 和 Yarn classic 时，安装步骤会把二进制文件放到启动器原来的位置，因此 `dx` 无需先启动 Node（约 25 毫秒），不到一毫秒就能启动。其他包管理器、`--ignore-scripts` 和 Windows 会保留一个运行同一二进制文件的小型 JavaScript 启动器。

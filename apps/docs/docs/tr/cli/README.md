@@ -29,3 +29,5 @@ Yerel ikili dosya sözlükleri ve yapılandırmayı sözdizimi ağacından okur.
 DIALEX_NATIVE=0 dx check   # always use the Node implementation
 DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
 ```
+
+Linux ve macOS'ta npm ve Yarn classic ile kurulum adımı ikili dosyayı launcher'ın yerine koyar; böylece `dx`, önce Node'u başlatmak yerine (yaklaşık 25 ms) bir milisaniyenin altında başlar. Diğer paket yöneticileri, `--ignore-scripts` ve Windows aynı ikili dosyayı çalıştıran küçük bir JavaScript launcher'ı korur.

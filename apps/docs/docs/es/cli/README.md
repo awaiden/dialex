@@ -29,3 +29,5 @@ El binario nativo lee los diccionarios y la configuración desde el árbol de si
 DIALEX_NATIVE=0 dx check   # always use the Node implementation
 DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
 ```
+
+Con npm y Yarn classic en Linux y macOS, el paso de instalación coloca el binario donde estaba el launcher, así que `dx` arranca en menos de un milisegundo en lugar de iniciar Node primero (unos 25 ms). Otros gestores de paquetes, `--ignore-scripts` y Windows conservan un pequeño launcher de JavaScript que ejecuta el mismo binario.

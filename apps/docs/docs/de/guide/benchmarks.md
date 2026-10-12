@@ -43,18 +43,18 @@ Dialex ist grün. Die Balken sind innerhalb eines Diagramms maßstabsgetreu; ver
 
 | Bibliothek                        |     Lookup | Interpolation |     Plural | Verschachteltes Select und Plural |
 | --------------------------------- | ---------: | ------------: | ---------: | --------------------------------: |
-| dialexjs                          | 43,519,557 |    12,182,375 |  1,314,654 |                         1,224,797 |
-| dialexjs (function messages)      | 29,402,418 |    20,147,608 | 26,145,040 |                        16,089,639 |
-| dialexjs formatMessage            | 39,919,266 |    17,307,720 |  1,411,691 |                         1,383,457 |
-| dialexjs (dictionary object)      | 76,879,058 |           n/a |        n/a |                               n/a |
-| dialexjs (getDictionary per call) | 70,281,828 |           n/a |        n/a |                               n/a |
-| i18next                           |    409,982 |       308,147 |    186,193 |                               n/a |
-| intl-messageformat                | 18,011,740 |     4,011,251 |    431,958 |                           394,071 |
-| intl-messageformat (no cache)     |    220,488 |       166,977 |     22,984 |                            18,178 |
-| @lingui/core                      |  7,520,241 |     5,259,893 |    269,471 |                           127,467 |
-| Paraglide JS                      | 21,550,673 |    15,754,696 |     87,237 |                            90,820 |
-| Intlayer                          | 61,550,138 |     2,090,239 |  1,246,861 |                         1,114,859 |
-| Intlayer (getIntlayer per call)   |    398,154 |       330,110 |    301,829 |                           297,055 |
+| dialexjs                          | 46,266,998 |    16,938,089 |  9,917,618 |                         8,535,548 |
+| dialexjs (function messages)      | 30,714,103 |    21,162,309 | 26,238,852 |                        16,211,910 |
+| dialexjs formatMessage            | 35,208,235 |    22,909,967 | 14,132,201 |                        11,197,127 |
+| dialexjs (dictionary object)      | 85,001,512 |           n/a |        n/a |                               n/a |
+| dialexjs (getDictionary per call) | 77,576,643 |           n/a |        n/a |                               n/a |
+| i18next                           |    425,993 |       344,288 |    215,223 |                               n/a |
+| intl-messageformat                | 19,372,016 |     4,191,336 |    441,379 |                           398,668 |
+| intl-messageformat (no cache)     |    220,923 |       162,267 |     22,148 |                            18,346 |
+| @lingui/core                      |  7,677,169 |     5,582,960 |    268,008 |                           126,476 |
+| Paraglide JS                      | 21,495,958 |    16,618,901 |     87,101 |                            91,326 |
+| Intlayer                          | 63,762,365 |     2,083,863 |  1,361,079 |                         1,242,438 |
+| Intlayer (getIntlayer per call)   |    402,101 |       320,671 |    295,293 |                           284,140 |
 
 Gemessen mit Node v24.21.0 auf einem Intel Core i5-11400H, Linux x64, am 2026-10-12.
 
@@ -66,9 +66,9 @@ Das kleinste nützliche Programm in jeder Bibliothek: erzeugen, eine Plural-Nach
 
 | Programm                     | Minifiziert |     Gzip |   Brotli |
 | ---------------------------- | ----------: | -------: | -------: |
-| dialexjs (t)                 |     7,227 B |  2,739 B |  2,486 B |
-| dialexjs/icu (formatMessage) |     6,479 B |  2,401 B |  2,175 B |
-| dialexjs (function messages) |     7,268 B |  2,757 B |  2,491 B |
+| dialexjs (t)                 |     8,025 B |  3,029 B |  2,760 B |
+| dialexjs/icu (formatMessage) |     7,060 B |  2,619 B |  2,397 B |
+| dialexjs (function messages) |     8,066 B |  3,052 B |  2,772 B |
 | i18next                      |    43,666 B | 14,043 B | 12,726 B |
 | intl-messageformat           |    33,567 B |  9,908 B |  8,883 B |
 | Paraglide JS                 |    10,702 B |  3,952 B |  3,528 B |
@@ -79,13 +79,13 @@ Versionen: dialexjs 0.7.2 plus die Laufzeit-Performance-Änderungen (kompilierte
 
 ## Wie du diese Zahlen liest
 
-- **Bei Plural und Zahlen unterscheiden sich die Bibliotheken.** Ein Plural braucht ein `PluralRules` und einen Zahlenformatter. Sie bei jedem Aufruf zu erzeugen ist langsam, daher hält Dialex eines pro Locale und Optionen. Ohne das lag der Plural-Fall bei etwa 36.000 Operationen pro Sekunde, damit bei etwa 1.300.000.
+- **Bei Plural und Zahlen unterscheiden sich die Bibliotheken.** Ein Plural braucht ein `PluralRules` und einen Zahlenformatter. Sie bei jedem Aufruf zu erzeugen ist langsam, daher hält Dialex eines pro Locale und Optionen. Ohne das lag der Plural-Fall bei etwa 36.000 Operationen pro Sekunde, damit bei etwa 700.000 und bei etwa 9.900.000, sobald Kategorie und formatierte Zahl kleiner Zähler pro Locale gemerkt werden.
 - **Funktionsnachrichten überspringen den Parser.** Eine als TypeScript-Funktion geschriebene Nachricht wird von TypeScript kompiliert, daher kosten Plural und Select so viel wie ein Template-String.
-- **`t()` leistet etwas mehr als der Formatter.** `dialexjs` zerlegt den Punktpfad und sucht den Schlüssel, bevor es formatiert; deshalb ist `formatMessage` allein bei der Interpolation schneller; beim Lookup liegen beide im Rahmen der Messschwankung.
+- **`t()` leistet etwas mehr als der Formatter.** `dialexjs` zerlegt den Punktpfad und sucht den Schlüssel, bevor es formatiert; deshalb ist `formatMessage` allein schneller, sobald Werte formatiert werden. Ein einfacher String ohne Werte wird unverändert zurückgegeben, daher ist `t()` beim Lookup schneller.
 - **i18next leistet pro Aufruf mehr.** Es löst bei jedem `t()` Fallback-Ketten, Namespaces und Plugins auf; das ist der Funktionsumfang, den du bezahlst. Das ICU-Plugin ändert seine Zahlen; dieser Benchmark läuft ohne es.
 - **Paraglide JS ist unter den anderen Bibliotheken bei der Interpolation am schnellsten.** Eine Nachricht mit Wert wird zu einem Template-String kompiliert. Sein Plural-Code erzeugt bei jedem Aufruf ein neues `Intl.PluralRules` (Version 2.27.0), genau die Kosten, die Dialex beseitigt hat; deshalb ist Plural viel langsamer als die Interpolation (etwa 87.000 gegenüber 16 Millionen Operationen pro Sekunde).
 - **Das Lookup von Intlayer ist ein Property-Zugriff.** Ein einfacher String braucht keine Arbeit, weshalb es allen Bibliotheken, die einen Pfad nachschlagen oder formatieren, weit voraus ist. Interpolation, Plural und Select laufen über Knotenfunktionen, und das Wörterbuch bei jedem Aufruf zu lesen ist viel langsamer, als es einmal zu lesen. Ein Dialex-Wörterbuchobjekt zu lesen ist dieselbe Operation und liegt in derselben Größenordnung; mit Werten leisten `t()` und die Knotenfunktionen von Intlayer echte Arbeit, und dort unterscheiden sich die Spalten.
-- **Die Größe gilt nur für die Laufzeit.** Die Zahl von Lingui gilt für vorab kompilierte Nachrichten und enthält seine `lingui`-Werkzeuge nicht. Dialex liefert seinen Parser in der Laufzeit mit, daher funktionieren ICU-Strings ohne Kompilierschritt.
+- **Die Größe gilt nur für die Laufzeit.** Die Zahl von Lingui gilt für vorab kompilierte Nachrichten und enthält seine `lingui`-Werkzeuge nicht. Dialex liefert seinen Parser in der Laufzeit mit, daher funktionieren ICU-Strings ohne Kompilierschritt. Die Closures und Caches, die das Formatieren beschleunigen, kosten etwa 2 KB minifiziert (0,7 KB gzip) gegenüber dem Interpreter, den sie ersetzen.
 - **Paraglide JS und Intlayer werden mit ihren eigenen Build-Werkzeugen gemessen.** Die Zahl von Paraglide ist eine kompilierte Nachricht plus seine Laufzeit. Intlayer braucht sein Bundler-Plugin, um im Browser zu laufen, daher wird es mit `vite-intlayer` und `vanilla-intlayer` gebaut.
 
 ## Selbst ausführen

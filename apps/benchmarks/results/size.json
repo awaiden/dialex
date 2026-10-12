@@ -12,19 +12,19 @@
   },
   "results": {
     "dialexjs (t)": {
-      "minified": 7227,
-      "gzip": 2739,
-      "brotli": 2486
+      "minified": 8025,
+      "gzip": 3029,
+      "brotli": 2760
     },
     "dialexjs/icu (formatMessage)": {
-      "minified": 6479,
-      "gzip": 2401,
-      "brotli": 2175
+      "minified": 7060,
+      "gzip": 2619,
+      "brotli": 2397
     },
     "dialexjs (function messages)": {
-      "minified": 7268,
-      "gzip": 2757,
-      "brotli": 2491
+      "minified": 8066,
+      "gzip": 3052,
+      "brotli": 2772
     },
     "i18next": {
       "minified": 43666,

@@ -29,3 +29,5 @@ Die native Binärdatei liest Wörterbücher und Konfiguration aus dem Syntaxbaum
 DIALEX_NATIVE=0 dx check   # always use the Node implementation
 DIALEX_NATIVE=1 dx check   # native only: fail instead of falling back to Node
 ```
+
+Mit npm und Yarn classic unter Linux und macOS legt der Installationsschritt die Binärdatei an die Stelle des Launchers, sodass `dx` in unter einer Millisekunde startet, statt zuerst Node zu booten (etwa 25 ms). Andere Paketmanager, `--ignore-scripts` und Windows behalten einen kleinen JavaScript-Launcher, der dieselbe Binärdatei ausführt.
