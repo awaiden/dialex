@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "date": "2026-10-12",
+    "node": "v24.21.0",
+    "platform": "Linux x64",
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz",
+    "rounds": 7,
+    "roundMs": 400,
+    "sink": 13803231828
+  },
+  "messages": {
+    "lookup": "Hello, world",
+    "interpolation": "Hello, {name}!",
+    "plural": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "nested": "{gender, select, female {{count, plural, one {She has # item} other {She has # items}}} male {{count, plural, one {He has # item} other {He has # items}}} other {{count, plural, one {They have # item} other {They have # items}}}}"
+  },
+  "results": {
+    "dialexjs": {
+      "lookup": 46707541,
+      "interpolation": 14051921,
+      "plural": 1406051,
+      "nested": 1376668
+    },
+    "dialexjs (function messages)": {
+      "lookup": 31048917,
+      "interpolation": 22331081,
+      "plural": 28292094,
+      "nested": 16844399
+    },
+    "dialexjs formatMessage": {
+      "lookup": 43237670,
+      "interpolation": 18950435,
+      "plural": 1493870,
+      "nested": 1453541
+    },
+    "i18next": {
+      "lookup": 433997,
+      "interpolation": 340709,
+      "plural": 211321,
+      "nested": null
+    },
+    "intl-messageformat": {
+      "lookup": 21672973,
+      "interpolation": 4179803,
+      "plural": 441800,
+      "nested": 406716
+    },
+    "intl-messageformat (no cache)": {
+      "lookup": 215188,
+      "interpolation": 172955,
+      "plural": 23179,
+      "nested": 19389
+    },
+    "@lingui/core": {
+      "lookup": 7855446,
+      "interpolation": 5666858,
+      "plural": 276988,
+      "nested": 132382
+    },
+    "Paraglide JS": {
+      "lookup": 23386911,
+      "interpolation": 16831905,
+      "plural": 89624,
+      "nested": 95300
+    },
+    "Intlayer": {
+      "lookup": 68713663,
+      "interpolation": 2262200,
+      "plural": 1419100,
+      "nested": 1278051
+    },
+    "Intlayer (getIntlayer per call)": {
+      "lookup": 422557,
+      "interpolation": 331815,
+      "plural": 298988,
+      "nested": 292948
+    }
+  }
+}

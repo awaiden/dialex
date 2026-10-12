@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "date": "2026-10-11",
+    "node": "v24.21.0",
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz",
+    "command": "/home/awaiden/.local/share/vite-plus/js_runtime/node/24.21.0/bin/node /home/awaiden/Documents/Github/i18n/packages/cli/dist/index.mjs",
+    "runs": 5
+  },
+  "results": {
+    "100": {
+      "version": {
+        "best": 87.9,
+        "median": 88.5
+      },
+      "generate": {
+        "best": 339.1,
+        "median": 343.1
+      },
+      "check": {
+        "best": 488.2,
+        "median": 490.4
+      },
+      "check --json": {
+        "best": 496.7,
+        "median": 499.5
+      }
+    },
+    "1000": {
+      "version": {
+        "best": 88.2,
+        "median": 90.7
+      },
+      "generate": {
+        "best": 1117.8,
+        "median": 1133.3
+      },
+      "check": {
+        "best": 2160,
+        "median": 2190.8
+      },
+      "check --json": {
+        "best": 2128.6,
+        "median": 2152.9
+      }
+    },
+    "2000": {
+      "version": {
+        "best": 89,
+        "median": 90.3
+      },
+      "generate": {
+        "best": 1900.6,
+        "median": 1920.3
+      },
+      "check": {
+        "best": 3821.7,
+        "median": 3959.8
+      },
+      "check --json": {
+        "best": 3832.8,
+        "median": 3904.3
+      }
+    }
+  }
+}

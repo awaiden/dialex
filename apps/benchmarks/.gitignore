@@ -1,0 +1,4 @@
+node_modules
+# Built by `bun run prepare:libs`
+.intlayer
+paraglide/generated

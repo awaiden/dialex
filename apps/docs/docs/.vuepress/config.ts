@@ -20,6 +20,8 @@ const PAGES = {
     "lazy-loading",
     "testing",
     "best-practices",
+    "comparison",
+    "benchmarks",
     "vscode",
     "zed",
     "ai",

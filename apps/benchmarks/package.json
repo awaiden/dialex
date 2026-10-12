@@ -1,0 +1,29 @@
+{
+  "name": "dialex-benchmarks",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:libs": "cd paraglide && paraglide-js compile --project ./project.inlang --outdir ./generated && cd .. && intlayer build",
+    "bench": "bun run prepare:libs && node src/run.mjs",
+    "size": "bun run prepare:libs && node src/size.mjs",
+    "report": "node src/report.mjs",
+    "all": "bun run bench && bun run size && bun run docs:data",
+    "docs:data": "node src/publish.mjs"
+  },
+  "dependencies": {
+    "@inlang/paraglide-js": "^2.27.0",
+    "@lingui/core": "^6.9.1",
+    "@lingui/message-utils": "^6.9.1",
+    "dialexjs": "workspace:*",
+    "i18next": "^26.4.3",
+    "intl-messageformat": "^12.1.3",
+    "intlayer": "^9.7.0",
+    "vanilla-intlayer": "^9.7.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "vite": "catalog:",
+    "vite-intlayer": "^9.7.0"
+  }
+}

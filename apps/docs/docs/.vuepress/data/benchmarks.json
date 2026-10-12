@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "date": "2026-10-12",
+    "node": "v24.21.0",
+    "platform": "Linux x64",
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz",
+    "rounds": 7,
+    "roundMs": 400,
+    "sink": 13803231828
+  },
+  "versions": {
+    "i18next": "26.4.3",
+    "intl-messageformat": "12.1.3",
+    "@lingui/core": "6.9.1",
+    "@inlang/paraglide-js": "2.27.0",
+    "intlayer": "9.7.0",
+    "vite-intlayer": "9.7.0",
+    "esbuild": "0.28.2",
+    "dialexjs": "0.7.2"
+  },
+  "throughput": {
+    "dialexjs": {
+      "lookup": 46707541,
+      "interpolation": 14051921,
+      "plural": 1406051,
+      "nested": 1376668
+    },
+    "dialexjs (function messages)": {
+      "lookup": 31048917,
+      "interpolation": 22331081,
+      "plural": 28292094,
+      "nested": 16844399
+    },
+    "dialexjs formatMessage": {
+      "lookup": 43237670,
+      "interpolation": 18950435,
+      "plural": 1493870,
+      "nested": 1453541
+    },
+    "i18next": {
+      "lookup": 433997,
+      "interpolation": 340709,
+      "plural": 211321,
+      "nested": null
+    },
+    "intl-messageformat": {
+      "lookup": 21672973,
+      "interpolation": 4179803,
+      "plural": 441800,
+      "nested": 406716
+    },
+    "intl-messageformat (no cache)": {
+      "lookup": 215188,
+      "interpolation": 172955,
+      "plural": 23179,
+      "nested": 19389
+    },
+    "@lingui/core": {
+      "lookup": 7855446,
+      "interpolation": 5666858,
+      "plural": 276988,
+      "nested": 132382
+    },
+    "Paraglide JS": {
+      "lookup": 23386911,
+      "interpolation": 16831905,
+      "plural": 89624,
+      "nested": 95300
+    },
+    "Intlayer": {
+      "lookup": 68713663,
+      "interpolation": 2262200,
+      "plural": 1419100,
+      "nested": 1278051
+    },
+    "Intlayer (getIntlayer per call)": {
+      "lookup": 422557,
+      "interpolation": 331815,
+      "plural": 298988,
+      "nested": 292948
+    }
+  },
+  "size": {
+    "dialexjs (t)": {
+      "minified": 7227,
+      "gzip": 2739,
+      "brotli": 2486
+    },
+    "dialexjs/icu (formatMessage)": {
+      "minified": 6479,
+      "gzip": 2401,
+      "brotli": 2175
+    },
+    "dialexjs (function messages)": {
+      "minified": 7268,
+      "gzip": 2757,
+      "brotli": 2491
+    },
+    "i18next": {
+      "minified": 43666,
+      "gzip": 14043,
+      "brotli": 12726
+    },
+    "intl-messageformat": {
+      "minified": 33567,
+      "gzip": 9908,
+      "brotli": 8883
+    },
+    "Paraglide JS": {
+      "minified": 10702,
+      "gzip": 3952,
+      "brotli": 3528
+    },
+    "@lingui/core": {
+      "minified": 4824,
+      "gzip": 2087,
+      "brotli": 1869
+    },
+    "Intlayer": {
+      "minified": 17207,
+      "gzip": 4901,
+      "brotli": 4381
+    }
+  }
+}

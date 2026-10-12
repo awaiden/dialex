@@ -1,0 +1,29 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "lookup": "Hello, world",
+  "interpolation": "Hello, {name}!",
+  "plural": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} item",
+        "countPlural=other": "{count} items"
+      }
+    }
+  ],
+  "nested": [
+    {
+      "declarations": ["input gender", "input count", "local countPlural = count: plural"],
+      "selectors": ["gender", "countPlural"],
+      "match": {
+        "gender=female, countPlural=one": "She has {count} item",
+        "gender=female, countPlural=other": "She has {count} items",
+        "gender=male, countPlural=one": "He has {count} item",
+        "gender=male, countPlural=other": "He has {count} items",
+        "gender=*, countPlural=one": "They have {count} item",
+        "gender=*, countPlural=other": "They have {count} items"
+      }
+    }
+  ]
+}
