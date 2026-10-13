@@ -1,6 +1,6 @@
-import { isObjectNode, propertyKeyName, unwrapNode, type AstNode } from "@dialexjs/config";
 import { generateCode } from "magicast";
 
+import { isObjectNode, propertyKeyName, unwrapNode, type AstNode } from "./ast.js";
 import type { DictionaryFile } from "./dictionary-edit.js";
 
 export interface LocaleSlice {

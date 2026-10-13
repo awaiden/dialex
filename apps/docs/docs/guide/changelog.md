@@ -6,6 +6,76 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.9.0
+
+### Minor Changes
+
+- 4b70e2e: Add `@dialexjs/eslint-plugin`, ESLint and oxlint rules for unknown dictionaries and keys, dynamic keys, hard-coded text and dictionary files.
+
+  Checks are configured once in `dialex.config.ts` under `lint.rules` (level and options per diagnostic code), and `dialex check`, the editors and the plugin all read it. The analyzer skips comments, understands dictionaries registered inline with `dictionaries: { name: ... }`, and honours `dialex-ignore` / `dialex-ignore-next-line` comments. `@dialexjs/cli/api` gains `analyzeProjectSync`, and editors get a `dialex.diagnostics` setting for use with the plugin.
+
+## 0.8.0
+
+### Minor Changes
+
+- 621a03a: Seven new framework entry points and CLI support for them.
+
+  - `dialexjs/preact`: Preact 10 and later. `<DialexProvider {...dialex}>`, `useDialex`, `useDictionary`, `useT`, `useDialexConfig`. No `preact/compat` needed.
+  - `dialexjs/qwik`: `createDialexQwik({ ...dialex })` returns `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` (an accessor, `home().title`), `useT` and `getPersistedLocale`. Dictionaries stay in their module; only the locale is serialized into the page.
+  - `dialexjs/lit`: `createDialex({ ...dialex })` holds the locale, and `DialexController` is a reactive controller that re-renders a Lit element on locale changes. It also works with plain custom elements through `subscribe`.
+  - `dialexjs/react-native`: `DialexProvider` for React Native and Expo with `deviceLocales` (the device's languages) and `storage` (AsyncStorage, MMKV, anything with `getItem` and `setItem`). It uses the hooks of `dialexjs/react`.
+  - `dialexjs/hapi`: the `dialexPlugin` for Hapi 21, adding `request.locale` and `request.getDictionary(name)`.
+  - `dialexjs/adonis`: `createDialexMiddleware({ ...dialex })` for AdonisJS 6 and later, adding `ctx.locale` and `ctx.getDictionary(name)`.
+  - `dialexjs/trpc`: `createDialexContext({ ...dialex })` puts the locale and dictionaries into the tRPC context from a Fetch `Request` or Node-style headers.
+  - `DialexProvider` of `dialexjs/react` accepts `onLocaleChange(locale)`.
+  - The `react` peer dependency is `>=19.0.0` (was `^19.3.0`), so Expo SDK apps pinned to React 19.2 install without a warning.
+  - `dialex init` and the type registry detect Preact, Qwik, Lit, React Native / Expo, Hapi, AdonisJS and tRPC. React Native shares the `dialexjs/react` declarations.
+  - `dialexjs/react-native` reads `storage` before it renders, so the first screen is already in the remembered language and a restore is not reported through `onLocaleChange`.
+  - `dialexjs/qwik` loads lazy dictionaries (`lazy: true`) and renders the readers again when they arrive.
+  - `dx generate` follows a `tsconfig.json` that extends a package (such as `@adonisjs/tsconfig`), or lists several configs, when it decides whether generated imports need the `.js` extension.
+  - New examples: `examples/preact`, `qwik`, `lit`, `expo`, `hapi`, `adonis` and `trpc`.
+
+  Documentation: a page for each new framework in five languages.
+
+- 5c72368: Two new framework entry points and CLI support for four more frameworks.
+
+  - `dialexjs/svelte`: Svelte 4 and 5 (plain Vite apps, and SvelteKit components). `provideDialex({ ...dialex })` in the root component, then `useDictionary("home")` and `useT("home")` return stores (`$home.title`, `$t("home.cart.items", { count })`). It uses `svelte/store` and Svelte's context, so no runes or compile step are needed.
+  - `dialexjs/solid`: SolidJS. `<DialexProvider {...dialex}>` and `useDictionary("home")` returning an accessor (`home().title`), `useT`, `useDialex`.
+  - `dialex init` and the type registry detect Svelte, Solid and React Router (framework mode), and `dialex-env.d.ts` augments `dialexjs/svelte` and `dialexjs/solid`.
+  - New config option `output`: where `dialex generate` writes `dialex.generated.ts` (the type declarations go next to it). React Router apps keep their source in `app/`.
+  - New examples: `examples/vue`, `examples/svelte`, `examples/solid` and `examples/react-router`.
+
+  Documentation: new pages for Svelte, Solid and React Router, a Best practices guide, and Best practices and Troubleshooting sections on every framework page, in five languages.
+
+### Patch Changes
+
+- 6aa75d3: Documentation and editor hints.
+
+  - **Every public export has a TSDoc comment**, so editors show what `defineDictionary`, `defineConfig`, the formatters, the adapter options and the framework contexts do on hover. A test fails when a new export has none.
+  - **`dialex translate --json` no longer prints the parsed dictionaries.** The `pending` list carried the whole syntax tree of each dictionary; it now has `file`, `locale`, `key`, `source` (and `stale` or `translated` when they apply).
+  - **Docs:** a full API reference (signatures, parameters, return values, failures and examples for every export), plus new pages for how Dialex works, requirements and peer ranges, a diagnostics reference with the JSON shape of `check`, troubleshooting, an FAQ, a glossary, and migration guides from i18next, react-intl, next-intl and vue-i18n. The CLI pages now document `--json`, exit codes, `--ai`, and `dialex lock`. A guard checks that the API reference names every export. All pages are available in English, Turkish, Spanish, German and Simplified Chinese.
+
+- 71b5b3a: A second round of speed-ups.
+
+  - **Plural messages are about 7 times faster.** The results of `Intl.PluralRules.select` and of the `#` number format for counts 0 to 255 are remembered per locale (exactly what Intl returned, so every locale and numbering system stays correct), and messages with two or three parts get unrolled closures. `t()` on a plural: 1.3 M to 9.9 M operations per second; nested select and plural: 1.2 M to 8.5 M; interpolation: 12.2 M to 16.9 M; lookup: 43.5 M to 46.3 M.
+  - **Bundle size:** the `t` program is 8,025 B minified (3,029 B gzip), up from 7,227 B (2,739 B). The compiled closures and caches are the price of the speed above; the 10% size target was not met.
+  - **Language server re-analysis is about 4 times faster.** After one edit in a project of 1,000 dictionaries it takes about 20 ms instead of about 75 ms: unchanged dictionaries and source files are reused, the tree is not walked again for a content edit, and unchanged diagnostics are not sent again.
+
+- f5cc8bd: Faster message formatting. ICU messages and the `plural`, `number`, `date`, `relativeTime` and `list` helpers reuse one `Intl` formatter per locale and options instead of creating a new one on every call, and each message is compiled once into a closure instead of walked on every call.
+
+  Measured with the new `apps/benchmarks` (operations per second, `t()` on ICU strings):
+
+  | Case          | Before |  After |
+  | ------------- | -----: | -----: |
+  | Lookup        |  6.8 M | 43.5 M |
+  | Interpolation |  4.0 M | 12.2 M |
+  | Plural        | 0.70 M | 1.31 M |
+  | Nested        | 0.65 M | 1.22 M |
+
+  The plural case was about 36,000 operations per second before the shared formatters (the "Before" column above already includes them). The runtime got larger by about 19% (`t` program: 6,081 B to 7,227 B minified, 2,301 B to 2,739 B gzip) because of the compiler.
+
+  Documentation: new Benchmarks and Comparison pages, in five languages.
+
 ## 0.7.2
 
 ### Patch Changes

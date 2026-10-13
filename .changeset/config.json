@@ -6,15 +6,8 @@
       "dialexjs",
       "@dialexjs/cli",
       "@dialexjs/mcp",
-      "@dialexjs/config",
       "@dialexjs/eslint-plugin",
-      "@dialexjs/language-server",
-      "@dialexjs/cli-linux-x64",
-      "@dialexjs/cli-linux-arm64",
-      "@dialexjs/cli-darwin-x64",
-      "@dialexjs/cli-darwin-arm64",
-      "@dialexjs/cli-win32-x64",
-      "@dialexjs/cli-win32-arm64"
+      "@dialexjs/language-server"
     ]
   ],
   "access": "public",

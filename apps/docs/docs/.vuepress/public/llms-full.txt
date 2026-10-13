@@ -61,25 +61,27 @@ function analyzeProject(options: AnalysisOptions): Promise<AnalysisResult>;
 
 Finds the dictionaries of a project, checks locale parity, ICU messages, lock-file staleness and references from source code, and returns the issues. `dialex check` is a thin layer over it.
 
-| Option    | Type             | Default               | Description                                                                                                                     |
-| --------- | ---------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `root`    | `string`         | —                     | The project folder. Required                                                                                                    |
-| `config`  | `AnalysisConfig` | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Required                                                                      |
-| `src`     | `string[]`       | `DEFAULT_SOURCE_GLOB` | Source globs to scan for references. Pass `[]` to skip scanning                                                                 |
-| `runtime` | `boolean`        | `false`               | **Runs project code.** Imports dictionaries the syntax tree cannot describe (spreads, computed keys). Editors must leave it off |
-| `ignore`  | `string[]`       | —                     | More ignore globs, relative to `root` (nested projects)                                                                         |
-| `unused`  | `boolean`        | `true`                | Report possibly unused keys and dictionaries                                                                                    |
-| `lock`    | `boolean`        | `true`                | Report translations whose source text changed since `dialex.lock.json`                                                          |
-| `cache`   | `AnalysisCache`  | —                     | Reuse parsed dictionaries and scanned sources between calls. Ignored with `runtime`                                             |
+| Option     | Type                  | Default               | Description                                                                                                                     |
+| ---------- | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `root`     | `string`              | —                     | The project folder. Required                                                                                                    |
+| `config`   | `AnalysisConfig`      | —                     | `defaultLocale`, `locales`, `include`, `exclude`. Required                                                                      |
+| `src`      | `string[]`            | `DEFAULT_SOURCE_GLOB` | Source globs to scan for references. Pass `[]` to skip scanning                                                                 |
+| `runtime`  | `boolean`             | `false`               | **Runs project code.** Imports dictionaries the syntax tree cannot describe (spreads, computed keys). Editors must leave it off |
+| `ignore`   | `string[]`            | —                     | More ignore globs, relative to `root` (nested projects)                                                                         |
+| `unused`   | `boolean`             | `true`                | Report possibly unused keys and dictionaries                                                                                    |
+| `lock`     | `boolean`             | `true`                | Report translations whose source text changed since `dialex.lock.json`                                                          |
+| `cache`    | `AnalysisCache`       | —                     | Reuse parsed dictionaries and scanned sources between calls. Ignored with `runtime`                                             |
+| `contents` | `Map<string, string>` | —                     | Unsaved text of files by absolute path, read instead of the file on disk. For linters and editors                               |
 
 The result:
 
-| Field                | Type                   | Description                                          |
-| -------------------- | ---------------------- | ---------------------------------------------------- |
-| `issues`             | `AnalysisIssue[]`      | Everything found. See the table below                |
-| `dictionaries`       | `AnalyzedDictionary[]` | One entry per readable dictionary                    |
-| `files`              | `string[]`             | Absolute paths of every dictionary file that matched |
-| `sourceFilesScanned` | `number`               | How many source files were scanned for references    |
+| Field                | Type                   | Description                                                                           |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------- |
+| `issues`             | `AnalysisIssue[]`      | Everything found. See the table below                                                 |
+| `dictionaries`       | `AnalyzedDictionary[]` | One entry per readable dictionary                                                     |
+| `files`              | `string[]`             | Absolute paths of every dictionary file that matched                                  |
+| `sourceFilesScanned` | `number`               | How many source files were scanned for references                                     |
+| `inlineDictionaries` | `string[]`             | Names registered in code with `dictionaries: { name: ... }`. Empty when `src` is `[]` |
 
 An `AnalysisIssue` has `file`, `level` (`"error" \| "warning" \| "info"`), `code` ([see the codes](../guide/diagnostics.md)), `message`, and, when known, `range` (zero-based `{ start, end }` of `{ line, column }`), `dictionary`, `locale`, `path`, and `sourceLocale` (for `missing-key`: a locale to copy the key from).
 
@@ -87,13 +89,15 @@ An `AnalyzedDictionary` has `name`, `file`, `locales`, `leaves` (`locale -> dott
 
 ### Other analysis exports
 
-| Export                     | Description                                                                                                          |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `createAnalysisCache()`    | An `AnalysisCache` for a long-lived caller. It reuses what has not changed (keyed by modification time and size)     |
-| `clearGitignore(cache)`    | Forgets the cached `.gitignore` rules, for example after a `.gitignore` changed                                      |
-| `scanReferences(text)`     | Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. Returns `{ kind, value, start, end }[]` |
-| `relativeFile(root, file)` | A root-relative path with forward slashes, for display                                                               |
-| `DEFAULT_SOURCE_GLOB`      | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                  |
+| Export                        | Description                                                                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createAnalysisCache()`       | An `AnalysisCache` for a long-lived caller. It reuses what has not changed (keyed by modification time and size)                                                   |
+| `analyzeProjectSync(options)` | `analyzeProject` for callers that cannot await, such as lint rules. Reads dictionaries from the syntax tree only: `runtime` is ignored, so project code never runs |
+| `clearGitignore(cache)`       | Forgets the cached `.gitignore` rules, for example after a `.gitignore` changed                                                                                    |
+| `scanReferences(text)`        | Finds `getDictionary("x")`-style and `t("x.y.z")` references in source text. Returns `{ kind, value, start, end }[]`                                               |
+| `scanText(text)`              | Like `scanReferences`, and also returns the dictionary names the text registers inline. Returns `{ references, inline }`                                           |
+| `relativeFile(root, file)`    | A root-relative path with forward slashes, for display                                                                                                             |
+| `DEFAULT_SOURCE_GLOB`         | `**/*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro,mdx}`                                                                                                                |
 
 ## Scanning files
 
@@ -322,18 +326,18 @@ Call the `inject*` functions in an injection context.
 
 The option and prop types, and which entry point uses them:
 
-| Type | Used by |
-| ---- | ------- |
-| `DialexProviderProps` | `DialexProvider` of `dialexjs/react`, `preact`, `solid` and `react-native` |
-| `DialexContext` | `useDialex()` of `dialexjs/react`, `preact`, `solid` and `vue` |
-| `CreateDialexOptions` | `createDialex` of `dialexjs/vue` and `dialexjs/lit` |
-| `Dialex` | The state `createDialex` of `dialexjs/lit` returns |
-| `DialexOptions`, `DialexSvelte` | `provideDialex` and `createSvelteDialex` of `dialexjs/svelte` |
-| `CreateDialexQwikOptions`, `UseDialexProviderOptions`, `DialexState` | `createDialexQwik` and its hooks, `dialexjs/qwik` |
-| `AngularDialexOptions`, `DialexStore` | `provideDialex` and `injectDialex` of `dialexjs/angular` |
-| `NuxtDialexOptions` | The module options of `dialexjs/nuxt` |
-| `DialexLinkProps`, `DialexMiddlewareOptions` | `DialexLink` and `createDialexMiddleware` of Next.js |
-| `LocaleStorage` | The `storage` prop of `dialexjs/react-native` |
+| Type                                                                 | Used by                                                                    |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `DialexProviderProps`                                                | `DialexProvider` of `dialexjs/react`, `preact`, `solid` and `react-native` |
+| `DialexContext`                                                      | `useDialex()` of `dialexjs/react`, `preact`, `solid` and `vue`             |
+| `CreateDialexOptions`                                                | `createDialex` of `dialexjs/vue` and `dialexjs/lit`                        |
+| `Dialex`                                                             | The state `createDialex` of `dialexjs/lit` returns                         |
+| `DialexOptions`, `DialexSvelte`                                      | `provideDialex` and `createSvelteDialex` of `dialexjs/svelte`              |
+| `CreateDialexQwikOptions`, `UseDialexProviderOptions`, `DialexState` | `createDialexQwik` and its hooks, `dialexjs/qwik`                          |
+| `AngularDialexOptions`, `DialexStore`                                | `provideDialex` and `injectDialex` of `dialexjs/angular`                   |
+| `NuxtDialexOptions`                                                  | The module options of `dialexjs/nuxt`                                      |
+| `DialexLinkProps`, `DialexMiddlewareOptions`                         | `DialexLink` and `createDialexMiddleware` of Next.js                       |
+| `LocaleStorage`                                                      | The `storage` prop of `dialexjs/react-native`                              |
 
 ## `preloadDictionaries`
 
@@ -473,7 +477,16 @@ The shape of `dialex.config.ts`. Every field is optional.
 | `fallbacks`     | `Record<string, string[]>` | —                   | Explicit [fallback chains](../guide/fallbacks.md)                                     |
 | `prefixDefault` | `boolean`                  | `true`              | Whether the default locale also gets a URL prefix                                     |
 | `lazy`          | `boolean \| "locale"`      | `false`             | Load dictionaries on demand. See [Lazy Loading](../guide/lazy-loading.md)             |
+| `lint`          | `LintConfig`               | —                   | Level and options of each check. See [Linting](../guide/linting.md)                   |
 | `translate`     | `TranslateConfig`          | —                   | Settings of [`dialex translate`](../cli/translate.md)                                 |
+
+### `LintConfig`
+
+| Field   | Type                              | Description                                                                    |
+| ------- | --------------------------------- | ------------------------------------------------------------------------------ |
+| `rules` | `Record<string, LintRuleSetting>` | Level and options per diagnostic code, plus `dynamic-key` and `literal-string` |
+
+A `LintRuleSetting` is a `LintSeverity` (`"off"`, `"warn"` or `"error"`), or `[LintSeverity, options]` for checks that take options. `dialex check`, the editors and [`@dialexjs/eslint-plugin`](../guide/linting.md) all read it.
 
 ### `TranslateConfig`
 
@@ -861,10 +874,10 @@ Every adapter takes the locale detection options and, except `createDialexMiddle
 
 ### Base adapter options (`BaseAdapterOptions`)
 
-| Option         | Type              | Default | Description                                                                                                                                                           |
-| -------------- | ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dictionaries` | `DictionaryInput` | —       | A `{ name: { locale: content } }` map or an array of `defineDictionary` results. Without it only dictionaries already registered through `defineDictionary` are found |
-| `setHeader`    | `boolean`         | `true`  | Send the resolved locale as `Content-Language`                                                                                                                        |
+| Option         | Type              | Default | Description                                                                                                                                                                                                                                                                            |
+| -------------- | ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dictionaries` | `DictionaryInput` | —       | The generated `dictionaries`; `{ ...dialex }` sets it. Pass your own `{ name: { locale: content } }` map or array of `defineDictionary` results only when you do not use the generated file. Without either, only dictionaries already registered through `defineDictionary` are found |
+| `setHeader`    | `boolean`         | `true`  | Send the resolved locale as `Content-Language`                                                                                                                                                                                                                                         |
 
 ## What each adapter adds
 
@@ -1241,21 +1254,6 @@ npm install -g @dialexjs/cli   # or globally
 | [`dialex lock`](./lock.md)           |        | Record translations as up to date with their source           |
 
 A typical workflow: `dialex check --fix` to create placeholders for new keys, then either `dialex translate` or `dialex export` / `dialex import` for human translators, then `dialex check` in CI.
-
-## Native binary
-
-On Linux, macOS and Windows (x64 and arm64) `dialex` and `dx` run a native binary built from Rust, installed with the package as an optional dependency (`@dialexjs/cli-<platform>`). `generate` and `check` are 25 to 40 times faster than the Node implementation on a project with 1,000 dictionaries, and produce the same files and output byte for byte.
-
-The native binary reads dictionaries and the config from the syntax tree. When a command needs your project's code to run (a config that is not plain data, a `translate` provider, `runtime: true`, lazy loading, `--fix`, `--watch`), or is not implemented natively (`init`, `export`, `import`, `lock`, `translate`), it hands the whole command to the Node CLI, so nothing changes for you. Two environment variables control this:
-
-```bash
-DIALEX_NATIVE=0 dx check   # always use the Node implementation
-DIALEX_NATIVE=1 dx check   # fail with a reason instead of running in Node
-```
-
-With npm and Yarn classic on Linux and macOS, the install step puts the binary where the launcher was, so `dx` starts in under a millisecond instead of booting Node first (about 25 ms). Other package managers, `--ignore-scripts`, and Windows keep a small JavaScript launcher that runs the same binary.
-
-Supported platforms, what runs natively, when it falls back and every environment variable are on [Native binaries](../guide/native.md).
 
 ## Exit codes and JSON
 
@@ -1942,6 +1940,47 @@ TestBed.configureTestingModule({
 
 For code that does not need Angular, use [`createTestDialex`](../guide/testing.md).
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for the Angular router: a few lines of your own keep `Router.navigateByUrl()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```ts
+// src/app/localized-path.ts
+import { injectDialex } from "dialexjs/angular";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated";
+
+export function injectLocalizedPath() {
+  const { locale } = injectDialex();
+  return (path: string, to = locale()) => localizePath(path, to, config);
+}
+```
+
+```ts
+import { Component, inject } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+
+import { injectLocalizedPath } from "./localized-path";
+
+@Component({
+  selector: "app-nav",
+  imports: [RouterLink],
+  template: `
+    <a [routerLink]="localize('/about')">About</a>
+    <button (click)="cart()">Cart</button>
+  `,
+})
+export class NavComponent {
+  private readonly router = inject(Router);
+  protected readonly localize = injectLocalizedPath();
+
+  protected cart() {
+    void this.router.navigateByUrl(this.localize("/cart"));
+  }
+}
+```
+
 ## Best practices
 
 - Configure Dialex once with `provideDialex({ ...dialex })` in `app.config.ts`, and read it with `injectDictionary` and `injectT` in components. They return signals, so templates update on their own.
@@ -2003,6 +2042,25 @@ The adapter takes the [locale detection options](../guide/locale-detection.md), 
 ## TypeScript
 
 `dialex generate` writes `dialex-env.d.ts`. With it included in `tsconfig.json` (and `moduleResolution` set to `"bundler"` or `"nodenext"`), `Astro.locals.getDictionary("home")` autocompletes the dictionary names, types the content, and `locale` is the union of your configured locales.
+
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Astro: a few lines of your own keep `Astro.redirect()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```astro
+---
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../dialex.generated.js";
+
+const { locale } = Astro.locals;
+const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+// In a page that must send the visitor elsewhere: return Astro.redirect(localize("/login"));
+---
+
+<a href={localize("/about")}>About</a>
+```
 
 ## Best practices
 
@@ -2611,6 +2669,25 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Lit: a few lines of your own keep `location.assign()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```ts
+import { localizePath } from "dialexjs/routing";
+import { html } from "lit";
+
+import { config } from "./dialex.generated";
+import { i18n } from "./i18n";
+
+const localize = (path: string, to = i18n.locale) => localizePath(path, to, config);
+
+html`<a href=${localize("/about")}>About</a>`;
+
+// Programmatic navigation without a router:
+location.assign(localize("/cart"));
+```
+
 ## Best practices
 
 - Create one `createDialex` instance per app and import it. Two instances do not share their locale.
@@ -2788,6 +2865,29 @@ import { DialexLink } from "dialexjs/next/link";
 ```
 
 It reads `locales`, `defaultLocale` and `prefixDefault` from the generated config, so render it inside `<DialexProvider {...dialex}>`. External URLs and `#fragments` are left alone. See also [Routing helpers](../guide/routing.md).
+
+`DialexLink` replaces `next/link`. For `router.push` and `router.replace`, apply `localizePath` the same way, with the locale the app is showing:
+
+```tsx
+"use client";
+
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+import { useRouter } from "next/navigation";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedRouter() {
+  const router = useRouter();
+  const { locale } = useDialex();
+  const localize = (path: string) => localizePath(path, locale, config);
+
+  return {
+    push: (path: string) => router.push(localize(path)),
+    replace: (path: string) => router.replace(localize(path)),
+  };
+}
+```
 
 ## Server Components
 
@@ -3008,6 +3108,31 @@ import { dialex } from "./dialex.generated";
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for preact-iso: a few lines of your own keep `route()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { useDialex } from "dialexjs/preact";
+import { localizePath } from "dialexjs/routing";
+import { useLocation } from "preact-iso";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const { route } = useLocation();
+  const localize = (path: string, to = locale) => localizePath(path, to, config);
+
+  return (
+    <>
+      <a href={localize("/about")}>About</a>
+      <button onClick={() => route(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
+```
+
 ## Best practices
 
 - Render `DialexProvider` once, at the root. Every component below it shares the same locale and the same loaded dictionaries.
@@ -3197,6 +3322,32 @@ export default component$(() => {
 | `getPersistedLocale()`                 | The locale remembered in this browser, when the app supports it. `undefined` on the server                         |
 | `useDictionary(name)`                  | An accessor for the dictionary of the current locale, following the fallback chain. Call it in JSX: `home().title` |
 | `useT()`                               | A `t("dictionary.key", values?)` function bound to the current locale                                              |
+
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Qwik City: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { Link, useNavigate } from "@builder.io/qwik-city";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+import { useDialex } from "./i18n";
+
+export const Nav = component$(() => {
+  const dialex = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string) => localizePath(path, dialex.locale, config);
+
+  return (
+    <>
+      <Link href={localize("/about")}>About</Link>
+      <button onClick$={() => navigate(localizePath("/cart", dialex.locale, config))}>Cart</button>
+    </>
+  );
+});
+```
 
 ## Best practices
 
@@ -3574,6 +3725,55 @@ export function LanguageSwitcher() {
 }
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for React Router: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+Put the routes under an optional `:locale?` segment, so `/cart` and `/tr/cart` both match:
+
+```ts
+// app/routes.ts
+import { index, route, type RouteConfig } from "@react-router/dev/routes";
+
+export default [
+  route(":locale?", "routes/layout.tsx", [
+    index("routes/home.tsx"),
+    route("cart", "routes/cart.tsx"),
+  ]),
+] satisfies RouteConfig;
+```
+
+```tsx
+// app/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+import { Link, useNavigate } from "react-router";
+
+import { useLocalizedPath } from "../useLocalizedPath";
+
+export function CartLinks() {
+  const localize = useLocalizedPath();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to={localize("/cart")}>Cart</Link>
+      <button onClick={() => navigate(localize("/checkout"))}>Checkout</button>
+    </>
+  );
+}
+```
+
 ## Best practices
 
 - Resolve the locale in the root loader only, and read it in child routes with `useRouteLoaderData("root")` or from the provider. Resolving it again in every route repeats work and can disagree.
@@ -3665,6 +3865,63 @@ export default () => (
 The provider renders the default locale first, then applies the remembered locale after mount (only if it is one of the configured `locales`). This keeps the first client render identical to server-rendered markup, at the cost of one extra render for returning visitors. To avoid it, read the cookie on the server and pass it as `initialLocale`. `<html lang>` is kept in sync with the active locale.
 
 `useT(...dictionaryNames)` returns a [`t` function](../guide/key-paths.md). With [lazy loading](../guide/lazy-loading.md), `useDictionary` suspends until its dictionary has loaded.
+
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for React: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+// src/useLocalizedPath.ts
+import { useDialex } from "dialexjs/react";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "./dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale) => localizePath(path, to, config);
+}
+```
+
+```tsx
+const localize = useLocalizedPath();
+
+<a href={localize("/about")}>About</a>;
+<a href={localize("/about", "en")}>English</a>;
+```
+
+With TanStack Router, make the locale an optional path parameter, `{-$locale}`, and pass it in `params`. The default locale is left out when `prefixDefault` is `false`:
+
+```tsx
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useDialex } from "dialexjs/react";
+
+import { config } from "./dialex.generated";
+
+function localeParam(locale: string) {
+  return locale === config.defaultLocale && !config.prefixDefault ? undefined : locale;
+}
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Link to="/{-$locale}/about" params={{ locale: localeParam(locale) }}>
+        About
+      </Link>
+      <button
+        onClick={() =>
+          navigate({ to: "/{-$locale}/cart", params: { locale: localeParam(locale) } })
+        }
+      >
+        Cart
+      </button>
+    </>
+  );
+}
+```
 
 ## Best practices
 
@@ -3822,6 +4079,31 @@ import { preloadDictionaries } from "dialexjs/solid";
 import { dialex } from "./dialex.generated";
 
 preloadDictionaries(dialex, { locale: "tr" }, "checkout");
+```
+
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Solid Router: a few lines of your own keep `useNavigate()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```tsx
+import { A, useNavigate } from "@solidjs/router";
+import { localizePath } from "dialexjs/routing";
+import { useDialex } from "dialexjs/solid";
+
+import { config } from "./dialex.generated";
+
+export function Nav() {
+  const { locale } = useDialex();
+  const navigate = useNavigate();
+  const localize = (path: string, to = locale()) => localizePath(path, to, config);
+
+  return (
+    <>
+      <A href={localize("/about")}>About</A>
+      <button onClick={() => navigate(localize("/cart"))}>Cart</button>
+    </>
+  );
+}
 ```
 
 ## Best practices
@@ -4032,6 +4314,26 @@ it("switches to Turkish", () => {
 });
 ```
 
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for SvelteKit: a few lines of your own keep `goto()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```svelte
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { useDialex } from "dialexjs/svelte";
+  import { localizePath } from "dialexjs/routing";
+
+  import { config } from "../dialex.generated";
+
+  const { locale } = useDialex();
+  const localize = (path: string, to = $locale) => localizePath(path, to, config);
+</script>
+
+<a href={localize("/about")}>About</a>
+<button onclick={() => goto(localize("/cart"))}>Cart</button>
+```
+
 ## Best practices
 
 - Call `provideDialex` in the root component only. Components below use `useDictionary` and `useT`; a second `provideDialex` starts a separate locale.
@@ -4086,6 +4388,24 @@ Put the placeholder in `src/app.html`; it is replaced with the resolved locale o
 ```
 
 `Content-Language` is set unless `setHeader` is `false`. All [locale detection options](../guide/locale-detection.md#options) apply, and `custom` receives the request event.
+
+## Links and navigation
+
+To send a visitor to a localized page from a hook or an endpoint, use `localizePath` with the locale the adapter resolved:
+
+```ts
+// src/routes/account/+page.server.ts
+import { redirect } from "@sveltejs/kit";
+import { localizePath } from "dialexjs/routing";
+
+import { config } from "../../dialex.generated.js";
+
+export function load({ locals, cookies }) {
+  if (!cookies.get("session")) {
+    redirect(302, localizePath("/login", locals.locale, config));
+  }
+}
+```
 
 ## Best practices
 
@@ -4221,6 +4541,40 @@ The module installs the Vue plugin with the dictionaries from `dialex.generated.
 ::: warning
 The Nuxt module is covered by unit tests of its setup calls only. It has not been run inside a full Nuxt application yet.
 :::
+
+## Links and navigation
+
+If your URLs carry the locale (`/tr/about`), build links with `localizePath` from [Routing Helpers](../guide/routing.md) and the locale the app is showing. Dialex has no link component for Vue Router and Nuxt: a few lines of your own keep `router.push()` and redirects working the same way, and show exactly what happens to a path. The generated `config` already holds `locales`, `defaultLocale` and `prefixDefault`, so nothing is repeated.
+
+```ts
+import { localizePath } from "dialexjs/routing";
+// src/composables/useLocalizedPath.ts
+import { useDialex } from "dialexjs/vue";
+
+import { config } from "../dialex.generated";
+
+export function useLocalizedPath() {
+  const { locale } = useDialex();
+  return (path: string, to = locale.value) => localizePath(path, to, config);
+}
+```
+
+```vue
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+import { useLocalizedPath } from "./composables/useLocalizedPath";
+
+const localize = useLocalizedPath();
+const router = useRouter();
+// In Nuxt: <NuxtLink :to="localize('/about')"> and navigateTo(localize("/cart"))
+</script>
+
+<template>
+  <RouterLink :to="localize('/about')">About</RouterLink>
+  <button @click="router.push(localize('/cart'))">Cart</button>
+</template>
+```
 
 ## Best practices
 
@@ -4620,6 +4974,76 @@ What changed in each release of `dialexjs`, `@dialexjs/cli`, `@dialexjs/mcp` and
 All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@dialexjs/mcp` and the VS Code extension share one version number.
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
+
+## 0.9.0
+
+### Minor Changes
+
+- 4b70e2e: Add `@dialexjs/eslint-plugin`, ESLint and oxlint rules for unknown dictionaries and keys, dynamic keys, hard-coded text and dictionary files.
+
+  Checks are configured once in `dialex.config.ts` under `lint.rules` (level and options per diagnostic code), and `dialex check`, the editors and the plugin all read it. The analyzer skips comments, understands dictionaries registered inline with `dictionaries: { name: ... }`, and honours `dialex-ignore` / `dialex-ignore-next-line` comments. `@dialexjs/cli/api` gains `analyzeProjectSync`, and editors get a `dialex.diagnostics` setting for use with the plugin.
+
+## 0.8.0
+
+### Minor Changes
+
+- 621a03a: Seven new framework entry points and CLI support for them.
+
+  - `dialexjs/preact`: Preact 10 and later. `<DialexProvider {...dialex}>`, `useDialex`, `useDictionary`, `useT`, `useDialexConfig`. No `preact/compat` needed.
+  - `dialexjs/qwik`: `createDialexQwik({ ...dialex })` returns `useDialexProvider`, `useDialex`, `setLocale`, `useDictionary` (an accessor, `home().title`), `useT` and `getPersistedLocale`. Dictionaries stay in their module; only the locale is serialized into the page.
+  - `dialexjs/lit`: `createDialex({ ...dialex })` holds the locale, and `DialexController` is a reactive controller that re-renders a Lit element on locale changes. It also works with plain custom elements through `subscribe`.
+  - `dialexjs/react-native`: `DialexProvider` for React Native and Expo with `deviceLocales` (the device's languages) and `storage` (AsyncStorage, MMKV, anything with `getItem` and `setItem`). It uses the hooks of `dialexjs/react`.
+  - `dialexjs/hapi`: the `dialexPlugin` for Hapi 21, adding `request.locale` and `request.getDictionary(name)`.
+  - `dialexjs/adonis`: `createDialexMiddleware({ ...dialex })` for AdonisJS 6 and later, adding `ctx.locale` and `ctx.getDictionary(name)`.
+  - `dialexjs/trpc`: `createDialexContext({ ...dialex })` puts the locale and dictionaries into the tRPC context from a Fetch `Request` or Node-style headers.
+  - `DialexProvider` of `dialexjs/react` accepts `onLocaleChange(locale)`.
+  - The `react` peer dependency is `>=19.0.0` (was `^19.3.0`), so Expo SDK apps pinned to React 19.2 install without a warning.
+  - `dialex init` and the type registry detect Preact, Qwik, Lit, React Native / Expo, Hapi, AdonisJS and tRPC. React Native shares the `dialexjs/react` declarations.
+  - `dialexjs/react-native` reads `storage` before it renders, so the first screen is already in the remembered language and a restore is not reported through `onLocaleChange`.
+  - `dialexjs/qwik` loads lazy dictionaries (`lazy: true`) and renders the readers again when they arrive.
+  - `dx generate` follows a `tsconfig.json` that extends a package (such as `@adonisjs/tsconfig`), or lists several configs, when it decides whether generated imports need the `.js` extension.
+  - New examples: `examples/preact`, `qwik`, `lit`, `expo`, `hapi`, `adonis` and `trpc`.
+
+  Documentation: a page for each new framework in five languages.
+
+- 5c72368: Two new framework entry points and CLI support for four more frameworks.
+
+  - `dialexjs/svelte`: Svelte 4 and 5 (plain Vite apps, and SvelteKit components). `provideDialex({ ...dialex })` in the root component, then `useDictionary("home")` and `useT("home")` return stores (`$home.title`, `$t("home.cart.items", { count })`). It uses `svelte/store` and Svelte's context, so no runes or compile step are needed.
+  - `dialexjs/solid`: SolidJS. `<DialexProvider {...dialex}>` and `useDictionary("home")` returning an accessor (`home().title`), `useT`, `useDialex`.
+  - `dialex init` and the type registry detect Svelte, Solid and React Router (framework mode), and `dialex-env.d.ts` augments `dialexjs/svelte` and `dialexjs/solid`.
+  - New config option `output`: where `dialex generate` writes `dialex.generated.ts` (the type declarations go next to it). React Router apps keep their source in `app/`.
+  - New examples: `examples/vue`, `examples/svelte`, `examples/solid` and `examples/react-router`.
+
+  Documentation: new pages for Svelte, Solid and React Router, a Best practices guide, and Best practices and Troubleshooting sections on every framework page, in five languages.
+
+### Patch Changes
+
+- 6aa75d3: Documentation and editor hints.
+
+  - **Every public export has a TSDoc comment**, so editors show what `defineDictionary`, `defineConfig`, the formatters, the adapter options and the framework contexts do on hover. A test fails when a new export has none.
+  - **`dialex translate --json` no longer prints the parsed dictionaries.** The `pending` list carried the whole syntax tree of each dictionary; it now has `file`, `locale`, `key`, `source` (and `stale` or `translated` when they apply).
+  - **Docs:** a full API reference (signatures, parameters, return values, failures and examples for every export), plus new pages for how Dialex works, requirements and peer ranges, a diagnostics reference with the JSON shape of `check`, troubleshooting, an FAQ, a glossary, and migration guides from i18next, react-intl, next-intl and vue-i18n. The CLI pages now document `--json`, exit codes, `--ai`, and `dialex lock`. A guard checks that the API reference names every export. All pages are available in English, Turkish, Spanish, German and Simplified Chinese.
+
+- 71b5b3a: A second round of speed-ups.
+
+  - **Plural messages are about 7 times faster.** The results of `Intl.PluralRules.select` and of the `#` number format for counts 0 to 255 are remembered per locale (exactly what Intl returned, so every locale and numbering system stays correct), and messages with two or three parts get unrolled closures. `t()` on a plural: 1.3 M to 9.9 M operations per second; nested select and plural: 1.2 M to 8.5 M; interpolation: 12.2 M to 16.9 M; lookup: 43.5 M to 46.3 M.
+  - **Bundle size:** the `t` program is 8,025 B minified (3,029 B gzip), up from 7,227 B (2,739 B). The compiled closures and caches are the price of the speed above; the 10% size target was not met.
+  - **Language server re-analysis is about 4 times faster.** After one edit in a project of 1,000 dictionaries it takes about 20 ms instead of about 75 ms: unchanged dictionaries and source files are reused, the tree is not walked again for a content edit, and unchanged diagnostics are not sent again.
+
+- f5cc8bd: Faster message formatting. ICU messages and the `plural`, `number`, `date`, `relativeTime` and `list` helpers reuse one `Intl` formatter per locale and options instead of creating a new one on every call, and each message is compiled once into a closure instead of walked on every call.
+
+  Measured with the new `apps/benchmarks` (operations per second, `t()` on ICU strings):
+
+  | Case          | Before |  After |
+  | ------------- | -----: | -----: |
+  | Lookup        |  6.8 M | 43.5 M |
+  | Interpolation |  4.0 M | 12.2 M |
+  | Plural        | 0.70 M | 1.31 M |
+  | Nested        | 0.65 M | 1.22 M |
+
+  The plural case was about 36,000 operations per second before the shared formatters (the "Before" column above already includes them). The runtime got larger by about 19% (`t` program: 6,081 B to 7,227 B minified, 2,301 B to 2,739 B gzip) because of the compiler.
+
+  Documentation: new Benchmarks and Comparison pages, in five languages.
 
 ## 0.7.2
 
@@ -5023,6 +5447,7 @@ export default defineConfig({
 | `fallbacks`     | `Record<string, string[]>`    | —                   | Explicit [fallback chains](./fallbacks.md) per locale                                                                                                                          |
 | `prefixDefault` | `boolean`                     | `true`              | Whether the default locale also gets a URL prefix. Read by `DialexLink` and the [routing helpers](./routing.md)                                                                |
 | `lazy`          | `boolean \| "locale"`         | `false`             | Load dictionaries on demand (client bundles): `true` splits per dictionary, `"locale"` per dictionary and locale. See [Lazy Loading](./lazy-loading.md)                        |
+| `lint`          | `{ rules }`                   | —                   | Turn checks off or change their level and options, for `dialex check`, the editors and the [ESLint and oxlint rules](./linting.md)                                             |
 | `translate`     | `{ provider, sourceLocale? }` | —                   | Provider for [`dialex translate`](../cli/translate.md)                                                                                                                         |
 
 Dialex skips `node_modules`, build output and everything your `.gitignore` files ignore (including the repository's, for a package inside a monorepo). Use `exclude` for anything else, such as a vendored folder you do commit.
@@ -5035,13 +5460,12 @@ The tools look in the project root (the folder you run `dialex` from, or the fol
 
 ## How the tools read it
 
-| Tool                                                        | Reads the config by                                                          |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)        |
-| The native `dx`                                             | Reading its syntax tree. Anything computed hands the command to the Node CLI |
-| The editor extension and language server                    | Reading its syntax tree, and never running it                                |
+| Tool                                                        | Reads the config by                                                                 |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)               |
+| The editor extension and language server                    | Reading its syntax tree, and never running it                                       |
 
-A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out. See [Native binaries](./native.md).
+A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out.
 
 ## Examples
 
@@ -5120,6 +5544,15 @@ These need source files to scan; they are skipped when there are none. See [`dia
 | `unknown-path`       | error    | `Unknown translation path "a.nope"`  | `t("a.nope")` where `a` is a known dictionary but has no such key. The editor offers a quick fix that adds the key to every locale         |
 | `unused-key`         | warning  | `Key "only_en" is possibly unused`   | No source file contains the key's last segment as a word. A heuristic: dynamic access is never reported, and some unused keys go unnoticed |
 | `unused-dictionary`  | warning  | `Dictionary "c" is never referenced` | No source file contains the dictionary's name                                                                                              |
+
+Comments are never checked. A dictionary registered in code with an object literal, `dictionaries: { name: ... }`, counts as known, so reading it with `getDictionary("name")` is not an error. To silence a reference that is fine, put `dialex-ignore-next-line` in a comment on the line above it, or `dialex-ignore` in a comment on the same line:
+
+```ts
+// dialex-ignore-next-line
+const d = getDictionary("from-a-plugin");
+```
+
+For the same checks in ESLint and oxlint, see [Linting](./linting.md).
 
 ## Generated files
 
@@ -5230,7 +5663,7 @@ Every dictionary should define the same keys for every locale. Run [`dialex chec
 | A locale whose content is a variable or an import: `en: enStrings` | No               |
 | A name that is not a string literal                                | No               |
 
-A dictionary that cannot be read statically is not wrong; the tools just have to run it. `dialex check` does (it imports the file), the native binary hands the command to the Node CLI, and the editor reports the file as "not analyzable" and skips it, so it has no diagnostics, hover or completion for its keys. If you want editor support everywhere, keep dictionaries as literal objects, and share text with a function or a helper that is called inside a leaf instead of spreading objects.
+A dictionary that cannot be read statically is not wrong; the tools just have to run it. `dialex check` does (it imports the file), and the editor reports the file as "not analyzable" and skips it, so it has no diagnostics, hover or completion for its keys. If you want editor support everywhere, keep dictionaries as literal objects, and share text with a function or a helper that is called inside a leaf instead of spreading objects.
 
 
 ---
@@ -5352,10 +5785,6 @@ No. Nothing is sent unless you configure a provider, and then only the strings t
 Yes. Each package with a `dialex.config.*` (or just `*.content.ts` files) is a project. The CLI works from the folder you run it in, and the editor tooling finds every project in the workspace and keeps nested projects apart. `.gitignore` files of the repository are respected.
 
 ## Tooling
-
-### Is the CLI written in Rust?
-
-`dialex generate` and `dialex check` have a native implementation that produces the same output as the Node CLI and is 20 to 40 times faster on large projects; everything else runs in Node. See [Native binaries](./native.md).
 
 ### Why does the editor skip one of my dictionaries?
 
@@ -5515,7 +5944,6 @@ The terms Dialex uses, in alphabetical order, with a link to where each is expla
 | **Leaf**                 | A value in a dictionary that is not an object: a string, a function or another value                                                                                                                             |
 | **Locale**               | A language tag such as `en`, `tr` or `pt-BR`                                                                                                                                                                     |
 | **Lock file**            | `dialex.lock.json`: records which source text each translation was made from, so a later change of the source is noticed. See [Keeping translations in sync](../cli/translate.md#keeping-translations-in-sync)   |
-| **Native binary**        | The Rust build of `dx` and of the language server. See [Native binaries](./native.md)                                                                                                                            |
 | **Parity**               | Every locale of a dictionary having the same keys (and the same ICU arguments). Checked by `dialex check`                                                                                                        |
 | **Persist**              | Remembering the user's locale choice in a cookie or `localStorage`                                                                                                                                               |
 | **Plural category**      | One of `zero`, `one`, `two`, `few`, `many`, `other`: the forms a language's plural rules distinguish (CLDR)                                                                                                      |
@@ -5737,6 +6165,132 @@ Use `useT("pricing")` the same way, and `preloadDictionaries(dialex, "pricing")`
 
 ---
 
+# File: guide/linting.md
+
+# Linting with ESLint and oxlint
+
+`@dialexjs/eslint-plugin` reports Dialex problems where your other lint errors already are: in the terminal, in CI and in any editor that runs ESLint or oxlint. It is one package for both linters, because oxlint loads ESLint-style plugins.
+
+It needs a `dialex.config.*` above the file being linted and does nothing in projects without one. Like `dialex check`, it reads dictionaries and the config from the syntax tree and never runs project code.
+
+## ESLint
+
+Install it, then add its config to `eslint.config.js`:
+
+```sh
+npm install --save-dev @dialexjs/eslint-plugin
+```
+
+```js
+import dialex from "@dialexjs/eslint-plugin";
+
+export default [dialex.configs.recommended];
+```
+
+## oxlint
+
+oxlint has no shareable configs, so list the plugin and the rules yourself in `.oxlintrc.json`:
+
+```json
+{
+  "jsPlugins": ["@dialexjs/eslint-plugin"],
+  "rules": {
+    "dialex/no-unknown-dictionary": "error",
+    "dialex/no-unknown-path": "error",
+    "dialex/no-dynamic-key": "warn",
+    "dialex/valid-dictionary": "error"
+  }
+}
+```
+
+oxlint's JS plugins are in alpha, and it does not run plugin rules on `.vue`, `.svelte` or `.astro` files. `dialex check` and the editor extensions still cover those.
+
+## Rules
+
+| Rule                           | Reports                                                                                                       | `recommended` |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------- |
+| `dialex/no-unknown-dictionary` | `getDictionary("x")`, `useDictionary("x")` or `@DialexDictionary("x")` names a dictionary that does not exist | `error`       |
+| `dialex/no-unknown-path`       | `t("a.nope")` where `a` is a known dictionary but has no such key                                             | `error`       |
+| `dialex/no-dynamic-key`        | A dictionary name or key that is not a string literal, so Dialex cannot check it                              | `warn`        |
+| `dialex/valid-dictionary`      | What `dialex check` finds in a dictionary file                                                                | `error`       |
+| `dialex/no-literal-string`     | Text written in JSX instead of coming from a dictionary                                                       | off           |
+
+### no-unknown-dictionary
+
+The same check as the `unknown-dictionary` diagnostic. A dictionary registered in code with `dictionaries: { name: ... }` counts as known, and comments are never checked.
+
+### no-unknown-path
+
+The same check as `unknown-path`. Keys of dictionaries Dialex does not know are ignored, because `t()` may belong to another library.
+
+### no-dynamic-key
+
+`getDictionary(name)` and ``t(`home.${key}`)`` cannot be verified. A bare `t` is only checked in files that import from `dialexjs`, since other libraries use that name too.
+
+### valid-dictionary
+
+Runs on dictionary files, on the text in the editor, and reports the dictionary [codes](./diagnostics.md) such as `missing-key`, `missing-locale`, `invalid-icu` and `todo-placeholder`. Unused keys and dictionaries are left to `dialex check`, which sees the whole project. Skip codes with `ignore`:
+
+```json
+{ "dialex/valid-dictionary": ["error", { "ignore": ["todo-placeholder"] }] }
+```
+
+### no-literal-string
+
+Flags JSX text that contains letters and the values of `title`, `alt`, `placeholder`, `aria-label` and `label`. It is off in `recommended` because most projects have some text that is fine to keep. Options:
+
+```json
+{
+  "dialex/no-literal-string": [
+    "warn",
+    { "attributes": ["title", "alt"], "ignore": ["^OK$"], "ignoreComponents": ["Trans", "code"] }
+  ]
+}
+```
+
+`attributes` replaces the attribute list, `ignore` is a list of regular expressions matched against the trimmed text, and `ignoreComponents` names elements whose content is skipped (by default `Trans`, `code`, `pre`, `script` and `style`).
+
+## Configuration
+
+Rules are configured once, under `lint.rules` in `dialex.config.ts`. `dialex check`, the editor extensions and these ESLint and oxlint rules all read it, so a check is on or off, with the same options, everywhere.
+
+```ts
+import { defineConfig } from "dialexjs";
+
+export default defineConfig({
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+  lint: {
+    rules: {
+      "unused-key": "off",
+      "missing-key": "warn",
+      "literal-string": ["warn", { ignore: ["^OK$"] }],
+    },
+  },
+});
+```
+
+Keys are the [diagnostic codes](./diagnostics.md), plus `dynamic-key` and `literal-string`, which only the linter plugin evaluates. A value is `"off"`, `"warn"`, `"error"` or `[level, options]`. The level changes how `dialex check` and the editors report the issue. In ESLint it is the severity that `dialex.configs.recommended` gives the rule, read from the `dialex.config.*` in the directory ESLint runs in, and `literal-string` is only on in `recommended` when you set it here.
+
+oxlint reads severities from `.oxlintrc.json`, which cannot be computed, so list the rules there at the level you want. `"off"` and options from `dialex.config.ts` still apply, so a check you turn off there stays quiet. `valid-dictionary` is one rule for many codes and the linter shows it at one level; per-code levels apply in `dialex check` and the editors. Options passed to a rule in the linter's own config override those from `dialex.config.ts`.
+
+## Suppressing a report
+
+Use the linter's own comments, such as `// eslint-disable-next-line dialex/no-unknown-dictionary`. The `dialex-ignore` comments from [Diagnostics](./diagnostics.md) are for `dialex check` and the editors, and the plugin does not read them.
+
+## Editors
+
+If your editor already shows these problems from ESLint or oxlint, turn off Dialex's own copy so each is shown once. Hover, completion and quick fixes keep working. In VS Code:
+
+```json
+{ "dialex.diagnostics": false }
+```
+
+In Zed, set `diagnostics` to `false` under `lsp.dialex.settings` ([Zed and other editors](./zed.md)).
+
+
+---
+
 # File: guide/locale-detection.md
 
 # Locale Detection
@@ -5925,84 +6479,6 @@ Check these before you start; each has a workaround above.
 
 ---
 
-# File: guide/native.md
-
-# Native binaries
-
-`dialex generate`, `dialex check` and the language server have a native implementation written in Rust. It reads the same dictionaries and configs, from the syntax tree, and produces **the same files and output byte for byte**; it is only faster. Every other command, and every case the native code cannot decide on its own, runs in the Node CLI as before. You never have to choose: install `@dialexjs/cli` and the right thing happens.
-
-## Speed
-
-Measured with best-of-5 fresh processes on one machine (an Intel Core i5-11400H); your numbers will differ, so run `apps/benchmarks/cli/run.mjs` to compare on your hardware.
-
-| Project            | Command    | Node CLI | Native binary |
-| ------------------ | ---------- | -------: | ------------: |
-| 100 dictionaries   | `generate` |   341 ms |        4.3 ms |
-| 100 dictionaries   | `check`    |   492 ms |        8.9 ms |
-| 1,000 dictionaries | `generate` | 1,107 ms |         28 ms |
-| 1,000 dictionaries | `check`    | 2,149 ms |         88 ms |
-
-The language server analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s, and re-analyzes after one edit in about 20 ms.
-
-## Which platforms
-
-Prebuilt binaries are published as optional dependencies of `@dialexjs/cli`:
-
-| Platform                      | Package                                                  |
-| ----------------------------- | -------------------------------------------------------- |
-| Linux x64 and arm64 (glibc)   | `@dialexjs/cli-linux-x64`, `@dialexjs/cli-linux-arm64`   |
-| macOS Intel and Apple silicon | `@dialexjs/cli-darwin-x64`, `@dialexjs/cli-darwin-arm64` |
-| Windows x64 and arm64         | `@dialexjs/cli-win32-x64`, `@dialexjs/cli-win32-arm64`   |
-
-Alpine Linux (musl) and other platforms have no binary and use the Node CLI. So does an install with `--no-optional`.
-
-## How it is chosen
-
-`dx` is a small launcher. If the platform package is installed it runs the binary; otherwise it runs the Node CLI. On npm and Yarn classic, on Linux and macOS, the install step goes further and puts the binary where the launcher was, so `dx` starts without booting Node first (under 1 ms instead of about 25 ms). With `--ignore-scripts`, pnpm, Bun (which blocks lifecycle scripts by default) or Windows, the launcher stays and runs the same binary.
-
-## What runs natively
-
-| Command                                           | Native                                                             |
-| ------------------------------------------------- | ------------------------------------------------------------------ |
-| `dialex generate`                                 | Yes, for eager (non-lazy) projects with `-o`, `-c` and `--json`    |
-| `dialex check`                                    | Yes, for `-c`, `--json`, `--github`, `--fail-on-stale` and `--src` |
-| `--version`                                       | Yes                                                                |
-| Language server                                   | Yes, opt-in with `DIALEX_NATIVE=1` (see below)                     |
-| `init`, `export`, `import`, `lock`, `translate`   | No: Node CLI                                                       |
-| `generate --watch`, `check --fix`, `lazy` loading | No: Node CLI                                                       |
-
-A command also runs in Node when the native code meets something it must not guess:
-
-- a `dialex.config.*` with spreads, computed keys or non-literal values (the Node CLI runs the file);
-- a dictionary with spreads, computed keys, imported values or a computed name;
-- a glob or locale tag it cannot interpret exactly.
-
-The result is always the same as without the native binary; it is just not faster.
-
-## Environment variables
-
-| Variable                                            | Used by                     | Effect                                                                                                                                                                                                                              |
-| --------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DIALEX_NATIVE=0`                                   | CLI, language server        | Always use the Node implementation                                                                                                                                                                                                  |
-| `DIALEX_NATIVE=1`                                   | CLI                         | When `generate` or `check` cannot be done natively, exit with code 1 and a reason instead of running in Node. Useful in CI to catch a dictionary that silently loses the speed-up. Commands that are Node-only run in Node as usual |
-| `DIALEX_NATIVE=1`                                   | language server             | Run the native server. Without it the Node server runs                                                                                                                                                                              |
-| `DIALEX_BINARY=/path/to/dx`                         | CLI launcher                | Use this binary instead of the installed platform package                                                                                                                                                                           |
-| `DIALEX_LSP_BINARY=/path/to/dialex-language-server` | `@dialexjs/language-server` | Use this server binary                                                                                                                                                                                                              |
-| `DIALEX_NODE_CLI=/path/to/index.mjs`                | native binary               | The Node CLI to hand commands to. The launcher sets it; set it yourself only when you run the binary on its own                                                                                                                     |
-| `DIALEX_SKIP_NATIVE_INSTALL=1`                      | install step                | Keep the JavaScript launcher instead of replacing it with the binary                                                                                                                                                                |
-| `NO_COLOR`                                          | CLI                         | Print without colors                                                                                                                                                                                                                |
-
-## Use the native language server
-
-The language server is opt-in for now. Set `DIALEX_NATIVE=1` in the environment that starts it; `@dialexjs/language-server` then runs the binary from the platform package. In Zed you can instead set `lsp.dialex.binary.path` to the binary. It has the same diagnostics, hover, go to definition, completion and quick fixes as the Node server. It does not regenerate `dialex.generated.ts` for projects that use lazy loading; run `dialex generate` for those.
-
-## Check which one ran
-
-`dialex --version` prints the same number either way. To see whether a command was done natively, run it with `DIALEX_NATIVE=1`: if it prints its normal output, it ran natively; if it exits with `dialex: native check declined: ...`, the reason is in the message and without the variable it would have run in Node.
-
-
----
-
 # File: guide/requirements.md
 
 # Requirements
@@ -6018,7 +6494,7 @@ What Dialex needs from your environment, and what it asks you to install yoursel
 | Other runtimes    | The runtime core and the Fetch API handler use only standard APIs (`Intl`, `Request`, `Headers`, `Map`), so they run where those exist: Bun, Deno, Cloudflare Workers and browsers             |
 | TypeScript        | A current 5.x or later. The types use template literal and conditional types. The repository type-checks with TypeScript 7                                                                     |
 | Module resolution | `compilerOptions.moduleResolution` must be `"bundler"`, `"node16"` or `"nodenext"`. The subpath imports (`dialexjs/react`) are `exports` entries, which the old `"node"` setting does not read |
-| Package manager   | npm, Yarn, pnpm and Bun all work. The native CLI binary is installed as an optional dependency, so do not use `--no-optional` if you want it (see [Native binaries](./native.md))              |
+| Package manager   | npm, Yarn, pnpm and Bun all work. |
 
 ## Packages
 
@@ -6124,6 +6600,24 @@ localeFromPath("/tr/about", options); // "tr"
 localeFromPath("/about", options); // "en"
 isLocale("tr", options.locales); // true
 ```
+
+## With your router
+
+`localizePath` needs two things: the locale the app is showing and your router's own navigation function. Every framework page has the full recipe; this is where each one gets them:
+
+| Framework                   | Current locale               | Navigate                                      |
+| --------------------------- | ---------------------------- | --------------------------------------------- |
+| React Router                | `useDialex().locale`         | `useNavigate()`                               |
+| TanStack Router             | `useDialex().locale`         | `useNavigate()`, `{-$locale}` route parameter |
+| Next.js                     | `useDialex().locale`         | `useRouter().push()`, `DialexLink`            |
+| Vue Router, Nuxt            | `useDialex().locale.value`   | `router.push()`, `navigateTo()`               |
+| SvelteKit                   | `$locale` from `useDialex()` | `goto()`, `redirect()`                        |
+| Solid Router                | `useDialex().locale()`       | `useNavigate()`                               |
+| Preact (preact-iso)         | `useDialex().locale`         | `useLocation().route()`                       |
+| Qwik City                   | `useDialex().locale`         | `useNavigate()`                               |
+| Angular                     | `injectDialex().locale()`    | `Router.navigateByUrl()`                      |
+| Astro                       | `Astro.locals.locale`        | `Astro.redirect()`                            |
+| Express, Fastify, Koa, Hono | `req.locale`, `c.var.locale` | `res.redirect()`, `c.redirect()`              |
 
 ## hreflang and sitemaps
 
@@ -6302,19 +6796,7 @@ In ICU, `{` and `}` start and end arguments, and `'` quotes them. Write a litera
 
 The language needs categories your message does not give (Russian needs `few` and `many`, Arabic six). `dialex check` warns with `icu-plural-categories`. Add the options; `other` is the fallback.
 
-## CLI and native binaries
-
-### `dx` is slow, or I want to know if the native binary runs
-
-Run `DIALEX_NATIVE=1 dx check`: if it fails with `native check declined`, the reason is in the message. See [Native binaries](./native.md).
-
-### `dialex: this command needs the Node CLI (@dialexjs/cli), which was not found`
-
-The native binary was started on its own, without the Node CLI next to it. Install `@dialexjs/cli` in the project, set `DIALEX_NODE_CLI` to its `dist/index.mjs`, or use `DIALEX_NATIVE=0`.
-
-### `dx` runs in Node although I installed the package
-
-The platform package was not installed (`--no-optional`, an unsupported platform, or Alpine/musl) or the platform is not supported. `npm ls @dialexjs/cli-linux-x64` (use your platform) shows whether it is there. The result is the same, only slower.
+## CLI
 
 ### `dialex check` reports nothing for a dictionary
 
@@ -6454,6 +6936,7 @@ Fixes replace the file's text in the editor, so they can be undone, and nothing 
 | Setting               | Default | Description                                                                                                                                     |
 | --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dialex.enable`       | `true`  | Turn all features on or off                                                                                                                     |
+| `dialex.diagnostics`  | `true`  | Show Dialex problems. Turn off when an [ESLint or oxlint plugin](./linting.md) reports them; hover, completion and quick fixes keep working     |
 | `dialex.unusedKeys`   | `false` | Fade out possibly unused keys and dictionaries. It is a word-match heuristic, so it is off by default                                           |
 | `dialex.autoGenerate` | `true`  | Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file changes, in projects that already have a generated file |
 | `dialex.configPath`   | `""`    | Config file path relative to each project root                                                                                                  |
@@ -6515,6 +6998,7 @@ Settings go under `lsp.dialex` in Zed's settings:
   "lsp": {
     "dialex": {
       "settings": {
+        "diagnostics": true,
         "unusedKeys": false,
         "autoGenerate": true,
         "configPath": ""
@@ -6599,5 +7083,4 @@ The server reads these from the `dialex` section of the editor's configuration:
 - Dictionaries and configs are read from the syntax tree, so the server never runs your project's code. Dictionaries built with spreads or computed keys cannot be analyzed and show an informational note; run `dialex check` for those.
 - Generated files are only updated in projects that already have one. Run `dialex generate` once to create it.
 - There are no editor commands: regeneration is automatic.
-- The native language server (`dialex-language-server`, built from Rust) analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s. It is opt-in for now: set `DIALEX_NATIVE=1` in the environment that starts the server, or point `lsp.dialex.binary.path` at the binary. It does not regenerate `dialex.generated.ts` for projects that use lazy loading; run `dialex generate` for those.
 

@@ -11,7 +11,7 @@ Dialex'in ortamınızdan neye ihtiyaç duyduğu ve sizden neyi kendiniz kurmanı
 | Diğer çalışma zamanları | Çalışma zamanı çekirdeği ve Fetch API işleyicisi yalnızca standart API'leri (`Intl`, `Request`, `Headers`, `Map`) kullanır; bunların bulunduğu her yerde çalışır: Bun, Deno, Cloudflare Workers ve tarayıcılar |
 | TypeScript              | Güncel bir 5.x ya da sonrası. Tipler şablon sabit ve koşullu tipler kullanır. Depo tipleri TypeScript 7 ile denetler                                                                                           |
 | Modül çözümleme         | `compilerOptions.moduleResolution` değeri `"bundler"`, `"node16"` ya da `"nodenext"` olmalıdır. Alt yol içe aktarımları (`dialexjs/react`) `exports` girdileridir; eski `"node"` ayarı bunları okumaz          |
-| Paket yöneticisi        | npm, Yarn, pnpm ve Bun çalışır. Yerel CLI ikili dosyası isteğe bağlı bağımlılık olarak kurulur; istiyorsanız `--no-optional` kullanmayın (bkz. [Yerel ikili dosyalar](./native.md))                            |
+| Paket yöneticisi        | npm, Yarn, pnpm ve Bun çalışır.                                                                                                                                                                                |
 
 ## Paketler
 

@@ -5,7 +5,6 @@
 ### Patch Changes
 
 - Updated dependencies [4b70e2e]
-- Updated dependencies [3de2c53]
   - @dialexjs/cli@0.9.0
 
 ## 0.8.0
@@ -15,7 +14,6 @@
 - Updated dependencies [6aa75d3]
 - Updated dependencies [71b5b3a]
 - Updated dependencies [621a03a]
-- Updated dependencies [d26dbc9]
 - Updated dependencies [5c72368]
   - @dialexjs/cli@0.8.0
 

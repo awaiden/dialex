@@ -18,35 +18,8 @@ permissions:
   id-token: write # npm provenance
 
 jobs:
-  # Pending changesets mean this push only opens or updates the Version Packages PR, which
-  # publishes nothing, so the binaries are built only when a publish can happen.
-  plan:
-    name: Plan
-    runs-on: ubuntu-latest
-    outputs:
-      publish: ${{ steps.pending.outputs.publish }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Look for pending changesets
-        id: pending
-        run: |
-          count=$(ls .changeset/*.md 2>/dev/null | grep -v '/README.md$' | wc -l)
-          if [ "$count" -eq 0 ]; then echo "publish=true" >> "$GITHUB_OUTPUT"; else echo "publish=false" >> "$GITHUB_OUTPUT"; fi
-
-  # One native build per platform, on a runner of that platform (no cross toolchains).
-  native:
-    name: Native binaries
-    needs: plan
-    if: needs.plan.outputs.publish == 'true'
-    uses: ./.github/workflows/native-build.yml
-
   release:
     name: Version PR or publish
-    needs: [plan, native]
-    # `native` is skipped while changesets are pending
-    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -84,27 +57,6 @@ jobs:
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: bun run ready
 
-      # The platform packages carry the binaries; the skeletons in the repository do not.
-      - name: Download the native binaries
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        uses: actions/download-artifact@v4
-        with:
-          pattern: native-*
-          path: native-artifacts
-
-      - name: Assemble the native packages
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: |
-          set -euo pipefail
-          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64 win32-arm64; do
-            dir="native-artifacts/native-$target"
-            ext=""
-            if [ "${target%%-*}" = "win32" ]; then ext=".exe"; fi
-            node scripts/native-packages.mjs --target "$target" \
-              --binary "$(find "$dir" -name "dx$ext" | head -1)" \
-              --lsp-binary "$(find "$dir" -name "dialex-language-server$ext" | head -1)"
-          done
-
       - name: Smoke test the packed packages
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: node scripts/smoke-pack.mjs
@@ -120,8 +72,7 @@ jobs:
         run: |
           set -euo pipefail
           published=""
-          # the platform packages go first: @dialexjs/cli lists them as optional dependencies
-          for dir in cli-linux-x64 cli-linux-arm64 cli-darwin-x64 cli-darwin-arm64 cli-win32-x64 cli-win32-arm64 core cli mcp language-server; do
+          for dir in core cli eslint-plugin mcp language-server; do
             name=$(node -p "require('./packages/$dir/package.json').name")
             version=$(node -p "require('./packages/$dir/package.json').version")
             # npm refuses to run inside the repo (devEngines wants bun), so ask from outside it

@@ -25,7 +25,6 @@ const PAGES = {
     "migration",
     "comparison",
     "benchmarks",
-    "native",
     "diagnostics",
     "linting",
     "troubleshooting",

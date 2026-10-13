@@ -19,21 +19,6 @@ npm install -g @dialexjs/cli   # or globally
 
 典型的工作流程：先用 `dialex check --fix` 为新键创建占位符，然后使用 `dialex translate`，或使用 `dialex export` / `dialex import` 交给人工翻译，最后在 CI 中运行 `dialex check`。
 
-## 原生二进制
-
-在 Linux、macOS 和 Windows（x64 与 arm64）上，`dialex` 和 `dx` 运行用 Rust 构建的原生二进制文件，它作为可选依赖（`@dialexjs/cli-<platform>`）随包一起安装。在包含 1,000 个字典的项目中，`generate` 和 `check` 比 Node 实现快 25 到 40 倍，并且生成的文件和输出逐字节一致。
-
-原生二进制从语法树读取字典，从 `.dialex/config.json` 读取配置。当命令需要运行项目代码（不是纯数据的配置、`translate` 提供方、`runtime: true`、懒加载、`--fix`、`--watch`），或没有原生实现（`init`、`export`、`import`、`lock`、`translate`）时，它会把整个命令交给 Node CLI，因此对你来说没有任何变化。两个环境变量可以控制这一行为：
-
-```bash
-DIALEX_NATIVE=0 dx check   # always use the Node implementation
-DIALEX_NATIVE=1 dx check   # fail with a reason instead of running in Node
-```
-
-在 Linux 和 macOS 上使用 npm 和 Yarn classic 时，安装步骤会把二进制文件放到启动器原来的位置，因此 `dx` 无需先启动 Node（约 25 毫秒），不到一毫秒就能启动。其他包管理器、`--ignore-scripts` 和 Windows 会保留一个运行同一二进制文件的小型 JavaScript 启动器。
-
-支持的平台、哪些命令原生运行、何时回退，以及每个环境变量，见[原生二进制](../guide/native.md)。
-
 ## 退出码与 JSON
 
 | 命令                                              | 退出码                                                                       |

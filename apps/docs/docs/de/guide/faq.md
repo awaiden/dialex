@@ -69,10 +69,6 @@ Ja. Jedes Paket mit einer `dialex.config.*` (oder nur `*.content.ts`-Dateien) is
 
 ## Werkzeuge
 
-### Ist die CLI in Rust geschrieben?
-
-`dialex generate` und `dialex check` haben eine native Implementierung, die dieselbe Ausgabe wie die Node-CLI erzeugt und bei großen Projekten 20- bis 40-mal schneller ist; alles andere läuft in Node. Siehe [Native Binärdateien](./native.md).
-
 ### Warum überspringt der Editor eines meiner Wörterbücher?
 
 Er kann es nicht lesen, ohne Code auszuführen: Es nutzt einen Spread, einen berechneten Schlüssel, einen importierten Wert oder einen berechneten Namen. Nutze Objektliterale oder akzeptiere, dass `dialex check` (das die Datei auswertet) die Prüfung für diese Datei ist. Siehe [Wörterbücher](./dictionaries.md#what-the-tools-can-read).

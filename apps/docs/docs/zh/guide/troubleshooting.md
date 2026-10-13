@@ -65,19 +65,7 @@
 
 该语言需要你的消息没有提供的类别（俄语需要 `few` 和 `many`，阿拉伯语需要六种）。`dialex check` 会以 `icu-plural-categories` 发出警告。补上这些选项；`other` 是回退。
 
-## CLI 与原生二进制
-
-### `dx` 很慢，或者我想知道原生二进制是否在运行
-
-运行 `DIALEX_NATIVE=1 dx check`：如果它以 `native check declined` 失败，原因就在消息里。参见[原生二进制](./native.md)。
-
-### `dialex: this command needs the Node CLI (@dialexjs/cli), which was not found`
-
-原生二进制是单独启动的，旁边没有 Node CLI。在项目中安装 `@dialexjs/cli`，把 `DIALEX_NODE_CLI` 设为它的 `dist/index.mjs`，或使用 `DIALEX_NATIVE=0`。
-
-### 我安装了这个包，但 `dx` 仍在 Node 中运行
-
-平台包没有安装（`--no-optional`、不受支持的平台或 Alpine/musl），或者该平台不受支持。`npm ls @dialexjs/cli-linux-x64`（换成你的平台）会显示它是否存在。结果相同，只是更慢。
+## CLI
 
 ### `dialex check` 对某个词典什么也不报告
 

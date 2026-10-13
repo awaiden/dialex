@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { loadConfigObject } from "@dialexjs/config";
 import { DEFAULT_CONFIG, type DialexConfig } from "dialexjs";
+
+import { loadConfigObject } from "./load-config.js";
 
 export function resolveDialexConfig(root: string, inlineConfig: DialexConfig = {}): DialexConfig {
   let loadedConfig: DialexConfig = {};

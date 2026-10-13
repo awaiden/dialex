@@ -37,15 +37,12 @@ Araçlar proje kökünde (`dialex` komutunu çalıştırdığınız klasör ya d
 
 ## Araçlar onu nasıl okur
 
-| Araç                                                        | Yapılandırmayı şöyle okur                                                                |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Dosyayı çalıştırarak; böylece değerler hesaplanabilir (`locales: getLocales()`)          |
-| Yerel `dx`                                                  | `@dialexjs/config`'in her komuttan önce yazdığı `.dialex/config.json` dosyasını okuyarak |
-| Editör eklentisi ve dil sunucusu                            | Sözdizimi ağacını okuyarak; asla çalıştırmaz                                             |
+| Araç                                                        | Yapılandırmayı şöyle okur                                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Dosyayı çalıştırarak; böylece değerler hesaplanabilir (`locales: getLocales()`) |
+| Editör eklentisi ve dil sunucusu                            | Sözdizimi ağacını okuyarak; asla çalıştırmaz                                    |
 
-Sabit değerlerden (dizeler, diziler, boolean'lar) oluşan bir yapılandırma her yerde anlaşılır. Hesaplanan bir ayar editöre görünmez; editör onun için varsayılanı kullanır ve bir not düşer. Bir editörün `locales` bilmesi gerekiyorsa onları açıkça yazın. Bkz. [Yerel ikili dosyalar](./native.md).
-
-`.dialex/config.json` `dialex.generated.ts` gibi üretilir: `.dialex/` dizinini `.gitignore` dosyanıza ekleyin. Her `dialex generate` ve `dialex check` öncesinde yeniden yazılır, bu yüzden hiçbir zaman eski kalmaz. Yalnızca literallerden oluşan bir yapılandırma sözdizimi ağacından okunur ve çalıştırılmaz. Spread, import ya da hesaplanan değer içeren bir yapılandırmayı `@dialexjs/config` çalıştırır; Node'a ihtiyaç duyan tek adım budur.
+Sabit değerlerden (dizeler, diziler, boolean'lar) oluşan bir yapılandırma her yerde anlaşılır. Hesaplanan bir ayar editöre görünmez; editör onun için varsayılanı kullanır ve bir not düşer. Bir editörün `locales` bilmesi gerekiyorsa onları açıkça yazın. Bkz.
 
 ## Örnekler
 
