@@ -1,5 +1,12 @@
 # @dialexjs/cli
 
+## 0.9.1
+
+### Patch Changes
+
+- 3417785: Remove the Rust port. The native `dx`, the native language server and the `@dialexjs/cli-<platform>` packages were never published, and `@dialexjs/config` is gone with them: the CLI reads `dialex.config.*` itself, `dialex` and `dx` run from `dist/index.mjs`, and `.dialex/config.json` is no longer written. Nothing to change in your projects.
+- dialexjs@0.9.1
+
 ## 0.9.0
 
 ### Minor Changes
