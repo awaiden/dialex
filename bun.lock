@@ -380,7 +380,7 @@
     },
     "packages/cli": {
       "name": "@dialexjs/cli",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "bin": {
         "dialex": "./dist/index.mjs",
         "dx": "./dist/index.mjs",
@@ -404,7 +404,7 @@
     },
     "packages/core": {
       "name": "dialexjs",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "devDependencies": {
         "@adonisjs/http-server": "^7.8.1",
         "@angular/common": "^22.2.1",
@@ -496,7 +496,7 @@
     },
     "packages/eslint-plugin": {
       "name": "@dialexjs/eslint-plugin",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "dependencies": {
         "@dialexjs/cli": "workspace:*",
       },
@@ -516,7 +516,7 @@
     },
     "packages/language-server": {
       "name": "@dialexjs/language-server",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "bin": {
         "dialex-language-server": "./dist/index.mjs",
       },
@@ -534,7 +534,7 @@
     },
     "packages/mcp": {
       "name": "@dialexjs/mcp",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "bin": {
         "dialex-mcp": "./dist/index.mjs",
       },
@@ -2404,7 +2404,7 @@
 
     "camelcase": ["camelcase@6.3.0", "", {}, "sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA=="],
 
-    "caniuse-lite": ["caniuse-lite@1.0.30001815", "", {}, "sha512-uDybUEyfgbyJJ93J1vikTylBX31AkdVYeVPeffMQpf8XN7hSfr0oZOn4VFOIMNvtU5+rHvC5Udg2TgtJKHm23Q=="],
+    "caniuse-lite": ["caniuse-lite@1.0.30001816", "", {}, "sha512-+8Yx7BXCoqk6IF8yTicjfUR6D/ldJzdlsodlEOiOSPmhK844WIgk67/zIQaGAOxNkZyyvBlrRFnLvqKIoqbAFw=="],
 
     "case-anything": ["case-anything@3.1.7", "", {}, "sha512-52UPzAJDZgxaNsYK4kvmov1kVaAfPc+OU2j0OSUZWbdWMuJd7Axi94XWSfSuafMd7K9avhsEnU6W6rXJdAd+Ug=="],
 
@@ -4842,7 +4842,7 @@
 
     "@nestjs/platform-express/express/accepts": ["accepts@2.0.0", "", { "dependencies": { "mime-types": "^3.0.0", "negotiator": "^1.0.0" } }, "sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng=="],
 
-    "@nestjs/platform-express/express/content-disposition": ["content-disposition@1.0.1", "", {}, "sha512-oIXISMynqSqm241k6kcQ5UwttDILMK4BiurCfGEREw6+X9jkkpEe5T9FZaApyLGGOnFuyMWZpdolTXMtvEJ08Q=="],
+    "@nestjs/platform-express/express/content-disposition": ["content-disposition@1.1.0", "", {}, "sha512-5jRCH9Z/+DRP7rkvY83B+yGIGX96OYdJmzngqnw2SBSxqCFPd0w2km3s5iawpGX8krnwSGmF0FW5Nhr0Hfai3g=="],
 
     "@nestjs/platform-express/express/cookie": ["cookie@0.7.2", "", {}, "sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w=="],
 
