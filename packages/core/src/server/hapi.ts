@@ -1,5 +1,6 @@
 import type { Plugin, Request, ResponseObject } from "@hapi/hapi";
 
+import type { Locales } from "../core/registry.js";
 import { withConfig } from "../core/resolver.js";
 import {
   createGetDictionary,
@@ -7,7 +8,6 @@ import {
   resolveRequestLocale,
   type BaseAdapterOptions,
 } from "../core/shared.js";
-import type { Locales } from "../index.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in

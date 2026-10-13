@@ -1,7 +1,7 @@
 import { createElement, type ReactNode } from "react";
 
 import { DialexProvider } from "../client/react.js";
-import type { DialexSource } from "../index.js";
+import type { DialexSource } from "../core/config.js";
 
 /**
  * Props of `TestDialexProvider`: the generated `dialex` object (or your own dictionaries) and the locale to render with.

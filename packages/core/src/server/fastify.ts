@@ -1,5 +1,7 @@
 import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from "fastify";
 
+import type { DictionaryDefinition } from "../core/dictionary.js";
+import type { Locales } from "../core/registry.js";
 import {
   parseAcceptLanguage,
   resolveLocaleFromCandidates,
@@ -9,7 +11,6 @@ import {
   withConfig,
 } from "../core/resolver.js";
 import { createGetDictionary, normalizeDictionaries } from "../core/shared.js";
-import type { DictionaryDefinition, Locales } from "../index.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in

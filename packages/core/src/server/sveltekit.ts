@@ -1,3 +1,4 @@
+import { type Locales } from "../core/registry.js";
 import { withConfig } from "../core/resolver.js";
 import {
   createGetDictionary,
@@ -5,7 +6,7 @@ import {
   resolveRequestLocale,
   type BaseAdapterOptions,
 } from "../core/shared.js";
-import { createT, type Locales, type Translate } from "../index.js";
+import { createT, type Translate } from "../core/translate.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in

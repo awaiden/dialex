@@ -40,4 +40,4 @@ Mit `setHeader` (dem Standard) wird die aufgelöste Locale als `Content-Language
 
 ## Hilfsfunktionen
 
-Intern teilen sich die Adapter `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` und `extractPathLocale`. Sie liegen in `src/resolver.ts` und gehören nicht zu den öffentlichen `exports` des Pakets.
+Intern teilen sich die Adapter `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` und `extractPathLocale`. Sie liegen in `src/core/resolver.ts` und gehören nicht zu den öffentlichen `exports` des Pakets.

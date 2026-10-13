@@ -1,6 +1,7 @@
 import { getContext, onMount, setContext } from "svelte";
 import { derived, writable, type Readable } from "svelte/store";
 
+import { type DialexSource } from "../core/config.js";
 import {
   readPersistedLocale,
   syncDocumentLang,
@@ -8,7 +9,7 @@ import {
   type PersistMode,
 } from "../core/persist.js";
 import { getDictionaryStore, readDictionary, type DictionaryStore } from "../core/store.js";
-import { createT, type DialexSource, type Translate } from "../index.js";
+import { createT, type Translate } from "../core/translate.js";
 
 export { preloadDictionaries } from "../core/store.js";
 

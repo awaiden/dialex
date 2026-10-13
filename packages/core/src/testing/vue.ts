@@ -1,5 +1,5 @@
 import { createDialex } from "../client/vue.js";
-import type { DialexSource } from "../index.js";
+import type { DialexSource } from "../core/config.js";
 
 /**
  * Vue plugin for component tests: starts in `locale`, with no persistence. Pass the generated

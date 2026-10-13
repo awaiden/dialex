@@ -1,7 +1,9 @@
 import type { DictionaryRegistry } from "../client/react.js";
+import { type DialexSource } from "../core/config.js";
+import { type Locales } from "../core/registry.js";
 import { lookupLocale } from "../core/resolver.js";
 import { createDictionaryStore } from "../core/store.js";
-import { createT, type DialexSource, type Locales, type Translate } from "../index.js";
+import { createT, type Translate } from "../core/translate.js";
 
 type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
 type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;

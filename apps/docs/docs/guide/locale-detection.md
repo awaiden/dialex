@@ -38,4 +38,4 @@ With `setHeader` (the default) the resolved locale is sent as `Content-Language`
 
 ## Helpers
 
-Internally the adapters share `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale`, and `extractPathLocale`. These live in `src/resolver.ts` and are not part of the package's public `exports`.
+Internally the adapters share `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale`, and `extractPathLocale`. These live in `src/core/resolver.ts` and are not part of the package's public `exports`.

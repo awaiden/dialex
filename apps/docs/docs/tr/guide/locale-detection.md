@@ -40,4 +40,4 @@ Bunlara ek olarak her adaptör `dictionaries` (bir harita ya da `defineDictionar
 
 ## Yardımcılar
 
-Adaptörler dahili olarak `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` ve `extractPathLocale` işlevlerini paylaşır. Bunlar `src/resolver.ts` içindedir ve paketin herkese açık `exports` alanının parçası değildir.
+Adaptörler dahili olarak `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` ve `extractPathLocale` işlevlerini paylaşır. Bunlar `src/core/resolver.ts` içindedir ve paketin herkese açık `exports` alanının parçası değildir.

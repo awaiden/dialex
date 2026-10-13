@@ -21,7 +21,7 @@ import {
   normalizeDictionaries,
   type DictionaryInput,
 } from "../core/shared.js";
-import { createT, type Translate } from "../index.js";
+import { createT, type Translate } from "../core/translate.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in

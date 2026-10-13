@@ -1,5 +1,5 @@
-import type { DictionaryRegistry, MessageArguments } from "../index.js";
 import { compileMessage, type IcuValues, type Run } from "./icu/format.js";
+import type { DictionaryRegistry, MessageArguments } from "./registry.js";
 
 type Leaf = (...args: any[]) => any;
 

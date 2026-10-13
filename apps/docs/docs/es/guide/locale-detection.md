@@ -40,4 +40,4 @@ Con `setHeader` (el valor por defecto) el locale resuelto se envía como `Conten
 
 ## Funciones auxiliares
 
-Internamente los adaptadores comparten `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` y `extractPathLocale`. Están en `src/resolver.ts` y no forman parte de los `exports` públicos del paquete.
+Internamente los adaptadores comparten `parseAcceptLanguage`, `matchLocale`, `resolveLocaleFromCandidates`, `extractCookieLocale` y `extractPathLocale`. Están en `src/core/resolver.ts` y no forman parte de los `exports` públicos del paquete.

@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { addImports, addPluginTemplate, defineNuxtModule } from "@nuxt/kit";
 
-import type { DialexConfig } from "../index.js";
+import type { DialexConfig } from "../core/config.js";
 
 /**
  * Options of the Nuxt module, set under the `dialex` key of `nuxt.config.ts`. They extend `DialexConfig`; locales and defaults normally come from `dialex.config.ts`.

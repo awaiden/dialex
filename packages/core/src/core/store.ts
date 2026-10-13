@@ -1,4 +1,4 @@
-import type { DialexClientConfig, DialexSource } from "../index.js";
+import type { DialexClientConfig, DialexSource } from "./config.js";
 import { lookupLocale, resolveFallbackChain } from "./resolver.js";
 import { normalizeDictionaries } from "./shared.js";
 

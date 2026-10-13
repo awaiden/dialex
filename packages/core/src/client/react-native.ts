@@ -1,7 +1,7 @@
 import { createElement, useEffect, useState, type ReactNode } from "react";
 
+import type { DialexSource } from "../core/config.js";
 import { resolveLocaleFromCandidates } from "../core/resolver.js";
-import type { DialexSource } from "../index.js";
 import { DialexProvider as ReactDialexProvider } from "./react.js";
 
 export {

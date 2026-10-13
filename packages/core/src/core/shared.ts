@@ -1,4 +1,5 @@
-import { globalDictionaries, type DictionaryDefinition, type Locales } from "../index.js";
+import { globalDictionaries, type DictionaryDefinition } from "./dictionary.js";
+import { type Locales } from "./registry.js";
 import {
   lookupLocale,
   parseAcceptLanguage,

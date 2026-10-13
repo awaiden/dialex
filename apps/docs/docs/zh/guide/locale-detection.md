@@ -40,4 +40,4 @@
 
 ## 辅助函数
 
-适配器内部共用 `parseAcceptLanguage`、`matchLocale`、`resolveLocaleFromCandidates`、`extractCookieLocale` 和 `extractPathLocale`。它们位于 `src/resolver.ts`，不属于包的公开 `exports`。
+适配器内部共用 `parseAcceptLanguage`、`matchLocale`、`resolveLocaleFromCandidates`、`extractCookieLocale` 和 `extractPathLocale`。它们位于 `src/core/resolver.ts`，不属于包的公开 `exports`。

@@ -11,9 +11,9 @@ import {
   type Ref,
 } from "vue";
 
+import type { DialexSource } from "../core/config.js";
 import { getDictionaryStore, readDictionary, type DictionaryStore } from "../core/store.js";
-import { createT, type Translate } from "../index.js";
-import type { DialexSource } from "../index.js";
+import { createT, type Translate } from "../core/translate.js";
 
 export { preloadDictionaries } from "../core/store.js";
 
