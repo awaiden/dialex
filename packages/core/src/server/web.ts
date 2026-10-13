@@ -1,0 +1,101 @@
+import { withConfig } from "../core/resolver.js";
+import {
+  createGetDictionary,
+  normalizeDictionaries,
+  resolveRequestLocale,
+  type BaseAdapterOptions,
+} from "../core/shared.js";
+import { createT, type Locales, type Translate } from "../index.js";
+
+/**
+ * Maps dictionary names to their content types. `dialex generate` augments it in
+ * `dialex-env.d.ts`, which is what types `getDictionary("home")` and autocompletes the names.
+ * Leave it empty in your own code.
+ */
+export interface DictionaryRegistry {}
+
+type AutocompleteKey<T> = [T] extends [never] ? string : T | (string & {});
+type DictionaryKey = AutocompleteKey<keyof DictionaryRegistry>;
+
+type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryRegistry[K] : any;
+
+/**
+ * Options of `createDialexHandler`: the shared locale detection options plus `dictionaries` and `setHeader`.
+ */
+export type WebDialexOptions = BaseAdapterOptions;
+
+/**
+ * What `createDialexHandler` resolves for one `Request`: the locale, the typed `getDictionary` and `t`, and the headers to send.
+ */
+export interface WebDialex {
+  locale: Locales;
+  getDictionary: <K extends DictionaryKey>(name: K) => ResolveDictionaryType<K>;
+  t: Translate;
+  /** Response headers to send, currently `Content-Language` (empty when `setHeader` is `false`). */
+  headers: Record<string, string>;
+  /** Returns `response` with the i18n headers applied. */
+  applyHeaders<R extends Response>(response: R): R;
+}
+
+/**
+ * Locale detection for any framework that exposes a standard Fetch API `Request`
+ * (React Router / Remix loaders, TanStack Start, SolidStart, Cloudflare Workers, Deno, Bun...).
+ *
+ * ```ts
+ * const resolveDialex = createDialexHandler({ locales: ["en", "tr"], dictionaries });
+ *
+ * export async function loader({ request }: { request: Request }) {
+ *   const { locale, getDictionary } = await resolveDialex(request);
+ *   return { locale, title: getDictionary("home").title };
+ * }
+ * ```
+ */
+export function createDialexHandler(
+  rawOptions: WebDialexOptions = {},
+): (request: Request) => Promise<WebDialex> {
+  const options = withConfig(rawOptions);
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
+
+  const customDictMap = normalizeDictionaries(options.dictionaries);
+
+  return async (request) => {
+    const url = new URL(request.url);
+    const locale = resolveRequestLocale(options, {
+      custom: typeof custom === "function" ? custom(request) : undefined,
+      pathname: url.pathname,
+      query: (key) => url.searchParams.get(key),
+      cookieHeader: request.headers.get("cookie"),
+      acceptLanguage: request.headers.get(headerKey),
+    });
+
+    const getDictionary = createGetDictionary({
+      customDictMap,
+      locale,
+      defaultLocale,
+      fallbacks: options.fallbacks,
+      tag: "web",
+    }) as WebDialex["getDictionary"];
+
+    const headers: Record<string, string> = setHeader ? { "Content-Language": locale } : {};
+
+    return {
+      locale: locale as Locales,
+      getDictionary,
+      t: createT(getDictionary, locale),
+      headers,
+      applyHeaders(response) {
+        try {
+          for (const [name, value] of Object.entries(headers)) response.headers.set(name, value);
+          return response;
+        } catch {
+          // Headers of responses from fetch() or Response.redirect() are immutable: copy.
+          const copy = new Response(response.body, response);
+          for (const [name, value] of Object.entries(headers)) copy.headers.set(name, value);
+          return copy as typeof response;
+        }
+      },
+    };
+  };
+}
+
+export default createDialexHandler;

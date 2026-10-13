@@ -1,5 +1,9 @@
+import {
+  createGetDictionary,
+  normalizeDictionaries,
+  type DictionaryInput,
+} from "../core/shared.js";
 import { createT, type Locales, type Translate } from "../index.js";
-import { createGetDictionary, normalizeDictionaries, type DictionaryInput } from "../shared.js";
 
 /**
  * Options of `createTestDialex`: the dictionaries to serve and the locale to render with.

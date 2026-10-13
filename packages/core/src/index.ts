@@ -1,4 +1,4 @@
-export * from "./format.js";
+export * from "./core/format.js";
 export {
   formatMessage,
   parseMessage,
@@ -7,7 +7,7 @@ export {
   type IcuNode,
   type IcuValue,
   type IcuValues,
-} from "./icu/index.js";
+} from "./core/icu/index.js";
 export {
   createT,
   type PathsOf,
@@ -15,7 +15,7 @@ export {
   type TranslationArgs,
   type TranslationPath,
   type TranslationResult,
-} from "./translate.js";
+} from "./core/translate.js";
 
 /**
  * A machine-translation backend used by `dialex translate`.

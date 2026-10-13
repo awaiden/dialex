@@ -1,0 +1,148 @@
+import "reflect-metadata";
+import { lastValueFrom, of, throwError } from "rxjs";
+import { describe, expect, it } from "vite-plus/test";
+
+import {
+  DialexModule,
+  DialexService,
+  DialexInterceptor,
+  DialexMiddleware,
+} from "../../src/server/nestjs/index.js";
+
+describe("NestJS integration", () => {
+  const homeDict = {
+    name: "home",
+    dictionary: {
+      en: { title: "Welcome" },
+      tr: { title: "Hoş Geldiniz" },
+    },
+  };
+
+  it("configures DialexModule.forRoot", () => {
+    const dynamicModule = DialexModule.forRoot({
+      defaultLocale: "en",
+      locales: ["en", "tr"],
+      dictionaries: [homeDict],
+    });
+
+    expect(dynamicModule.module).toBe(DialexModule);
+    expect(dynamicModule.global).toBe(true);
+    expect(dynamicModule.providers).toBeDefined();
+    expect(dynamicModule.exports).toEqual([DialexService, DialexInterceptor, DialexMiddleware]);
+  });
+
+  it("configures DialexModule.forRootAsync", async () => {
+    const dynamicModule = DialexModule.forRootAsync({
+      useFactory: () => ({
+        defaultLocale: "en",
+        locales: ["en", "tr"],
+        dictionaries: [homeDict],
+      }),
+    });
+
+    expect(dynamicModule.module).toBe(DialexModule);
+    expect(dynamicModule.global).toBe(true);
+  });
+
+  it("DialexService resolves locale and returns dictionary", () => {
+    const service = new DialexService({
+      defaultLocale: "en",
+      locales: ["en", "tr"],
+      dictionaries: [homeDict],
+    });
+
+    expect(service.getDefaultLocale()).toBe("en");
+    expect(service.getSupportedLocales()).toEqual(["en", "tr"]);
+
+    const req = {
+      headers: { "accept-language": "tr-TR,tr;q=0.9" },
+    };
+
+    const locale = service.resolveLocale(req);
+    expect(locale).toBe("tr");
+
+    const dict = service.getDictionary("home", locale);
+    expect(dict.title).toBe("Hoş Geldiniz");
+
+    const defaultDict = service.getDictionary("home");
+    expect(defaultDict.title).toBe("Welcome");
+  });
+
+  it("DialexMiddleware attaches locale and getDictionary to request", () => {
+    const service = new DialexService({
+      defaultLocale: "en",
+      locales: ["en", "tr"],
+      dictionaries: [homeDict],
+    });
+
+    const middleware = new DialexMiddleware(service);
+
+    const req: any = {
+      headers: { "accept-language": "tr" },
+    };
+    const res: any = {
+      setHeader: (name: string, val: string) => {
+        res[name] = val;
+      },
+    };
+    let nextCalled = false;
+
+    middleware.use(req, res, () => {
+      nextCalled = true;
+    });
+
+    expect(nextCalled).toBe(true);
+    expect(req.locale).toBe("tr");
+    expect(req.getDictionary("home").title).toBe("Hoş Geldiniz");
+    expect(res["Content-Language"]).toBe("tr");
+  });
+
+  it("DialexInterceptor resolves the locale before the handler runs", async () => {
+    const service = new DialexService({
+      defaultLocale: "en",
+      locales: ["en", "tr"],
+      dictionaries: [homeDict],
+    });
+    const req: any = { headers: { "accept-language": "tr" } };
+    const res: any = { setHeader: (name: string, val: string) => (res[name] = val) };
+    const context: any = {
+      switchToHttp: () => ({ getRequest: () => req, getResponse: () => res }),
+    };
+    let seenLocale: string | undefined;
+    const next: any = {
+      handle: () => {
+        seenLocale = req.locale;
+        return of("ok");
+      },
+    };
+
+    const result = lastValueFrom(new DialexInterceptor(service).intercept(context, next));
+
+    expect(await result).toBe("ok");
+    expect(seenLocale).toBe("tr");
+    expect(req.getDictionary("home").title).toBe("Hoş Geldiniz");
+    expect(res["Content-Language"]).toBe("tr");
+  });
+
+  it("DialexInterceptor surfaces setup failures as observable errors", async () => {
+    const service = new DialexService({ dictionaries: [homeDict] });
+    service.resolveLocale = () => {
+      throw new Error("resolve failed");
+    };
+    const context: any = {
+      switchToHttp: () => ({ getRequest: () => ({}), getResponse: () => ({}) }),
+    };
+    let handled = false;
+    const next: any = {
+      handle: () => {
+        handled = true;
+        return throwError(() => new Error("unreachable"));
+      },
+    };
+
+    await expect(
+      lastValueFrom(new DialexInterceptor(service).intercept(context, next)),
+    ).rejects.toThrow("resolve failed");
+    expect(handled).toBe(false);
+  });
+});
