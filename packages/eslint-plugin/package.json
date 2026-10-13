@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/eslint-plugin",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "ESLint and oxlint rules for Dialex: unknown dictionaries and keys, dynamic keys, hard-coded text and dictionary file checks",
   "keywords": [
     "dialex",
