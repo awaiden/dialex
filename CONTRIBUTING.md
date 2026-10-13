@@ -7,6 +7,22 @@ bun install
 bun run ready   # format check, lint, types, tests, builds, docs checks
 ```
 
+## Where things are
+
+| Path                           | What lives there                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/core/src/core`       | The runtime shared by every adapter: config and registry types, `t()`, formatting, locale resolution, the dictionary store and `icu/` |
+| `packages/core/src/client`     | Client framework adapters (`dialexjs/react`, `vue`, `svelte`, ...)                                                                    |
+| `packages/core/src/server`     | Server adapters (`dialexjs/express`, `hono`, `nestjs`, ...) and `createDialexServer`                                                  |
+| `packages/cli/src/analysis`    | Project analysis shared by `dialex check`, the editors and the lint rules                                                             |
+| `packages/cli/src/commands`    | One folder per larger command (`init`, `generate`, `check`, `import`), a file for the small ones                                      |
+| `packages/cli/src/utils`       | Dictionary editing (`dictionary/`), config reading, scanning, lock file                                                               |
+| `packages/language-server/src` | `features/` are LSP-free functions; `server/` wires them to the protocol                                                              |
+| `packages/mcp/src/tools`       | One file per MCP tool                                                                                                                 |
+| `packages/vscode/src`          | The extension: `providers/` for hover, definition, completion and quick fixes                                                         |
+
+A public import path such as `dialexjs/react` is decided by the entry list in `packages/core/vite.config.ts`, not by where the file is, so moving a source file does not change it.
+
 ## Making a change
 
 1. Branch from `main` and make the change, with tests.

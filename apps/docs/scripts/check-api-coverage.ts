@@ -25,7 +25,9 @@ function exportsOf(file: string): Set<string> {
   )) {
     names.add(m[1]);
   }
-  for (const m of text.matchAll(/export\s*\{([^}]*)\}/g)) {
+  // `export { a, b }` and `export type { A, B }`; the bundler re-exports types shared between
+  // entry points from a chunk with the second form
+  for (const m of text.matchAll(/export\s*(?:type\s*)?\{([^}]*)\}/g)) {
     for (const part of m[1].split(",")) {
       const name = part
         .trim()
