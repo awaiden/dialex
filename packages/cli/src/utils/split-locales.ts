@@ -1,7 +1,7 @@
 import { generateCode } from "magicast";
 
 import { isObjectNode, propertyKeyName, unwrapNode, type AstNode } from "./ast.js";
-import type { DictionaryFile } from "./dictionary-edit.js";
+import type { DictionaryFile } from "./dictionary/index.js";
 
 export interface LocaleSlice {
   locale: string;

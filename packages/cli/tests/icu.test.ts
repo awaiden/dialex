@@ -11,7 +11,7 @@ import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider } from "../src/translate/deepl.js";
 import { preservesPlaceholders } from "../src/translate/placeholders.js";
-import { getString, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { getString, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 import { checkIcu, type LocaleStrings } from "../src/utils/icu-check.js";
 
 const dirs: string[] = [];

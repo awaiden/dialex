@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { parseDictionaryText } from "../src/utils/dictionary-edit.js";
+import { parseDictionaryText } from "../src/utils/dictionary/index.js";
 import { splitLocales } from "../src/utils/split-locales.js";
 
 const split = (source: string) => splitLocales(parseDictionaryText("home.content.ts", source)!);

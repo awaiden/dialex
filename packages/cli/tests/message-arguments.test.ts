@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vite-plus/test";
 
 import { renderGenerated } from "../src/commands/generate.js";
-import { parseDictionaryText } from "../src/utils/dictionary-edit.js";
+import { parseDictionaryText } from "../src/utils/dictionary/index.js";
 import { messageArguments, messageType } from "../src/utils/message-arguments.js";
 
 describe("messageType", () => {

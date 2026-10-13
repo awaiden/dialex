@@ -14,7 +14,7 @@ import {
   loadDictionaryFile,
   saveDictionaryFile,
   setString,
-} from "../src/utils/dictionary-edit.js";
+} from "../src/utils/dictionary/index.js";
 
 describe("dictionary-edit", () => {
   let dir: string;
@@ -155,7 +155,7 @@ export default defineDictionary("home", {
 
   it("parses text without touching the disk and renders edits without writing", async () => {
     const { parseDictionaryText, renderDictionaryFile, setString, getString } =
-      await import("../src/utils/dictionary-edit.js");
+      await import("../src/utils/dictionary/index.js");
     const df = parseDictionaryText("/virtual/home.content.ts", source)!;
     expect(df.name).toBe("home");
 
@@ -170,7 +170,7 @@ export default defineDictionary("home", {
   });
 
   it("reports whether a dictionary is statically complete", async () => {
-    const { parseDictionaryText } = await import("../src/utils/dictionary-edit.js");
+    const { parseDictionaryText } = await import("../src/utils/dictionary/index.js");
     const complete = (code: string) => parseDictionaryText("/x.ts", code)?.complete;
 
     expect(complete(source)).toBe(true);
@@ -189,7 +189,7 @@ export default defineDictionary("home", {
 
   it("locates locales and keys with zero-based ranges", async () => {
     const { parseDictionaryText, locationOf, dictionaryLocation } =
-      await import("../src/utils/dictionary-edit.js");
+      await import("../src/utils/dictionary/index.js");
     const df = parseDictionaryText("/x.ts", source)!;
 
     expect(locationOf(df, "en")).toEqual({
@@ -205,7 +205,7 @@ export default defineDictionary("home", {
   });
 
   it("returns the source of function and string leaves", async () => {
-    const { parseDictionaryText, getLeafSource } = await import("../src/utils/dictionary-edit.js");
+    const { parseDictionaryText, getLeafSource } = await import("../src/utils/dictionary/index.js");
     const df = parseDictionaryText("/x.ts", source)!;
     expect(getLeafSource(df, "en", ["greeting"])).toBe("(name: string) => `Hello, ${name}!`");
     expect(getLeafSource(df, "en", ["title"])).toBe('"Welcome"');

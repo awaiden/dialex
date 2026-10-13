@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { listLeaves, listLocales } from "../utils/dictionary-edit.js";
+import { listLeaves, listLocales } from "../utils/dictionary/index.js";
 import { logger } from "../utils/logger.js";
 import { loadProject, toKey } from "../utils/project.js";
 

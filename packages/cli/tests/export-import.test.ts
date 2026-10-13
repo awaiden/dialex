@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from "vite-plus/test";
 
 import { runExport } from "../src/commands/export.js";
 import { parseCsv, parseEntries, runImport } from "../src/commands/import.js";
-import { getString, hasPath, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { getString, hasPath, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 
 const dirs: string[] = [];
 afterEach(() => {

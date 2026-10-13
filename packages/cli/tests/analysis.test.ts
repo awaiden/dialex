@@ -10,7 +10,7 @@ import {
   scanReferences,
   scanText,
   type AnalysisIssue,
-} from "../src/analysis.js";
+} from "../src/analysis/index.js";
 
 const dirs: string[] = [];
 afterEach(() => {

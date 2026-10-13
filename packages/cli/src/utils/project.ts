@@ -2,7 +2,7 @@ import path from "node:path";
 
 import type { DialexConfig } from "dialexjs";
 
-import { loadDictionaryFile, type DictionaryFile } from "./dictionary-edit.js";
+import { loadDictionaryFile, type DictionaryFile } from "./dictionary/index.js";
 import { scanFiles } from "./files.js";
 import { resolveDialexConfig } from "./scanner.js";
 import { readStaticConfig } from "./static-config.js";

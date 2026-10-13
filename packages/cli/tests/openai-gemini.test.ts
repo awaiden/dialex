@@ -10,7 +10,7 @@ import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { geminiProvider } from "../src/translate/gemini.js";
 import { openaiProvider } from "../src/translate/openai.js";
-import { getString, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { getString, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });

@@ -3,7 +3,7 @@ import path from "node:path";
 
 import pc from "picocolors";
 
-import { TODO_PREFIX, listLeaves, listLocales } from "../utils/dictionary-edit.js";
+import { TODO_PREFIX, listLeaves, listLocales } from "../utils/dictionary/index.js";
 import { LOCK_FILE, isStale, lockFor, lockPath, record, writeLock } from "../utils/lockfile.js";
 import { logger } from "../utils/logger.js";
 import { loadProject, toKey } from "../utils/project.js";

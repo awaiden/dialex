@@ -3,7 +3,7 @@ import path from "node:path";
 
 import pc from "picocolors";
 
-import { analyzeProject, type AnalysisIssue } from "../analysis.js";
+import { analyzeProject, type AnalysisIssue } from "../analysis/index.js";
 import {
   TODO_PREFIX,
   copyLeaf,
@@ -12,7 +12,7 @@ import {
   listLocales,
   loadDictionaryFile,
   saveDictionaryFile,
-} from "../utils/dictionary-edit.js";
+} from "../utils/dictionary/index.js";
 import { scanFiles } from "../utils/files.js";
 import { logger } from "../utils/logger.js";
 import { resolveDialexConfig } from "../utils/scanner.js";

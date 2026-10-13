@@ -4,7 +4,7 @@ import path from "node:path";
 import chokidar from "chokidar";
 import { DEFAULT_CONFIG } from "dialexjs";
 
-import { listLocales, parseDictionaryText } from "../utils/dictionary-edit.js";
+import { listLocales, parseDictionaryText } from "../utils/dictionary/index.js";
 import { createGitignoreFilter, scanFiles } from "../utils/files.js";
 import { logger } from "../utils/logger.js";
 import { messageArguments } from "../utils/message-arguments.js";

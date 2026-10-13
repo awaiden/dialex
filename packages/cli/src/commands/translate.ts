@@ -9,7 +9,7 @@ import {
   listLocales,
   saveDictionaryFile,
   setString,
-} from "../utils/dictionary-edit.js";
+} from "../utils/dictionary/index.js";
 import { isStale, lockFor, record, writeLock } from "../utils/lockfile.js";
 import { logger } from "../utils/logger.js";
 import { loadProject, toKey, type ProjectDictionary } from "../utils/project.js";

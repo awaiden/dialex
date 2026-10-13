@@ -1,6 +1,6 @@
 import { getArguments, parseMessage, type IcuArgument } from "dialexjs/icu";
 
-import { listLeaves, listLocales, type DictionaryFile } from "./dictionary-edit.js";
+import { listLeaves, listLocales, type DictionaryFile } from "./dictionary/index.js";
 
 const IDENTIFIER = /^[A-Za-z_$][\w$]*$/;
 

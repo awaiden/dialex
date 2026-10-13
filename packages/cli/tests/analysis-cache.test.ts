@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { analyzeProject, createAnalysisCache } from "../src/analysis.js";
+import { analyzeProject, createAnalysisCache } from "../src/analysis/index.js";
 
 const dirs: string[] = [];
 

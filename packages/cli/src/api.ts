@@ -23,7 +23,7 @@ export {
   type IssueLevel,
   type LeafInfo,
   type Reference,
-} from "./analysis.js";
+} from "./analysis/index.js";
 
 export {
   BUILTIN_IGNORE,
@@ -61,7 +61,7 @@ export {
   type Leaf,
   type LeafKind,
   type SourceRange,
-} from "./utils/dictionary-edit.js";
+} from "./utils/dictionary/index.js";
 
 export {
   DEFAULT_STATIC_CONFIG,

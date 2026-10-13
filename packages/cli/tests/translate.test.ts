@@ -9,7 +9,7 @@ import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider, toDeepLLanguage } from "../src/translate/deepl.js";
 import { extractPlaceholders, preservesPlaceholders } from "../src/translate/placeholders.js";
-import { getString, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { getString, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 
 const dirs: string[] = [];
 afterEach(() => {

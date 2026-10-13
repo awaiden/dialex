@@ -9,7 +9,7 @@ import { runCheck } from "../src/commands/check.js";
 import { runImport } from "../src/commands/import.js";
 import { runLock } from "../src/commands/lock.js";
 import { runTranslate } from "../src/commands/translate.js";
-import { getString, loadDictionaryFile } from "../src/utils/dictionary-edit.js";
+import { getString, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 import {
   hashSource,
   isStale,
