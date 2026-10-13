@@ -25,14 +25,22 @@ how to migrate in the changeset, because that text becomes the release notes.
 
 ## Releasing
 
-1. Merge changes (with their changesets) into `main`. The Release workflow opens or updates a
-   **Version Packages** pull request: it bumps the versions, writes each package's `CHANGELOG.md`
-   and rebuilds `bun.lock`.
-2. Review that PR and merge it when you want to release.
-3. The workflow runs again on `main`, finds nothing left to version, runs the full gate, and
-   publishes every package that is not on npm yet (with provenance). Then, if the tag for the version in `packages/core/package.json` is missing, it creates the `vX.Y.Z` tag
-   and the GitHub Release, using the section of `packages/core/CHANGELOG.md` as its notes.
-   The packaged VS Code extension (`dialex-vscode-X.Y.Z.vsix`) is attached to that release as an asset.
+Push to `main`. The Release workflow does the rest in one run, with no pull request:
+
+1. If changesets are pending, it bumps the versions, writes each package's `CHANGELOG.md` and
+   rebuilds `bun.lock`, and commits that as **Version Packages** (kept local for now).
+2. It runs the full gate (`bun run ready`) and the packed-package smoke test. If either fails
+   nothing is pushed and nothing is published.
+3. It pushes the version commit to `main`, then publishes every package that is not on npm yet
+   (with provenance).
+4. If the tag for the version in `packages/core/package.json` is missing, it creates the `vX.Y.Z`
+   tag and the GitHub Release, using the section of `packages/core/CHANGELOG.md` as its notes. The
+   packaged VS Code extension (`dialex-vscode-X.Y.Z.vsix`) is attached as an asset.
+5. For a version commit it starts the docs build (a push made with the workflow token does not).
+
+A push without changesets (docs, refactors, internal changes) publishes nothing new: the packages
+are already on npm, so the run only verifies. If a run fails after the version commit was pushed,
+re-run it: it publishes what is still missing.
 
 The docs changelog page is built from `packages/core/CHANGELOG.md` (newer releases) and the root
 `CHANGELOG.md` (history up to 0.4.0).
@@ -43,8 +51,8 @@ The docs changelog page is built from `packages/core/CHANGELOG.md` (newer releas
   the old ones after a bump. The workflow deletes and rebuilds `bun.lock` before packing and checks the
   tarball, so a package cannot depend on a stale release (0.2.0 did). `bun run changeset:version`
   does the same when it versions.
-- The repository setting **Settings, Actions, General, "Allow GitHub Actions to create and approve
-  pull requests"** must be on, or the Version Packages PR cannot be opened.
+- The workflow pushes to `main` with `GITHUB_TOKEN`, so `main` must not require pull requests or
+  status checks for that push.
 - `NPM_TOKEN` must be an Actions secret.
 
 ## Updating your own VS Code

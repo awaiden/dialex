@@ -1,8 +1,9 @@
 name: Release
 
-# Every push to main either opens or updates the "Version Packages" pull request (while changesets
-# are pending) or, once that PR is merged and nothing is left to version, publishes what is not on
-# npm yet. See RELEASING.md.
+# Every push to main publishes what is not on npm yet. When changesets are pending, the same run
+# first bumps the versions, writes the changelogs and rebuilds bun.lock, checks the result, and
+# pushes that "Version Packages" commit to main before it publishes. There is no pull request in
+# between. See RELEASING.md.
 on:
   push:
     branches: [main]
@@ -13,13 +14,13 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write # push the version branch, the tag and the GitHub Release
-  pull-requests: write
+  contents: write # push the version commit, the tag and the GitHub Release
+  actions: write # start the docs build for a version commit (a bot push does not trigger it)
   id-token: write # npm provenance
 
 jobs:
   release:
-    name: Version PR or publish
+    name: Version and publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -41,32 +42,42 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # With pending changesets this opens or updates the "Version Packages" PR (bumps the
-      # versions, writes the changelogs, rebuilds bun.lock) and sets hasChangesets to true.
-      - name: Version PR
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: bun run changeset:version
-          commit: "Version Packages"
-          title: "Version Packages"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Pending changesets are consumed here: versions bumped, changelogs written, bun.lock rebuilt
+      # (`changeset:version`). The commit stays local until the checks below have passed.
+      - name: Version
+        id: version
+        run: |
+          set -euo pipefail
+          pending=$(ls .changeset/*.md 2>/dev/null | grep -v '/README.md$' | wc -l)
+          if [ "$pending" -eq 0 ]; then
+            echo "versioned=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bun run changeset:version
+          git add -A
+          git diff --cached --quiet || git commit -m "Version Packages"
+          echo "versioned=true" >> "$GITHUB_OUTPUT"
 
       - name: Verify
-        if: steps.changesets.outputs.hasChangesets == 'false'
         run: bun run ready
 
       - name: Smoke test the packed packages
-        if: steps.changesets.outputs.hasChangesets == 'false'
         run: node scripts/smoke-pack.mjs
 
-      # `bun pm pack` writes the versions of workspace dependencies from bun.lock. The Version PR
-      # rebuilds the lock (`changeset:version`), and checking each tarball is what stops a package
-      # from depending on a stale release (0.2.0 did).
+      # Pushed before publishing so main never lags behind what is on npm. A push made with the
+      # workflow token does not start another run, so there is no loop. If main moved in the
+      # meantime this fails, and the run of that newer push versions again.
+      - name: Push the version commit
+        if: steps.version.outputs.versioned == 'true'
+        run: git push origin HEAD:main
+
+      # `bun pm pack` writes the versions of workspace dependencies from bun.lock. `changeset:version`
+      # rebuilds the lock, and checking each tarball is what stops a package from depending on a
+      # stale release (0.2.0 did).
       - name: Publish what is not on npm yet
         id: publish
-        if: steps.changesets.outputs.hasChangesets == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -100,10 +111,9 @@ jobs:
           done
           echo "published=$published" >> "$GITHUB_OUTPUT"
 
-      # The tag always follows packages/core/package.json: whenever nothing is left to version and
-      # the tag or the GitHub Release for that version is missing, it is created.
+      # The tag always follows packages/core/package.json: whenever the tag or the GitHub Release
+      # for that version is missing, it is created.
       - name: Tag and GitHub Release
-        if: steps.changesets.outputs.hasChangesets == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -130,3 +140,11 @@ jobs:
           else
             gh release create "$tag" --title "$tag" --generate-notes --verify-tag "$vsix"
           fi
+
+      # The version commit was pushed with the workflow token, which does not start the docs
+      # workflow, so the changelog page would stay behind until the next docs change.
+      - name: Rebuild the docs site
+        if: steps.version.outputs.versioned == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run docs.yml --ref main

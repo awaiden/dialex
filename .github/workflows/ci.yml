@@ -40,8 +40,8 @@ jobs:
   changeset:
     name: Changeset present
     # A pull request that changes a published package needs a changeset (bun run changeset).
-    # The Version Packages pull request consumes them, so it is exempt.
-    if: github.event_name == 'pull_request' && github.head_ref != 'changeset-release/main'
+    # (The release workflow versions on its own, without a pull request.)
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
