@@ -1602,13 +1602,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| Option                      | Description                                                              |
-| --------------------------- | ------------------------------------------------------------------------ |
-| `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)      |
-| `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)  |
-| `--dry-run`                 | List what would be translated. Does not call the provider or write files |
-| `--stale`                   | Re-translate strings whose source text changed (see below)               |
-| `-c, --config <path>`       | Custom config path                                                       |
+| Option                      | Description                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)                                  |
+| `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)                              |
+| `--dry-run`                 | List what would be translated. Does not call the provider or write files                             |
+| `--stale`                   | Re-translate strings whose source text changed (see below)                                           |
+| `-c, --config <path>`       | Custom config path                                                                                   |
+| `--json`                    | Print the result (`success`, `dryRun`, `pending`, `translated`, `rejected`) as JSON and nothing else |
 
 ## Configure a provider
 
@@ -4803,20 +4804,20 @@ Dialex is green. Bars are drawn to scale inside one chart, so compare lengths wi
 
 | Library                           |     Lookup | Interpolation |     Plural | Nested select and plural |
 | --------------------------------- | ---------: | ------------: | ---------: | -----------------------: |
-| dialexjs                          | 46,266,998 |    16,938,089 |  9,917,618 |                8,535,548 |
-| dialexjs (function messages)      | 30,714,103 |    21,162,309 | 26,238,852 |               16,211,910 |
-| dialexjs formatMessage            | 35,208,235 |    22,909,967 | 14,132,201 |               11,197,127 |
-| dialexjs (dictionary object)      | 85,001,512 |           n/a |        n/a |                      n/a |
-| dialexjs (getDictionary per call) | 77,576,643 |           n/a |        n/a |                      n/a |
-| i18next                           |    425,993 |       344,288 |    215,223 |                      n/a |
-| intl-messageformat                | 19,372,016 |     4,191,336 |    441,379 |                  398,668 |
-| intl-messageformat (no cache)     |    220,923 |       162,267 |     22,148 |                   18,346 |
-| @lingui/core                      |  7,677,169 |     5,582,960 |    268,008 |                  126,476 |
-| Paraglide JS                      | 21,495,958 |    16,618,901 |     87,101 |                   91,326 |
-| Intlayer                          | 63,762,365 |     2,083,863 |  1,361,079 |                1,242,438 |
-| Intlayer (getIntlayer per call)   |    402,101 |       320,671 |    295,293 |                  284,140 |
+| dialexjs                          | 45,921,949 |    17,591,571 |  9,956,907 |                8,572,741 |
+| dialexjs (function messages)      | 30,294,716 |    21,592,553 | 26,256,191 |               17,178,301 |
+| dialexjs formatMessage            | 41,122,519 |    24,645,778 | 14,808,836 |               11,676,472 |
+| dialexjs (dictionary object)      | 80,403,999 |           n/a |        n/a |                      n/a |
+| dialexjs (getDictionary per call) | 77,900,218 |           n/a |        n/a |                      n/a |
+| i18next                           |    391,482 |       315,556 |    200,486 |                      n/a |
+| intl-messageformat                | 21,248,346 |     4,068,286 |    431,805 |                  394,363 |
+| intl-messageformat (no cache)     |    220,735 |       165,743 |     22,636 |                   18,146 |
+| @lingui/core                      |  7,628,934 |     5,609,820 |    271,897 |                  129,683 |
+| Paraglide JS                      | 21,122,876 |    16,040,431 |     86,959 |                   91,792 |
+| Intlayer                          | 64,030,320 |     2,126,902 |  1,351,726 |                1,228,197 |
+| Intlayer (getIntlayer per call)   |    351,302 |       281,777 |    262,436 |                  252,884 |
 
-Measured with Node v24.21.0 on an Intel Core i5-11400H, Linux x64, on 2026-10-12.
+Measured with Node v24.21.0 on an Intel Core i5-11400H, Linux x64, on 2026-10-13.
 
 ## Bundle size
 
@@ -4829,13 +4830,13 @@ The smallest useful program in each library: create it, load one plural message 
 | dialexjs (t)                 |  8,025 B |  3,029 B |  2,760 B |
 | dialexjs/icu (formatMessage) |  7,060 B |  2,619 B |  2,397 B |
 | dialexjs (function messages) |  8,066 B |  3,052 B |  2,772 B |
-| i18next                      | 43,666 B | 14,043 B | 12,726 B |
+| i18next                      | 43,721 B | 14,080 B | 12,762 B |
 | intl-messageformat           | 33,567 B |  9,908 B |  8,883 B |
 | Paraglide JS                 | 10,702 B |  3,952 B |  3,528 B |
 | @lingui/core                 |  4,824 B |  2,087 B |  1,869 B |
 | Intlayer                     | 17,207 B |  4,901 B |  4,381 B |
 
-Versions: dialexjs 0.7.2 plus the runtime performance changes (compiled message formatting and shared `Intl` formatters), i18next 26.4.3, intl-messageformat 12.1.3, @lingui/core 6.9.1, @inlang/paraglide-js 2.27.0, intlayer 9.7.0, vite-intlayer 9.7.0.
+Versions: dialexjs 0.9.1, i18next 26.4.4, intl-messageformat 12.1.3, @lingui/core 6.9.1, @inlang/paraglide-js 2.27.0, intlayer 9.7.0, vite-intlayer 9.7.0.
 
 ## How to read these numbers
 
@@ -4974,6 +4975,10 @@ What changed in each release of `dialexjs`, `@dialexjs/cli`, `@dialexjs/mcp` and
 All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@dialexjs/mcp` and the VS Code extension share one version number.
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
+
+## 0.9.1
+
+No changes in this release.
 
 ## 0.9.0
 
@@ -5460,10 +5465,10 @@ The tools look in the project root (the folder you run `dialex` from, or the fol
 
 ## How the tools read it
 
-| Tool                                                        | Reads the config by                                                                 |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)               |
-| The editor extension and language server                    | Reading its syntax tree, and never running it                                       |
+| Tool                                                        | Reads the config by                                                   |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`) |
+| The editor extension and language server                    | Reading its syntax tree, and never running it                         |
 
 A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out.
 
@@ -6494,16 +6499,17 @@ What Dialex needs from your environment, and what it asks you to install yoursel
 | Other runtimes    | The runtime core and the Fetch API handler use only standard APIs (`Intl`, `Request`, `Headers`, `Map`), so they run where those exist: Bun, Deno, Cloudflare Workers and browsers             |
 | TypeScript        | A current 5.x or later. The types use template literal and conditional types. The repository type-checks with TypeScript 7                                                                     |
 | Module resolution | `compilerOptions.moduleResolution` must be `"bundler"`, `"node16"` or `"nodenext"`. The subpath imports (`dialexjs/react`) are `exports` entries, which the old `"node"` setting does not read |
-| Package manager   | npm, Yarn, pnpm and Bun all work. |
+| Package manager   | npm, Yarn, pnpm and Bun all work.                                                                                                                                                              |
 
 ## Packages
 
-| Package                     | What it is                                   | Dependencies                                    |
-| --------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| `dialexjs`                  | The runtime and every framework adapter      | None. Frameworks are optional peer dependencies |
-| `@dialexjs/cli`             | `dialex` / `dx`. Install as a dev dependency | Installs its own tooling; needs `dialexjs`      |
-| `@dialexjs/language-server` | The LSP server for Zed and other editors     | `@dialexjs/cli`                                 |
-| `@dialexjs/mcp`             | The MCP server for AI assistants             | `@dialexjs/cli`                                 |
+| Package                     | What it is                                        | Dependencies                                    |
+| --------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `dialexjs`                  | The runtime and every framework adapter           | None. Frameworks are optional peer dependencies |
+| `@dialexjs/cli`             | `dialex` / `dx`. Install as a dev dependency      | Installs its own tooling; needs `dialexjs`      |
+| `@dialexjs/eslint-plugin`   | ESLint and oxlint rules for dictionaries and keys | `@dialexjs/cli`                                 |
+| `@dialexjs/language-server` | The LSP server for Zed and other editors          | `@dialexjs/cli`                                 |
+| `@dialexjs/mcp`             | The MCP server for AI assistants                  | `@dialexjs/cli`                                 |
 
 ## Framework versions
 
@@ -7074,6 +7080,7 @@ The server reads these from the `dialex` section of the editor's configuration:
 | Setting        | Default | Description                                                             |
 | -------------- | ------- | ----------------------------------------------------------------------- |
 | `enable`       | `true`  | Turn all features off                                                   |
+| `diagnostics`  | `true`  | Report problems; turn off when an ESLint or oxlint plugin reports them  |
 | `unusedKeys`   | `false` | Fade out keys and dictionaries that no source file seems to use         |
 | `autoGenerate` | `true`  | Regenerate `dialex.generated.ts` when dictionaries or the config change |
 | `configPath`   | —       | Config file relative to each project root; empty uses `dialex.config.*` |

@@ -95,6 +95,7 @@ Der Server liest diese aus dem Abschnitt `dialex` der Editorkonfiguration:
 | Einstellung    | Standard | Beschreibung                                                                             |
 | -------------- | -------- | ---------------------------------------------------------------------------------------- |
 | `enable`       | `true`   | Alle Funktionen ausschalten                                                              |
+| `diagnostics`  | `true`   | Meldet Probleme; ausschalten, wenn ein ESLint- oder oxlint-Plugin sie meldet             |
 | `unusedKeys`   | `false`  | Schlüssel und Wörterbücher ausblenden, die keine Quelldatei zu verwenden scheint         |
 | `autoGenerate` | `true`   | `dialex.generated.ts` neu erzeugen, wenn sich Wörterbücher oder die Konfiguration ändern |
 | `configPath`   | —        | Konfigurationsdatei relativ zu jedem Projektstamm; leer verwendet `dialex.config.*`      |

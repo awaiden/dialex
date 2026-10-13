@@ -15,12 +15,13 @@ What Dialex needs from your environment, and what it asks you to install yoursel
 
 ## Packages
 
-| Package                     | What it is                                   | Dependencies                                    |
-| --------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| `dialexjs`                  | The runtime and every framework adapter      | None. Frameworks are optional peer dependencies |
-| `@dialexjs/cli`             | `dialex` / `dx`. Install as a dev dependency | Installs its own tooling; needs `dialexjs`      |
-| `@dialexjs/language-server` | The LSP server for Zed and other editors     | `@dialexjs/cli`                                 |
-| `@dialexjs/mcp`             | The MCP server for AI assistants             | `@dialexjs/cli`                                 |
+| Package                     | What it is                                        | Dependencies                                    |
+| --------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `dialexjs`                  | The runtime and every framework adapter           | None. Frameworks are optional peer dependencies |
+| `@dialexjs/cli`             | `dialex` / `dx`. Install as a dev dependency      | Installs its own tooling; needs `dialexjs`      |
+| `@dialexjs/eslint-plugin`   | ESLint and oxlint rules for dictionaries and keys | `@dialexjs/cli`                                 |
+| `@dialexjs/language-server` | The LSP server for Zed and other editors          | `@dialexjs/cli`                                 |
+| `@dialexjs/mcp`             | The MCP server for AI assistants                  | `@dialexjs/cli`                                 |
 
 ## Framework versions
 

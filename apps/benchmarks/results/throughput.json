@@ -1,12 +1,12 @@
 {
   "meta": {
-    "date": "2026-10-12",
+    "date": "2026-10-13",
     "node": "v24.21.0",
     "platform": "Linux x64",
     "cpu": "11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz",
     "rounds": 7,
     "roundMs": 400,
-    "sink": 20470419394
+    "sink": 20795823059
   },
   "messages": {
     "lookup": "Hello, world",
@@ -16,76 +16,76 @@
   },
   "results": {
     "dialexjs": {
-      "lookup": 46266998,
-      "interpolation": 16938089,
-      "plural": 9917618,
-      "nested": 8535548
+      "lookup": 45921949,
+      "interpolation": 17591571,
+      "plural": 9956907,
+      "nested": 8572741
     },
     "dialexjs (function messages)": {
-      "lookup": 30714103,
-      "interpolation": 21162309,
-      "plural": 26238852,
-      "nested": 16211910
+      "lookup": 30294716,
+      "interpolation": 21592553,
+      "plural": 26256191,
+      "nested": 17178301
     },
     "dialexjs formatMessage": {
-      "lookup": 35208235,
-      "interpolation": 22909967,
-      "plural": 14132201,
-      "nested": 11197127
+      "lookup": 41122519,
+      "interpolation": 24645778,
+      "plural": 14808836,
+      "nested": 11676472
     },
     "dialexjs (dictionary object)": {
-      "lookup": 85001512,
+      "lookup": 80403999,
       "interpolation": null,
       "plural": null,
       "nested": null
     },
     "dialexjs (getDictionary per call)": {
-      "lookup": 77576643,
+      "lookup": 77900218,
       "interpolation": null,
       "plural": null,
       "nested": null
     },
     "i18next": {
-      "lookup": 425993,
-      "interpolation": 344288,
-      "plural": 215223,
+      "lookup": 391482,
+      "interpolation": 315556,
+      "plural": 200486,
       "nested": null
     },
     "intl-messageformat": {
-      "lookup": 19372016,
-      "interpolation": 4191336,
-      "plural": 441379,
-      "nested": 398668
+      "lookup": 21248346,
+      "interpolation": 4068286,
+      "plural": 431805,
+      "nested": 394363
     },
     "intl-messageformat (no cache)": {
-      "lookup": 220923,
-      "interpolation": 162267,
-      "plural": 22148,
-      "nested": 18346
+      "lookup": 220735,
+      "interpolation": 165743,
+      "plural": 22636,
+      "nested": 18146
     },
     "@lingui/core": {
-      "lookup": 7677169,
-      "interpolation": 5582960,
-      "plural": 268008,
-      "nested": 126476
+      "lookup": 7628934,
+      "interpolation": 5609820,
+      "plural": 271897,
+      "nested": 129683
     },
     "Paraglide JS": {
-      "lookup": 21495958,
-      "interpolation": 16618901,
-      "plural": 87101,
-      "nested": 91326
+      "lookup": 21122876,
+      "interpolation": 16040431,
+      "plural": 86959,
+      "nested": 91792
     },
     "Intlayer": {
-      "lookup": 63762365,
-      "interpolation": 2083863,
-      "plural": 1361079,
-      "nested": 1242438
+      "lookup": 64030320,
+      "interpolation": 2126902,
+      "plural": 1351726,
+      "nested": 1228197
     },
     "Intlayer (getIntlayer per call)": {
-      "lookup": 402101,
-      "interpolation": 320671,
-      "plural": 295293,
-      "nested": 284140
+      "lookup": 351302,
+      "interpolation": 281777,
+      "plural": 262436,
+      "nested": 252884
     }
   }
 }

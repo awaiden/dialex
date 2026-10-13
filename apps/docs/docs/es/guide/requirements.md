@@ -19,6 +19,7 @@ Lo que Dialex necesita de tu entorno y lo que te pide instalar a ti.
 | --------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
 | `dialexjs`                  | El runtime y todos los adaptadores de framework           | Ninguna. Los frameworks son dependencias peer opcionales |
 | `@dialexjs/cli`             | `dialex` / `dx`. Instálalo como dependencia de desarrollo | Instala sus propias herramientas; necesita `dialexjs`    |
+| `@dialexjs/eslint-plugin`   | Reglas de ESLint y oxlint para diccionarios y claves      | `@dialexjs/cli`                                          |
 | `@dialexjs/language-server` | El servidor LSP para Zed y otros editores                 | `@dialexjs/cli`                                          |
 | `@dialexjs/mcp`             | El servidor MCP para asistentes de IA                     | `@dialexjs/cli`                                          |
 

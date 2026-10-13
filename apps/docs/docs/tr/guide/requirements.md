@@ -15,12 +15,13 @@ Dialex'in ortamınızdan neye ihtiyaç duyduğu ve sizden neyi kendiniz kurmanı
 
 ## Paketler
 
-| Paket                       | Nedir                                                | Bağımlılıklar                                         |
-| --------------------------- | ---------------------------------------------------- | ----------------------------------------------------- |
-| `dialexjs`                  | Çalışma zamanı ve her framework adaptörü             | Yok. Framework'ler isteğe bağlı peer bağımlılıklardır |
-| `@dialexjs/cli`             | `dialex` / `dx`. Geliştirme bağımlılığı olarak kurun | Kendi araçlarını kurar; `dialexjs` gerekir            |
-| `@dialexjs/language-server` | Zed ve diğer editörler için LSP sunucusu             | `@dialexjs/cli`                                       |
-| `@dialexjs/mcp`             | Yapay zekâ asistanları için MCP sunucusu             | `@dialexjs/cli`                                       |
+| Paket                       | Nedir                                                   | Bağımlılıklar                                         |
+| --------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| `dialexjs`                  | Çalışma zamanı ve her framework adaptörü                | Yok. Framework'ler isteğe bağlı peer bağımlılıklardır |
+| `@dialexjs/cli`             | `dialex` / `dx`. Geliştirme bağımlılığı olarak kurun    | Kendi araçlarını kurar; `dialexjs` gerekir            |
+| `@dialexjs/eslint-plugin`   | Sözlükler ve anahtarlar için ESLint ve oxlint kuralları | `@dialexjs/cli`                                       |
+| `@dialexjs/language-server` | Zed ve diğer editörler için LSP sunucusu                | `@dialexjs/cli`                                       |
+| `@dialexjs/mcp`             | Yapay zekâ asistanları için MCP sunucusu                | `@dialexjs/cli`                                       |
 
 ## Framework sürümleri
 

@@ -10,13 +10,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| Option                      | Description                                                              |
-| --------------------------- | ------------------------------------------------------------------------ |
-| `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)      |
-| `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)  |
-| `--dry-run`                 | List what would be translated. Does not call the provider or write files |
-| `--stale`                   | Re-translate strings whose source text changed (see below)               |
-| `-c, --config <path>`       | Custom config path                                                       |
+| Option                      | Description                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `-l, --locale <locales...>` | Target locales (default: every configured locale except the source)                                  |
+| `-s, --source <locale>`     | Source locale (default: `translate.sourceLocale`, then `defaultLocale`)                              |
+| `--dry-run`                 | List what would be translated. Does not call the provider or write files                             |
+| `--stale`                   | Re-translate strings whose source text changed (see below)                                           |
+| `-c, --config <path>`       | Custom config path                                                                                   |
+| `--json`                    | Print the result (`success`, `dryRun`, `pending`, `translated`, `rejected`) as JSON and nothing else |
 
 ## Configure a provider
 

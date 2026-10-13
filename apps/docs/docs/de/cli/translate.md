@@ -10,13 +10,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| Option                      | Beschreibung                                                                            |
-| --------------------------- | --------------------------------------------------------------------------------------- |
-| `-l, --locale <locales...>` | Ziel-Locales (Standard: alle konfigurierten Locales außer dem Quell-Locale)             |
-| `-s, --source <locale>`     | Quell-Locale (Standard: `translate.sourceLocale`, dann `defaultLocale`)                 |
-| `--dry-run`                 | Listet auf, was übersetzt würde. Ruft den Provider nicht auf und schreibt keine Dateien |
-| `--stale`                   | Übersetzt Strings erneut, deren Quelltext sich geändert hat (siehe unten)               |
-| `-c, --config <path>`       | Eigener Konfigurationspfad                                                              |
+| Option                      | Beschreibung                                                                                  |
+| --------------------------- | --------------------------------------------------------------------------------------------- |
+| `-l, --locale <locales...>` | Ziel-Locales (Standard: alle konfigurierten Locales außer dem Quell-Locale)                   |
+| `-s, --source <locale>`     | Quell-Locale (Standard: `translate.sourceLocale`, dann `defaultLocale`)                       |
+| `--dry-run`                 | Listet auf, was übersetzt würde. Ruft den Provider nicht auf und schreibt keine Dateien       |
+| `--stale`                   | Übersetzt Strings erneut, deren Quelltext sich geändert hat (siehe unten)                     |
+| `-c, --config <path>`       | Eigener Konfigurationspfad                                                                    |
+| `--json`                    | Gibt das Ergebnis (`success`, `dryRun`, `pending`, `translated`, `rejected`) nur als JSON aus |
 
 ## Einen Provider konfigurieren
 

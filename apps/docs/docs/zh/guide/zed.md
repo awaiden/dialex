@@ -95,6 +95,7 @@ language-servers = ["typescript-language-server", "dialex"]
 | 设置           | 默认值  | 说明                                                         |
 | -------------- | ------- | ------------------------------------------------------------ |
 | `enable`       | `true`  | 关闭所有功能                                                 |
+| `diagnostics`  | `true`  | 报告问题；当 ESLint 或 oxlint 插件已经报告时请关闭           |
 | `unusedKeys`   | `false` | 淡化没有任何源文件似乎在使用的键和词典                       |
 | `autoGenerate` | `true`  | 词典或配置变化时重新生成 `dialex.generated.ts`               |
 | `configPath`   | —       | 相对于每个项目根目录的配置文件；留空则使用 `dialex.config.*` |

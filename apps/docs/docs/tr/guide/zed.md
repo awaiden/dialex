@@ -95,6 +95,7 @@ Sunucu bunları editör yapılandırmasının `dialex` bölümünden okur:
 | Ayar           | Varsayılan | Açıklama                                                                           |
 | -------------- | ---------- | ---------------------------------------------------------------------------------- |
 | `enable`       | `true`     | Tüm özellikleri kapat                                                              |
+| `diagnostics`  | `true`     | Sorunları bildirir; ESLint veya oxlint eklentisi bildiriyorsa kapatın              |
 | `unusedKeys`   | `false`    | Hiçbir kaynak dosyanın kullanmadığı görünen anahtarları ve sözlükleri soluklaştır  |
 | `autoGenerate` | `true`     | Sözlükler veya yapılandırma değişince `dialex.generated.ts` dosyasını yeniden üret |
 | `configPath`   | —          | Her proje köküne göre yapılandırma dosyası; boşsa `dialex.config.*` kullanılır     |

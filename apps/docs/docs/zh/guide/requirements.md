@@ -15,12 +15,13 @@ Dialex 对你的环境有哪些要求，以及需要你自己安装什么。
 
 ## 包
 
-| 包                          | 是什么                             | 依赖                          |
-| --------------------------- | ---------------------------------- | ----------------------------- |
-| `dialexjs`                  | 运行时和每个框架适配器             | 无。框架是可选的 peer 依赖    |
-| `@dialexjs/cli`             | `dialex` / `dx`。作为开发依赖安装  | 自带所需工具；需要 `dialexjs` |
-| `@dialexjs/language-server` | 面向 Zed 和其他编辑器的 LSP 服务器 | `@dialexjs/cli`               |
-| `@dialexjs/mcp`             | 面向 AI 助手的 MCP 服务器          | `@dialexjs/cli`               |
+| 包                          | 是什么                               | 依赖                          |
+| --------------------------- | ------------------------------------ | ----------------------------- |
+| `dialexjs`                  | 运行时和每个框架适配器               | 无。框架是可选的 peer 依赖    |
+| `@dialexjs/cli`             | `dialex` / `dx`。作为开发依赖安装    | 自带所需工具；需要 `dialexjs` |
+| `@dialexjs/eslint-plugin`   | 面向词典和键的 ESLint 与 oxlint 规则 | `@dialexjs/cli`               |
+| `@dialexjs/language-server` | 面向 Zed 和其他编辑器的 LSP 服务器   | `@dialexjs/cli`               |
+| `@dialexjs/mcp`             | 面向 AI 助手的 MCP 服务器            | `@dialexjs/cli`               |
 
 ## 框架版本
 

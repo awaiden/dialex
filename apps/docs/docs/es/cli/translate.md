@@ -10,13 +10,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| Opción                      | Descripción                                                                           |
-| --------------------------- | ------------------------------------------------------------------------------------- |
-| `-l, --locale <locales...>` | Locales de destino (por defecto: todos los locales configurados excepto el de origen) |
-| `-s, --source <locale>`     | Locale de origen (por defecto: `translate.sourceLocale`, y después `defaultLocale`)   |
-| `--dry-run`                 | Enumera lo que se traduciría. No llama al proveedor ni escribe archivos               |
-| `--stale`                   | Vuelve a traducir las cadenas cuyo texto de origen cambió (ver abajo)                 |
-| `-c, --config <path>`       | Ruta de configuración personalizada                                                   |
+| Opción                      | Descripción                                                                                    |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `-l, --locale <locales...>` | Locales de destino (por defecto: todos los locales configurados excepto el de origen)          |
+| `-s, --source <locale>`     | Locale de origen (por defecto: `translate.sourceLocale`, y después `defaultLocale`)            |
+| `--dry-run`                 | Enumera lo que se traduciría. No llama al proveedor ni escribe archivos                        |
+| `--stale`                   | Vuelve a traducir las cadenas cuyo texto de origen cambió (ver abajo)                          |
+| `-c, --config <path>`       | Ruta de configuración personalizada                                                            |
+| `--json`                    | Imprime solo el resultado (`success`, `dryRun`, `pending`, `translated`, `rejected`) como JSON |
 
 ## Configurar un proveedor
 

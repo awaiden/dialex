@@ -43,20 +43,20 @@ Dialex yeşil renktedir. Çubuklar bir grafik içinde ölçeklidir; uzunlukları
 
 | Kütüphane                         |      Arama | Enterpolasyon |      Çoğul | İç içe select ve çoğul |
 | --------------------------------- | ---------: | ------------: | ---------: | ---------------------: |
-| dialexjs                          | 46,266,998 |    16,938,089 |  9,917,618 |              8,535,548 |
-| dialexjs (function messages)      | 30,714,103 |    21,162,309 | 26,238,852 |             16,211,910 |
-| dialexjs formatMessage            | 35,208,235 |    22,909,967 | 14,132,201 |             11,197,127 |
-| dialexjs (dictionary object)      | 85,001,512 |           n/a |        n/a |                    n/a |
-| dialexjs (getDictionary per call) | 77,576,643 |           n/a |        n/a |                    n/a |
-| i18next                           |    425,993 |       344,288 |    215,223 |                    n/a |
-| intl-messageformat                | 19,372,016 |     4,191,336 |    441,379 |                398,668 |
-| intl-messageformat (no cache)     |    220,923 |       162,267 |     22,148 |                 18,346 |
-| @lingui/core                      |  7,677,169 |     5,582,960 |    268,008 |                126,476 |
-| Paraglide JS                      | 21,495,958 |    16,618,901 |     87,101 |                 91,326 |
-| Intlayer                          | 63,762,365 |     2,083,863 |  1,361,079 |              1,242,438 |
-| Intlayer (getIntlayer per call)   |    402,101 |       320,671 |    295,293 |                284,140 |
+| dialexjs                          | 45,921,949 |    17,591,571 |  9,956,907 |              8,572,741 |
+| dialexjs (function messages)      | 30,294,716 |    21,592,553 | 26,256,191 |             17,178,301 |
+| dialexjs formatMessage            | 41,122,519 |    24,645,778 | 14,808,836 |             11,676,472 |
+| dialexjs (dictionary object)      | 80,403,999 |           n/a |        n/a |                    n/a |
+| dialexjs (getDictionary per call) | 77,900,218 |           n/a |        n/a |                    n/a |
+| i18next                           |    391,482 |       315,556 |    200,486 |                    n/a |
+| intl-messageformat                | 21,248,346 |     4,068,286 |    431,805 |                394,363 |
+| intl-messageformat (no cache)     |    220,735 |       165,743 |     22,636 |                 18,146 |
+| @lingui/core                      |  7,628,934 |     5,609,820 |    271,897 |                129,683 |
+| Paraglide JS                      | 21,122,876 |    16,040,431 |     86,959 |                 91,792 |
+| Intlayer                          | 64,030,320 |     2,126,902 |  1,351,726 |              1,228,197 |
+| Intlayer (getIntlayer per call)   |    351,302 |       281,777 |    262,436 |                252,884 |
 
-Node v24.21.0 ile, Intel Core i5-11400H üzerinde, Linux x64, 2026-10-12 tarihinde ölçüldü.
+Node v24.21.0 ile, Intel Core i5-11400H üzerinde, Linux x64, 2026-10-13 tarihinde ölçüldü.
 
 ## Paket boyutu
 
@@ -69,13 +69,13 @@ Her kütüphanedeki en küçük yararlı program: oluştur, bir çoğul mesaj y�
 | dialexjs (t)                 |     8,025 B |  3,029 B |  2,760 B |
 | dialexjs/icu (formatMessage) |     7,060 B |  2,619 B |  2,397 B |
 | dialexjs (function messages) |     8,066 B |  3,052 B |  2,772 B |
-| i18next                      |    43,666 B | 14,043 B | 12,726 B |
+| i18next                      |    43,721 B | 14,080 B | 12,762 B |
 | intl-messageformat           |    33,567 B |  9,908 B |  8,883 B |
 | Paraglide JS                 |    10,702 B |  3,952 B |  3,528 B |
 | @lingui/core                 |     4,824 B |  2,087 B |  1,869 B |
 | Intlayer                     |    17,207 B |  4,901 B |  4,381 B |
 
-Sürümler: dialexjs 0.7.2 ve çalışma zamanı performans değişiklikleri (derlenmiş mesaj biçimlendirme ve paylaşılan `Intl` biçimlendiricileri), i18next 26.4.3, intl-messageformat 12.1.3, @lingui/core 6.9.1, @inlang/paraglide-js 2.27.0, intlayer 9.7.0, vite-intlayer 9.7.0.
+Sürümler: dialexjs 0.9.1, i18next 26.4.4, intl-messageformat 12.1.3, @lingui/core 6.9.1, @inlang/paraglide-js 2.27.0, intlayer 9.7.0, vite-intlayer 9.7.0.
 
 ## Bu sayılar nasıl okunur
 
