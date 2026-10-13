@@ -24,7 +24,7 @@ export class IcuFormatError extends Error {
  * A message turned into a function once, so formatting does not walk the syntax tree again.
  * `usesPound` tells whether the `#` of the enclosing plural appears in it.
  */
-type Run = ((locale: string, values: IcuValues, pound?: string) => string) & {
+export type Run = ((locale: string, values: IcuValues, pound?: string) => string) & {
   usesPound?: boolean;
 };
 
@@ -180,6 +180,16 @@ function compileNodes(nodes: IcuNode[]): Run {
   }
   run.usesPound = usesPound;
   return run;
+}
+
+/**
+ * The compiled form of a message, shared with `formatMessage`'s cache. Used by `t()`, which keeps
+ * the result next to the path so a repeated call skips the lookup by message text.
+ *
+ * @internal Not exported from the package.
+ */
+export function compileMessage(message: string): Run {
+  return compileCached(message);
 }
 
 function compileCached(message: string): Run {

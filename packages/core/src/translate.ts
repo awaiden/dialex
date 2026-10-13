@@ -1,4 +1,4 @@
-import { formatMessage, type IcuValues } from "./icu/format.js";
+import { compileMessage, type IcuValues, type Run } from "./icu/format.js";
 import type { DictionaryRegistry, MessageArguments } from "./index.js";
 
 type Leaf = (...args: any[]) => any;
@@ -103,7 +103,19 @@ export function createT(getDictionary: (name: any) => any, locale = "en"): Trans
       const values = arguments.length > 1 ? arguments[1] : undefined;
       if (values === undefined || !isValues(values)) return value;
       try {
-        return formatMessage(locale, value, values);
+        // The compiled message is kept with the path (two slots, for a server that renders two
+        // locales in turn), so a repeated call does not look it up by its text again.
+        let run: Run;
+        if (parsed.text === value) run = parsed.run!;
+        else if (parsed.text2 === value) run = parsed.run2!;
+        else {
+          run = compileMessage(value);
+          parsed.text2 = parsed.text;
+          parsed.run2 = parsed.run;
+          parsed.text = value;
+          parsed.run = run;
+        }
+        return run(locale, values, undefined);
       } catch (error) {
         console.warn(`[dialex] Could not format "${path}": ${(error as Error).message}`);
         return value;
@@ -134,6 +146,11 @@ export function createT(getDictionary: (name: any) => any, locale = "en"): Trans
 interface ParsedPath {
   name: string;
   segments: string[];
+  /** The message found at this path last time, and its compiled form. */
+  text?: string;
+  run?: Run;
+  text2?: string;
+  run2?: Run;
 }
 
 const PATH_CACHE_LIMIT = 500;
