@@ -48,7 +48,8 @@ jobs:
         id: version
         run: |
           set -euo pipefail
-          pending=$(ls .changeset/*.md 2>/dev/null | grep -v '/README.md$' | wc -l)
+          # no grep here: with pipefail it would fail the step when nothing is pending
+          pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name README.md | wc -l)
           if [ "$pending" -eq 0 ]; then
             echo "versioned=false" >> "$GITHUB_OUTPUT"
             exit 0
