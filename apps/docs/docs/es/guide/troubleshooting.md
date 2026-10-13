@@ -65,19 +65,7 @@ En ICU, `{` y `}` abren y cierran argumentos, y `'` los entrecomilla. Escribe un
 
 El idioma necesita categorías que tu mensaje no da (el ruso necesita `few` y `many`, el árabe seis). `dialex check` avisa con `icu-plural-categories`. Añade las opciones; `other` es el respaldo.
 
-## CLI y binarios nativos
-
-### `dx` va lento, o quiero saber si se ejecuta el binario nativo
-
-Ejecuta `DIALEX_NATIVE=1 dx check`: si falla con `native check declined`, el motivo está en el mensaje. Consulta [Binarios nativos](./native.md).
-
-### `dialex: this command needs the Node CLI (@dialexjs/cli), which was not found`
-
-El binario nativo se inició por sí solo, sin la CLI de Node a su lado. Instala `@dialexjs/cli` en el proyecto, define `DIALEX_NODE_CLI` con su `dist/index.mjs` o usa `DIALEX_NATIVE=0`.
-
-### `dx` se ejecuta en Node aunque instalé el paquete
-
-El paquete de la plataforma no se instaló (`--no-optional`, una plataforma no admitida o Alpine/musl) o la plataforma no es compatible. `npm ls @dialexjs/cli-linux-x64` (usa tu plataforma) muestra si está. El resultado es el mismo, solo que más lento.
+## CLI
 
 ### `dialex check` no informa de nada para un diccionario
 

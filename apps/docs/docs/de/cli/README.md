@@ -19,21 +19,6 @@ npm install -g @dialexjs/cli   # or globally
 
 Ein typischer Ablauf: `dialex check --fix`, um Platzhalter für neue Schlüssel anzulegen, dann entweder `dialex translate` oder `dialex export` / `dialex import` für menschliche Übersetzer, anschließend `dialex check` in der CI.
 
-## Native Binärdatei
-
-Unter Linux, macOS und Windows (x64 und arm64) führen `dialex` und `dx` eine native, in Rust gebaute Binärdatei aus, die mit dem Paket als optionale Abhängigkeit (`@dialexjs/cli-<platform>`) installiert wird. `generate` und `check` sind bei einem Projekt mit 1.000 Wörterbüchern 25- bis 40-mal schneller als die Node-Implementierung und erzeugen dieselben Dateien und Ausgaben Byte für Byte.
-
-Die native Binärdatei liest Wörterbücher aus dem Syntaxbaum und die Konfiguration aus `.dialex/config.json`. Braucht ein Befehl die Ausführung des Projektcodes (eine Konfiguration, die nicht nur aus Daten besteht, ein `translate`-Provider, `runtime: true`, Lazy Loading, `--fix`, `--watch`) oder ist er nativ nicht umgesetzt (`init`, `export`, `import`, `lock`, `translate`), übergibt sie den ganzen Befehl an die Node-CLI, sodass sich für dich nichts ändert. Zwei Umgebungsvariablen steuern das:
-
-```bash
-DIALEX_NATIVE=0 dx check   # always use the Node implementation
-DIALEX_NATIVE=1 dx check   # fail with a reason instead of running in Node
-```
-
-Mit npm und Yarn classic unter Linux und macOS legt der Installationsschritt die Binärdatei an die Stelle des Launchers, sodass `dx` in unter einer Millisekunde startet, statt zuerst Node zu booten (etwa 25 ms). Andere Paketmanager, `--ignore-scripts` und Windows behalten einen kleinen JavaScript-Launcher, der dieselbe Binärdatei ausführt.
-
-Unterstützte Plattformen, was nativ läuft, wann zurückgefallen wird und jede Umgebungsvariable stehen unter [Native Binärdateien](../guide/native.md).
-
 ## Exit-Codes und JSON
 
 | Befehl                                            | Exit-Code                                                                                                                     |

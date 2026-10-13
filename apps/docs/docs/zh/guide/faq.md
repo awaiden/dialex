@@ -69,10 +69,6 @@ Dialex 翻译文本并格式化数字和日期；它不设置文本方向。Prov
 
 ## 工具
 
-### CLI 是用 Rust 写的吗？
-
-`dialex generate` 和 `dialex check` 有原生实现，输出与 Node CLI 相同，在大型项目中快 20 到 40 倍；其余命令都在 Node 中运行。参见[原生二进制](./native.md)。
-
 ### 为什么编辑器跳过了我的某个词典？
 
 它无法在不运行代码的前提下读取该词典：它使用了展开、计算键、导入值或计算名称。请使用字面量对象，或者接受对该文件而言 `dialex check`（它会求值该文件）才是检查手段。参见[词典](./dictionaries.md#what-the-tools-can-read)。

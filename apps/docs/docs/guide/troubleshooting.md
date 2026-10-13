@@ -65,19 +65,7 @@ In ICU, `{` and `}` start and end arguments, and `'` quotes them. Write a litera
 
 The language needs categories your message does not give (Russian needs `few` and `many`, Arabic six). `dialex check` warns with `icu-plural-categories`. Add the options; `other` is the fallback.
 
-## CLI and native binaries
-
-### `dx` is slow, or I want to know if the native binary runs
-
-Run `DIALEX_NATIVE=1 dx check`: if it fails with `native check declined`, the reason is in the message. See [Native binaries](./native.md).
-
-### `dialex: this command needs the Node CLI (@dialexjs/cli), which was not found`
-
-The native binary was started on its own, without the Node CLI next to it. Install `@dialexjs/cli` in the project, set `DIALEX_NODE_CLI` to its `dist/index.mjs`, or use `DIALEX_NATIVE=0`.
-
-### `dx` runs in Node although I installed the package
-
-The platform package was not installed (`--no-optional`, an unsupported platform, or Alpine/musl) or the platform is not supported. `npm ls @dialexjs/cli-linux-x64` (use your platform) shows whether it is there. The result is the same, only slower.
+## CLI
 
 ### `dialex check` reports nothing for a dictionary
 

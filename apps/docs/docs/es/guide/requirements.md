@@ -11,7 +11,7 @@ Lo que Dialex necesita de tu entorno y lo que te pide instalar a ti.
 | Otros runtimes        | El núcleo del runtime y el manejador de la API Fetch solo usan APIs estándar (`Intl`, `Request`, `Headers`, `Map`), así que funcionan donde existan: Bun, Deno, Cloudflare Workers y navegadores |
 | TypeScript            | Un 5.x actual o posterior. Los tipos usan tipos de plantilla literal y condicionales. El repositorio comprueba tipos con TypeScript 7                                                            |
 | Resolución de módulos | `compilerOptions.moduleResolution` debe ser `"bundler"`, `"node16"` o `"nodenext"`. Las importaciones por subruta (`dialexjs/react`) son entradas de `exports`, que el antiguo `"node"` no lee   |
-| Gestor de paquetes    | npm, Yarn, pnpm y Bun funcionan. El binario nativo de la CLI se instala como dependencia opcional, así que no uses `--no-optional` si lo quieres (consulta [Binarios nativos](./native.md))      |
+| Gestor de paquetes    | npm, Yarn, pnpm y Bun funcionan.                                                                                                                                                                 |
 
 ## Paquetes
 

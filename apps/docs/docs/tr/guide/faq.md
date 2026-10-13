@@ -69,10 +69,6 @@ Evet. Bir `dialex.config.*` dosyası olan (ya da yalnızca `*.content.ts` dosyal
 
 ## Araçlar
 
-### CLI Rust ile mi yazıldı?
-
-`dialex generate` ve `dialex check` komutlarının, Node CLI ile aynı çıktıyı üreten ve büyük projelerde 20 ila 40 kat daha hızlı olan yerel bir uygulaması vardır; diğer her şey Node'da çalışır. Bkz. [Yerel ikili dosyalar](./native.md).
-
 ### Editör sözlüklerimden birini neden atlıyor?
 
 Kod çalıştırmadan okuyamaz: spread, hesaplanan anahtar, içe aktarılan değer ya da hesaplanan ad kullanıyor. Sabit nesneler kullanın ya da o dosya için denetimin (dosyayı değerlendiren) `dialex check` olduğunu kabul edin. Bkz. [Sözlükler](./dictionaries.md#what-the-tools-can-read).

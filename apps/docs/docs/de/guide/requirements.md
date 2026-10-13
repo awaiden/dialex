@@ -4,14 +4,14 @@ Was Dialex von deiner Umgebung braucht und was es dich selbst installieren läss
 
 ## Laufzeit und Werkzeuge
 
-| Voraussetzung     | Was Dialex braucht                                                                                                                                                                                                |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Modulformat       | Die Pakete sind **nur ES-Module** (`"type": "module"`, `.mjs`-Dateien). Importiere sie aus ESM, einem Bundler oder per `import()` in CommonJS                                                                     |
-| Node.js           | Es ist kein Feld `engines` deklariert. Die Testsuite und die CI laufen auf Node.js 22; das eigene Tooling des Repositorys braucht 22.18 oder neuer. Nimm ein aktuelles LTS-Release                                |
-| Andere Laufzeiten | Der Laufzeitkern und der Fetch-API-Handler nutzen nur Standard-APIs (`Intl`, `Request`, `Headers`, `Map`) und laufen daher überall, wo es sie gibt: Bun, Deno, Cloudflare Workers und Browser                     |
-| TypeScript        | Ein aktuelles 5.x oder neuer. Die Typen verwenden Template-Literal- und konditionale Typen. Das Repository prüft die Typen mit TypeScript 7                                                                       |
-| Modulauflösung    | `compilerOptions.moduleResolution` muss `"bundler"`, `"node16"` oder `"nodenext"` sein. Die Subpfad-Importe (`dialexjs/react`) sind `exports`-Einträge, die die alte Einstellung `"node"` nicht liest             |
-| Paketmanager      | npm, Yarn, pnpm und Bun funktionieren alle. Die native CLI-Binärdatei wird als optionale Abhängigkeit installiert; nutze also kein `--no-optional`, wenn du sie willst (siehe [Native Binärdateien](./native.md)) |
+| Voraussetzung     | Was Dialex braucht                                                                                                                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Modulformat       | Die Pakete sind **nur ES-Module** (`"type": "module"`, `.mjs`-Dateien). Importiere sie aus ESM, einem Bundler oder per `import()` in CommonJS                                                         |
+| Node.js           | Es ist kein Feld `engines` deklariert. Die Testsuite und die CI laufen auf Node.js 22; das eigene Tooling des Repositorys braucht 22.18 oder neuer. Nimm ein aktuelles LTS-Release                    |
+| Andere Laufzeiten | Der Laufzeitkern und der Fetch-API-Handler nutzen nur Standard-APIs (`Intl`, `Request`, `Headers`, `Map`) und laufen daher überall, wo es sie gibt: Bun, Deno, Cloudflare Workers und Browser         |
+| TypeScript        | Ein aktuelles 5.x oder neuer. Die Typen verwenden Template-Literal- und konditionale Typen. Das Repository prüft die Typen mit TypeScript 7                                                           |
+| Modulauflösung    | `compilerOptions.moduleResolution` muss `"bundler"`, `"node16"` oder `"nodenext"` sein. Die Subpfad-Importe (`dialexjs/react`) sind `exports`-Einträge, die die alte Einstellung `"node"` nicht liest |
+| Paketmanager      | npm, Yarn, pnpm und Bun funktionieren alle.                                                                                                                                                           |
 
 ## Pakete
 

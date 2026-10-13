@@ -95,23 +95,13 @@ dialex check
 
 ---
 
-## 🦀 Native binary
-
-`dialex` and `dx` run a native binary (Rust) for `generate` and `check` on Linux, macOS and Windows (x64 and arm64). It is installed with this package as an optional dependency, writes the same files and prints the same output as the Node CLI, and is 20 to 40 times faster on large projects. Commands or projects it cannot decide on its own (a config with computed values, `translate`, `--fix`, `--watch`, lazy loading) run in Node as before.
-
-| Variable                    | Effect                                                                                         |
-| --------------------------- | ---------------------------------------------------------------------------------------------- |
-| `DIALEX_NATIVE=0`           | Always use the Node implementation                                                             |
-| `DIALEX_NATIVE=1`           | Fail with a reason, instead of running in Node, when `generate` or `check` cannot run natively |
-| `DIALEX_BINARY=/path/to/dx` | Use this binary instead of the installed platform package                                      |
-
 ## Exit codes
 
 `0` on success; `1` when the command fails. `dialex check` exits with `1` when it finds errors (warnings never fail it). `dialex import` exits with `0` even when it rejected values; read `success` in its `--json` output. Every command except `init` accepts `--json`.
 
 ## Documentation
 
-[Commands and options](https://dialex.awaiden.com/cli/), [diagnostics reference](https://dialex.awaiden.com/guide/diagnostics.html), [native binaries](https://dialex.awaiden.com/guide/native.html).
+[Commands and options](https://dialex.awaiden.com/cli/) and the [diagnostics reference](https://dialex.awaiden.com/guide/diagnostics.html).
 
 ---
 

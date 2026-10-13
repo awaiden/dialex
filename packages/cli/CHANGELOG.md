@@ -8,16 +8,10 @@
 
   Checks are configured once in `dialex.config.ts` under `lint.rules` (level and options per diagnostic code), and `dialex check`, the editors and the plugin all read it. The analyzer skips comments, understands dictionaries registered inline with `dictionaries: { name: ... }`, and honours `dialex-ignore` / `dialex-ignore-next-line` comments. `@dialexjs/cli/api` gains `analyzeProjectSync`, and editors get a `dialex.diagnostics` setting for use with the plugin.
 
-- 3de2c53: Add `@dialexjs/config`. It reads `dialex.config.*` (running it only when its syntax tree is not enough) and writes `.dialex/config.json` before every `dialex generate` and `dialex check`. The native `dx` and language server read that file instead of parsing the config themselves, so a config with spreads, imports or computed values no longer hands the whole command to the Node CLI, and there is one reader of the config instead of two.
-
-  The language server resolves the config with the package of its own install and never runs a script it finds inside the workspace. Add `.dialex/` to your `.gitignore`.
-
 ### Patch Changes
 
 - Updated dependencies [4b70e2e]
-- Updated dependencies [3de2c53]
   - dialexjs@0.9.0
-  - @dialexjs/config@0.9.0
 
 ## 0.8.0
 
@@ -42,14 +36,6 @@
 
   Documentation: a page for each new framework in five languages.
 
-- d26dbc9: A native `dx` and a native language server, written in Rust.
-
-  - `dialex generate` and `dialex check` run as a native binary on Linux, macOS and Windows (x64 and arm64), installed as an optional dependency (`@dialexjs/cli-<platform>`). On a project with 1,000 dictionaries they are 25 to 40 times faster, and they write the same files and print the same output, byte for byte. A command that needs your code to run (a config that is not plain data, `translate`, `runtime: true`, lazy loading, `--fix`, `--watch`) or that is not native yet (`init`, `export`, `import`, `lock`, `translate`) is handed to the Node CLI as before. `DIALEX_NATIVE=0` always uses Node; `DIALEX_NATIVE=1` fails instead of falling back.
-  - `dialex-language-server` has a native build with the same diagnostics, hover, go to definition, completion and quick fixes, and about 50 ms to analyze 1,000 dictionaries (2.7 s in Node). It is opt-in for this release: set `DIALEX_NATIVE=1`, or point your editor at the binary. Quick fix edits mean the same as before but are not laid out identically to the Node server's.
-  - The native packages are published as `@dialexjs/cli-linux-x64`, `-linux-arm64`, `-darwin-x64`, `-darwin-arm64`, `-win32-x64` and `-win32-arm64`. Alpine (musl) and other platforms keep using the Node CLI.
-
-  Documentation: a "Native binary" section on the CLI page and a note on the editor page, in five languages.
-
 - 5c72368: Two new framework entry points and CLI support for four more frameworks.
 
   - `dialexjs/svelte`: Svelte 4 and 5 (plain Vite apps, and SvelteKit components). `provideDialex({ ...dialex })` in the root component, then `useDictionary("home")` and `useT("home")` return stores (`$home.title`, `$t("home.cart.items", { count })`). It uses `svelte/store` and Svelte's context, so no runes or compile step are needed.
@@ -66,19 +52,17 @@
 
   - **Every public export has a TSDoc comment**, so editors show what `defineDictionary`, `defineConfig`, the formatters, the adapter options and the framework contexts do on hover. A test fails when a new export has none.
   - **`dialex translate --json` no longer prints the parsed dictionaries.** The `pending` list carried the whole syntax tree of each dictionary; it now has `file`, `locale`, `key`, `source` (and `stale` or `translated` when they apply).
-  - **Docs:** a full API reference (signatures, parameters, return values, failures and examples for every export), plus new pages for how Dialex works, requirements and peer ranges, native binaries and their environment variables, a diagnostics reference with the JSON shape of `check`, troubleshooting, an FAQ, a glossary, and migration guides from i18next, react-intl, next-intl and vue-i18n. The CLI pages now document `--json`, exit codes, `--ai`, and `dialex lock`. A guard checks that the API reference names every export. All pages are available in English, Turkish, Spanish, German and Simplified Chinese.
+  - **Docs:** a full API reference (signatures, parameters, return values, failures and examples for every export), plus new pages for how Dialex works, requirements and peer ranges, a diagnostics reference with the JSON shape of `check`, troubleshooting, an FAQ, a glossary, and migration guides from i18next, react-intl, next-intl and vue-i18n. The CLI pages now document `--json`, exit codes, `--ai`, and `dialex lock`. A guard checks that the API reference names every export. All pages are available in English, Turkish, Spanish, German and Simplified Chinese.
 
 - 71b5b3a: A second round of speed-ups.
 
   - **Plural messages are about 7 times faster.** The results of `Intl.PluralRules.select` and of the `#` number format for counts 0 to 255 are remembered per locale (exactly what Intl returned, so every locale and numbering system stays correct), and messages with two or three parts get unrolled closures. `t()` on a plural: 1.3 M to 9.9 M operations per second; nested select and plural: 1.2 M to 8.5 M; interpolation: 12.2 M to 16.9 M; lookup: 43.5 M to 46.3 M.
   - **Bundle size:** the `t` program is 8,025 B minified (3,029 B gzip), up from 7,227 B (2,739 B). The compiled closures and caches are the price of the speed above; the 10% size target was not met.
-  - **`dx` starts without Node.** With npm or Yarn classic on Linux and macOS, the install step replaces the JavaScript launcher with the native binary (about 25 ms of launcher overhead down to under 1 ms). `--ignore-scripts`, pnpm, Windows and every other case keep the JavaScript launcher.
   - **Language server re-analysis is about 4 times faster.** After one edit in a project of 1,000 dictionaries it takes about 20 ms instead of about 75 ms: unchanged dictionaries and source files are reused, the tree is not walked again for a content edit, and unchanged diagnostics are not sent again.
 
 - Updated dependencies [6aa75d3]
 - Updated dependencies [71b5b3a]
 - Updated dependencies [621a03a]
-- Updated dependencies [d26dbc9]
 - Updated dependencies [f5cc8bd]
 - Updated dependencies [5c72368]
   - dialexjs@0.8.0

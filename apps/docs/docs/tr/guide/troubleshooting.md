@@ -65,19 +65,7 @@ ICU'da `{` ve `}` argümanları açıp kapatır, `'` ise onları tırnak içine 
 
 Dil, mesajınızın vermediği kategorilere ihtiyaç duyar (Rusça `few` ve `many`, Arapça altı kategori ister). `dialex check` `icu-plural-categories` ile uyarır. Seçenekleri ekleyin; `other` yedektir.
 
-## CLI ve yerel ikili dosyalar
-
-### `dx` yavaş ya da yerel ikili dosyanın çalışıp çalışmadığını bilmek istiyorum
-
-`DIALEX_NATIVE=1 dx check` çalıştırın: `native check declined` ile başarısız olursa neden iletidedir. Bkz. [Yerel ikili dosyalar](./native.md).
-
-### `dialex: this command needs the Node CLI (@dialexjs/cli), which was not found`
-
-Yerel ikili dosya, yanında Node CLI olmadan tek başına başlatıldı. `@dialexjs/cli` paketini projeye kurun, `DIALEX_NODE_CLI` değerini onun `dist/index.mjs` dosyasına ayarlayın ya da `DIALEX_NATIVE=0` kullanın.
-
-### Paketi kurmama rağmen `dx` Node'da çalışıyor
-
-Platform paketi kurulmamış (`--no-optional`, desteklenmeyen bir platform ya da Alpine/musl) ya da platform desteklenmiyor. `npm ls @dialexjs/cli-linux-x64` (kendi platformunuzu yazın) orada olup olmadığını gösterir. Sonuç aynıdır, yalnızca daha yavaştır.
+## CLI
 
 ### `dialex check` bir sözlük için hiçbir şey bildirmiyor
 

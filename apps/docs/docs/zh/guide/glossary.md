@@ -22,7 +22,6 @@ Dialex 使用的术语，按字母顺序排列，并附有解释它们的页面�
 | **叶子（Leaf）**             | 词典中不是对象的值：字符串、函数或其他值                                                                                                           |
 | **Locale**                   | 语言标签，如 `en`、`tr` 或 `pt-BR`                                                                                                                 |
 | **锁文件**                   | `dialex.lock.json`：记录每条翻译根据哪段源文本翻译，以便发现之后源文本的变化。参见[保持翻译同步](../cli/translate.md#keeping-translations-in-sync) |
-| **原生二进制**               | `dx` 和语言服务器的 Rust 版本。参见[原生二进制](./native.md)                                                                                       |
 | **一致性（Parity）**         | 词典的每个 locale 都有相同的键（以及相同的 ICU 参数）。由 `dialex check` 检查                                                                      |
 | **持久化（Persist）**        | 把用户选择的 locale 记在 Cookie 或 `localStorage` 中                                                                                               |
 | **复数类别**                 | `zero`、`one`、`two`、`few`、`many`、`other` 之一：一种语言的复数规则所区分的形式（CLDR）                                                          |

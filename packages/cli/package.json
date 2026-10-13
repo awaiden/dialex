@@ -13,13 +13,11 @@
     "url": "git+https://github.com/awaiden/dialex.git"
   },
   "bin": {
-    "dialex": "./bin/launcher.mjs",
-    "dx": "./bin/launcher.mjs"
+    "dialex": "./dist/index.mjs",
+    "dx": "./dist/index.mjs"
   },
   "files": [
-    "bin",
-    "dist",
-    "scripts/install.mjs"
+    "dist"
   ],
   "type": "module",
   "exports": {
@@ -32,7 +30,6 @@
     "access": "public"
   },
   "scripts": {
-    "postinstall": "node scripts/install.mjs",
     "build": "vp pack",
     "dev": "vp pack --watch",
     "test": "vp test",
@@ -40,26 +37,18 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",
-    "@dialexjs/config": "workspace:*",
     "chokidar": "^5.0.0",
     "commander": "^15.0.0",
     "dialexjs": "workspace:*",
     "fast-glob": "^3.3.3",
     "ignore": "^7.0.12",
     "magicast": "^0.5.5",
-    "picocolors": "^1.1.1"
+    "picocolors": "^1.1.1",
+    "unconfig": "^7.5.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
     "typescript": "^7.0.2",
     "vite-plus": "catalog:"
-  },
-  "optionalDependencies": {
-    "@dialexjs/cli-darwin-arm64": "workspace:*",
-    "@dialexjs/cli-darwin-x64": "workspace:*",
-    "@dialexjs/cli-linux-arm64": "workspace:*",
-    "@dialexjs/cli-linux-x64": "workspace:*",
-    "@dialexjs/cli-win32-arm64": "workspace:*",
-    "@dialexjs/cli-win32-x64": "workspace:*"
   }
 }

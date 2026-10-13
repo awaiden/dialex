@@ -37,15 +37,12 @@ The tools look in the project root (the folder you run `dialex` from, or the fol
 
 ## How the tools read it
 
-| Tool                                                        | Reads the config by                                                                 |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`)               |
-| The native `dx`                                             | Reading `.dialex/config.json`, which `@dialexjs/config` writes before every command |
-| The editor extension and language server                    | Reading its syntax tree, and never running it                                       |
+| Tool                                                        | Reads the config by                                                   |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| `dialex generate`, `check`, `export`, `import`, `translate` | Running the file, so values can be computed (`locales: getLocales()`) |
+| The editor extension and language server                    | Reading its syntax tree, and never running it                         |
 
-A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out. See [Native binaries](./native.md).
-
-`.dialex/config.json` is generated, like `dialex.generated.ts`: add `.dialex/` to your `.gitignore`. It is written again before every `dialex generate` and `dialex check`, so it is never out of date. A config made only of literals is read from its syntax tree and is not run. One with spreads, imports or computed values is run by `@dialexjs/config`, which is the only step that needs Node.
+A config made of literals (strings, arrays, booleans) is understood everywhere. A setting that is computed is invisible to the editor, which then uses the default for it and logs a note. If an editor must know `locales`, write them out.
 
 ## Examples
 

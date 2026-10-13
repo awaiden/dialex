@@ -11,7 +11,7 @@ Dialex 对你的环境有哪些要求，以及需要你自己安装什么。
 | 其他运行时 | 运行时核心和 Fetch API 处理器只使用标准 API（`Intl`、`Request`、`Headers`、`Map`），因此只要这些存在就能运行：Bun、Deno、Cloudflare Workers 和浏览器               |
 | TypeScript | 当前的 5.x 或更高版本。类型使用了模板字面量类型和条件类型。仓库使用 TypeScript 7 做类型检查                                                                        |
 | 模块解析   | `compilerOptions.moduleResolution` 必须是 `"bundler"`、`"node16"` 或 `"nodenext"`。子路径导入（`dialexjs/react`）是 `exports` 条目，旧的 `"node"` 设置不会读取它们 |
-| 包管理器   | npm、Yarn、pnpm 和 Bun 都可以。原生 CLI 二进制作为可选依赖安装，所以想用它就不要使用 `--no-optional`（见[原生二进制](./native.md)）                                |
+| 包管理器   | npm、Yarn、pnpm 和 Bun 都可以。                                                                                                                                    |
 
 ## 包
 

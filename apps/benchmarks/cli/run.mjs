@@ -1,7 +1,6 @@
 // Wall-clock time of the Dialex CLI on synthetic projects.
 //
 //   node cli/run.mjs                              the Node CLI (packages/cli/dist)
-//   node cli/run.mjs --bin ./target/release/dx    another binary, same commands
 //   node cli/run.mjs --baseline results/cli-baseline.json
 //   node cli/run.mjs --compare results/cli-baseline.json
 //

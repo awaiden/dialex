@@ -44,10 +44,6 @@ Sent under the `dialex` section (`workspace/configuration`):
 | `autoGenerate` | `true`  | Regenerate `dialex.generated.ts` when a dictionary or config file changes, in projects that already have one |
 | `configPath`   | —       | Config file relative to each project root; empty uses `dialex.config.*`                                      |
 
-## Native server
-
-A Rust build of this server (`dialex-language-server`, the same diagnostics, hover, definition, completion and quick fixes) ships in the `@dialexjs/cli-<platform>` packages. Set `DIALEX_NATIVE=1` in the environment that starts the server and `npx @dialexjs/language-server --stdio` runs it; `DIALEX_LSP_BINARY=/path/to/dialex-language-server` runs a binary you built. It analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s. It does not regenerate generated files of projects that use `lazy` loading. See [Native binaries](https://dialex.awaiden.com/guide/native.html).
-
 ## Library use
 
 The editor-independent building blocks (project model, reference lookup, hover text, completion

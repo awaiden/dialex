@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "@dialexjs/cli": "workspace:*",
-    "@dialexjs/config": "workspace:*",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12"
   },
@@ -53,13 +52,5 @@
     "typescript": "^7.0.2",
     "vite-plus": "catalog:",
     "vscode-jsonrpc": "^8.2.0"
-  },
-  "optionalDependencies": {
-    "@dialexjs/cli-darwin-arm64": "workspace:*",
-    "@dialexjs/cli-darwin-x64": "workspace:*",
-    "@dialexjs/cli-linux-arm64": "workspace:*",
-    "@dialexjs/cli-linux-x64": "workspace:*",
-    "@dialexjs/cli-win32-arm64": "workspace:*",
-    "@dialexjs/cli-win32-x64": "workspace:*"
   }
 }

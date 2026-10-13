@@ -33,19 +33,17 @@ Modern web development demands internationalization that doesn't compromise on r
 - 📝 **ICU Messages**: `{count, plural, one {# item} other {# items}}` strings, formatted by `t()` with CLDR plural rules for every language.
 - 🔑 **Key Paths**: A typed `t("home.nav.about")` alongside `getDictionary`.
 - 🧰 **Developer-First CLI**: [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) scaffolds projects with AST precision (**Magicast**), watches dictionary files with instantaneous codegen, and audits translation parity in CI.
-- 🦀 **Native Speed**: `dialex generate`, `dialex check` and the language server have a Rust implementation with identical output, 20 to 40 times faster on large projects, installed automatically and falling back to Node where it must ([details](https://dialex.awaiden.com/guide/native.html)).
 
 ---
 
 ## 📦 Packages
 
-| Package                                                   | Version                                                                                                                       | Description                                                                                                             |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [`dialexjs`](./packages/core)                             | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)                                   | Core runtime library and framework adapters                                                                             |
-| [`@dialexjs/cli`](./packages/cli)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)                         | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks                                          |
-| [`@dialexjs/mcp`](./packages/mcp)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp)                         | Model Context Protocol (MCP) server for AI assistants and agent skills                                                  |
-| [`@dialexjs/language-server`](./packages/language-server) | [![npm](https://img.shields.io/npm/v/@dialexjs/language-server.svg)](https://www.npmjs.com/package/@dialexjs/language-server) | LSP server: diagnostics, hover, go to definition, completion and quick fixes                                            |
-| [`@dialexjs/cli-<platform>`](./packages/cli-linux-x64)    | [![npm](https://img.shields.io/npm/v/@dialexjs/cli-linux-x64.svg)](https://www.npmjs.com/package/@dialexjs/cli-linux-x64)     | The native `dx` and language server binaries (Linux, macOS, Windows; x64 and arm64), installed as optional dependencies |
+| Package                                                   | Version                                                                                                                       | Description                                                                    |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [`dialexjs`](./packages/core)                             | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)                                   | Core runtime library and framework adapters                                    |
+| [`@dialexjs/cli`](./packages/cli)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)                         | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks |
+| [`@dialexjs/mcp`](./packages/mcp)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp)                         | Model Context Protocol (MCP) server for AI assistants and agent skills         |
+| [`@dialexjs/language-server`](./packages/language-server) | [![npm](https://img.shields.io/npm/v/@dialexjs/language-server.svg)](https://www.npmjs.com/package/@dialexjs/language-server) | LSP server: diagnostics, hover, go to definition, completion and quick fixes   |
 
 ---
 

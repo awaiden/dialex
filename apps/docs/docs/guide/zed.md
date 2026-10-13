@@ -104,4 +104,3 @@ The server reads these from the `dialex` section of the editor's configuration:
 - Dictionaries and configs are read from the syntax tree, so the server never runs your project's code. Dictionaries built with spreads or computed keys cannot be analyzed and show an informational note; run `dialex check` for those.
 - Generated files are only updated in projects that already have one. Run `dialex generate` once to create it.
 - There are no editor commands: regeneration is automatic.
-- The native language server (`dialex-language-server`, built from Rust) analyzes 1,000 dictionaries in about 50 ms instead of about 2.7 s. It is opt-in for now: set `DIALEX_NATIVE=1` in the environment that starts the server, or point `lsp.dialex.binary.path` at the binary. It does not regenerate `dialex.generated.ts` for projects that use lazy loading; run `dialex generate` for those.

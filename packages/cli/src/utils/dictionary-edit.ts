@@ -1,12 +1,13 @@
 import fs from "node:fs";
 
+import { loadFile, writeFile, generateCode, parseExpression, parseModule } from "magicast";
+
 import {
   findProperty as findProp,
   isObjectNode as isObject,
   propertyKeyName as keyName,
   unwrapNode as unwrap,
-} from "@dialexjs/config";
-import { loadFile, writeFile, generateCode, parseExpression, parseModule } from "magicast";
+} from "./ast.js";
 
 /**
  * AST-level helpers for reading and editing `.content.ts` dictionary files.
