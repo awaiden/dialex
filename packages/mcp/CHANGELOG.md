@@ -1,5 +1,11 @@
 # @dialexjs/mcp
 
+## 0.9.2
+
+### Patch Changes
+
+- @dialexjs/cli@0.9.2
+
 ## 0.9.1
 
 ### Patch Changes

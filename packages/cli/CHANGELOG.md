@@ -1,5 +1,12 @@
 # @dialexjs/cli
 
+## 0.9.2
+
+### Patch Changes
+
+- Updated dependencies [a9cbdbe]
+  - dialexjs@0.9.2
+
 ## 0.9.1
 
 ### Patch Changes
