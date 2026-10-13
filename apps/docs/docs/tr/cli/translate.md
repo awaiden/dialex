@@ -10,13 +10,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| Seçenek                     | Açıklama                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------ |
-| `-l, --locale <locales...>` | Hedef yerel ayarlar (varsayılan: kaynak dışındaki tüm yapılandırılmış yerel ayarlar) |
-| `-s, --source <locale>`     | Kaynak yerel ayar (varsayılan: `translate.sourceLocale`, sonra `defaultLocale`)      |
-| `--dry-run`                 | Nelerin çevrileceğini listeler. Sağlayıcıyı çağırmaz ve dosya yazmaz                 |
-| `--stale`                   | Kaynak metni değişen metinleri yeniden çevirir (aşağıya bakın)                       |
-| `-c, --config <path>`       | Özel yapılandırma yolu                                                               |
+| Seçenek                     | Açıklama                                                                                        |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| `-l, --locale <locales...>` | Hedef yerel ayarlar (varsayılan: kaynak dışındaki tüm yapılandırılmış yerel ayarlar)            |
+| `-s, --source <locale>`     | Kaynak yerel ayar (varsayılan: `translate.sourceLocale`, sonra `defaultLocale`)                 |
+| `--dry-run`                 | Nelerin çevrileceğini listeler. Sağlayıcıyı çağırmaz ve dosya yazmaz                            |
+| `--stale`                   | Kaynak metni değişen metinleri yeniden çevirir (aşağıya bakın)                                  |
+| `-c, --config <path>`       | Özel yapılandırma yolu                                                                          |
+| `--json`                    | Sonucu (`success`, `dryRun`, `pending`, `translated`, `rejected`) yalnızca JSON olarak yazdırır |
 
 ## Sağlayıcı yapılandırma
 

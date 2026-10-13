@@ -95,6 +95,7 @@ El servidor los lee de la sección `dialex` de la configuración del editor:
 | Ajuste         | Por defecto | Descripción                                                                               |
 | -------------- | ----------- | ----------------------------------------------------------------------------------------- |
 | `enable`       | `true`      | Desactivar todas las funciones                                                            |
+| `diagnostics`  | `true`      | Informa de problemas; desactívalo si un plugin de ESLint u oxlint los informa             |
 | `unusedKeys`   | `false`     | Atenuar claves y diccionarios que ningún archivo fuente parece usar                       |
 | `autoGenerate` | `true`      | Regenerar `dialex.generated.ts` cuando cambian los diccionarios o la configuración        |
 | `configPath`   | —           | Archivo de configuración relativo a la raíz de cada proyecto; vacío usa `dialex.config.*` |

@@ -30,12 +30,13 @@ The extension reads your config and dictionaries from the syntax tree. It **neve
 
 ## Settings
 
-| Setting               | Default | Description                                                                                                                                     |
-| --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dialex.enable`       | `true`  | Turn the extension's features on or off                                                                                                         |
-| `dialex.unusedKeys`   | `false` | Fade out keys and dictionaries that no source file seems to use (a word-match heuristic)                                                        |
-| `dialex.autoGenerate` | `true`  | Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file changes, in projects that already have a generated file |
-| `dialex.configPath`   | `""`    | Config file path, relative to each project root                                                                                                 |
+| Setting               | Default | Description                                                                                                                                              |
+| --------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialex.enable`       | `true`  | Turn the extension's features on or off                                                                                                                  |
+| `dialex.diagnostics`  | `true`  | Show Dialex problems. Turn off when the ESLint or oxlint plugin (`@dialexjs/eslint-plugin`) reports them; hover, completion and quick fixes keep working |
+| `dialex.unusedKeys`   | `false` | Fade out keys and dictionaries that no source file seems to use (a word-match heuristic)                                                                 |
+| `dialex.autoGenerate` | `true`  | Regenerate `dialex.generated.ts` and `dialex-env.d.ts` when a dictionary or config file changes, in projects that already have a generated file          |
+| `dialex.configPath`   | `""`    | Config file path, relative to each project root                                                                                                          |
 
 ## Projects
 

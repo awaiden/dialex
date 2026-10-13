@@ -10,13 +10,14 @@ dialex translate -s en
 dialex translate --stale
 ```
 
-| 选项                        | 说明                                                                |
-| --------------------------- | ------------------------------------------------------------------- |
-| `-l, --locale <locales...>` | 目标 locale（默认：除源 locale 之外所有已配置的 locale）            |
-| `-s, --source <locale>`     | 源 locale（默认：`translate.sourceLocale`，然后是 `defaultLocale`） |
-| `--dry-run`                 | 列出将要翻译的内容。不会调用提供者，也不会写入文件                  |
-| `--stale`                   | 重新翻译源文本已变化的字符串（见下文）                              |
-| `-c, --config <path>`       | 自定义配置路径                                                      |
+| 选项                        | 说明                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `-l, --locale <locales...>` | 目标 locale（默认：除源 locale 之外所有已配置的 locale）                       |
+| `-s, --source <locale>`     | 源 locale（默认：`translate.sourceLocale`，然后是 `defaultLocale`）            |
+| `--dry-run`                 | 列出将要翻译的内容。不会调用提供者，也不会写入文件                             |
+| `--stale`                   | 重新翻译源文本已变化的字符串（见下文）                                         |
+| `-c, --config <path>`       | 自定义配置路径                                                                 |
+| `--json`                    | 仅以 JSON 打印结果（`success`、`dryRun`、`pending`、`translated`、`rejected`） |
 
 ## 配置提供者
 

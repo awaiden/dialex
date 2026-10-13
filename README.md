@@ -33,17 +33,19 @@ Modern web development demands internationalization that doesn't compromise on r
 - 📝 **ICU Messages**: `{count, plural, one {# item} other {# items}}` strings, formatted by `t()` with CLDR plural rules for every language.
 - 🔑 **Key Paths**: A typed `t("home.nav.about")` alongside `getDictionary`.
 - 🧰 **Developer-First CLI**: [`@dialexjs/cli`](https://www.npmjs.com/package/@dialexjs/cli) scaffolds projects with AST precision (**Magicast**), watches dictionary files with instantaneous codegen, and audits translation parity in CI.
+- 🔍 **Lint Rules**: [`@dialexjs/eslint-plugin`](https://dialex.awaiden.com/guide/linting.html) reports unknown dictionaries and keys, dynamic keys and hard-coded text in ESLint and oxlint, configured once under `lint.rules` in `dialex.config.ts`.
 
 ---
 
 ## 📦 Packages
 
-| Package                                                   | Version                                                                                                                       | Description                                                                    |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [`dialexjs`](./packages/core)                             | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)                                   | Core runtime library and framework adapters                                    |
-| [`@dialexjs/cli`](./packages/cli)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)                         | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks |
-| [`@dialexjs/mcp`](./packages/mcp)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp)                         | Model Context Protocol (MCP) server for AI assistants and agent skills         |
-| [`@dialexjs/language-server`](./packages/language-server) | [![npm](https://img.shields.io/npm/v/@dialexjs/language-server.svg)](https://www.npmjs.com/package/@dialexjs/language-server) | LSP server: diagnostics, hover, go to definition, completion and quick fixes   |
+| Package                                                   | Version                                                                                                                       | Description                                                                           |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [`dialexjs`](./packages/core)                             | [![npm](https://img.shields.io/npm/v/dialexjs.svg)](https://www.npmjs.com/package/dialexjs)                                   | Core runtime library and framework adapters                                           |
+| [`@dialexjs/cli`](./packages/cli)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/cli.svg)](https://www.npmjs.com/package/@dialexjs/cli)                         | Standalone CLI (`dialex`, `dx`) for scaffolding, codegen, and CI parity checks        |
+| [`@dialexjs/mcp`](./packages/mcp)                         | [![npm](https://img.shields.io/npm/v/@dialexjs/mcp.svg)](https://www.npmjs.com/package/@dialexjs/mcp)                         | Model Context Protocol (MCP) server for AI assistants and agent skills                |
+| [`@dialexjs/eslint-plugin`](./packages/eslint-plugin)     | [![npm](https://img.shields.io/npm/v/@dialexjs/eslint-plugin.svg)](https://www.npmjs.com/package/@dialexjs/eslint-plugin)     | ESLint and oxlint rules: unknown dictionaries and keys, dynamic keys, hard-coded text |
+| [`@dialexjs/language-server`](./packages/language-server) | [![npm](https://img.shields.io/npm/v/@dialexjs/language-server.svg)](https://www.npmjs.com/package/@dialexjs/language-server) | LSP server: diagnostics, hover, go to definition, completion and quick fixes          |
 
 ---
 
@@ -421,6 +423,7 @@ Check out runnable projects in [`examples/`](./examples):
 - [`examples/hapi`](./examples/hapi): Hapi server with `dialexjs/hapi`
 - [`examples/adonis`](./examples/adonis): AdonisJS 6 app with `dialexjs/adonis`
 - [`examples/trpc`](./examples/trpc): tRPC server with `dialexjs/trpc`
+- [`examples/tanstack`](./examples/tanstack): TanStack Start (SSR) with locale detection in a server function through `dialexjs/web`
 
 ---
 
