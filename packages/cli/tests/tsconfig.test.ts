@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { renderGenerated } from "../src/commands/generate.js";
+import { renderGenerated } from "../src/commands/generate/index.js";
 import { parseJsonc, relativeImportExtension } from "../src/utils/tsconfig.js";
 
 const dirs: string[] = [];

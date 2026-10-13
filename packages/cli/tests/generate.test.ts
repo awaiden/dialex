@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { describe, expect, it, afterEach } from "vite-plus/test";
 
-import { generateDictionaries } from "../src/commands/generate.js";
+import { generateDictionaries } from "../src/commands/generate/index.js";
 
 describe("CLI generate command", () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-gen-test-"));
@@ -100,7 +100,7 @@ export default defineDictionary({
     const origLog = console.log;
     console.log = (...args: unknown[]) => void lines.push(args.join(" "));
     try {
-      const { runGenerate } = await import("../src/commands/generate.js");
+      const { runGenerate } = await import("../src/commands/generate/index.js");
       await runGenerate({ cwd: tempDir, json: true });
       const json = JSON.parse(lines.join("\n"));
       expect(json.success).toBe(true);

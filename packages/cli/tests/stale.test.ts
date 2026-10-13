@@ -5,8 +5,8 @@ import path from "node:path";
 import type { TranslateProvider } from "dialexjs";
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { runCheck } from "../src/commands/check.js";
-import { runImport } from "../src/commands/import.js";
+import { runCheck } from "../src/commands/check/index.js";
+import { runImport } from "../src/commands/import/index.js";
 import { runLock } from "../src/commands/lock.js";
 import { runTranslate } from "../src/commands/translate.js";
 import { getString, loadDictionaryFile } from "../src/utils/dictionary/index.js";

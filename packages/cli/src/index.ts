@@ -3,11 +3,11 @@
 import { Command } from "commander";
 
 import pkg from "../package.json" with { type: "json" };
-import { runCheck } from "./commands/check.js";
+import { runCheck } from "./commands/check/index.js";
 import { runExport } from "./commands/export.js";
-import { runGenerate } from "./commands/generate.js";
-import { runImport } from "./commands/import.js";
-import { runInit } from "./commands/init.js";
+import { runGenerate } from "./commands/generate/index.js";
+import { runImport } from "./commands/import/index.js";
+import { runInit } from "./commands/init/index.js";
 import { runLock } from "./commands/lock.js";
 import { runTranslate } from "./commands/translate.js";
 import { logger } from "./utils/logger.js";

@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { describe, expect, it, afterEach } from "vite-plus/test";
 
-import { runCheck } from "../src/commands/check.js";
+import { runCheck } from "../src/commands/check/index.js";
 
 describe("CLI check command", () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-check-test-"));

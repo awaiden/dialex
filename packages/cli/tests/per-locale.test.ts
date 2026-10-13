@@ -4,8 +4,8 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { runCheck } from "../src/commands/check.js";
-import { generateDictionaries, renderGenerated } from "../src/commands/generate.js";
+import { runCheck } from "../src/commands/check/index.js";
+import { generateDictionaries, renderGenerated } from "../src/commands/generate/index.js";
 import { parseStaticConfig } from "../src/utils/static-config.js";
 
 const dirs: string[] = [];

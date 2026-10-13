@@ -85,4 +85,4 @@ export {
   startGenerateWatcher,
   type GenerateOptions,
   type RenderedGenerate,
-} from "./commands/generate.js";
+} from "./commands/generate/index.js";

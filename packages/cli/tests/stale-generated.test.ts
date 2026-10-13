@@ -4,8 +4,8 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { normalizeGenerated, runCheck } from "../src/commands/check.js";
-import { generateDictionaries, renderGenerated } from "../src/commands/generate.js";
+import { normalizeGenerated, runCheck } from "../src/commands/check/index.js";
+import { generateDictionaries, renderGenerated } from "../src/commands/generate/index.js";
 
 const dirs: string[] = [];
 afterEach(() => {
@@ -153,7 +153,7 @@ describe("dx generate --watch", () => {
     const generated = path.join(dir, "src/dialex.generated.ts");
     const read = () => fs.readFileSync(generated, "utf-8");
 
-    const { startGenerateWatcher } = await import("../src/commands/generate.js");
+    const { startGenerateWatcher } = await import("../src/commands/generate/index.js");
     const watcher = startGenerateWatcher(dir, {}, () => void generateDictionaries(dir), 20);
     try {
       await new Promise<void>((resolve) => watcher.on("ready", () => resolve()));
@@ -179,7 +179,7 @@ describe("dx generate --watch", () => {
     generateDictionaries(dir);
     let runs = 0;
 
-    const { startGenerateWatcher } = await import("../src/commands/generate.js");
+    const { startGenerateWatcher } = await import("../src/commands/generate/index.js");
     const watcher = startGenerateWatcher(dir, {}, () => void runs++, 20);
     try {
       await new Promise<void>((resolve) => watcher.on("ready", () => resolve()));

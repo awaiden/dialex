@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { describe, expect, it, afterEach } from "vite-plus/test";
 
-import { runInit } from "../src/commands/init.js";
+import { runInit } from "../src/commands/init/index.js";
 
 describe("CLI init command", () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-init-test-"));

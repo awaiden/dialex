@@ -5,8 +5,8 @@ import path from "node:path";
 import type { TranslateProvider } from "dialexjs";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 
-import { runCheck } from "../src/commands/check.js";
-import { runImport } from "../src/commands/import.js";
+import { runCheck } from "../src/commands/check/index.js";
+import { runImport } from "../src/commands/import/index.js";
 import { runTranslate } from "../src/commands/translate.js";
 import { claudeProvider } from "../src/translate/claude.js";
 import { deeplProvider } from "../src/translate/deepl.js";
