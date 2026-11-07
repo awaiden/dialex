@@ -36,9 +36,9 @@
   "devDependencies": {
     "@dialexjs/cli": "workspace:*",
     "@dialexjs/language-server": "workspace:*",
-    "@types/node": "^26.1.1",
-    "@types/vscode": "~1.90.0",
-    "@vscode/vsce": "^4.0.0",
+    "@types/node": "^26.6.6",
+    "@types/vscode": "~1.145.0",
+    "@vscode/vsce": "^4.1.0",
     "fast-glob": "^3.3.3",
     "typescript": "^7.0.2",
     "vite-plus": "catalog:"
@@ -92,7 +92,7 @@
   ],
   "icon": "icon.png",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.145.2"
   },
   "capabilities": {
     "untrustedWorkspaces": {
