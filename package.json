@@ -33,12 +33,12 @@
   "devEngines": {
     "packageManager": {
       "name": "bun",
-      "version": "1.4.2",
+      "version": "1.4.4",
       "onFail": "download"
     }
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.23.5"
   },
   "catalog": {
     "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",

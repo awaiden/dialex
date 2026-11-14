@@ -36,18 +36,18 @@
     "check": "vp check"
   },
   "dependencies": {
-    "@clack/prompts": "^1.8.1",
+    "@clack/prompts": "^1.9.0",
     "chokidar": "^5.0.0",
-    "commander": "^15.0.0",
+    "commander": "^15.1.0",
     "dialexjs": "workspace:*",
     "fast-glob": "^3.3.3",
-    "ignore": "^7.0.12",
+    "ignore": "^7.0.14",
     "magicast": "^0.5.5",
     "picocolors": "^1.1.1",
     "unconfig": "^7.5.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.6.6",
     "typescript": "^7.0.2",
     "vite-plus": "catalog:"
   }
