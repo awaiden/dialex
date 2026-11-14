@@ -226,6 +226,14 @@ describe("hover, definition, completion", () => {
     expect(names.map((i) => i.label)).toEqual(["home"]);
     expect(names[0].command).toBeUndefined();
 
+    const leafSource = `const x = t("home.nav.`;
+    const leaves = state.completion!.provider.provideCompletionItems(
+      fake.createDocument(path.join(dir, "src/app.ts"), leafSource),
+      new fake.Position(0, leafSource.length),
+    ) as fake.CompletionItem[];
+    const contact = leaves.find((i) => i.label === "contact")!;
+    expect(contact.detail).toBe("Contact");
+
     expect(
       state.completion!.provider.provideCompletionItems(
         fake.createDocument(path.join(dir, "src/app.ts"), `const x = 1`),

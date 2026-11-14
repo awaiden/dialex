@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 
 import { TODO_PREFIX, dictionaryLocation, locationOf } from "../utils/dictionary/index.js";
 import { createGitignoreFilter, scanFiles } from "../utils/files.js";
@@ -295,8 +296,11 @@ export function* analysisSteps(
 
   if (cache) {
     const live = new Set([...files, ...sourceFiles]);
+    const prefix = root.endsWith(path.sep) ? root : root + path.sep;
     for (const map of [cache.dictionaries, cache.sources] as Map<string, unknown>[]) {
-      for (const key of map.keys()) if (key.startsWith(root) && !live.has(key)) map.delete(key);
+      for (const key of map.keys()) {
+        if ((key === root || key.startsWith(prefix)) && !live.has(key)) map.delete(key);
+      }
     }
   }
 

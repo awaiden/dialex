@@ -1,6 +1,7 @@
 import { readStaticConfig } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const dialexConfig: McpTool = {
@@ -20,7 +21,8 @@ export const dialexConfig: McpTool = {
   async handler(root, args) {
     const schema = z.object({ config: z.string().optional() });
     const parsed = schema.parse(args);
-    const staticConf = readStaticConfig(root, parsed.config);
+    const config = parsed.config !== undefined ? resolveInRoot(root, parsed.config) : undefined;
+    const staticConf = readStaticConfig(root, config);
     return {
       content: [
         {

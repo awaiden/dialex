@@ -1,6 +1,5 @@
-import type { DictionaryRegistry } from "../client/react.js";
 import { type DialexSource } from "../core/config.js";
-import { type Locales } from "../core/registry.js";
+import { type DictionaryRegistry, type Locales } from "../core/registry.js";
 import { lookupLocale } from "../core/resolver.js";
 import { createDictionaryStore } from "../core/store.js";
 import { createT, type Translate } from "../core/translate.js";
@@ -75,4 +74,4 @@ export function createDialexServer(source: DialexSource): DialexServer {
 /**
  * Re-exported so `dialexjs/server` users can see the registry that `dialex generate` augments.
  */
-export type { DictionaryRegistry } from "../client/react.js";
+export type { DictionaryRegistry } from "../core/registry.js";

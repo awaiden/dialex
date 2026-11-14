@@ -31,8 +31,10 @@ export interface ExportResult {
 export const escapeXml = (value: string) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export const csvCell = (value: string) =>
-  /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+export const csvCell = (value: string) => {
+  const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+  return /[",\r\n]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
+};
 
 export async function runExport(options: ExportOptions = {}): Promise<ExportResult> {
   const root = options.cwd || process.cwd();

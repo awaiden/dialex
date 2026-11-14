@@ -63,6 +63,15 @@ declare global {
 /** Placeholder to put in `src/app.html` (e.g. `<html lang="%dialex.lang%">`). */
 export const LANG_PLACEHOLDER = "%dialex.lang%";
 
+function escapeHtmlAttr(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
 /**
  * SvelteKit `handle` hook for i18n detection and dictionary resolution.
  * Adds `locale` and `getDictionary(name)` to `event.locals` and replaces
@@ -93,8 +102,9 @@ export function dialexHandle(rawOptions: SvelteKitDialexOptions = {}): Handle {
     }) as App.Locals["getDictionary"];
     event.locals.t = createT(event.locals.getDictionary, locale);
 
+    const escapedLocale = escapeHtmlAttr(locale as string);
     const response = await resolve(event, {
-      transformPageChunk: ({ html }) => html.replaceAll(LANG_PLACEHOLDER, locale as string),
+      transformPageChunk: ({ html }) => html.replaceAll(LANG_PLACEHOLDER, escapedLocale),
     });
 
     if (setHeader) {

@@ -2,9 +2,10 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { describe, expect, it, afterEach } from "vite-plus/test";
+import { describe, expect, it, afterEach, vi } from "vite-plus/test";
 
 import { runCheck } from "../src/commands/check/index.js";
+import { logger } from "../src/utils/logger.js";
 
 describe("CLI check command", () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-cli-check-test-"));
@@ -195,5 +196,24 @@ const e = t("other.lib.key");
     expect(lines).toContain(
       '::error file=src/app.ts,line=1,title=dialex::Unknown dictionary "nope"',
     );
+  });
+
+  it("pluralizes 'file' using the number of files with errors, not total reported files", async () => {
+    const dir = project({
+      "dialex.config.ts": config,
+      "src/home.content.ts": home,
+      "src/app.ts": `const a = getDictionary("home"); console.log(a.title, a.greeting);\n`,
+      "src/bad.ts": `const b = getDictionary("nope");\n`,
+    });
+    const errorSpy = vi.spyOn(logger, "error").mockImplementation(() => {});
+    const logSpy = vi.spyOn(logger, "log").mockImplementation(() => {});
+    try {
+      const result = await runCheck({ cwd: dir, exitOnError: false });
+      expect(result.diagnostics.length).toBe(2);
+      expect(errorSpy).toHaveBeenCalledWith("Found 1 issue across 1 file:");
+    } finally {
+      errorSpy.mockRestore();
+      logSpy.mockRestore();
+    }
   });
 });

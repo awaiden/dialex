@@ -72,4 +72,39 @@ describe("Vue integration", () => {
     dialex.setLocale("en");
     expect(await renderToString(createSSRApp(Comp).use(dialex))).toBe("<p>Welcome</p>");
   });
+
+  it("avoids unhandled rejections on client lazy load failure while preserving SSR visibility", async () => {
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => unhandled.push(reason);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    process.on("unhandledRejection", onUnhandled);
+    try {
+      const loaders = {
+        home: {
+          en: () => Promise.resolve({ default: { title: "Welcome" } }),
+          tr: () => Promise.reject(new Error("chunk failed")),
+        },
+      };
+      const dialex = create({ config: { defaultLocale: "en", locales: ["en", "tr"] }, loaders });
+      expect(await render(dialex)).toBe("<p>en:Welcome</p>");
+
+      // Client-side locale switch triggers ensureLoaded without onServerPrefetch running
+      dialex.setLocale("tr");
+      await new Promise((r) => setTimeout(r, 10));
+      expect(unhandled).toEqual([]);
+
+      // SSR render still sees the rejection via onServerPrefetch
+      const ssrDialex = create({
+        config: { defaultLocale: "en" },
+        loaders: { home: () => Promise.reject(new Error("chunk failed")) },
+      });
+      await render(ssrDialex);
+      await new Promise((r) => setTimeout(r, 0));
+      expect(warn).toHaveBeenCalled();
+      expect(warn.mock.calls[0]?.[0]).toContain("serverPrefetch");
+    } finally {
+      process.off("unhandledRejection", onUnhandled);
+      warn.mockRestore();
+    }
+  });
 });

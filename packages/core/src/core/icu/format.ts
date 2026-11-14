@@ -39,12 +39,17 @@ const PERCENT: Intl.NumberFormatOptions = Object.freeze({ style: "percent" });
 /** The value of an argument; a missing one is an error. */
 function valueOf(values: IcuValues, name: string): NonNullable<IcuValue> {
   const value = values[name];
-  if (value === undefined) throw new IcuFormatError(`Missing value for "${name}"`);
+  if (value === undefined || value === null)
+    throw new IcuFormatError(`Missing value for "${name}"`);
   return value as NonNullable<IcuValue>;
 }
 
 function numberOf(values: IcuValues, name: string): number {
-  const value = Number(valueOf(values, name));
+  const raw = valueOf(values, name);
+  if (typeof raw === "string" && raw.trim() === "") {
+    throw new IcuFormatError(`"${name}" must be a number`);
+  }
+  const value = Number(raw);
   if (!Number.isFinite(value)) throw new IcuFormatError(`"${name}" must be a number`);
   return value;
 }
@@ -54,7 +59,8 @@ function numberOptions(style: string | undefined): Intl.NumberFormatOptions | un
   if (style === "integer") return INTEGER;
   if (style === "percent" || style === "::percent") return PERCENT;
   if (style?.startsWith("::currency/")) {
-    return Object.freeze({ style: "currency", currency: style.slice(11).toUpperCase() });
+    const currency = style.slice(11).toUpperCase();
+    if (currency.length > 0) return Object.freeze({ style: "currency", currency });
   }
   return undefined;
 }
@@ -92,7 +98,11 @@ function compileNode(node: IcuNode): Run {
         node.type === "date" ? { dateStyle: chosen } : { timeStyle: chosen },
       );
       return (locale, values) => {
-        const date = new Date(valueOf(values, node.name) as string | number | Date);
+        const raw = valueOf(values, node.name);
+        if (typeof raw === "string" && raw.trim() === "") {
+          throw new IcuFormatError(`"${node.name}" must be a date`);
+        }
+        const date = new Date(raw as string | number | Date);
         if (Number.isNaN(date.getTime())) {
           throw new IcuFormatError(`"${node.name}" must be a date`);
         }

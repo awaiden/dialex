@@ -69,6 +69,6 @@ describe.skipIf(!oxlint || !fs.existsSync(built))("oxlint", () => {
     expect(output).toContain('Unknown dictionary "nope"');
     expect(output).toContain('Unknown translation path "home.nav.missing"');
     expect(output).toContain('Locale "tr" is missing key "nav.about"');
-    expect(output).not.toContain("commented");
+    expect(output).not.toContain('Unknown dictionary "commented"');
   });
 });

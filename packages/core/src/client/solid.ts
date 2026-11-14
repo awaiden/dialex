@@ -128,7 +128,10 @@ export function DialexProvider(props: DialexProviderProps): JSX.Element {
     },
     ensureLoaded(name, forLocale) {
       if (!store.lazy || store.isLoaded(name, forLocale)) return;
-      void store.load(name, forLocale).then(() => setLoaded((n) => n + 1));
+      void store
+        .load(name, forLocale)
+        .then(() => setLoaded((n) => n + 1))
+        .catch(() => {});
     },
   };
 

@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
-import { runExport } from "../src/commands/export.js";
+import { csvCell, runExport } from "../src/commands/export.js";
 import { parseCsv, parseEntries, runImport } from "../src/commands/import/index.js";
 import { getString, hasPath, loadDictionaryFile } from "../src/utils/dictionary/index.js";
 
@@ -92,6 +92,17 @@ describe("export", () => {
       /Unsupported format/,
     );
   });
+
+  it("neutralizes leading formula characters in csvCell before quoting", () => {
+    expect(csvCell("=SUM(A1)")).toBe("'=SUM(A1)");
+    expect(csvCell("+1+1")).toBe("'+1+1");
+    expect(csvCell("-1,2")).toBe('"\'-1,2"');
+    expect(csvCell("@cmd")).toBe("'@cmd");
+    expect(csvCell("\tfoo")).toBe("'\tfoo");
+    expect(csvCell("\rbar")).toBe('"\'\rbar"');
+    expect(csvCell('Say "hi"')).toBe('"Say ""hi"""');
+    expect(csvCell("plain")).toBe("plain");
+  });
 });
 
 describe("import", () => {
@@ -152,6 +163,11 @@ describe("import", () => {
 
     await runImport({ cwd: dir, file: "out/translations.csv" });
     expect(getString(await load(dir), "tr", ["quote"])).toBe('Selam, "dost"');
+  });
+
+  it("treats mid-cell quotes in parseCsv as literal characters rather than opening a quoted field", () => {
+    expect(parseCsv('a"b,c\n')).toEqual([['a"b', "c"]]);
+    expect(parseCsv('a,"b""c",d\n')).toEqual([["a", 'b"c', "d"]]);
   });
 
   it("round-trips XLIFF including entities", async () => {

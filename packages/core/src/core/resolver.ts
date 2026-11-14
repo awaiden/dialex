@@ -97,11 +97,11 @@ export function lookupLocale<T = any>(
   options: { fallbacks?: Record<string, string[]>; defaultLocale?: string } = {},
 ): { content: T; locale: string } | undefined {
   // The chain starts with `locale` itself, so the common case needs no chain at all.
-  if (locale && dictionary[locale] !== undefined) {
+  if (locale && Object.hasOwn(dictionary, locale) && dictionary[locale] !== undefined) {
     return { content: dictionary[locale], locale };
   }
   for (const candidate of resolveFallbackChain(locale, options)) {
-    if (dictionary[candidate] !== undefined) {
+    if (Object.hasOwn(dictionary, candidate) && dictionary[candidate] !== undefined) {
       return { content: dictionary[candidate], locale: candidate };
     }
   }
@@ -164,6 +164,8 @@ export function matchLocale(
   return undefined;
 }
 
+const BCP47_LOCALE_RE = /^[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*$/;
+
 /**
  * Resolves a final locale given an ordered list of candidate strings and configuration.
  */
@@ -177,7 +179,8 @@ export function resolveLocaleFromCandidates(
   );
 
   if (!supportedLocales || supportedLocales.length === 0) {
-    return validCandidates[0] || defaultLocale;
+    const candidate = validCandidates[0];
+    return candidate && BCP47_LOCALE_RE.test(candidate) ? candidate : defaultLocale;
   }
 
   for (const candidate of validCandidates) {

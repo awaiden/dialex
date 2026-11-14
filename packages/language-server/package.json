@@ -1,6 +1,6 @@
 {
   "name": "@dialexjs/language-server",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Language server (LSP) for Dialex translations: diagnostics, hover, go to definition, completion and quick fixes",
   "keywords": [
     "dialex",

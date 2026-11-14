@@ -90,7 +90,10 @@ export function createSvelteDialex(
 
   function ensureLoaded(name: string, forLocale: string): void {
     if (!store.lazy || store.isLoaded(name, forLocale)) return;
-    void store.load(name, forLocale).then(() => loadedVersion.update((n) => n + 1));
+    void store
+      .load(name, forLocale)
+      .then(() => loadedVersion.update((n) => n + 1))
+      .catch(() => {});
   }
 
   return {

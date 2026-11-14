@@ -101,6 +101,8 @@ function ensureLoaded(store: DictionaryStore, name: string, locale: string): voi
   const pending = store.load(name, locale).then(() => {
     loadedVersion.value++;
   });
+  // Prevent unhandledRejection on the client while keeping `pending` rejected for onServerPrefetch.
+  pending.catch(() => {});
   if (getCurrentInstance()) onServerPrefetch(() => pending);
 }
 

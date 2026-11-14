@@ -83,4 +83,22 @@ describe("createSvelteDialex", () => {
     await vi.waitFor(() => expect(titles.at(-1)).toBe("Welcome"));
     stop();
   });
+
+  it("does not emit unhandledRejection when a lazy dictionary fails to load", async () => {
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => unhandled.push(reason);
+    process.on("unhandledRejection", onUnhandled);
+    try {
+      const loaders = {
+        home: () => Promise.reject(new Error("chunk failed")),
+      };
+      const dialex = createSvelteDialex({ config, loaders }, { persist: false });
+      const stop = dialex.dictionary("home").subscribe(() => {});
+      await new Promise((r) => setTimeout(r, 10));
+      expect(unhandled).toEqual([]);
+      stop();
+    } finally {
+      process.off("unhandledRejection", onUnhandled);
+    }
+  });
 });

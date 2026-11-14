@@ -119,8 +119,9 @@ export async function runCheck(options: CheckOptions = {}): Promise<CheckResult>
   } else if (reported.length > 0) {
     logger.log("");
     if (totalIssues > 0) {
+      const errorFiles = reported.filter((d) => d.errors.length > 0).length;
       logger.error(
-        `Found ${totalIssues} issue${totalIssues === 1 ? "" : "s"} across ${reported.filter((d) => d.errors.length > 0).length} file${reported.length === 1 ? "" : "s"}:`,
+        `Found ${totalIssues} issue${totalIssues === 1 ? "" : "s"} across ${errorFiles} file${errorFiles === 1 ? "" : "s"}:`,
       );
     }
     logger.log("");

@@ -1,5 +1,7 @@
 import { loadConfigSync } from "unconfig";
 
+import { CONFIG_EXTENSIONS, CONFIG_NAMES } from "./static-config.js";
+
 /** What running a config file produced. */
 export interface LoadedConfig {
   /** The exported config object, exactly as the file built it (functions and all). */
@@ -16,8 +18,8 @@ export interface LoadedConfig {
 export function loadConfigObject(root: string, configFile?: string): LoadedConfig | undefined {
   const sources: any[] = [];
   if (configFile) sources.push({ files: configFile });
-  for (const name of ["dialex.config", "i18n.config"]) {
-    sources.push({ files: name, extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""] });
+  for (const name of CONFIG_NAMES) {
+    sources.push({ files: name, extensions: [...CONFIG_EXTENSIONS, ""] });
   }
 
   const result = loadConfigSync<Record<string, unknown>>({

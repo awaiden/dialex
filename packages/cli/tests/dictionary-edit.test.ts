@@ -114,6 +114,18 @@ export default defineDictionary("home", {
     expect(hasPath(reloaded, "en", ["greeting"])).toBe(true);
   });
 
+  it("skips empty path in setString without mutating the AST", async () => {
+    const file = write(sample);
+    const df = (await loadDictionaryFile(file))!;
+
+    expect(setString(df, "tr", [], "nope")).toBe("skipped");
+    expect(setString(df, "de", [], "nope")).toBe("skipped");
+    await saveDictionaryFile(df);
+
+    const out = fs.readFileSync(file, "utf-8");
+    expect(out).toBe(sample);
+  });
+
   it("supports the object forms of dictionary files", async () => {
     const a = (await loadDictionaryFile(
       write(`export default defineDictionary({ name: "a", dictionary: { en: { x: "1" } } });`),

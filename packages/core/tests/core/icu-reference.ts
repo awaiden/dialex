@@ -58,7 +58,7 @@ function formatDateTime(
 }
 
 function requireValue(values: IcuValues, name: string): IcuValue {
-  if (!(name in values) || values[name] === undefined) {
+  if (!(name in values) || values[name] === undefined || values[name] === null) {
     throw new ReferenceFormatError(`Missing value for "${name}"`);
   }
   return values[name];

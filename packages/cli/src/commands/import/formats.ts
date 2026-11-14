@@ -28,7 +28,7 @@ export function parseCsv(text: string): string[][] {
       } else {
         cell += ch;
       }
-    } else if (ch === '"') {
+    } else if (ch === '"' && cell === "") {
       quoted = true;
     } else if (ch === ",") {
       row.push(cell);

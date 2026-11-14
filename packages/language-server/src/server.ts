@@ -63,7 +63,7 @@ export interface DialexServer {
 export function createServer(connection: Connection): DialexServer {
   const documents = new TextDocuments(TextDocument);
   const cache = createAnalysisCache();
-  const states = new Map<string, ProjectState>();
+  let states = new Map<string, ProjectState>();
   const projectCache = new Map<string, ProjectRoot[]>();
   const publish = createPublisher(connection);
 
@@ -72,6 +72,7 @@ export function createServer(connection: Connection): DialexServer {
   let settings: Settings = { ...DEFAULT_SETTINGS };
   let timer: ReturnType<typeof setTimeout> | undefined;
   let generateTimer: ReturnType<typeof setTimeout> | undefined;
+  let refreshGeneration = 0;
   /** True when the client sends file events itself; otherwise the server watches the disk. */
   let clientWatches = false;
 
@@ -98,23 +99,28 @@ export function createServer(connection: Connection): DialexServer {
     afterWatchRegenerate: () => schedule(),
   });
 
-  async function loadSettings(): Promise<void> {
-    settings = { ...DEFAULT_SETTINGS };
-    if (!canConfigure) return;
+  async function loadSettings(): Promise<Settings> {
+    const nextSettings: Settings = { ...DEFAULT_SETTINGS };
+    if (!canConfigure) return nextSettings;
     try {
-      applyClientSettings(settings, await connection.workspace.getConfiguration("dialex"));
+      applyClientSettings(nextSettings, await connection.workspace.getConfiguration("dialex"));
     } catch {
       // the client does not answer configuration requests; keep the defaults
     }
+    return nextSettings;
   }
 
   async function refresh(): Promise<void> {
-    await loadSettings();
-    states.clear();
+    const token = ++refreshGeneration;
+    const nextSettings = await loadSettings();
+    if (token !== refreshGeneration) return;
+    settings = nextSettings;
 
+    const nextStates = new Map<string, ProjectState>();
     if (settings.enable) {
       for (const folder of folders) {
         for (const { root, ignore } of projectsIn(folder)) {
+          if (token !== refreshGeneration) return;
           try {
             const { config, notes } = readStaticConfig(root, settings.configPath);
             for (const note of notes) connection.console.info(`[${root}] ${note}`);
@@ -127,16 +133,20 @@ export function createServer(connection: Connection): DialexServer {
               unused: settings.unusedKeys,
               cache,
             });
-            states.set(root, {
+            if (token !== refreshGeneration) return;
+            nextStates.set(root, {
               model: buildModel(root, config.defaultLocale, result),
               issues: result.issues,
             });
           } catch (error) {
+            if (token !== refreshGeneration) return;
             connection.console.error(`[${root}] analysis failed: ${(error as Error).message}`);
           }
         }
       }
     }
+    if (token !== refreshGeneration) return;
+    states = nextStates;
     publish(settings.diagnostics ? allIssues() : []);
     await generation.syncWatchers();
   }

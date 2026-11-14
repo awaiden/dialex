@@ -3,6 +3,7 @@ import path from "node:path";
 import { scanReferences } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const findUsages: McpTool = {
@@ -23,7 +24,7 @@ export const findUsages: McpTool = {
   async handler(root, args) {
     const schema = z.object({ file: z.string() });
     const parsed = schema.parse(args);
-    const filePath = path.isAbsolute(parsed.file) ? parsed.file : path.resolve(root, parsed.file);
+    const filePath = resolveInRoot(root, parsed.file);
     const fs = await import("node:fs");
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${parsed.file}`);

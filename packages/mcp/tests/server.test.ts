@@ -266,4 +266,103 @@ describe("Dialex MCP Server", () => {
     expect(fs.existsSync(path.join(root, "src/dialex.generated.ts"))).toBe(true);
     expect(fs.existsSync(path.join(root, "src/dialex-env.d.ts"))).toBe(true);
   });
+
+  it("tool: dialex_generate reads config statically without executing dialex.config.ts", async () => {
+    const root = createTestProject();
+    const sentinel = path.join(root, "executed-sentinel.txt");
+    fs.writeFileSync(
+      path.join(root, "dialex.config.ts"),
+      `import fs from "node:fs";
+fs.writeFileSync(${JSON.stringify(sentinel)}, "executed");
+export default {
+  defaultLocale: "en",
+  locales: ["en", "tr"],
+};
+`,
+      "utf-8",
+    );
+
+    const { client } = await setupClientAndServer(root);
+    const genRes = await client.callTool({ name: "dialex_generate", arguments: {} });
+    expect(genRes.isError).toBeFalsy();
+    expect(fs.existsSync(sentinel)).toBe(false);
+    expect(fs.existsSync(path.join(root, "src/dialex.generated.ts"))).toBe(true);
+  });
+
+  it("tool: dialex_set_key rejects empty path array", async () => {
+    const root = createTestProject();
+    const { client } = await setupClientAndServer(root);
+    const before = fs.readFileSync(path.join(root, "src/home.content.ts"), "utf-8");
+
+    const res = await client.callTool({
+      name: "dialex_set_key",
+      arguments: {
+        file: "src/home.content.ts",
+        locale: "tr",
+        path: [],
+        value: "nope",
+      },
+    });
+    expect(res.isError).toBe(true);
+    expect(fs.readFileSync(path.join(root, "src/home.content.ts"), "utf-8")).toBe(before);
+  });
+
+  it("rejects path traversal and symlink escapes across MCP tools", async () => {
+    const root = createTestProject();
+    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "dialex-mcp-outside-"));
+    dirs.push(outsideDir);
+    const outsideFile = path.join(outsideDir, "secret.ts");
+    fs.writeFileSync(outsideFile, `export default { defaultLocale: "en", locales: ["en"] };\n`);
+
+    const symlinkPath = path.join(root, "src/escape-link");
+    fs.symlinkSync(outsideDir, symlinkPath, "dir");
+
+    const { client } = await setupClientAndServer(root);
+
+    const traversalCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [
+      { name: "dialex_find_usages", arguments: { file: "../outside/secret.ts" } },
+      { name: "dialex_find_usages", arguments: { file: outsideFile } },
+      { name: "dialex_find_usages", arguments: { file: "src/escape-link/secret.ts" } },
+      {
+        name: "dialex_set_key",
+        arguments: { file: "../outside/secret.ts", locale: "tr", path: ["a"], value: "b" },
+      },
+      {
+        name: "dialex_set_key",
+        arguments: { file: outsideFile, locale: "tr", path: ["a"], value: "b" },
+      },
+      {
+        name: "dialex_set_key",
+        arguments: {
+          file: "src/escape-link/secret.ts",
+          locale: "tr",
+          path: ["a"],
+          value: "b",
+        },
+      },
+      { name: "dialex_generate", arguments: { output: "../outside-gen.ts" } },
+      {
+        name: "dialex_generate",
+        arguments: { output: path.join(outsideDir, "dialex.generated.ts") },
+      },
+      { name: "dialex_generate", arguments: { output: "src/escape-link/dialex.generated.ts" } },
+      { name: "dialex_generate", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_config", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_config", arguments: { config: outsideFile } },
+      { name: "dialex_config", arguments: { config: "src/escape-link/secret.ts" } },
+      { name: "dialex_list_dictionaries", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_get_dictionary", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_check", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_missing", arguments: { config: "../outside/secret.ts" } },
+      { name: "dialex_add_missing", arguments: { config: "../outside/secret.ts" } },
+    ];
+
+    for (const call of traversalCalls) {
+      const res = await client.callTool(call);
+      expect(
+        res.isError,
+        `Expected ${call.name} with ${JSON.stringify(call.arguments)} to fail`,
+      ).toBe(true);
+    }
+  });
 });

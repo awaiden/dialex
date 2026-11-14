@@ -1,16 +1,13 @@
 import type { Middleware, ParameterizedContext } from "koa";
 
-import type { DictionaryDefinition } from "../core/dictionary.js";
 import type { Locales } from "../core/registry.js";
+import { withConfig } from "../core/resolver.js";
 import {
-  parseAcceptLanguage,
-  resolveLocaleFromCandidates,
-  extractCookieLocale,
-  extractPathLocale,
-  type LocaleResolverOptions,
-  withConfig,
-} from "../core/resolver.js";
-import { createGetDictionary, normalizeDictionaries } from "../core/shared.js";
+  createGetDictionary,
+  normalizeDictionaries,
+  resolveRequestLocale,
+  type BaseAdapterOptions,
+} from "../core/shared.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in
@@ -27,21 +24,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 /**
  * Options of the Koa middleware: the shared locale detection options, the dictionaries to read and whether to send `Content-Language`.
  */
-export interface KoaDialexOptions extends LocaleResolverOptions {
-  /**
-   * The dictionaries to read. `{ ...dialex }` from the generated file sets this, so pass your own
-   * map or array of `defineDictionary` definitions only when you do not use that file.
-   * If neither is given, only dictionaries already registered through `defineDictionary` are found.
-   */
-  dictionaries?:
-    | Record<string, Record<string, any>>
-    | (DictionaryDefinition<any, any> | Record<string, any>)[];
-  /**
-   * Whether to set the `Content-Language` header on the response.
-   * @default true
-   */
-  setHeader?: boolean;
-}
+export type KoaDialexOptions = BaseAdapterOptions;
 
 declare module "koa" {
   interface BaseContext {
@@ -57,70 +40,44 @@ export function dialex(rawOptions: KoaDialexOptions = {}): Middleware {
   const options = withConfig(rawOptions);
   const {
     defaultLocale = "en",
-    locales,
-    queryKeys = ["locale", "lang"],
     cookieKeys = ["locale", "lang"],
     headerKey = "accept-language",
     custom,
     setHeader = true,
-    usePath = true,
   } = options;
 
-  const queryKeyList = Array.isArray(queryKeys) ? queryKeys : [queryKeys];
   const cookieKeyList = Array.isArray(cookieKeys) ? cookieKeys : [cookieKeys];
   const customDictMap = normalizeDictionaries(options.dictionaries);
 
   return async (ctx: ParameterizedContext, next) => {
-    const candidates: (string | null | undefined)[] = [];
-
-    // 1. Custom extractor
-    if (typeof custom === "function") {
-      candidates.push(custom(ctx));
-    }
-
-    // 2. URL Path locale (e.g. /tr/api)
-    if (usePath && ctx.path) {
-      const pVal = extractPathLocale(ctx.path, locales);
-      if (pVal) candidates.push(pVal);
-    }
-
-    // 3. Query parameters
-    if (ctx.query && typeof ctx.query === "object") {
-      for (const qk of queryKeyList) {
-        const val = ctx.query[qk];
-        if (typeof val === "string") candidates.push(val);
-      }
-    }
-
-    // 4. Cookie (via Koa cookies API or raw header)
-    try {
-      if (ctx.cookies) {
-        for (const ck of cookieKeyList) {
+    let cookieHeader = typeof ctx.headers?.cookie === "string" ? ctx.headers.cookie : undefined;
+    if (!cookieHeader && ctx.cookies) {
+      const pairs: string[] = [];
+      for (const ck of cookieKeyList) {
+        try {
           const val = ctx.cookies.get(ck);
-          if (typeof val === "string") candidates.push(val);
+          if (typeof val === "string") pairs.push(`${ck}=${val}`);
+        } catch {
+          // Ignore if ctx.cookies accessor fails in non-standard request contexts
         }
       }
-    } catch {
-      // Ignore if ctx.cookies accessor fails in non-standard request contexts
-    }
-    if (ctx.headers && typeof ctx.headers.cookie === "string") {
-      const cVal = extractCookieLocale(ctx.headers.cookie, cookieKeyList);
-      if (cVal) candidates.push(cVal);
+      if (pairs.length > 0) cookieHeader = pairs.join("; ");
     }
 
-    // 5. Accept-Language header
-    const rawHeader = ctx.headers ? ctx.headers[headerKey.toLowerCase()] : undefined;
-    const headerStr = Array.isArray(rawHeader) ? rawHeader.join(",") : rawHeader;
-    if (headerStr) {
-      candidates.push(...parseAcceptLanguage(headerStr));
-    }
+    const rawHeader = ctx.headers?.[headerKey.toLowerCase()];
+    const acceptLanguage = Array.isArray(rawHeader) ? rawHeader.join(",") : rawHeader;
 
-    // Resolve final locale
-    const resolvedLocale = resolveLocaleFromCandidates(
-      candidates,
-      locales,
-      defaultLocale,
-    ) as Locales;
+    const resolvedLocale = resolveRequestLocale(options, {
+      custom: typeof custom === "function" ? custom(ctx) : undefined,
+      pathname: ctx.path,
+      query: (key) => {
+        if (!ctx.query || typeof ctx.query !== "object") return undefined;
+        const val = ctx.query[key];
+        return typeof val === "string" ? val : undefined;
+      },
+      cookieHeader,
+      acceptLanguage,
+    });
 
     // Attach to context
     ctx.locale = resolvedLocale;

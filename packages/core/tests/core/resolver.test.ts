@@ -98,6 +98,40 @@ describe("resolver utilities", () => {
       const resolved = resolveLocaleFromCandidates(candidates, ["en", "tr"], "en");
       expect(resolved).toBe("en");
     });
+
+    it("accepts valid BCP-47 locales when supportedLocales is omitted", () => {
+      expect(resolveLocaleFromCandidates(["en"], undefined, "fr")).toBe("en");
+      expect(resolveLocaleFromCandidates(["en-US"], undefined, "fr")).toBe("en-US");
+      expect(resolveLocaleFromCandidates(["zh-Hans-CN"], [], "en")).toBe("zh-Hans-CN");
+      expect(resolveLocaleFromCandidates(["pt-BR"], undefined, "en")).toBe("pt-BR");
+    });
+
+    it("falls back to defaultLocale for XSS, CRLF, or non-BCP-47 candidates when supportedLocales is omitted", () => {
+      expect(resolveLocaleFromCandidates(['en"><script>alert(1)</script>'], undefined, "en")).toBe(
+        "en",
+      );
+      expect(resolveLocaleFromCandidates(["en\r\nX-Injected: 1"], undefined, "en")).toBe("en");
+      expect(resolveLocaleFromCandidates(["en\nSet-Cookie: a=b"], [], "en")).toBe("en");
+      expect(resolveLocaleFromCandidates(["not a locale!"], undefined, "en")).toBe("en");
+      expect(resolveLocaleFromCandidates(["../etc/passwd"], undefined, "en")).toBe("en");
+      expect(resolveLocaleFromCandidates(["constructor"], undefined, "en")).toBe("en");
+    });
+  });
+});
+
+describe("lookupLocale prototype safety", () => {
+  it("does not match prototype keys like constructor or toString", () => {
+    const dictionary = { en: "Hello" };
+    expect(lookupLocale(dictionary, "constructor", { defaultLocale: "en" })).toEqual({
+      content: "Hello",
+      locale: "en",
+    });
+    expect(lookupLocale(dictionary, "toString", { defaultLocale: "en" })).toEqual({
+      content: "Hello",
+      locale: "en",
+    });
+    expect(lookupLocale({}, "constructor")).toBeUndefined();
+    expect(lookupLocale({}, "toString")).toBeUndefined();
   });
 });
 

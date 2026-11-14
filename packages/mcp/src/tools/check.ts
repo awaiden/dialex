@@ -3,6 +3,7 @@ import path from "node:path";
 import { analyzeProject, readStaticConfig } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const check: McpTool = {
@@ -30,7 +31,8 @@ export const check: McpTool = {
       config: z.string().optional(),
     });
     const parsed = schema.parse(args);
-    const staticConf = readStaticConfig(root, parsed.config);
+    const config = parsed.config !== undefined ? resolveInRoot(root, parsed.config) : undefined;
+    const staticConf = readStaticConfig(root, config);
     const analysis = await analyzeProject({
       root,
       config: staticConf.config,

@@ -6,6 +6,22 @@ All notable changes to Dialex are listed here. `dialexjs`, `@dialexjs/cli`, `@di
 
 Releases after 0.4.0 are listed first and come from each release's changesets. The older ones below follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project uses [Semantic Versioning](https://semver.org/).
 
+## 0.9.3
+
+### Patch Changes
+
+- Security, correctness, and stability fixes:
+
+  - Validate fallback locale candidates as BCP-47 in `dialexjs`, guard `lookupLocale` with `Object.hasOwn`, HTML-escape SvelteKit `LANG_PLACEHOLDER`, prevent unhandled rejections on failed lazy dictionary loads in Vue/Svelte/Solid, harden ICU `null`/empty-string/currency handling, and migrate Express/Fastify/Hono/Koa/NestJS adapters to shared request locale resolution.
+  - Run `dialex_generate` in static mode, confine MCP file/config/output paths to the workspace root, and reject empty key paths in `setString()` / `dialex_set_key`.
+  - Fix async `refresh()` / `syncWatchers()` race conditions in `@dialexjs/language-server` (and the VS Code extension), CSV formula escaping / mid-cell quote parsing / check pluralization / cache pruning in `@dialexjs/cli`, and the `oxlint` diagnostic snippet test in `@dialexjs/eslint-plugin`.
+
+## 0.9.2
+
+### Patch Changes
+
+- a9cbdbe: `t()` keeps the compiled message with its path, so a repeated call with values skips the lookup by message text. Plural and select messages are about 10% faster in a single-locale app (measured old against new in one process); a server that renders several locales in turn is unchanged.
+
 ## 0.9.1
 
 No changes in this release.

@@ -95,4 +95,21 @@ describe("dialexjs/solid", () => {
   it("throws a helpful error outside a provider", () => {
     expect(() => createRoot(() => useDialex())).toThrow("DialexProvider");
   });
+
+  it("does not emit unhandledRejection when a lazy dictionary fails to load", async () => {
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => unhandled.push(reason);
+    process.on("unhandledRejection", onUnhandled);
+    try {
+      const loaders = { home: () => Promise.reject(new Error("chunk failed")) };
+      const { dispose } = withProvider({ dictionaries: undefined, loaders }, () =>
+        useDictionary("home"),
+      );
+      await new Promise((r) => setTimeout(r, 10));
+      expect(unhandled).toEqual([]);
+      dispose();
+    } finally {
+      process.off("unhandledRejection", onUnhandled);
+    }
+  });
 });

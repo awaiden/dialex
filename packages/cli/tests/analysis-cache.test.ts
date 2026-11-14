@@ -84,4 +84,29 @@ describe("analyzeProject with a cache", () => {
     const plain = await analyzeProject({ root, config });
     expect(cached.issues).toEqual(plain.issues);
   });
+
+  it("does not prune cached entries from a sibling directory sharing a path prefix", async () => {
+    const base = fs.mkdtempSync(path.join(os.tmpdir(), "dialex-cache-prefix-"));
+    const rootA = path.join(base, "app");
+    const rootB = path.join(base, "app-2");
+    dirs.push(base);
+
+    for (const [dir, file, content] of [
+      [rootA, "src/home.content.ts", HOME],
+      [rootA, "src/app.ts", `t("home.title");\n`],
+      [rootB, "src/home.content.ts", HOME],
+      [rootB, "src/other.ts", `t("home.title");\n`],
+    ] as const) {
+      const full = path.join(dir, file);
+      fs.mkdirSync(path.dirname(full), { recursive: true });
+      fs.writeFileSync(full, content);
+    }
+
+    const cache = createAnalysisCache();
+    await analyzeProject({ root: rootB, config, cache, unused: false });
+    await analyzeProject({ root: rootA, config, cache, unused: false });
+
+    expect(cache.sources.has(path.join(rootB, "src/other.ts"))).toBe(true);
+    expect(cache.dictionaries.has(path.join(rootB, "src/home.content.ts"))).toBe(true);
+  });
 });

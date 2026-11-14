@@ -117,6 +117,16 @@ describe("formatMessage", () => {
     expect(() => formatMessage("en", "{d, date}", { d: "not a date" })).toThrow(
       '"d" must be a date',
     );
+    expect(() => formatMessage("en", "Hi {name}", { name: null })).toThrow(
+      'Missing value for "name"',
+    );
+    expect(() => formatMessage("en", "{n, number}", { n: null })).toThrow('Missing value for "n"');
+    expect(() => formatMessage("en", "{n, number}", { n: "" })).toThrow('"n" must be a number');
+    expect(() => formatMessage("en", "{n, number}", { n: "   " })).toThrow('"n" must be a number');
+    expect(() => formatMessage("en", "{d, date}", { d: null })).toThrow('Missing value for "d"');
+    expect(() => formatMessage("en", "{d, date}", { d: "" })).toThrow('"d" must be a date');
+    expect(() => formatMessage("en", "{d, time}", { d: "   " })).toThrow('"d" must be a date');
+    expect(formatMessage("en", "{n, number, ::currency/}", { n: 42 })).toBe("42");
     expect(() => formatMessage("en", "Hi {name", {})).toThrow(IcuSyntaxError);
   });
 

@@ -62,4 +62,28 @@ describe("SvelteKit integration", () => {
     const { response } = await run("http://localhost/", {}, { setHeader: false });
     expect(response.headers.get("content-language")).toBeNull();
   });
+
+  it("falls back to defaultLocale for XSS/CRLF query candidates when locales is unset", async () => {
+    const { event, response, html } = await run(
+      'http://localhost/?locale=en"><script>alert(1)</script>',
+      {},
+      { locales: undefined },
+    );
+    expect(event.locals.locale).toBe("en");
+    expect(html).toBe('<html lang="en">');
+    expect(response.headers.get("content-language")).toBe("en");
+  });
+
+  it("HTML-attribute-escapes locale in transformPageChunk as defense-in-depth", async () => {
+    const { html } = await run(
+      "http://localhost/",
+      {},
+      {
+        locales: undefined,
+        defaultLocale: 'en"><script>alert(1)</script>',
+        setHeader: false,
+      },
+    );
+    expect(html).toBe('<html lang="en&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;">');
+  });
 });

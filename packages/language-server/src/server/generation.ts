@@ -21,6 +21,7 @@ export interface GenerationContext {
 export function createGeneration(context: GenerationContext) {
   const { connection } = context;
   const watchers = new Map<string, { close(): Promise<void> }>();
+  let syncGeneration = 0;
 
   /** The projects whose generated file exists; the others do not use one. */
   function generatedProjects(): { root: string; options: { config?: string; static: true } }[] {
@@ -65,6 +66,7 @@ export function createGeneration(context: GenerationContext) {
 
   /** Without client file events, watch each project that has a generated file ourselves. */
   async function syncWatchers(): Promise<void> {
+    const token = ++syncGeneration;
     const wanted = new Map<string, { config?: string; static: true }>();
     const settings = context.settings();
     if (!context.clientWatches() && settings.autoGenerate && settings.enable) {
@@ -75,9 +77,13 @@ export function createGeneration(context: GenerationContext) {
       if (!wanted.has(root)) {
         watchers.delete(root);
         await watcher.close();
+        if (token !== syncGeneration) return;
       }
     }
+    if (token !== syncGeneration) return;
+
     for (const [root, options] of wanted) {
+      if (token !== syncGeneration) return;
       if (watchers.has(root)) continue;
       try {
         watchers.set(
@@ -99,6 +105,7 @@ export function createGeneration(context: GenerationContext) {
   }
 
   async function dispose(): Promise<void> {
+    syncGeneration++;
     await Promise.all([...watchers.values()].map((watcher) => watcher.close()));
     watchers.clear();
   }

@@ -68,6 +68,7 @@ export class Location {
 
 export class CompletionItem {
   detail?: string;
+  documentation?: string;
   insertText?: string;
   range?: Range;
   command?: { command: string; title: string };

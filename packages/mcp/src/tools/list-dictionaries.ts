@@ -1,6 +1,7 @@
 import { listLocales, loadStaticProject } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const listDictionaries: McpTool = {
@@ -19,7 +20,8 @@ export const listDictionaries: McpTool = {
   async handler(root, args) {
     const schema = z.object({ config: z.string().optional() });
     const parsed = schema.parse(args);
-    const project = await loadStaticProject(root, parsed.config);
+    const config = parsed.config !== undefined ? resolveInRoot(root, parsed.config) : undefined;
+    const project = await loadStaticProject(root, config);
     const dicts = project.dictionaries.map((d) => ({
       name: d.name,
       file: d.rel,

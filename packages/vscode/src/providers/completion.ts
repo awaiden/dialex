@@ -18,6 +18,7 @@ export const completionProvider = (services: Services): vscode.CompletionItemPro
     return completionEntries(model, completion).map((entry) => {
       const item = new vscode.CompletionItem(entry.label, COMPLETION_KINDS[entry.kind]);
       item.detail = entry.detail;
+      if (entry.documentation) item.documentation = entry.documentation;
       item.insertText = entry.insertText;
       item.range = new vscode.Range(
         position.line,

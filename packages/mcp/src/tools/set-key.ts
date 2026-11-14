@@ -9,6 +9,7 @@ import {
 } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const setKey: McpTool = {
@@ -29,6 +30,7 @@ export const setKey: McpTool = {
       path: {
         type: "array",
         items: { type: "string" },
+        minItems: 1,
         description: "Key path segments (e.g. ['nav', 'about'] or ['title']).",
       },
       value: {
@@ -48,12 +50,12 @@ export const setKey: McpTool = {
     const schema = z.object({
       file: z.string(),
       locale: z.string(),
-      path: z.array(z.string()),
+      path: z.array(z.string()).min(1),
       value: z.string(),
       overwrite: z.boolean().optional(),
     });
     const parsed = schema.parse(args);
-    const filePath = path.isAbsolute(parsed.file) ? parsed.file : path.resolve(root, parsed.file);
+    const filePath = resolveInRoot(root, parsed.file);
 
     const df = await loadDictionaryFile(filePath);
     if (!df) {

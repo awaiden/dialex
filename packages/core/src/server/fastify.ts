@@ -1,16 +1,14 @@
 import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from "fastify";
+import fp from "fastify-plugin";
 
-import type { DictionaryDefinition } from "../core/dictionary.js";
 import type { Locales } from "../core/registry.js";
+import { withConfig } from "../core/resolver.js";
 import {
-  parseAcceptLanguage,
-  resolveLocaleFromCandidates,
-  extractCookieLocale,
-  extractPathLocale,
-  type LocaleResolverOptions,
-  withConfig,
-} from "../core/resolver.js";
-import { createGetDictionary, normalizeDictionaries } from "../core/shared.js";
+  createGetDictionary,
+  normalizeDictionaries,
+  resolveRequestLocale,
+  type BaseAdapterOptions,
+} from "../core/shared.js";
 
 /**
  * Maps dictionary names to their content types. `dialex generate` augments it in
@@ -27,21 +25,7 @@ type ResolveDictionaryType<K> = K extends keyof DictionaryRegistry ? DictionaryR
 /**
  * Options of the Fastify plugin: the shared locale detection options, the dictionaries to read and whether to send `Content-Language`.
  */
-export interface FastifyDialexOptions extends LocaleResolverOptions {
-  /**
-   * The dictionaries to read. `{ ...dialex }` from the generated file sets this, so pass your own
-   * map or array of `defineDictionary` definitions only when you do not use that file.
-   * If neither is given, only dictionaries already registered through `defineDictionary` are found.
-   */
-  dictionaries?:
-    | Record<string, Record<string, any>>
-    | (DictionaryDefinition<any, any> | Record<string, any>)[];
-  /**
-   * Whether to set the `Content-Language` header on the response.
-   * @default true
-   */
-  setHeader?: boolean;
-}
+export type FastifyDialexOptions = BaseAdapterOptions;
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -50,27 +34,14 @@ declare module "fastify" {
   }
 }
 
-import fp from "fastify-plugin";
-
 /**
  * Fastify plugin for i18n detection and dictionary resolution.
  */
 const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify, rawOptions) => {
   const options = withConfig(rawOptions ?? {});
-  const {
-    defaultLocale = "en",
-    locales,
-    queryKeys = ["locale", "lang"],
-    cookieKeys = ["locale", "lang"],
-    headerKey = "accept-language",
-    custom,
-    setHeader = true,
-    usePath = true,
-  } = options || {};
+  const { defaultLocale = "en", headerKey = "accept-language", custom, setHeader = true } = options;
 
-  const queryKeyList = Array.isArray(queryKeys) ? queryKeys : [queryKeys];
-  const cookieKeyList = Array.isArray(cookieKeys) ? cookieKeys : [cookieKeys];
-  const customDictMap = normalizeDictionaries(options?.dictionaries);
+  const customDictMap = normalizeDictionaries(options.dictionaries);
 
   // Decorate FastifyRequest prototype for TypeScript and Fastify internals
   if (!fastify.hasRequestDecorator("locale")) {
@@ -81,53 +52,29 @@ const dialexPluginFn: FastifyPluginAsync<FastifyDialexOptions> = async (fastify,
   }
 
   fastify.addHook("onRequest", async (req: FastifyRequest, reply: FastifyReply) => {
-    const candidates: (string | null | undefined)[] = [];
-
-    // 1. Custom extractor
-    if (typeof custom === "function") {
-      candidates.push(custom(req));
-    }
-
-    // 2. URL Path locale (e.g. /tr/api)
-    if (usePath && req.url) {
-      const pVal = extractPathLocale(req.url, locales);
-      if (pVal) candidates.push(pVal);
-    }
-
-    // 3. Query parameters
-    if (req.query && typeof req.query === "object") {
-      for (const qk of queryKeyList) {
-        const val = (req.query as Record<string, any>)[qk];
-        if (typeof val === "string") candidates.push(val);
-      }
-    }
-
-    // 4. Cookie (from req.cookies object if @fastify/cookie is used, or from headers.cookie)
     const reqCookies = (req as any).cookies;
-    if (reqCookies && typeof reqCookies === "object") {
-      for (const ck of cookieKeyList) {
-        if (typeof reqCookies[ck] === "string") {
-          candidates.push(reqCookies[ck]);
-        }
-      }
-    } else if (req.headers && typeof req.headers.cookie === "string") {
-      const cVal = extractCookieLocale(req.headers.cookie, cookieKeyList);
-      if (cVal) candidates.push(cVal);
-    }
+    const cookieHeader =
+      reqCookies && typeof reqCookies === "object"
+        ? Object.entries(reqCookies)
+            .filter((entry): entry is [string, string] => typeof entry[1] === "string")
+            .map(([k, v]) => `${k}=${v}`)
+            .join("; ")
+        : req.headers?.cookie;
 
-    // 5. Accept-Language header
-    const rawHeader = req.headers ? req.headers[headerKey.toLowerCase()] : undefined;
-    const headerStr = Array.isArray(rawHeader) ? rawHeader.join(",") : rawHeader;
-    if (headerStr) {
-      candidates.push(...parseAcceptLanguage(headerStr));
-    }
+    const rawHeader = req.headers?.[headerKey.toLowerCase()];
+    const acceptLanguage = Array.isArray(rawHeader) ? rawHeader.join(",") : rawHeader;
 
-    // Resolve final locale
-    const resolvedLocale = resolveLocaleFromCandidates(
-      candidates,
-      locales,
-      defaultLocale,
-    ) as Locales;
+    const resolvedLocale = resolveRequestLocale(options, {
+      custom: typeof custom === "function" ? custom(req) : undefined,
+      pathname: req.url,
+      query: (key) => {
+        if (!req.query || typeof req.query !== "object") return undefined;
+        const val = (req.query as Record<string, any>)[key];
+        return typeof val === "string" ? val : undefined;
+      },
+      cookieHeader,
+      acceptLanguage,
+    });
 
     // Attach to Request
     req.locale = resolvedLocale;

@@ -3,6 +3,7 @@ import path from "node:path";
 import { generateDictionaries } from "@dialexjs/cli/api";
 import { z } from "zod";
 
+import { resolveInRoot } from "./path.js";
 import type { McpTool } from "./types.js";
 
 export const generate: McpTool = {
@@ -29,7 +30,9 @@ export const generate: McpTool = {
       config: z.string().optional(),
     });
     const parsed = schema.parse(args);
-    const res = generateDictionaries(root, { output: parsed.output, config: parsed.config });
+    const output = parsed.output !== undefined ? resolveInRoot(root, parsed.output) : undefined;
+    const config = parsed.config !== undefined ? resolveInRoot(root, parsed.config) : undefined;
+    const res = generateDictionaries(root, { output, config, static: true });
     return {
       content: [
         {

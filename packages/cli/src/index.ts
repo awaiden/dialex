@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import fs from "node:fs";
+import { pathToFileURL } from "node:url";
+
 import { Command } from "commander";
 
 import pkg from "../package.json" with { type: "json" };
@@ -12,121 +15,144 @@ import { runLock } from "./commands/lock.js";
 import { runTranslate } from "./commands/translate.js";
 import { logger } from "./utils/logger.js";
 
-const program = new Command();
+export function createProgram(): Command {
+  const program = new Command();
 
-program
-  .name("dialex")
-  .description("Dialex CLI - High-performance, type-safe internationalization compiler and tooling")
-  .version(pkg.version);
+  program
+    .name("dialex")
+    .description(
+      "Dialex CLI - High-performance, type-safe internationalization compiler and tooling",
+    )
+    .version(pkg.version);
 
-program
-  .command("generate")
-  .alias("gen")
-  .description("Generate standalone dictionary bundle and TypeScript declarations")
-  .option("-w, --watch", "Watch dictionary files for changes")
-  .option("-o, --output <path>", "Custom output file path for generated dictionaries")
-  .option("-c, --config <path>", "Custom config path")
-  .option("--json", "Print machine-readable JSON")
-  .action(async (opts) => {
-    await runGenerate(opts);
-  });
+  program
+    .command("generate")
+    .alias("gen")
+    .description("Generate standalone dictionary bundle and TypeScript declarations")
+    .option("-w, --watch", "Watch dictionary files for changes")
+    .option("-o, --output <path>", "Custom output file path for generated dictionaries")
+    .option("-c, --config <path>", "Custom config path")
+    .option("--json", "Print machine-readable JSON")
+    .action(async (opts) => {
+      await runGenerate(opts);
+    });
 
-program
-  .command("init")
-  .description("Initialize Dialex in the current project")
-  .option(
-    "-f, --framework <framework>",
-    "Target framework (hono, express, fastify, koa, nestjs, elysia, sveltekit, astro, vue, nuxt, next, react, react-router, svelte, solid, preact, qwik, lit, react-native, hapi, adonis, trpc)",
-  )
-  .option("-d, --default-locale <locale>", "Default locale (e.g. en)")
-  .option("-l, --locales <locales>", "Comma-separated supported locales (e.g. en,tr)")
-  .option("-y, --yes", "Skip prompts and use defaults")
-  .option("--ai", "Configure AI agent support (.agents/skills, .mcp.json, AGENTS.md)")
-  .option("--no-ai", "Skip AI agent configuration")
-  .action(async (opts) => {
-    await runInit(opts);
-  });
+  program
+    .command("init")
+    .description("Initialize Dialex in the current project")
+    .option(
+      "-f, --framework <framework>",
+      "Target framework (hono, express, fastify, koa, nestjs, elysia, sveltekit, astro, vue, nuxt, next, react, react-router, svelte, solid, preact, qwik, lit, react-native, hapi, adonis, trpc)",
+    )
+    .option("-d, --default-locale <locale>", "Default locale (e.g. en)")
+    .option("-l, --locales <locales>", "Comma-separated supported locales (e.g. en,tr)")
+    .option("-y, --yes", "Skip prompts and use defaults")
+    .option("--ai", "Configure AI agent support (.agents/skills, .mcp.json, AGENTS.md)")
+    .option("--no-ai", "Skip AI agent configuration")
+    .action(async (opts) => {
+      await runInit(opts);
+    });
 
-program
-  .command("check")
-  .alias("lint")
-  .description("Verify dictionary key parity and locale completeness")
-  .option("-c, --config <path>", "Custom config path")
-  .option("--json", "Print machine-readable JSON")
-  .option("--github", "Print GitHub Actions annotations")
-  .option("--fix", "Insert missing keys marked with [TODO]")
-  .option("--fail-on-stale", "Treat translations whose source text changed as errors")
-  .option("--src <globs...>", "Source globs to scan for dictionary references")
-  .action(async (opts) => {
-    await runCheck(opts);
-  });
+  program
+    .command("check")
+    .alias("lint")
+    .description("Verify dictionary key parity and locale completeness")
+    .option("-c, --config <path>", "Custom config path")
+    .option("--json", "Print machine-readable JSON")
+    .option("--github", "Print GitHub Actions annotations")
+    .option("--fix", "Insert missing keys marked with [TODO]")
+    .option("--fail-on-stale", "Treat translations whose source text changed as errors")
+    .option("--src <globs...>", "Source globs to scan for dictionary references")
+    .action(async (opts) => {
+      await runCheck(opts);
+    });
 
-program
-  .command("export")
-  .description("Export dictionary strings for translators (json, csv, or xliff)")
-  .option("-f, --format <format>", "Output format: json, csv, xliff", "json")
-  .option("-o, --out <dir>", "Output directory", "dialex-export")
-  .option("-l, --locale <locales...>", "Limit to these locales")
-  .option("-c, --config <path>", "Custom config path")
-  .option("--json", "Print machine-readable JSON")
-  .action(async (opts) => {
-    await runExport(opts);
-  });
+  program
+    .command("export")
+    .description("Export dictionary strings for translators (json, csv, or xliff)")
+    .option("-f, --format <format>", "Output format: json, csv, xliff", "json")
+    .option("-o, --out <dir>", "Output directory", "dialex-export")
+    .option("-l, --locale <locales...>", "Limit to these locales")
+    .option("-c, --config <path>", "Custom config path")
+    .option("--json", "Print machine-readable JSON")
+    .action(async (opts) => {
+      await runExport(opts);
+    });
 
-program
-  .command("import <file>")
-  .description("Write translated strings from a json, csv, or xliff file back into dictionaries")
-  .option("-f, --format <format>", "Input format (inferred from the extension)")
-  .option("-l, --locale <locale>", "Locale for single-locale files")
-  .option("--allow-new", "Add keys that do not exist in any locale yet")
-  .option("-c, --config <path>", "Custom config path")
-  .option("--json", "Print machine-readable JSON")
-  .action(async (file, opts) => {
-    await runImport({ file, ...opts });
-  });
+  program
+    .command("import <file>")
+    .description("Write translated strings from a json, csv, or xliff file back into dictionaries")
+    .option("-f, --format <format>", "Input format (inferred from the extension)")
+    .option("-l, --locale <locale>", "Locale for single-locale files")
+    .option("--allow-new", "Add keys that do not exist in any locale yet")
+    .option("-c, --config <path>", "Custom config path")
+    .option("--json", "Print machine-readable JSON")
+    .action(async (file, opts) => {
+      await runImport({ file, ...opts });
+    });
 
-program
-  .command("translate")
-  .description("Fill missing translations with the provider configured in dialex.config.ts")
-  .option("-l, --locale <locales...>", "Target locales (default: all configured)")
-  .option(
-    "-s, --source <locale>",
-    "Source locale (default: translate.sourceLocale or defaultLocale)",
-  )
-  .option("--dry-run", "List what would be translated without calling the provider")
-  .option(
-    "--stale",
-    "Also re-translate strings whose source text changed since they were translated",
-  )
-  .option("-c, --config <path>", "Custom config path")
-  .option("--json", "Print machine-readable JSON")
-  .action(async (opts) => {
-    try {
-      await runTranslate(opts);
-    } catch (err: any) {
-      if (opts.json) {
-        console.log(JSON.stringify({ success: false, error: err.message || String(err) }, null, 2));
-      } else {
-        logger.error(err.message || String(err));
+  program
+    .command("translate")
+    .description("Fill missing translations with the provider configured in dialex.config.ts")
+    .option("-l, --locale <locales...>", "Target locales (default: all configured)")
+    .option(
+      "-s, --source <locale>",
+      "Source locale (default: translate.sourceLocale or defaultLocale)",
+    )
+    .option("--dry-run", "List what would be translated without calling the provider")
+    .option(
+      "--stale",
+      "Also re-translate strings whose source text changed since they were translated",
+    )
+    .option("-c, --config <path>", "Custom config path")
+    .option("--json", "Print machine-readable JSON")
+    .action(async (opts) => {
+      try {
+        await runTranslate(opts);
+      } catch (err: any) {
+        if (opts.json) {
+          console.log(
+            JSON.stringify({ success: false, error: err.message || String(err) }, null, 2),
+          );
+        } else {
+          logger.error(err.message || String(err));
+        }
+        process.exit(1);
       }
-      process.exit(1);
-    }
-  });
+    });
 
-program
-  .command("lock")
-  .description("Record translations as up to date with the current source text (dialex.lock.json)")
-  .option("-s, --source <locale>", "Locale the translations were made from")
-  .option("--all", "Also accept translations that are already out of date")
-  .option("--json", "Print machine-readable JSON")
-  .option("-c, --config <path>", "Custom config path")
-  .action(async (opts) => {
+  program
+    .command("lock")
+    .description(
+      "Record translations as up to date with the current source text (dialex.lock.json)",
+    )
+    .option("-s, --source <locale>", "Locale the translations were made from")
+    .option("--all", "Also accept translations that are already out of date")
+    .option("--json", "Print machine-readable JSON")
+    .option("-c, --config <path>", "Custom config path")
+    .action(async (opts) => {
+      try {
+        await runLock(opts);
+      } catch (err: any) {
+        logger.error(err.message || String(err));
+        process.exit(1);
+      }
+    });
+
+  return program;
+}
+
+const isMain =
+  typeof process !== "undefined" &&
+  Boolean(process.argv[1]) &&
+  (() => {
     try {
-      await runLock(opts);
-    } catch (err: any) {
-      logger.error(err.message || String(err));
-      process.exit(1);
+      return pathToFileURL(fs.realpathSync(process.argv[1])).href === import.meta.url;
+    } catch {
+      return false;
     }
-  });
+  })();
 
-program.parse();
+if (isMain) {
+  createProgram().parse();
+}

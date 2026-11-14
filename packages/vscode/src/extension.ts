@@ -39,10 +39,11 @@ export interface DialexApi {
 export function activate(context: vscode.ExtensionContext): DialexApi {
   const output = vscode.window.createOutputChannel("Dialex");
   const collection = vscode.languages.createDiagnosticCollection("dialex");
-  const states = new Map<string, ProjectState>();
+  let states = new Map<string, ProjectState>();
   const issueOf = new WeakMap<vscode.Diagnostic, AnalysisIssue>();
   let timer: ReturnType<typeof setTimeout> | undefined;
   let generateTimer: ReturnType<typeof setTimeout> | undefined;
+  let refreshGeneration = 0;
 
   // Parsed dictionaries and scanned sources are kept between refreshes and only redone for files
   // whose modification time changed, so saving one file does not re-read the whole workspace.
@@ -98,38 +99,42 @@ export function activate(context: vscode.ExtensionContext): DialexApi {
   }
 
   async function refresh(): Promise<void> {
-    states.clear();
-    if (!settings().get<boolean>("enable", true)) {
-      publish();
-      return;
-    }
+    const token = ++refreshGeneration;
+    const nextStates = new Map<string, ProjectState>();
 
-    const configPath = settings().get<string>("configPath") || undefined;
-    const unused = settings().get<boolean>("unusedKeys", false);
+    if (settings().get<boolean>("enable", true)) {
+      const configPath = settings().get<string>("configPath") || undefined;
+      const unused = settings().get<boolean>("unusedKeys", false);
 
-    for (const folder of vscode.workspace.workspaceFolders ?? []) {
-      for (const { root, ignore } of projectsIn(folder.uri.fsPath)) {
-        try {
-          const { config, notes } = readStaticConfig(root, configPath);
-          for (const note of notes) output.appendLine(`[${root}] ${note}`);
+      for (const folder of vscode.workspace.workspaceFolders ?? []) {
+        for (const { root, ignore } of projectsIn(folder.uri.fsPath)) {
+          if (token !== refreshGeneration) return;
+          try {
+            const { config, notes } = readStaticConfig(root, configPath);
+            for (const note of notes) output.appendLine(`[${root}] ${note}`);
 
-          const result = await analyzeProject({
-            root,
-            config,
-            runtime: false,
-            ignore,
-            unused,
-            cache,
-          });
-          states.set(root, {
-            model: buildModel(root, config.defaultLocale, result),
-            issues: result.issues,
-          });
-        } catch (error) {
-          output.appendLine(`[${root}] analysis failed: ${(error as Error).message}`);
+            const result = await analyzeProject({
+              root,
+              config,
+              runtime: false,
+              ignore,
+              unused,
+              cache,
+            });
+            if (token !== refreshGeneration) return;
+            nextStates.set(root, {
+              model: buildModel(root, config.defaultLocale, result),
+              issues: result.issues,
+            });
+          } catch (error) {
+            if (token !== refreshGeneration) return;
+            output.appendLine(`[${root}] analysis failed: ${(error as Error).message}`);
+          }
         }
       }
     }
+    if (token !== refreshGeneration) return;
+    states = nextStates;
     publish();
   }
 

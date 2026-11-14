@@ -22,6 +22,7 @@ function ensureLocale(df: DictionaryFile, locale: string): Node {
 
 /** Returns the object that should contain the last path segment, creating objects as needed. */
 function ensureParent(df: DictionaryFile, locale: string, path: string[]): Node | undefined {
+  if (path.length === 0) return undefined;
   let obj = ensureLocale(df, locale);
   for (const segment of path.slice(0, -1)) {
     let prop = findProp(obj, segment);
@@ -48,6 +49,7 @@ export function setString(
   path: string[],
   value: string,
 ): SetResult {
+  if (path.length === 0) return "skipped";
   const parent = ensureParent(df, locale, path);
   if (!parent) return "skipped";
 
